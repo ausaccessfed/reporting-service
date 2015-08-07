@@ -1,5 +1,6 @@
 config/rapidconnect.yml
 config/deploy.yml
+spec/examples.txt
 tmp
 log
 vendor
