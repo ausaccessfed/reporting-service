@@ -12,7 +12,7 @@ module Authentication
       }
     end
 
-    def subject(_env, attrs)
+    def subject(_env, _attrs)
       fail('not implemented')
     end
   end
