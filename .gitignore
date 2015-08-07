@@ -1,0 +1,5 @@
+config/rapidconnect.yml
+config/deploy.yml
+tmp
+log
+vendor
