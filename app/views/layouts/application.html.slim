@@ -1,0 +1,54 @@
+doctype html
+html lang='en'
+  head profile='http://www.w3.org/2005/10/profile'
+    link rel='icon' type='image/png' href=image_path('favicon.png')
+    meta charset='utf-8'
+    meta http-equiv='X-UA-Compatible' content='IE=Edge,chrome=1'
+    meta name='viewport' content='width=device-width, initial-scale=1.0'
+
+    title AAF Reporting Service
+
+    = csrf_meta_tags
+
+    = javascript_include_tag 'application'
+    = stylesheet_link_tag 'application', media: 'all'
+
+    = disable_animations if Rails.env.test?
+  body
+    = aaf_header(title: 'AAF Reporting Service', environment: environment_string)
+      = nav_bar do
+        - if @subject
+          = nav_item('Dashboard', dashboard_path)
+        - else
+          = nav_item('Welcome', root_path)
+
+        = nav_collapsing_items do
+          - if permitted?('admin:menu')
+            = nav_dropdown 'Administration' do
+              - if permitted?('admin:blah')
+                = nav_item('Blah', '/admin/blah')
+
+              - if permitted?('admin:blah')
+                = nav_item('Blah', '/admin/blah')
+
+          = nav_items_right do
+            - if @subject
+              = nav_item('Logout', '/auth/logout')
+            - else
+              = nav_item('Login', '/auth/login')
+
+    section class='content'
+      = render(partial: 'layouts/flashes')
+      main= yield
+
+    == aaf_footer do
+      = logged_in_user(@subject)
+
+      p
+        ' AAF Reporting Service
+        strong= ApplicationHelper::VERSION
+        br
+
+        ' Developed for the
+        a> href='http://www.aaf.edu.au' Australian Access Federation
+        | by Shaun Mangelsdorf

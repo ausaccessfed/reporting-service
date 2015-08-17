@@ -3,3 +3,4 @@ mail:
   from: noreply@example.com
   port: 1025
   host: localhost
+environment_string: Development
