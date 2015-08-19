@@ -7,5 +7,5 @@ class Role < ActiveRecord::Base
 
   has_many :permissions
 
-  validates :name, presence: true
+  valhammer
 end
