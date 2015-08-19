@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150817222545) do
+ActiveRecord::Schema.define(version: 20150819002105) do
+
+  create_table "api_subjects", force: :cascade do |t|
+    t.string   "x509_cn",      limit: 255,                null: false
+    t.string   "contact_name", limit: 255,                null: false
+    t.string   "contact_mail", limit: 255,                null: false
+    t.string   "description",  limit: 255,                null: false
+    t.boolean  "enabled",                  default: true, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "subjects", force: :cascade do |t|
     t.string   "targeted_id",  limit: 255,                null: false
