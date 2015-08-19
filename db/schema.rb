@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819032118) do
+ActiveRecord::Schema.define(version: 20150819035849) do
 
   create_table "api_subjects", force: :cascade do |t|
     t.string   "x509_cn",      limit: 255,                null: false
@@ -42,6 +42,15 @@ ActiveRecord::Schema.define(version: 20150819032118) do
   end
 
   add_index "roles", ["entitlement"], name: "index_roles_on_entitlement", unique: true, using: :btree
+
+  create_table "subject_roles", force: :cascade do |t|
+    t.integer  "subject_id", limit: 4, null: false
+    t.integer  "role_id",    limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subject_roles", ["subject_id", "role_id"], name: "index_subject_roles_on_subject_id_and_role_id", unique: true, using: :btree
 
   create_table "subjects", force: :cascade do |t|
     t.string   "targeted_id",  limit: 255,                null: false
