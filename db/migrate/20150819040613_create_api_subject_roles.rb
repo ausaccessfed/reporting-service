@@ -6,6 +6,8 @@ class CreateAPISubjectRoles < ActiveRecord::Migration
 
       t.timestamps
 
+      t.foreign_key :api_subjects
+      t.foreign_key :roles
       t.index [:api_subject_id, :role_id], unique: true
     end
   end

@@ -6,6 +6,8 @@ class CreateSubjectRoles < ActiveRecord::Migration
 
       t.timestamps
 
+      t.foreign_key :subjects
+      t.foreign_key :roles
       t.index [:subject_id, :role_id], unique: true
     end
   end

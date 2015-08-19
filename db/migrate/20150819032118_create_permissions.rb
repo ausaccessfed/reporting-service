@@ -7,6 +7,7 @@ class CreatePermissions < ActiveRecord::Migration
 
       t.timestamps
 
+      t.foreign_key :roles
       t.index [:role_id, :value], unique: true
     end
   end
