@@ -5,11 +5,11 @@ module ApplicationHelper
 
   VERSION = '0.0.1'
 
-  def permitted?(*)
-    true # TODO
+  def permitted?(action)
+    @subject.permits?(action)
   end
 
   def environment_string
-    'TODO' # TODO
+    Rails.application.config.reporting_service.environment_string
   end
 end

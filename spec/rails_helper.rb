@@ -13,6 +13,8 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
+  include FactoryGirl::Syntax::Methods
+
   config.use_transactional_fixtures = false
 
   config.before(:suite) { DatabaseCleaner.clean_with(:truncation) }
@@ -21,7 +23,7 @@ RSpec.configure do |config|
     type = spec.metadata[:type]
     DatabaseCleaner.strategy = (type == :feature ? :truncation : :transaction)
 
-    DatabaseCleaner.with_cleaning { spec.run }
+    DatabaseCleaner.cleaning { spec.run }
   end
 
   config.infer_spec_type_from_file_location!

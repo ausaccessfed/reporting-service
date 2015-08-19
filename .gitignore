@@ -2,6 +2,8 @@ config/rapidconnect.yml
 config/deploy.yml
 config/reporting_service.yml
 spec/examples.txt
+
+coverage
 tmp
 log
 vendor
