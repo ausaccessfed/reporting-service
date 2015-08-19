@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819002105) do
+ActiveRecord::Schema.define(version: 20150819032118) do
 
   create_table "api_subjects", force: :cascade do |t|
     t.string   "x509_cn",      limit: 255,                null: false
@@ -22,6 +22,15 @@ ActiveRecord::Schema.define(version: 20150819002105) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "permissions", force: :cascade do |t|
+    t.integer  "role_id",    limit: 4,   null: false
+    t.string   "value",      limit: 255, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "permissions", ["role_id", "value"], name: "index_permissions_on_role_id_and_value", unique: true, using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -39,5 +48,8 @@ ActiveRecord::Schema.define(version: 20150819002105) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "subjects", ["shared_token"], name: "index_subjects_on_shared_token", unique: true, using: :btree
+  add_index "subjects", ["targeted_id"], name: "index_subjects_on_targeted_id", unique: true, using: :btree
 
 end
