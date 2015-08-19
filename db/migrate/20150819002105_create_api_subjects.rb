@@ -8,6 +8,8 @@ class CreateAPISubjects < ActiveRecord::Migration
       t.boolean :enabled, null: false, default: true
 
       t.timestamps
+
+      t.index :x509_cn, unique: true
     end
   end
 end
