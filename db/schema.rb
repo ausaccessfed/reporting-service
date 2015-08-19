@@ -33,10 +33,13 @@ ActiveRecord::Schema.define(version: 20150819032118) do
   add_index "permissions", ["role_id", "value"], name: "index_permissions_on_role_id_and_value", unique: true, using: :btree
 
   create_table "roles", force: :cascade do |t|
-    t.string   "name",       limit: 255
+    t.string   "name",        limit: 255, null: false
+    t.string   "entitlement", limit: 255, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "roles", ["entitlement"], name: "index_roles_on_entitlement", unique: true, using: :btree
 
   create_table "subjects", force: :cascade do |t|
     t.string   "targeted_id",  limit: 255,                null: false
