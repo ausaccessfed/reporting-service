@@ -23,6 +23,12 @@ ActiveRecord::Schema.define(version: 20150819002105) do
     t.datetime "updated_at"
   end
 
+  create_table "roles", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "subjects", force: :cascade do |t|
     t.string   "targeted_id",  limit: 255,                null: false
     t.string   "shared_token", limit: 255,                null: false
