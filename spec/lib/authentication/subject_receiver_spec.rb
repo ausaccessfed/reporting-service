@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe Authentication::SubjectReceiver do
   let(:env) { {} }
 
+  before { allow(subject).to receive(:update_roles) }
+
   context '#map_attributes' do
     let(:attrs) do
       keys = %w(edupersontargetedid auedupersonsharedtoken displayname mail)
@@ -42,6 +44,11 @@ RSpec.describe Authentication::SubjectReceiver do
       it 'marks the new subject as complete' do
         expect(run).to be_complete
       end
+
+      it 'updates roles for the subject' do
+        expect(subject).to receive(:update_roles).with(an_instance_of(Subject))
+        run
+      end
     end
 
     context 'with an existing subject' do
@@ -59,6 +66,11 @@ RSpec.describe Authentication::SubjectReceiver do
 
       it 'marks the subject as complete' do
         expect(run).to be_complete
+      end
+
+      it 'updates roles for the subject' do
+        expect(subject).to receive(:update_roles).with(an_instance_of(Subject))
+        run
       end
 
       context 'with a mismatched targeted id' do
