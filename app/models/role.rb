@@ -8,4 +8,8 @@ class Role < ActiveRecord::Base
   has_many :permissions
 
   valhammer
+
+  def self.for_entitlement(entitlement)
+    create_with(name: 'auto').find_or_create_by!(entitlement: entitlement)
+  end
 end
