@@ -43,6 +43,14 @@ RSpec.describe Subject, type: :model do
       it 'assigns the role to the subject' do
         expect { run }.to change { roles }.to include(role)
       end
+
+      context 'when the role is already assigned' do
+        before { object.roles << role }
+
+        it 'makes no change' do
+          expect { run }.not_to change { roles }
+        end
+      end
     end
 
     context 'when the role does not exist' do
