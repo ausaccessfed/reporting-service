@@ -13,6 +13,14 @@ RSpec.describe ApplicationHelper, type: :helper do
     it 'returns false when not permitted' do
       expect(helper.permitted?('a:b:d')).to be_falsey
     end
+
+    context 'with no user' do
+      let(:user) { nil }
+
+      it 'returns false' do
+        expect(helper.permitted?('a:b:c')).to be_falsey
+      end
+    end
   end
 
   context '#environment_string' do

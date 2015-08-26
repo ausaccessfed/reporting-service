@@ -6,7 +6,7 @@ module ApplicationHelper
   VERSION = '0.0.1'
 
   def permitted?(action)
-    @subject.permits?(action)
+    @subject.try(:permits?, action)
   end
 
   def environment_string
