@@ -1,6 +1,8 @@
 require 'api_constraints'
 
 Rails.application.routes.draw do
+  mount RapidRack::Engine => '/auth'
+
   get '/dashboard' => 'dashboard#index', as: 'dashboard'
   root to: 'welcome#index'
 
