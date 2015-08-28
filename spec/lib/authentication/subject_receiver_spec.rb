@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe Authentication::SubjectReceiver do
   let(:env) { {} }
 
+  before { allow(subject).to receive(:update_roles) }
+
   context '#map_attributes' do
     let(:attrs) do
       keys = %w(edupersontargetedid auedupersonsharedtoken displayname mail)
@@ -23,20 +25,29 @@ RSpec.describe Authentication::SubjectReceiver do
       attributes_for(:subject)
     end
 
+    def run
+      subject.subject(env, attrs)
+    end
+
     context 'for an unknown subject' do
       it 'creates the subject' do
-        expect { subject.subject(env, attrs) }
+        expect { run }
           .to change(Subject, :count).by(1)
       end
 
       it 'returns the new subject' do
-        obj = subject.subject(env, attrs)
+        obj = run
         expect(obj).to be_a(Subject)
         expect(obj).to have_attributes(attrs.except(:audit_comment))
       end
 
       it 'marks the new subject as complete' do
-        expect(subject.subject(env, attrs)).to be_complete
+        expect(run).to be_complete
+      end
+
+      it 'updates roles for the subject' do
+        expect(subject).to receive(:update_roles).with(an_instance_of(Subject))
+        run
       end
     end
 
@@ -50,17 +61,20 @@ RSpec.describe Authentication::SubjectReceiver do
       end
 
       it 'returns the existing subject' do
-        expect(subject.subject(env, attrs)).to eq(object)
+        expect(run).to eq(object)
       end
 
       it 'marks the subject as complete' do
-        expect(subject.subject(env, attrs)).to be_complete
+        expect(run).to be_complete
+      end
+
+      it 'updates roles for the subject' do
+        expect(subject).to receive(:update_roles).with(an_instance_of(Subject))
+        run
       end
 
       context 'with a mismatched targeted id' do
-        def run
-          subject.subject(env, attrs.merge(targeted_id: 'wrong'))
-        end
+        before { attrs[:targeted_id] = 'wrong' }
 
         it 'fails to provision the subject' do
           expect { run }.to raise_error(/targeted_id.*did not match/)
@@ -68,9 +82,7 @@ RSpec.describe Authentication::SubjectReceiver do
       end
 
       context 'with a mismatched shared token' do
-        def run
-          subject.subject(env, attrs.merge(shared_token: 'wrong'))
-        end
+        before { attrs[:shared_token] = 'wrong' }
 
         it 'fails to provision the subject' do
           expect { run }.to raise_error(/shared_token.*did not match/)

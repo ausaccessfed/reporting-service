@@ -2,6 +2,7 @@ module Authentication
   class SubjectReceiver
     include RapidRack::DefaultReceiver
     include RapidRack::RedisRegistry
+    include IdentityEnhancement
 
     def map_attributes(_env, attrs)
       {
@@ -15,6 +16,7 @@ module Authentication
     def subject(_env, attrs)
       subject = subject_scope(attrs).find_or_initialize_by({})
       check_subject(subject, attrs) if subject.persisted?
+      update_roles(subject)
       subject.update_attributes!(attrs.merge(complete: true))
       subject
     end
