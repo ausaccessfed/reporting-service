@@ -3,3 +3,43 @@
  *= require_tree .
  *= require_self
  */
+
+$graph-color-dull: #aaaaaa;
+$graph-color-primary: #2a3689;
+$graph-color-vibrant: #f5811d;
+
+#report-output {
+  .axis {
+    path, line {
+      fill: none;
+      stroke: #cccccc;
+      shape-rendering: crispEdges;
+    }
+
+    text {
+      font-family: sans-serif;
+      font-size: 11px;
+    }
+  }
+
+  .grid {
+    .tick line {
+      fill: none;
+      stroke: rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &.random-time-series {
+    path.total {
+      fill: $graph-color-vibrant;
+    }
+
+    path.database {
+      fill: $graph-color-primary;
+    }
+
+    path.render {
+      fill: $graph-color-dull;
+    }
+  }
+}

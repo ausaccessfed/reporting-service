@@ -18,6 +18,8 @@ module ReportingService
       File.join(config.root, 'app', 'reports')
     ]
 
+    config.assets.precompile += %w(render_report.js)
+
     config.rapid_rack.receiver = 'Authentication::SubjectReceiver'
 
     config.active_record.raise_in_transactional_callbacks = true

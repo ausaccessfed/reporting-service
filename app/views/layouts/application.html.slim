@@ -13,6 +13,8 @@ html lang='en'
     = javascript_include_tag 'application'
     = stylesheet_link_tag 'application', media: 'all'
 
+    = javascript_include_tag 'render_report'
+
     = disable_animations if Rails.env.test?
   body
     = aaf_header(title: 'AAF Reporting Service', environment: environment_string)
