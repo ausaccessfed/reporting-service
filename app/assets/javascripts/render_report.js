@@ -146,6 +146,14 @@ jQuery(function($) {
         var bisectDate = d3.bisector(function(d) { return d[0]; }).left;
 
         var update = throttle(function(mouse) {
+          if (!mouse) {
+            report.series.forEach(function(k) {
+              svg.select('.legend .' + k + '-text').text("");
+            });
+            svg.select('.x-text').text("");
+            return;
+          }
+
           var date = 0;
           var x0 = (scale.x.invert(mouse[0]) - range.start) / 1000;
 
@@ -175,10 +183,7 @@ jQuery(function($) {
           })
           .on("mouseout", function() {
             hoverbar.style("display", "none");
-            report.series.forEach(function(k) {
-              svg.select('.legend .' + k + '-text').text("");
-            });
-            svg.select('.x-text').text("");
+            update(null);
           })
           .on("mousemove", function() {
             var mouse = d3.mouse(this);
