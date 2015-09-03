@@ -38,6 +38,12 @@ jQuery(function($) {
       .attr("class", report.type);
     svg.select("text.placeholder").remove();
 
+    var translate = function(x, y) {
+      return function(selection) {
+        selection.attr('transform', 'translate(' + x + ',' + y + ')');
+      };
+    };
+
     var charts = {
       axes: function() {
         var xAxis = d3.svg.axis()
@@ -47,10 +53,10 @@ jQuery(function($) {
 
         svg.append("g")
           .attr("class", "x axis")
-          .attr("transform", "translate(" + margin.left + "," + (margin.top + height) + ")")
+          .call(translate(margin.left, margin.top + height))
           .call(xAxis)
           .append("text")
-          .attr("transform", "translate(0,30)")
+          .call(translate(0, 30))
           .attr("class", "hover-text x-text")
           .attr("text-anchor", "middle");
 
@@ -60,17 +66,17 @@ jQuery(function($) {
 
         svg.append("g")
           .attr("class", "y axis")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+          .call(translate(margin.left, margin.top))
           .call(yAxis);
 
         svg.append("g")
           .attr("class", "grid")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+          .call(translate(margin.left, margin.top))
           .call(xAxis.tickSize(height, 0, 0).tickFormat(""));
 
         svg.append("g")
           .attr("class", "grid")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+          .call(translate(margin.left, margin.top))
           .call(yAxis.tickSize(-width, 0, 0).tickFormat(""));
       },
 
@@ -82,28 +88,28 @@ jQuery(function($) {
 
         d3.entries(report.data).forEach(function(entry) {
           g.append("text")
-            .attr("transform", "translate(30," + pos + ")")
+            .call(translate(30, pos))
             .text(entry.key);
 
           g.append("rect")
             .attr("class", entry.key)
             .attr("width", 15)
             .attr("height", 15)
-            .attr("transform", "translate(10," + (pos - 13) + ")");
+            .call(translate(10, pos - 13));
 
           g.append("text")
-            .attr("transform", "translate(30," + (pos + 17) + ")")
+            .call(translate(30, pos + 17))
             .attr("class", "hover-text " + entry.key + "-text");
 
           pos += 40;
         });
 
-        g.attr("transform", "translate(" + (margin.left + width + margin.right) + "," + (margin.top + (height - pos + 27) / 2) + ")");
+        g.call(translate(margin.left + width + margin.right, margin.top + (height - pos + 27) / 2));
       },
 
       hoverbox: function() {
         var g = svg.append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          .call(translate(margin.left, margin.top));
 
         var hoverbar = g.append("line")
           .attr("class", "hover-bar")
@@ -167,7 +173,8 @@ jQuery(function($) {
 
         var g = svg.append("g")
           .attr("class", "area paths")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          .call(translate(margin.left, margin.top));
+
         d3.entries(report.data).forEach(function(entry) {
           g.append("path")
             .datum(entry.value)
