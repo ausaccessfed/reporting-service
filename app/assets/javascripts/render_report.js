@@ -23,14 +23,16 @@ jQuery(function($) {
       };
     };
 
-    var margin = { top: 20, right: 30, bottom: 30, left: 50 };
+    var margin = { top: 45, right: 210, bottom: 30, left: 50 };
     var legend = { width: 160, margin: 20 };
+    var header = { margin: 20 };
 
     var height = 400 - margin.top - margin.bottom;
-    var width = 960 - margin.right - margin.left - legend.width - legend.margin;
+    var width = 960 - margin.right - margin.left;
 
     var timeOnly = d3.time.format("%H:%M");
     var timeFormat = d3.time.format('%Y-%m-%d %H:%M:%S UTC');
+    var prettyDateFormat = d3.time.format('%-d %b %Y');
 
     var range = {
       start: timeFormat.parse(report.range.start),
@@ -126,7 +128,7 @@ jQuery(function($) {
           pos += 40;
         });
 
-        g.call(translate(margin.left + width + margin.right, margin.top + (height - pos + 27) / 2));
+        g.call(translate(margin.left + width + legend.margin, margin.top + (height - pos + 27) / 2));
       },
 
       hoverbox: function() {
@@ -195,6 +197,33 @@ jQuery(function($) {
           });
       },
 
+      labels: function() {
+        var g = svg.append("g")
+          .call(translate(margin.left, header.margin));
+
+        g.append("text")
+          .call(translate(width / 2, 0))
+          .attr("class", "label title")
+          .attr("text-anchor", "middle")
+          .text(report.title);
+
+        g.append("text")
+          .call(translate(width / 2, 15))
+          .attr("class", "label subtitle")
+          .attr("text-anchor", "middle")
+          .text(prettyDateFormat(range.start) + " \u2014 " + prettyDateFormat(range.end));
+
+        var y = svg.append("g")
+          .call(translate(0, margin.top))
+          .append("text")
+          .attr("class", "label y-axis")
+          .attr("text-anchor", "middle")
+          .call(translate(15, height / 2))
+          .text(report.labels.y);
+
+        y.attr("transform", y.attr("transform") + ", rotate(-90)");
+      },
+
       area: function() {
         var area = d3.svg.area()
           .interpolate("cardinal")
@@ -216,6 +245,7 @@ jQuery(function($) {
         charts.axes();
         charts.legend();
         charts.hoverbox();
+        charts.labels();
       }
     };
 

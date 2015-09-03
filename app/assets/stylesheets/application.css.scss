@@ -44,6 +44,16 @@ $graph-color-retina-burn: #6aff7f;
     }
   }
 
+  .label {
+    font-family: sans-serif;
+    font-size: 12px;
+
+    &.title {
+      font-size: 14px;
+      font-weight: bold;
+    }
+  }
+
   .hover-bar {
     fill: none;
     stroke: fade-out($graph-color-retina-burn, 0.4);
