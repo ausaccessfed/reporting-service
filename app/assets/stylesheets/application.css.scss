@@ -7,6 +7,13 @@
 $graph-color-dull: #aaaaaa;
 $graph-color-primary: #2a3689;
 $graph-color-vibrant: #f5811d;
+$graph-color-retina-burn: #6aff7f;
+
+#report-output-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+}
 
 #report-output {
   .axis {
@@ -29,16 +36,35 @@ $graph-color-vibrant: #f5811d;
     }
   }
 
+  .legend {
+    .hover-text {
+      font-size: .9em;
+      vertical-align: top;
+      white-space: pre;
+    }
+  }
+
+  .hover-bar {
+    fill: none;
+    stroke: fade-out($graph-color-retina-burn, 0.4);
+  }
+
+  .hover-box {
+    fill: none;
+    stroke: none;
+    pointer-events: all;
+  }
+
   &.random-time-series {
-    path.total {
+    .total {
       fill: $graph-color-vibrant;
     }
 
-    path.database {
+    .database {
       fill: $graph-color-primary;
     }
 
-    path.render {
+    .render {
       fill: $graph-color-dull;
     }
   }
