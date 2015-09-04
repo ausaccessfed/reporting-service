@@ -226,7 +226,6 @@ jQuery(function($) {
 
       area: function() {
         var area = d3.svg.area()
-          .interpolate("cardinal")
           .x(function(e) { return scale.x(d3.time.second.offset(range.start, e[0])); })
           .y0(height)
           .y1(function(e) { return scale.y(e[1]); });
