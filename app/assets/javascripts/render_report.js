@@ -1,34 +1,51 @@
 //= require d3
 
 jQuery(function($) {
-  var renderReport = function(report) {
-    function throttle(func, timeout) {
-      var next = null, timer = null;
-      return function() {
-        var context = this, args = arguments;
+  function throttle(func, timeout) {
+    var next = null, timer = null;
+    return function() {
+      var context = this, args = arguments;
 
-        var invoke = function() {
-          if (next) next();
-          timer = null;
-          next = null;
-        };
-
-        if (!timer) {
-          timer = setTimeout(invoke, timeout);
-          func.apply(context, args);
-          return;
-        }
-
-        next = function() { func.apply(context, args); };
+      var invoke = function() {
+        if (next) next();
+        timer = null;
+        next = null;
       };
+
+      if (!timer) {
+        timer = setTimeout(invoke, timeout);
+        func.apply(context, args);
+        return;
+      }
+
+      next = function() { func.apply(context, args); };
+    };
+  };
+
+  var renderReport = function(report) {
+    var box = {
+      height: 400,
+      width: $('#report-output-container').width()
     };
 
-    var margin = { top: 45, right: 210, bottom: 30, left: 50 };
-    var legend = { width: 160, margin: 20 };
+    var svg = d3.select('svg#report-output')
+      .attr("class", report.type)
+      .attr("height", box.height)
+      .attr("width", box.width);
+
+    svg.selectAll('svg > *').remove();
+
+    var margin = { top: 45, right: 150, bottom: 30, left: 50 };
+    var legend = { margin: 20 };
     var header = { margin: 20 };
 
-    var height = 400 - margin.top - margin.bottom;
-    var width = 960 - margin.right - margin.left;
+    if (box.width < 720) {
+      margin.right = 20;
+      svg.attr("height", box.height + (report.series.length * 40));
+    }
+
+    var height = box.height - margin.top - margin.bottom;
+    var width = box.width - margin.right - margin.left;
 
     var timeOnly = d3.time.format("%H:%M");
     var timeFormat = d3.time.format('%Y-%m-%d %H:%M:%S UTC');
@@ -57,10 +74,6 @@ jQuery(function($) {
         return d3.scale.linear().range([0, height]).domain(domain.reverse());
       })()
     };
-
-    var svg = d3.select('svg#report-output')
-      .attr("class", report.type);
-    svg.select("text.placeholder").remove();
 
     var translate = function(x, y) {
       return function(selection) {
@@ -112,23 +125,27 @@ jQuery(function($) {
 
         d3.entries(report.data).forEach(function(entry) {
           g.append("text")
-            .call(translate(30, pos))
+            .call(translate(20, pos))
             .text(entry.key);
 
           g.append("rect")
             .attr("class", entry.key)
             .attr("width", 15)
             .attr("height", 15)
-            .call(translate(10, pos - 13));
+            .call(translate(0, pos - 13));
 
           g.append("text")
-            .call(translate(30, pos + 17))
+            .call(translate(20, pos + 17))
             .attr("class", "hover-text " + entry.key + "-text");
 
           pos += 40;
         });
 
-        g.call(translate(margin.left + width + legend.margin, margin.top + (height - pos + 27) / 2));
+        if (box.width > 720) {
+          g.call(translate(margin.left + width + legend.margin + 10, margin.top + (height - pos + 27) / 2));
+        } else {
+          g.call(translate(margin.left, margin.top + height + margin.bottom));
+        }
       },
 
       hoverbox: function() {
@@ -251,9 +268,15 @@ jQuery(function($) {
     charts.area();
   };
 
-
   var json = $('#report-data').html();
   if (json) {
-    renderReport($.parseJSON(json));
+    var data = $.parseJSON(json);
+
+    d3.select(window).on('resize', throttle(function() {
+      console.log('rendering');
+      renderReport(data);
+    }, 250));
+
+    renderReport(data);
   }
 });
