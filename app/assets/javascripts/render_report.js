@@ -1,6 +1,3 @@
-//= require d3
-//= require reporting
-
 jQuery(function($) {
   var renderReport = function(report) {
     var sizing = reporting.sizing(report);
