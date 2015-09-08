@@ -17,12 +17,12 @@ class TimeSeriesReport
     end
 
     def series(opts)
-      options[:series] = (options[:series] || []) + opts.keys
+      options[:series] = opts.keys
       labels(opts)
     end
 
     def labels(opts)
-      options[:labels] = (options[:labels] || {}).merge(opts)
+      options[:labels] = (options[:labels].try(:slice, :y) || {}).merge(opts)
     end
   end
 

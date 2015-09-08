@@ -12,22 +12,24 @@ jQuery(function($) {
     var range = reporting.range(report);
     var scale = reporting.scale(report, range, sizing);
     var translate = reporting.translate;
+    var graph = sizing.graph;
+    var margin = graph.margin;
 
     var charts = {
       area: function() {
         var area = d3.svg.area()
           .x(function(e) { return scale.x(d3.time.second.offset(range.start, e[0])); })
-          .y0(sizing.graph.height)
+          .y0(graph.height)
           .y1(function(e) { return scale.y(e[1]); });
 
         var g = svg.append('g')
           .attr('class', 'area paths')
-          .call(translate(sizing.graph.margin.left, sizing.graph.margin.top));
+          .call(translate(margin.left, margin.top));
 
-        d3.entries(report.data).forEach(function(entry) {
+        report.series.forEach(function(key) {
           g.append('path')
-            .datum(entry.value)
-            .attr('class', entry.key)
+            .datum(report.data[key])
+            .attr('class', key)
             .attr('d', area);
         });
 
