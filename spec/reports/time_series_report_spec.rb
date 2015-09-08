@@ -13,6 +13,8 @@ RSpec.describe TimeSeriesReport do
              b: 'The letter B',
              c: 'The letter C'
 
+      units ' Hz'
+
       def initialize(title, start, finish, data)
         super(title, start, finish)
         @data = data
@@ -84,6 +86,7 @@ RSpec.describe TimeSeriesReport do
     it { is_expected.to include(labels: include(b: 'The letter B')) }
     it { is_expected.to include(labels: include(c: 'The letter C')) }
     it { is_expected.to include(series: contain_exactly(:a, :b, :c)) }
+    it { is_expected.to include(units: ' Hz') }
     it { is_expected.to include(data: report_data) }
   end
 end

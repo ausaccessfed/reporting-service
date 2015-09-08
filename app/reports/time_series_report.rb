@@ -24,6 +24,10 @@ class TimeSeriesReport
     def labels(opts)
       options[:labels] = (options[:labels].try(:slice, :y) || {}).merge(opts)
     end
+
+    def units(value)
+      options[:units] = value
+    end
   end
 
   def initialize(title, start, finish)

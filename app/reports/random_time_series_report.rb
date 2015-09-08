@@ -7,6 +7,8 @@ class RandomTimeSeriesReport < TimeSeriesReport
          database: 'Database Time',
          render: 'Render Time'
 
+  units ' ms'
+
   def initialize(host, start, finish)
     super("A randomly generated graph for #{host}", start, finish)
     @start = start
