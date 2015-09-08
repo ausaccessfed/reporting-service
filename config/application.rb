@@ -13,7 +13,12 @@ Bundler.require(*Rails.groups)
 
 module ReportingService
   class Application < Rails::Application
-    config.autoload_paths << File.join(config.root, 'lib')
+    config.autoload_paths += [
+      File.join(config.root, 'lib'),
+      File.join(config.root, 'app', 'reports')
+    ]
+
+    config.assets.precompile += %w(render_report.js)
 
     config.rapid_rack.receiver = 'Authentication::SubjectReceiver'
 
