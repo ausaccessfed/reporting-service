@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/ausaccessfed/aaf-lipstick
-  revision: 25c33b4d9bba49aca4816000131dbc596022704e
+  revision: 8a8fbd7306439718af027bc18eb2eb4577ee60e3
   branch: develop
   specs:
     aaf-lipstick (1.1.0)
@@ -159,7 +159,7 @@ GEM
     listen (3.0.3)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
-    loofah (2.0.2)
+    loofah (2.0.3)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.9)
     mail (2.6.3)
@@ -207,11 +207,11 @@ GEM
     rails-assets-jquery (1.11.3)
     rails-assets-pickadate (3.5.6)
       rails-assets-jquery (>= 1.7)
-    rails-assets-semantic-ui (2.0.7)
+    rails-assets-semantic-ui (2.1.3)
       rails-assets-jquery (>= 1.8)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
-    rails-dom-testing (1.0.6)
+    rails-dom-testing (1.0.7)
       activesupport (>= 4.2.0.beta, < 5.0)
       nokogiri (~> 1.6.0)
       rails-deprecated_sanitizer (>= 1.0.1)
@@ -247,7 +247,7 @@ GEM
       redis-store (~> 1.1.0)
     redis-store (1.1.6)
       redis (>= 2.2)
-    rmagick (2.15.3)
+    rmagick (2.15.4)
     rspec (3.3.0)
       rspec-core (~> 3.3.0)
       rspec-expectations (~> 3.3.0)
