@@ -51,6 +51,6 @@ jQuery(function($) {
       renderReport(data);
     }, 250));
 
-    renderReport(data);
+    setTimeout(function() { renderReport(data); }, 0);
   }
 });
