@@ -3,7 +3,7 @@ class ReportsController < ApplicationController
     public_action
     @start = 1.week.ago.utc.beginning_of_day
     @finish = Time.now.utc.beginning_of_day
-    @data = RandomTimeSeriesReport::Stacked.new('test', @start, @finish)
+    @data = RandomTimeSeriesReport::Line.new('test', @start, @finish)
             .generate
   end
 end

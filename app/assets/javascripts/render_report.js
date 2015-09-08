@@ -15,32 +15,49 @@ jQuery(function($) {
     var graph = sizing.graph;
     var margin = graph.margin;
 
-    var charts = {
-      area: function() {
-        var area = d3.svg.area()
-          .x(function(e) { return scale.x(d3.time.second.offset(range.start, e[0])); })
-          .y0(graph.height)
-          .y1(function(e) { return scale.y(e[1]); });
+    var mappers = {
+      x: function(e) { return scale.x(d3.time.second.offset(range.start, e[0])); },
+      y: function(e) { return scale.y(e[1]); }
+    };
 
+    var charts = {
+      generic: function(type, d) {
         var g = svg.append('g')
-          .attr('class', 'area paths')
-          .call(translate(margin.left, margin.top));
+          .attr('class', type + ' paths')
+          .call(translate(margin.left, margin.top))
 
         report.series.forEach(function(key) {
           g.append('path')
             .datum(report.data[key])
             .attr('class', key)
-            .attr('d', area);
+            .attr('d', d);
         });
 
         svg.call(reporting.axes(scale, sizing))
           .call(reporting.legend(report, sizing))
           .call(reporting.hoverbox(report, scale, range, sizing))
           .call(reporting.labels(report, range, sizing));
+      },
+
+      area: function() {
+        var area = d3.svg.area()
+          .x(mappers.x)
+          .y0(graph.height)
+          .y1(mappers.y);
+
+        charts.generic('area', area);
+      },
+
+      line: function() {
+        var line = d3.svg.line()
+          .x(mappers.x)
+          .y(mappers.y);
+
+        charts.generic('line', line);
       }
     };
 
-    charts.area();
+    charts.line();
   };
 
   var json = $('#report-data').html();

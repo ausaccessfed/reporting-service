@@ -52,6 +52,10 @@ class RandomTimeSeriesReport < TimeSeriesReport
     [[n, d], [n, r], [n, d + r + t]]
   end
 
+  class Line < RandomTimeSeriesReport
+    report_type 'random-time-series-line'
+  end
+
   class Stacked < RandomTimeSeriesReport
     series total: 'Total Response Time',
            render: 'Render Time',
