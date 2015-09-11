@@ -57,7 +57,11 @@ RSpec.describe TimeSeriesReport do
         end
       end
 
-      let(:subclass_report) { subclass.new(title, start, finish, report_data) }
+      let(:subclass_report) do
+        subclass.new(title, start, finish, subclass_report_data)
+      end
+
+      let(:subclass_report_data) { { d: [[0, 3], [1, 3], [2, 3]] } }
 
       it 'has a separate options hash' do
         expect(subclass_report.generate).to include(type: 'subclass-report')

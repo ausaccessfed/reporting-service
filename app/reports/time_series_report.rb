@@ -6,6 +6,7 @@ class TimeSeriesReport
   class <<self
     def inherited(klass)
       klass.options = klass.options.dup
+      klass.include TimeSeriesReport::Lint
     end
 
     def report_type(value)
@@ -36,6 +37,7 @@ class TimeSeriesReport
   end
 
   def generate
-    self.class.options.merge(title: @title, range: @range, data: data)
+    range = @range.transform_values(&:xmlschema)
+    self.class.options.merge(title: @title, range: range, data: data)
   end
 end
