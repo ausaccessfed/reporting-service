@@ -1,12 +1,13 @@
 # Base class for all time series reports.
 class TimeSeriesReport
+  prepend TimeSeriesReport::Lint
+
   class_attribute :options
   self.options = {}
 
   class <<self
     def inherited(klass)
       klass.options = klass.options.dup
-      klass.include TimeSeriesReport::Lint
     end
 
     def report_type(value)
