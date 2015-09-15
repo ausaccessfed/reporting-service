@@ -77,7 +77,7 @@ class TimeSeriesReport
         fail_with("data for #{series} is unsorted") if prev > s
         prev = s
 
-        fail_with("data for #{series} is not numeric") unless v.is_a?(Fixnum)
+        fail_with("data for #{series} is not numeric") unless v.is_a?(Numeric)
 
         next if s >= 0 && s.seconds.since(start) <= finish
         fail_with("data for #{series} is outside time range")
