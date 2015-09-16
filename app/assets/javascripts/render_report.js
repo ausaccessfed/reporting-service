@@ -2,12 +2,19 @@ jQuery(function($) {
   var renderGraph = function(report) {
     var sizing = reporting.sizing(report);
 
-    var svg = d3.select('svg' + reporting.selector)
-      .attr('class', report.type)
-      .attr('height', sizing.container.height)
-      .attr('width', sizing.container.width);
+    var svg = d3.select(reporting.container)
+      .selectAll('svg')
+      .data([reporting.id]);
 
     svg.selectAll('svg > *').remove();
+
+    svg.enter()
+      .append('svg')
+      .attr('id', function(id) { return id; })
+      .attr('class', report.type);
+
+    svg.attr('height', sizing.container.height)
+      .attr('width', sizing.container.width);
 
     var range = reporting.range(report);
     var scale = reporting.scale(report, range, sizing);
@@ -66,7 +73,14 @@ jQuery(function($) {
   };
 
   var renderTable = function(report) {
-    var table = d3.select('table' + reporting.selector)
+    var table = d3.select(reporting.container)
+      .selectAll('table')
+      .data([reporting.id]);
+    table.selectAll('table > *').remove();
+
+    table.enter()
+      .append('table')
+      .attr('id', function(id) { return id; })
       .attr('class', report.type);
 
     var appendRow = function(parent, row, tag) {
@@ -75,8 +89,6 @@ jQuery(function($) {
         tr.append(tag).text(field);
       });
     };
-
-    table.selectAll('table > *').remove();
 
     var thead = table.append('thead');
     var tbody = table.append('tbody');

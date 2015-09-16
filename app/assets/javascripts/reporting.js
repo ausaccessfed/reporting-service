@@ -2,6 +2,6 @@
 //= require_tree ./reporting
 
 var reporting = {
-  selector: '#report-output',
+  id: 'report-output',
   container: '#report-output-container'
 };
