@@ -23,7 +23,7 @@ $graph-color-retina-burn: #6aff7f;
   }
 }
 
-#report-output {
+svg#report-output {
   .axis {
     path, line {
       fill: none;
@@ -119,5 +119,12 @@ $graph-color-retina-burn: #6aff7f;
     rect.render {
       fill: $graph-color-dull;
     }
+  }
+}
+
+table#report-output {
+  width: 100%;
+  th, td {
+    padding-right: 1em;
   }
 }

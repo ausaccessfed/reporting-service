@@ -1,5 +1,5 @@
 jQuery(function($) {
-  var renderReport = function(report) {
+  var renderGraph = function(report) {
     var sizing = reporting.sizing(report);
 
     var svg = d3.select('svg' + reporting.selector)
@@ -60,14 +60,44 @@ jQuery(function($) {
     charts.line();
   };
 
+  var renderTable = function(report) {
+    var table = d3.select('table' + reporting.selector)
+      .attr('class', report.type);
+
+    var appendRow = function(parent, row, tag) {
+      var tr = parent.append('tr');
+      row.forEach(function(field) {
+        tr.append(tag).text(field);
+      });
+    };
+
+    table.selectAll('table > *').remove();
+
+    var thead = table.append('thead');
+    var tbody = table.append('tbody');
+    var tfoot = table.append('tfoot');
+
+    report.header.forEach(function(row) {
+      appendRow(thead, row, 'th');
+    });
+
+    report.rows.forEach(function(row) {
+      appendRow(tbody, row, 'td');
+    });
+
+    report.footer.forEach(function(row) {
+      appendRow(tfoot, row, 'td');
+    });
+  };
+
   var json = $('#report-data').html();
   if (json) {
     var data = $.parseJSON(json);
 
     d3.select(window).on('resize', reporting.throttle(function() {
-      renderReport(data);
+      renderTable(data);
     }, 250));
 
-    setTimeout(function() { renderReport(data); }, 0);
+    setTimeout(function() { renderTable(data); }, 0);
   }
 });
