@@ -57,7 +57,12 @@ jQuery(function($) {
       }
     };
 
-    charts.line();
+    var kinds = {
+      'random-time-series': charts.area,
+      'random-time-series-line': charts.line
+    };
+
+    kinds[report.type]();
   };
 
   var renderTable = function(report) {
@@ -90,14 +95,21 @@ jQuery(function($) {
     });
   };
 
+  var renderer = {
+    'random-time-series': renderGraph,
+    'random-time-series-line': renderGraph,
+    'random-tabular-data': renderTable
+  };
+
   var json = $('#report-data').html();
   if (json) {
     var data = $.parseJSON(json);
+    var target = renderer[data.type];
 
     d3.select(window).on('resize', reporting.throttle(function() {
-      renderTable(data);
+      target(data);
     }, 250));
 
-    setTimeout(function() { renderTable(data); }, 0);
+    setTimeout(function() { target(data); }, 0);
   }
 });
