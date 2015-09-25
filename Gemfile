@@ -7,6 +7,7 @@ gem 'uglifier'
 gem 'jbuilder'
 gem 'slim'
 
+gem 'elasticsearch'
 gem 'redis'
 gem 'redis-rails'
 
