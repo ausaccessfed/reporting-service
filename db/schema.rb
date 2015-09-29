@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819040613) do
+ActiveRecord::Schema.define(version: 20150929002006) do
 
   create_table "api_subject_roles", force: :cascade do |t|
     t.integer  "api_subject_id", limit: 4, null: false
@@ -35,6 +35,37 @@ ActiveRecord::Schema.define(version: 20150819040613) do
 
   add_index "api_subjects", ["x509_cn"], name: "index_api_subjects_on_x509_cn", unique: true, using: :btree
 
+  create_table "attributes", force: :cascade do |t|
+    t.string   "name",        limit: 255, null: false
+    t.string   "description", limit: 255, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  create_table "identity_provider_attributes", force: :cascade do |t|
+    t.integer  "identity_provider_id", limit: 4, null: false
+    t.integer  "attribute_id",         limit: 4, null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "identity_provider_attributes", ["attribute_id"], name: "fk_rails_94f14b5952", using: :btree
+  add_index "identity_provider_attributes", ["identity_provider_id", "attribute_id"], name: "unique_identity_provider_attribute", unique: true, using: :btree
+
+  create_table "identity_providers", force: :cascade do |t|
+    t.string   "entity_id",  limit: 255, null: false
+    t.string   "name",       limit: 255, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.string   "identifier", limit: 255, null: false
+    t.string   "name",       limit: 255, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "permissions", force: :cascade do |t|
     t.integer  "role_id",    limit: 4,   null: false
     t.string   "value",      limit: 255, null: false
@@ -44,6 +75,14 @@ ActiveRecord::Schema.define(version: 20150819040613) do
 
   add_index "permissions", ["role_id", "value"], name: "index_permissions_on_role_id_and_value", unique: true, using: :btree
 
+  create_table "rapid_connect_services", force: :cascade do |t|
+    t.string   "identifier", limit: 255, null: false
+    t.string   "name",       limit: 255, null: false
+    t.string   "type",       limit: 255, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string   "name",        limit: 255, null: false
     t.string   "entitlement", limit: 255, null: false
@@ -52,6 +91,24 @@ ActiveRecord::Schema.define(version: 20150819040613) do
   end
 
   add_index "roles", ["entitlement"], name: "index_roles_on_entitlement", unique: true, using: :btree
+
+  create_table "service_provider_attributes", force: :cascade do |t|
+    t.integer  "service_provider_id", limit: 4, null: false
+    t.integer  "attribute_id",        limit: 4, null: false
+    t.boolean  "optional",                      null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "service_provider_attributes", ["attribute_id"], name: "fk_rails_de72af15ed", using: :btree
+  add_index "service_provider_attributes", ["service_provider_id", "attribute_id"], name: "unique_identity_provider_attribute", unique: true, using: :btree
+
+  create_table "service_providers", force: :cascade do |t|
+    t.string   "entity_id",  limit: 255, null: false
+    t.string   "name",       limit: 255, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
 
   create_table "subject_roles", force: :cascade do |t|
     t.integer  "subject_id", limit: 4, null: false
@@ -79,7 +136,11 @@ ActiveRecord::Schema.define(version: 20150819040613) do
 
   add_foreign_key "api_subject_roles", "api_subjects"
   add_foreign_key "api_subject_roles", "roles"
+  add_foreign_key "identity_provider_attributes", "attributes"
+  add_foreign_key "identity_provider_attributes", "identity_providers"
   add_foreign_key "permissions", "roles"
+  add_foreign_key "service_provider_attributes", "attributes"
+  add_foreign_key "service_provider_attributes", "service_providers"
   add_foreign_key "subject_roles", "roles"
   add_foreign_key "subject_roles", "subjects"
 end
