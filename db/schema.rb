@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150929002006) do
+ActiveRecord::Schema.define(version: 20150930010255) do
+
+  create_table "activations", force: :cascade do |t|
+    t.integer  "federation_object_id",   limit: 4,   null: false
+    t.string   "federation_object_type", limit: 255, null: false
+    t.datetime "activated_at",                       null: false
+    t.datetime "deactivated_at"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
 
   create_table "api_subject_roles", force: :cascade do |t|
     t.integer  "api_subject_id", limit: 4, null: false
