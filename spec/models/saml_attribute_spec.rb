@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe Attribute, type: :model do
+RSpec.describe SAMLAttribute, type: :model do
   context 'validations' do
-    subject { build(:attribute) }
+    subject { build(:saml_attribute) }
 
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:description) }

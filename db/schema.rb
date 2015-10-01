@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150930010255) do
+ActiveRecord::Schema.define(version: 20151001015645) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -44,22 +44,15 @@ ActiveRecord::Schema.define(version: 20150930010255) do
 
   add_index "api_subjects", ["x509_cn"], name: "index_api_subjects_on_x509_cn", unique: true, using: :btree
 
-  create_table "attributes", force: :cascade do |t|
-    t.string   "name",        limit: 255, null: false
-    t.string   "description", limit: 255, null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-  end
-
-  create_table "identity_provider_attributes", force: :cascade do |t|
+  create_table "identity_provider_saml_attributes", force: :cascade do |t|
     t.integer  "identity_provider_id", limit: 4, null: false
-    t.integer  "attribute_id",         limit: 4, null: false
+    t.integer  "saml_attribute_id",    limit: 4, null: false
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
   end
 
-  add_index "identity_provider_attributes", ["attribute_id"], name: "fk_rails_94f14b5952", using: :btree
-  add_index "identity_provider_attributes", ["identity_provider_id", "attribute_id"], name: "unique_identity_provider_attribute", unique: true, using: :btree
+  add_index "identity_provider_saml_attributes", ["identity_provider_id", "saml_attribute_id"], name: "unique_identity_provider_attribute", unique: true, using: :btree
+  add_index "identity_provider_saml_attributes", ["saml_attribute_id"], name: "fk_rails_94f14b5952", using: :btree
 
   create_table "identity_providers", force: :cascade do |t|
     t.string   "entity_id",  limit: 255, null: false
@@ -101,16 +94,23 @@ ActiveRecord::Schema.define(version: 20150930010255) do
 
   add_index "roles", ["entitlement"], name: "index_roles_on_entitlement", unique: true, using: :btree
 
-  create_table "service_provider_attributes", force: :cascade do |t|
+  create_table "saml_attributes", force: :cascade do |t|
+    t.string   "name",        limit: 255, null: false
+    t.string   "description", limit: 255, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  create_table "service_provider_saml_attributes", force: :cascade do |t|
     t.integer  "service_provider_id", limit: 4, null: false
-    t.integer  "attribute_id",        limit: 4, null: false
+    t.integer  "saml_attribute_id",   limit: 4, null: false
     t.boolean  "optional",                      null: false
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
   end
 
-  add_index "service_provider_attributes", ["attribute_id"], name: "fk_rails_de72af15ed", using: :btree
-  add_index "service_provider_attributes", ["service_provider_id", "attribute_id"], name: "unique_identity_provider_attribute", unique: true, using: :btree
+  add_index "service_provider_saml_attributes", ["saml_attribute_id"], name: "fk_rails_de72af15ed", using: :btree
+  add_index "service_provider_saml_attributes", ["service_provider_id", "saml_attribute_id"], name: "unique_identity_provider_attribute", unique: true, using: :btree
 
   create_table "service_providers", force: :cascade do |t|
     t.string   "entity_id",  limit: 255, null: false
@@ -145,11 +145,11 @@ ActiveRecord::Schema.define(version: 20150930010255) do
 
   add_foreign_key "api_subject_roles", "api_subjects"
   add_foreign_key "api_subject_roles", "roles"
-  add_foreign_key "identity_provider_attributes", "attributes"
-  add_foreign_key "identity_provider_attributes", "identity_providers"
+  add_foreign_key "identity_provider_saml_attributes", "identity_providers"
+  add_foreign_key "identity_provider_saml_attributes", "saml_attributes"
   add_foreign_key "permissions", "roles"
-  add_foreign_key "service_provider_attributes", "attributes"
-  add_foreign_key "service_provider_attributes", "service_providers"
+  add_foreign_key "service_provider_saml_attributes", "saml_attributes"
+  add_foreign_key "service_provider_saml_attributes", "service_providers"
   add_foreign_key "subject_roles", "roles"
   add_foreign_key "subject_roles", "subjects"
 end
