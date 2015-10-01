@@ -1,5 +1,7 @@
 # Base class for all time series reports.
 class TimeSeriesReport
+  prepend TimeSeriesReport::Lint
+
   class_attribute :options
   self.options = {}
 
@@ -17,12 +19,16 @@ class TimeSeriesReport
     end
 
     def series(opts)
-      options[:series] = (options[:series] || []) + opts.keys
+      options[:series] = opts.keys
       labels(opts)
     end
 
     def labels(opts)
-      options[:labels] = (options[:labels] || {}).merge(opts)
+      options[:labels] = (options[:labels].try(:slice, :y) || {}).merge(opts)
+    end
+
+    def units(value)
+      options[:units] = value
     end
   end
 
@@ -32,6 +38,7 @@ class TimeSeriesReport
   end
 
   def generate
-    self.class.options.merge(title: @title, range: @range, data: data)
+    range = @range.transform_values(&:xmlschema)
+    self.class.options.merge(title: @title, range: range, data: data)
   end
 end

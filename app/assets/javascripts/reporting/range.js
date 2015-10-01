@@ -1,5 +1,5 @@
 reporting.range = function(report) {
-  var timeFormat = d3.time.format('%Y-%m-%d %H:%M:%S UTC');
+  var timeFormat = d3.time.format('%Y-%m-%dT%H:%M:%SZ');
   var range = report.range;
 
   return {

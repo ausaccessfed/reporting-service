@@ -40,8 +40,11 @@ reporting.hoverbox = function(report, scale, range, sizing) {
 
         date = Math.abs(x0 - d[0]) > Math.abs(x0 - date) ? date : d[0];
 
+        var value = d[1];
+        if (d.length > 2) value = d[2];
+
         selection.select('.legend .' + k + '-text')
-          .text(d3.round(d[1], 1) + ' ms');
+          .text(d3.round(value, 1) + report.units);
       });
 
       selection.select('.x-text').text(

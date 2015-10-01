@@ -7,6 +7,8 @@ class RandomTimeSeriesReport < TimeSeriesReport
          database: 'Database Time',
          render: 'Render Time'
 
+  units ' ms'
+
   def initialize(host, start, finish)
     super("A randomly generated graph for #{host}", start, finish)
     @start = start
@@ -15,10 +17,10 @@ class RandomTimeSeriesReport < TimeSeriesReport
 
   def data
     range.each_with_object(total: [], database: [], render: []) do |n, map|
-      r1, r2, r3 = randoms
-      map[:database] << [n, 30 + r2]
-      map[:render] << [n, 10 + r1]
-      map[:total] << [n, 40 + r1 + r2 + r3]
+      d, r, t = points(n)
+      map[:database] << d
+      map[:render] << r
+      map[:total] << t
     end
   end
 
@@ -38,5 +40,35 @@ class RandomTimeSeriesReport < TimeSeriesReport
     r2 = -2.0 if r2 < -2.0
     r3 = rng.call.abs * 5
     [r1, r2, r3]
+  end
+
+  def points(n)
+    r1, r2, r3 = randoms
+
+    d = 30 + r2
+    r = 10 + r1
+    t = r3
+
+    [[n, d], [n, r], [n, d + r + t]]
+  end
+
+  class Line < RandomTimeSeriesReport
+    report_type 'random-time-series-line'
+  end
+
+  class Stacked < RandomTimeSeriesReport
+    series total: 'Total Response Time',
+           render: 'Render Time',
+           database: 'Database Time'
+
+    def points(n)
+      r1, r2, r3 = randoms
+
+      d = 30 + r2
+      r = 10 + r1
+      t = r3
+
+      [[n, d, d], [n, d + r, r], [n, d + r + t, d + r + t]]
+    end
   end
 end

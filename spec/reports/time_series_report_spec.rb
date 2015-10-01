@@ -13,6 +13,8 @@ RSpec.describe TimeSeriesReport do
              b: 'The letter B',
              c: 'The letter C'
 
+      units ' Hz'
+
       def initialize(title, start, finish, data)
         super(title, start, finish)
         @data = data
@@ -55,7 +57,11 @@ RSpec.describe TimeSeriesReport do
         end
       end
 
-      let(:subclass_report) { subclass.new(title, start, finish, report_data) }
+      let(:subclass_report) do
+        subclass.new(title, start, finish, subclass_report_data)
+      end
+
+      let(:subclass_report_data) { { d: [[0, 3], [1, 3], [2, 3]] } }
 
       it 'has a separate options hash' do
         expect(subclass_report.generate).to include(type: 'subclass-report')
@@ -84,6 +90,7 @@ RSpec.describe TimeSeriesReport do
     it { is_expected.to include(labels: include(b: 'The letter B')) }
     it { is_expected.to include(labels: include(c: 'The letter C')) }
     it { is_expected.to include(series: contain_exactly(:a, :b, :c)) }
+    it { is_expected.to include(units: ' Hz') }
     it { is_expected.to include(data: report_data) }
   end
 end

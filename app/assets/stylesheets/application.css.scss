@@ -23,7 +23,7 @@ $graph-color-retina-burn: #6aff7f;
   }
 }
 
-#report-output {
+svg#report-output {
   .axis {
     path, line {
       fill: none;
@@ -74,6 +74,10 @@ $graph-color-retina-burn: #6aff7f;
     cursor: crosshair;
   }
 
+  .line path {
+    stroke-width: 2px;
+  }
+
   &.random-time-series {
     .total {
       fill: $graph-color-vibrant;
@@ -86,5 +90,41 @@ $graph-color-retina-burn: #6aff7f;
     .render {
       fill: $graph-color-dull;
     }
+  }
+
+  &.random-time-series-line {
+    path.total {
+      stroke: $graph-color-vibrant;
+      fill: none;
+    }
+
+    rect.total {
+      fill: $graph-color-vibrant;
+    }
+
+    path.database {
+      stroke: $graph-color-primary;
+      fill: none;
+    }
+
+    rect.database {
+      fill: $graph-color-primary;
+    }
+
+    path.render {
+      stroke: $graph-color-dull;
+      fill: none;
+    }
+
+    rect.render {
+      fill: $graph-color-dull;
+    }
+  }
+}
+
+table#report-output {
+  width: 100%;
+  th, td {
+    padding-right: 1em;
   }
 }
