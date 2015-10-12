@@ -6,6 +6,5 @@ RSpec.describe ServiceProviderSAMLAttribute, type: :model do
 
     it { is_expected.to validate_presence_of(:service_provider) }
     it { is_expected.to validate_presence_of(:saml_attribute) }
-    it { is_expected.to validate_inclusion_of(:optional).in([true, false]) }
   end
 end
