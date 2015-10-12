@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151001015645) do
+ActiveRecord::Schema.define(version: 20151001225748) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -61,12 +61,16 @@ ActiveRecord::Schema.define(version: 20151001015645) do
     t.datetime "updated_at",             null: false
   end
 
+  add_index "identity_providers", ["entity_id"], name: "index_identity_providers_on_entity_id", unique: true, using: :btree
+
   create_table "organizations", force: :cascade do |t|
     t.string   "identifier", limit: 255, null: false
     t.string   "name",       limit: 255, null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
+
+  add_index "organizations", ["identifier"], name: "index_organizations_on_identifier", unique: true, using: :btree
 
   create_table "permissions", force: :cascade do |t|
     t.integer  "role_id",    limit: 4,   null: false
@@ -85,6 +89,8 @@ ActiveRecord::Schema.define(version: 20151001015645) do
     t.datetime "updated_at",             null: false
   end
 
+  add_index "rapid_connect_services", ["identifier"], name: "index_rapid_connect_services_on_identifier", unique: true, using: :btree
+
   create_table "roles", force: :cascade do |t|
     t.string   "name",        limit: 255, null: false
     t.string   "entitlement", limit: 255, null: false
@@ -100,6 +106,8 @@ ActiveRecord::Schema.define(version: 20151001015645) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end
+
+  add_index "saml_attributes", ["name"], name: "index_saml_attributes_on_name", unique: true, using: :btree
 
   create_table "service_provider_saml_attributes", force: :cascade do |t|
     t.integer  "service_provider_id", limit: 4, null: false
@@ -118,6 +126,8 @@ ActiveRecord::Schema.define(version: 20151001015645) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
+
+  add_index "service_providers", ["entity_id"], name: "index_service_providers_on_entity_id", unique: true, using: :btree
 
   create_table "subject_roles", force: :cascade do |t|
     t.integer  "subject_id", limit: 4, null: false
