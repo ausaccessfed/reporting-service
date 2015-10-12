@@ -118,7 +118,7 @@ ActiveRecord::Schema.define(version: 20151001225748) do
   end
 
   add_index "service_provider_saml_attributes", ["saml_attribute_id"], name: "fk_rails_de72af15ed", using: :btree
-  add_index "service_provider_saml_attributes", ["service_provider_id", "saml_attribute_id"], name: "unique_identity_provider_attribute", unique: true, using: :btree
+  add_index "service_provider_saml_attributes", ["service_provider_id", "saml_attribute_id"], name: "unique_service_provider_attribute", unique: true, using: :btree
 
   create_table "service_providers", force: :cascade do |t|
     t.string   "entity_id",  limit: 255, null: false
