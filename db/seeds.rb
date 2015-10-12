@@ -39,9 +39,9 @@ def event_body(time)
           ip: Faker::Internet.ip_v4_address, protocol: 'DS', type: 'Cookie' }
 end
 
-es_config = Rails.application.config.elasticsearch
-client = Elasticsearch::Client.new(es_config.slice(:url))
-index = es_config[:index]
+include DataSources
+index = elasticsearch_index
+client = elasticsearch_client
 
 type_mappings = { ds: { _ttl: { enabled: false } } }
 
