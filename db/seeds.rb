@@ -49,7 +49,7 @@ client.indices.delete(index: index)
 client.indices.create(index: index, body: { mappings: type_mappings })
 
 times = Enumerator.new do |y|
-  ((Date.today - 40)..Date.tomorrow).to_a.each do |date|
+  (40.days.ago.to_date..1.day.from_now.to_date).to_a.each do |date|
     i = 0
 
     while i < 86_400
