@@ -11,6 +11,6 @@ module DataSources
   private
 
   def elasticsearch_config
-    es_config = Rails.application.config.elasticsearch
+    Rails.application.config.elasticsearch
   end
 end

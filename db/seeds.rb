@@ -35,8 +35,8 @@ def event_body(time)
 
   return_url = sp.gsub(%r{/shibboleth$}, '/Shibboleth.sso/SSO')
 
-  doc = { idp: idp, sp: sp, return_url: return_url, date: time.xmlschema,
-          ip: Faker::Internet.ip_v4_address, protocol: 'DS', type: 'Cookie' }
+  { idp: idp, sp: sp, return_url: return_url, date: time.xmlschema,
+    ip: Faker::Internet.ip_v4_address, protocol: 'DS', type: 'Cookie' }
 end
 
 include DataSources
