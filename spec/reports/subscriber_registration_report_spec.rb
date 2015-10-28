@@ -6,6 +6,11 @@ RSpec.describe SubscriberRegistrationReport do
   let(:footer) { [['Name', 'Registration Date']] }
   let(:type) { 'subscriber-registrations' }
 
+  let(:activated_organization) { create(:organization) }
+  let(:activated_idp) { create(:identity_provider) }
+  let(:activated_sp) { create(:service_provider) }
+  let(:activated_rapid_connect) { create(:rapid_connect_service) }
+
   let(:org_report) do
     SubscriberRegistrationReport.new(title, 'organizations')
   end
@@ -20,6 +25,16 @@ RSpec.describe SubscriberRegistrationReport do
 
   let(:rapid_c_report) do
     SubscriberRegistrationReport.new(title, 'rapid_connect_services')
+  end
+
+  context '#rows' do
+    it 'must return array' do
+      expect(org_report.rows).to be_an(Array)
+    end
+
+    it 'must include first' do
+      puts org_report.rows
+    end
   end
 
   context '#generate' do
@@ -67,10 +82,6 @@ RSpec.describe SubscriberRegistrationReport do
   end
 
   context '#select_activated_subscribers organizations' do
-    let(:activated_organization) do
-      create(:organization)
-    end
-
     let(:deactivated_organization) do
       create(:organization)
     end
@@ -97,10 +108,6 @@ RSpec.describe SubscriberRegistrationReport do
   end
 
   context '#select_activated_subscribers idps' do
-    let(:activated_idp) do
-      create(:identity_provider)
-    end
-
     let(:deactivated_idp) do
       create(:identity_provider)
     end
@@ -127,10 +134,6 @@ RSpec.describe SubscriberRegistrationReport do
   end
 
   context '#select_activated_subscribers sps' do
-    let(:activated_sp) do
-      create(:service_provider)
-    end
-
     let(:deactivated_sp) do
       create(:service_provider)
     end
@@ -157,10 +160,6 @@ RSpec.describe SubscriberRegistrationReport do
   end
 
   context '#select_activated_subscribers rapid_connect_services' do
-    let(:activated_rapid_connect) do
-      create(:rapid_connect_service)
-    end
-
     let(:deactivated_rapid_connect) do
       create(:rapid_connect_service)
     end
