@@ -15,6 +15,7 @@ class SubscriberRegistrationReport < TabularReport
     end
   end
 
+  # rubocop:disable Metrics/MethodLength
   def subscribers_list
     case @identifier
     when 'organizations'
@@ -25,6 +26,8 @@ class SubscriberRegistrationReport < TabularReport
       ServiceProvider.all
     when 'rapid_connect_services'
       RapidConnectService.all
+    when 'services'
+      ServiceProvider.all + RapidConnectService.all
     end
   end
 

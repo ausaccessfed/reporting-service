@@ -27,6 +27,10 @@ RSpec.describe SubscriberRegistrationReport do
     SubscriberRegistrationReport.new(title, 'rapid_connect_services')
   end
 
+  let(:service_report) do
+    SubscriberRegistrationReport.new(title, 'services')
+  end
+
   context '#rows' do
     before do
       create(:activation, :with_activated_at,
@@ -41,10 +45,39 @@ RSpec.describe SubscriberRegistrationReport do
       activated_date = activated_organization.activations
                        .order(activated_at: :asc).first.activated_at
 
-      org_nam = activated_organization.name
+      org_name = activated_organization.name
 
       expect(org_report.rows.map)
-        .to include([org_nam, activated_date])
+        .to include([org_name, activated_date])
+    end
+  end
+
+  context '#rows on services' do
+    before do
+      create(:activation, :with_activated_at,
+             federation_object: activated_sp)
+      create(:activation, :with_activated_at,
+             federation_object: activated_rapid_connect)
+    end
+
+    it 'must return array' do
+      expect(service_report.rows).to be_an(Array)
+    end
+
+    it 'must include related object activated_at' do
+      sp_activated_date = activated_sp.activations
+                          .order(activated_at: :asc).first.activated_at
+      rapid_activated_date = activated_rapid_connect.activations
+                             .order(activated_at: :asc).first.activated_at
+
+      sp_service_name = activated_sp.name
+      rapid_service_name = activated_rapid_connect.name
+
+      expect(service_report.rows.map)
+        .to include([sp_service_name, sp_activated_date])
+
+      expect(service_report.rows.map)
+        .to include([rapid_service_name, rapid_activated_date])
     end
   end
 
@@ -66,6 +99,11 @@ RSpec.describe SubscriberRegistrationReport do
 
     it 'must have title, header and type' do
       expect(rapid_c_report.generate).to include(title: title, header: header,
+                                                 footer: footer, type: type)
+    end
+
+    it 'must have title, header and type' do
+      expect(service_report.generate).to include(title: title, header: header,
                                                  footer: footer, type: type)
     end
   end
@@ -172,6 +210,43 @@ RSpec.describe SubscriberRegistrationReport do
 
     it 'should not include deactivated_rapid_connect' do
       expect(rapid_c_report.select_activated_subscribers)
+        .not_to include(deactivated_rapid_connect)
+    end
+  end
+
+  context '#select_activated_subscribers servcies' do
+    let(:deactivated_rapid_connect) { create(:rapid_connect_service) }
+    let(:deactivated_sp) { create(:service_provider) }
+
+    before do
+      create(:activation, :with_activated_at,
+             federation_object: activated_sp)
+      create(:activation, :with_deactivated_at,
+             federation_object: deactivated_sp)
+
+      create(:activation, :with_activated_at,
+             federation_object: activated_rapid_connect)
+      create(:activation, :with_deactivated_at,
+             federation_object: deactivated_rapid_connect)
+    end
+
+    it 'should include activated_sp' do
+      expect(service_report.select_activated_subscribers)
+        .to include(activated_sp)
+    end
+
+    it 'should include activated_rapid_connect' do
+      expect(service_report.select_activated_subscribers)
+        .to include(activated_rapid_connect)
+    end
+
+    it 'should not include deactivated_' do
+      expect(service_report.select_activated_subscribers)
+        .not_to include(deactivated_sp)
+    end
+
+    it 'should not include deactivated_rapid_connect' do
+      expect(service_report.select_activated_subscribers)
         .not_to include(deactivated_rapid_connect)
     end
   end
