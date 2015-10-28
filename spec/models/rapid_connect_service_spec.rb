@@ -6,7 +6,7 @@ RSpec.describe RapidConnectService, type: :model do
 
     it { is_expected.to validate_presence_of(:identifier) }
     it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to validate_presence_of(:type) }
+    it { is_expected.to validate_presence_of(:service_type) }
 
     it { is_expected.to validate_uniqueness_of(:identifier) }
   end

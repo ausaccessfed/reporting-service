@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151001225748) do
+ActiveRecord::Schema.define(version: 20151028023321) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -82,11 +82,11 @@ ActiveRecord::Schema.define(version: 20151001225748) do
   add_index "permissions", ["role_id", "value"], name: "index_permissions_on_role_id_and_value", unique: true, using: :btree
 
   create_table "rapid_connect_services", force: :cascade do |t|
-    t.string   "identifier", limit: 255, null: false
-    t.string   "name",       limit: 255, null: false
-    t.string   "type",       limit: 255, null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "identifier",   limit: 255, null: false
+    t.string   "name",         limit: 255, null: false
+    t.string   "service_type", limit: 255, null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   add_index "rapid_connect_services", ["identifier"], name: "index_rapid_connect_services_on_identifier", unique: true, using: :btree
