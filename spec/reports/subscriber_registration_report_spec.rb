@@ -43,4 +43,26 @@ RSpec.describe SubscriberRegistrationReport do
                                                  footer: footer, type: type)
     end
   end
+
+  context '#subscribers_list' do
+    it 'should to match Organization.all' do
+      expect(org_report.subscribers_list)
+        .to match_array(Organization.all)
+    end
+
+    it 'should to match IdentityProvider.all' do
+      expect(idp_report.subscribers_list)
+        .to match_array(IdentityProvider.all)
+    end
+
+    it 'should to match ServiceProvider.all' do
+      expect(sp_report.subscribers_list)
+        .to match_array(ServiceProvider.all)
+    end
+
+    it 'should to match RapidConnectService.all' do
+      expect(rapid_c_report.subscribers_list)
+        .to match_array(RapidConnectService.all)
+    end
+  end
 end
