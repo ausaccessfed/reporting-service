@@ -28,7 +28,7 @@ RSpec.describe SubscriberRegistrationReport do
   end
 
   context '#rows' do
-    let!(:activation) do
+    before do
       create(:activation, :with_activated_at,
              federation_object: activated_organization)
     end
@@ -93,16 +93,11 @@ RSpec.describe SubscriberRegistrationReport do
   end
 
   context '#select_activated_subscribers organizations' do
-    let(:deactivated_organization) do
-      create(:organization)
-    end
+    let(:deactivated_organization) { create(:organization) }
 
-    let!(:activation) do
+    before do
       create(:activation, :with_activated_at,
              federation_object: activated_organization)
-    end
-
-    let!(:deactivation) do
       create(:activation, :with_deactivated_at,
              federation_object: deactivated_organization)
     end
@@ -119,16 +114,11 @@ RSpec.describe SubscriberRegistrationReport do
   end
 
   context '#select_activated_subscribers idps' do
-    let(:deactivated_idp) do
-      create(:identity_provider)
-    end
+    let(:deactivated_idp) { create(:identity_provider) }
 
-    let!(:activation) do
+    before do
       create(:activation, :with_activated_at,
              federation_object: activated_idp)
-    end
-
-    let!(:deactivation) do
       create(:activation, :with_deactivated_at,
              federation_object: deactivated_idp)
     end
@@ -145,16 +135,11 @@ RSpec.describe SubscriberRegistrationReport do
   end
 
   context '#select_activated_subscribers sps' do
-    let(:deactivated_sp) do
-      create(:service_provider)
-    end
+    let(:deactivated_sp) { create(:service_provider) }
 
-    let!(:activation) do
+    before do
       create(:activation, :with_activated_at,
              federation_object: activated_sp)
-    end
-
-    let!(:deactivation) do
       create(:activation, :with_deactivated_at,
              federation_object: deactivated_sp)
     end
@@ -171,16 +156,11 @@ RSpec.describe SubscriberRegistrationReport do
   end
 
   context '#select_activated_subscribers rapid_connect_services' do
-    let(:deactivated_rapid_connect) do
-      create(:rapid_connect_service)
-    end
+    let(:deactivated_rapid_connect) { create(:rapid_connect_service) }
 
-    let!(:activation) do
+    before do
       create(:activation, :with_activated_at,
              federation_object: activated_rapid_connect)
-    end
-
-    let!(:deactivation) do
       create(:activation, :with_deactivated_at,
              federation_object: deactivated_rapid_connect)
     end
