@@ -17,13 +17,12 @@ class SubscriberRegistrationReport < TabularReport
   end
 
   def subscribers_list
-    services = ServiceProvider.all + RapidConnectService.all
-    registered_objects = { 'organizations' => Organization.all,
-                           'identity_providers' => IdentityProvider.all,
-                           'service_providers' => ServiceProvider.all,
-                           'rapid_connect_services' => RapidConnectService.all,
-                           'services' =>  services }
-    registered_objects[@identifier]
+    objects = { 'organizations' => [Organization],
+                'identity_providers' => [IdentityProvider],
+                'service_providers' => [ServiceProvider],
+                'rapid_connect_services' => [RapidConnectService],
+                'services' => [ServiceProvider, RapidConnectService] }
+    objects[@identifier].flat_map(&:all).sort_by(&:name)
   end
 
   def select_activated_subscribers
