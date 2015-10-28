@@ -33,7 +33,7 @@ RSpec.describe SubscriberRegistrationReport do
 
   context '#rows' do
     before do
-      create(:activation, :with_activated_at,
+      create(:activation,
              federation_object: activated_organization)
     end
 
@@ -54,9 +54,9 @@ RSpec.describe SubscriberRegistrationReport do
 
   context '#rows on services' do
     before do
-      create(:activation, :with_activated_at,
+      create(:activation,
              federation_object: activated_sp)
-      create(:activation, :with_activated_at,
+      create(:activation,
              federation_object: activated_rapid_connect)
     end
 
@@ -134,9 +134,9 @@ RSpec.describe SubscriberRegistrationReport do
     let(:deactivated_organization) { create(:organization) }
 
     before do
-      create(:activation, :with_activated_at,
+      create(:activation,
              federation_object: activated_organization)
-      create(:activation, :with_deactivated_at,
+      create(:activation, :deactivated,
              federation_object: deactivated_organization)
     end
 
@@ -155,9 +155,9 @@ RSpec.describe SubscriberRegistrationReport do
     let(:deactivated_idp) { create(:identity_provider) }
 
     before do
-      create(:activation, :with_activated_at,
+      create(:activation,
              federation_object: activated_idp)
-      create(:activation, :with_deactivated_at,
+      create(:activation, :deactivated,
              federation_object: deactivated_idp)
     end
 
@@ -176,9 +176,9 @@ RSpec.describe SubscriberRegistrationReport do
     let(:deactivated_sp) { create(:service_provider) }
 
     before do
-      create(:activation, :with_activated_at,
+      create(:activation,
              federation_object: activated_sp)
-      create(:activation, :with_deactivated_at,
+      create(:activation, :deactivated,
              federation_object: deactivated_sp)
     end
 
@@ -197,9 +197,9 @@ RSpec.describe SubscriberRegistrationReport do
     let(:deactivated_rapid_connect) { create(:rapid_connect_service) }
 
     before do
-      create(:activation, :with_activated_at,
+      create(:activation,
              federation_object: activated_rapid_connect)
-      create(:activation, :with_deactivated_at,
+      create(:activation, :deactivated,
              federation_object: deactivated_rapid_connect)
     end
 
@@ -219,14 +219,14 @@ RSpec.describe SubscriberRegistrationReport do
     let(:deactivated_sp) { create(:service_provider) }
 
     before do
-      create(:activation, :with_activated_at,
+      create(:activation,
              federation_object: activated_sp)
-      create(:activation, :with_deactivated_at,
+      create(:activation, :deactivated,
              federation_object: deactivated_sp)
 
-      create(:activation, :with_activated_at,
+      create(:activation,
              federation_object: activated_rapid_connect)
-      create(:activation, :with_deactivated_at,
+      create(:activation, :deactivated,
              federation_object: deactivated_rapid_connect)
     end
 
