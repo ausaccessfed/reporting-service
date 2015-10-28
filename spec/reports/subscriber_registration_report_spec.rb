@@ -21,4 +21,26 @@ RSpec.describe SubscriberRegistrationReport do
   let(:rapid_c_report) do
     SubscriberRegistrationReport.new(title, 'rapid_connect_services')
   end
+
+  context '#generate' do
+    it 'must have title, header and type' do
+      expect(org_report.generate).to include(title: title, header: header,
+                                             footer: footer, type: type)
+    end
+
+    it 'must have title, header and type' do
+      expect(idp_report.generate).to include(title: title, header: header,
+                                             footer: footer, type: type)
+    end
+
+    it 'must have title, header and type' do
+      expect(sp_report.generate).to include(title: title, header: header,
+                                            footer: footer, type: type)
+    end
+
+    it 'must have title, header and type' do
+      expect(rapid_c_report.generate).to include(title: title, header: header,
+                                                 footer: footer, type: type)
+    end
+  end
 end
