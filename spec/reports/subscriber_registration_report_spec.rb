@@ -28,12 +28,23 @@ RSpec.describe SubscriberRegistrationReport do
   end
 
   context '#rows' do
+    let!(:activation) do
+      create(:activation, :with_activated_at,
+             federation_object: activated_organization)
+    end
+
     it 'must return array' do
       expect(org_report.rows).to be_an(Array)
     end
 
-    it 'must include first' do
-      puts org_report.rows
+    it 'must include related object activated_at' do
+      activated_date = activated_organization.activations
+                       .order(activated_at: :asc).first.activated_at
+
+      org_nam = activated_organization.name
+
+      expect(org_report.rows.map)
+        .to include([org_nam, activated_date])
     end
   end
 
