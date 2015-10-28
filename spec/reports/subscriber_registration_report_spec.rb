@@ -80,36 +80,32 @@ RSpec.describe SubscriberRegistrationReport do
   end
 
   context '#generate' do
-    def standard_title(identifier)
-      'Registered' + ' ' + identifier.strip.downcase.titleize
-    end
-
     it 'must have title, header and type' do
-      title = standard_title 'organizations'
+      title = 'Registered Organizations'
       expect(org_report.generate).to include(title: title,
                                              header: header, type: type)
     end
 
     it 'must have title, header and type' do
-      title = standard_title 'identity_providers'
+      title = 'Registered Identity Providers'
       expect(idp_report.generate).to include(title: title,
                                              header: header, type: type)
     end
 
     it 'must have title, header and type' do
-      title = standard_title 'service_providers'
+      title = 'Registered Service Providers'
       expect(sp_report.generate).to include(title: title,
                                             header: header, type: type)
     end
 
     it 'must have title, header and type' do
-      title = standard_title 'rapid_connect_services'
+      title = 'Registered Rapid Connect Services'
       expect(rapid_c_report.generate).to include(title: title,
                                                  header: header, type: type)
     end
 
     it 'must have title, header and type' do
-      title = standard_title 'services'
+      title = 'Registered Services'
       expect(service_report.generate).to include(title: title,
                                                  header: header, type: type)
     end
