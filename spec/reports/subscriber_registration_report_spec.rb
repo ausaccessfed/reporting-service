@@ -27,6 +27,7 @@ RSpec.describe SubscriberRegistrationReport do
                   'service_providers' => ServiceProvider.all,
                   'rapid_connect_services' => RapidConnectService.all,
                   'services' => ServiceProvider.all + RapidConnectService.all }
+
       it 'matches all objects' do
         expect(subject.subscribers_list)
           .to match_array(objects[report_type])
@@ -43,6 +44,7 @@ RSpec.describe SubscriberRegistrationReport do
         reported_objects.each do |o|
           activated_date = o.activations(true)
                            .flat_map(&:activated_at).min
+
           expect(subject.rows).to include([o.name, activated_date])
           expect(subject.select_activated_subscribers)
             .to include(o)
