@@ -48,6 +48,14 @@ RSpec.describe SubscriberRegistrationReport do
         end
       end
     end
+
+    context 'when objects have no activations' do
+      it 'excludes object without activations' do
+        [*reported_objects, *excluded_objects].each do |o|
+          expect(subject.rows).not_to include([o.name, anything])
+        end
+      end
+    end
   end
 
   context 'report generation' do

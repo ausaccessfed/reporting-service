@@ -29,8 +29,8 @@ class SubscriberRegistrationReport < TabularReport
   end
 
   def select_activated_subscribers
-    subscribers_list.select do |i|
-      i.activations.select(&:deactivated_at) == []
+    subscribers_list.select do |o|
+      o.activations.any? { |x| !x.deactivated_at }
     end
   end
 
