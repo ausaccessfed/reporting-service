@@ -21,19 +21,6 @@ RSpec.describe SubscriberRegistrationReport do
                                           header: header, type: type)
     end
 
-    context '#subscribers_list' do
-      objects = { 'organizations' => Organization.all,
-                  'identity_providers' => IdentityProvider.all,
-                  'service_providers' => ServiceProvider.all,
-                  'rapid_connect_services' => RapidConnectService.all,
-                  'services' => ServiceProvider.all + RapidConnectService.all }
-
-      it 'matches all objects' do
-        expect(subject.subscribers_list)
-          .to match_array(objects[report_type])
-      end
-    end
-
     context 'when all objects are activated' do
       let!(:activations) do
         [*reported_objects, *excluded_objects]
@@ -44,10 +31,7 @@ RSpec.describe SubscriberRegistrationReport do
         reported_objects.each do |o|
           activated_date = o.activations(true)
                            .flat_map(&:activated_at).min
-
           expect(subject.rows).to include([o.name, activated_date])
-          expect(subject.select_activated_subscribers)
-            .to include(o)
         end
       end
     end
@@ -61,8 +45,6 @@ RSpec.describe SubscriberRegistrationReport do
       it 'excludes all objects' do
         [*reported_objects, *excluded_objects].each do |o|
           expect(subject.rows).not_to include([o.name, anything])
-          expect(subject.select_activated_subscribers)
-            .not_to include(o)
         end
       end
     end

@@ -16,6 +16,8 @@ class SubscriberRegistrationReport < TabularReport
     end
   end
 
+  private
+
   def subscribers_list
     objects = { 'organizations' => [Organization],
                 'identity_providers' => [IdentityProvider],
