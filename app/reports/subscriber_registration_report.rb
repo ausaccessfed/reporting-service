@@ -11,7 +11,7 @@ class SubscriberRegistrationReport < TabularReport
 
   def rows
     select_activated_subscribers.map do |i|
-      rego_date = i.activations.order(activated_at: :asc).first.activated_at
+      rego_date = i.activations.minimum(:activated_at)
 
       [i.name, rego_date]
     end
