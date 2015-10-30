@@ -19,7 +19,7 @@ class SubscriberRegistrationReport < TabularReport
 
   private
 
-  def subscribers_list
+  def select_activated_subscribers
     objects = { 'organizations' => [Organization],
                 'identity_providers' => [IdentityProvider],
                 'service_providers' => [ServiceProvider],
@@ -27,12 +27,9 @@ class SubscriberRegistrationReport < TabularReport
                 'services' => [ServiceProvider, RapidConnectService] }
     fail('Identifier is not valid!') unless objects.key?(@identifier)
 
-    objects[@identifier].flat_map(&:all).sort_by(&:name)
-  end
-
-  def select_activated_subscribers
-    subscribers_list.select do |o|
-      o.activations.any? { |x| !x.deactivated_at }
+    objects[@identifier].flat_map do |o|
+      o.joins(:activations).includes(:activations)
+        .where(activations: { deactivated_at: nil })
     end
   end
 
