@@ -10,9 +10,9 @@ class SubscriberRegistrationReport < TabularReport
   end
 
   def rows
-    select_activated_subscribers.sort_by! { |key| key[:name] }
+    objects = select_activated_subscribers.sort_by(&:name)
 
-    select_activated_subscribers.map do |o|
+    objects.map do |o|
       rego_date = o.activations.map(&:activated_at).min
 
       [o.name, rego_date]
