@@ -10,10 +10,12 @@ class SubscriberRegistrationReport < TabularReport
   end
 
   def rows
-    select_activated_subscribers.map do |i|
-      rego_date = i.activations.minimum(:activated_at)
+    select_activated_subscribers.sort_by! { |key| key[:name] }
 
-      [i.name, rego_date]
+    select_activated_subscribers.map do |o|
+      rego_date = o.activations.map(&:activated_at).min
+
+      [o.name, rego_date]
     end
   end
 
@@ -28,7 +30,7 @@ class SubscriberRegistrationReport < TabularReport
     fail('Identifier is not valid!') unless objects.key?(@identifier)
 
     objects[@identifier].flat_map do |o|
-      o.joins(:activations).includes(:activations)
+      o.joins(:activations).preload(:activations)
         .where(activations: { deactivated_at: nil })
     end
   end
