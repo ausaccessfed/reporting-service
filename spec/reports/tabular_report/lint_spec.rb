@@ -107,7 +107,9 @@ RSpec.describe TabularReport::Lint do
 
   context 'when the row data is blank' do
     let(:output) { valid_output.merge(rows: []) }
-    fails_with 'rows is blank'
+    fit 'is valid' do
+      expect { subject.generate }.not_to raise_error
+    end
   end
 
   context 'when the row data is an array of strings' do

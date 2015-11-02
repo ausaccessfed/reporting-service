@@ -27,12 +27,12 @@ class TabularReport
     end
 
     def validate_rows(output)
-      validate_required_field(output, :rows, Array)
+      validate_required_field(output, :rows, Array, allow_blank: true)
       validate_tabular_row_data(output, :rows, 'row data')
     end
 
     def validate_shape(output)
-      width = output[:rows].first.length
+      width = output[:header].first.length
 
       ensure_width(output, :rows, width, 'row data has inconsistent width')
       ensure_width(output, :header, width, 'header size is incorrect')

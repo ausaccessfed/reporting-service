@@ -7,8 +7,8 @@ RSpec.describe TabularReport do
 
       report_type 'test-table'
 
-      header 'Column 1', 'Column 2', 'Column 3'
-      footer 'Footer 1', 'Footer 2', 'Footer 3'
+      header ['Column 1', 'Column 2', 'Column 3']
+      footer ['Footer 1', 'Footer 2', 'Footer 3']
 
       def initialize(title, rows)
         super(title)
@@ -27,7 +27,7 @@ RSpec.describe TabularReport do
         Class.new(klass) do
           report_type 'subclass-table'
 
-          header 'Column A', 'Column B'
+          header ['Column A', 'Column B']
         end
       end
 
@@ -53,11 +53,13 @@ RSpec.describe TabularReport do
 
   context '#generate' do
     subject { report.generate }
+    header = [['Column 1', 'Column 2', 'Column 3']]
+    footer = [['Footer 1', 'Footer 2', 'Footer 3']]
 
     it { is_expected.to include(title: title) }
     it { is_expected.to include(rows: report_rows) }
     it { is_expected.to include(type: 'test-table') }
-    it { is_expected.to include(header: ['Column 1', 'Column 2', 'Column 3']) }
-    it { is_expected.to include(footer: ['Footer 1', 'Footer 2', 'Footer 3']) }
+    it { is_expected.to include(header: header) }
+    it { is_expected.to include(footer: footer) }
   end
 end
