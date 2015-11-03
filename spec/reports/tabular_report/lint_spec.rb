@@ -65,7 +65,7 @@ RSpec.describe TabularReport::Lint do
 
   context 'when the header has too few items' do
     let(:output) { valid_output.merge(header: [%w(a b)]) }
-    fails_with 'header size is incorrect'
+    fails_with 'row data has inconsistent width'
   end
 
   context 'when the header contains non-string data' do
@@ -107,7 +107,7 @@ RSpec.describe TabularReport::Lint do
 
   context 'when the row data is blank' do
     let(:output) { valid_output.merge(rows: []) }
-    fit 'is valid' do
+    it 'is valid' do
       expect { subject.generate }.not_to raise_error
     end
   end

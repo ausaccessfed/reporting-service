@@ -28,6 +28,7 @@ RSpec.describe TabularReport do
           report_type 'subclass-table'
 
           header ['Column A', 'Column B']
+          footer
         end
       end
 
@@ -44,9 +45,9 @@ RSpec.describe TabularReport do
 
       it 'overrides options in the build' do
         expect(subclass_report.generate[:header])
-          .to contain_exactly('Column A', 'Column B')
+          .to contain_exactly(['Column A', 'Column B'])
         expect(report.generate[:header])
-          .to contain_exactly('Column 1', 'Column 2', 'Column 3')
+          .to contain_exactly(['Column 1', 'Column 2', 'Column 3'])
       end
     end
   end
