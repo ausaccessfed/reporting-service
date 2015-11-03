@@ -54,8 +54,8 @@ RSpec.describe TabularReport do
 
   context '#generate' do
     subject { report.generate }
-    header = [['Column 1', 'Column 2', 'Column 3']]
-    footer = [['Footer 1', 'Footer 2', 'Footer 3']]
+    let(:header) { [['Column 1', 'Column 2', 'Column 3']] }
+    let(:footer) { [['Footer 1', 'Footer 2', 'Footer 3']] }
 
     it { is_expected.to include(title: title) }
     it { is_expected.to include(rows: report_rows) }
