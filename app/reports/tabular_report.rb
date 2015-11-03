@@ -1,4 +1,6 @@
 class TabularReport
+  prepend TabularReport::Lint
+
   class_attribute :options
   self.options = {}
 
