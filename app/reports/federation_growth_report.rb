@@ -24,12 +24,31 @@ class FederationGrowthReport < TimeSeriesReport
   end
 
   def data
+    activations = Activation.where('activated_at <= ?', @finish)
+
     range.each_with_object(organizations: [], identity_providers: [],
                            rapid_connect_services: []) do |point, data|
-      # TODO
-      data[:organizations] << [point, 0]
-      data[:identity_providers] << [point, 0]
-      data[:rapid_connect_services] << [point, 0]
+      acts = activations_in_range point, activations
+      acts.each do |a|
+        data[object_switcher[a[0]]] << [point, a[1]]
+      end
     end
+  end
+
+  def activations_in_range(point, activations)
+    acts = activations.select do |a|
+      a.activated_at <= @start + point && a.deactivated_at.nil?
+    end
+
+    acts.group_by(&:federation_object_type).map do |type, value|
+      value.uniq! { |o| o[:federation_object_id] }
+      [type, value.count]
+    end
+  end
+
+  def object_switcher
+    { 'Organization' => :organizations,
+      'IdentityProvider' => :identity_providers,
+      'RapidConnectService' => :rapid_connect_services }
   end
 end
