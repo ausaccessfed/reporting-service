@@ -42,7 +42,7 @@ RSpec.describe FederationGrowthReport do
 
     it 'does not include dublicate activations' do
       expect(subject.generate)
-        .to include(data: (include organizations: include([0, 1])))
+        .not_to include(data: (include organizations: include([0, 2])))
     end
   end
 end
