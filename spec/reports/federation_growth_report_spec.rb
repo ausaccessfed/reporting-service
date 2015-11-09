@@ -6,11 +6,13 @@ RSpec.describe FederationGrowthReport do
   let(:labels) do
     { y: '', organizations: 'Organizations',
       identity_providers: 'Identity Providers',
+      service_providers: 'Service Providers',
       rapid_connect_services: 'Rapid Connect Services' }
   end
 
   let(:organization) { create(:organization) }
   let(:identity_provider) { create(:identity_provider) }
+  let(:service_provider) { create(:service_provider) }
   let(:rapid_connect_service) { create(:rapid_connect_service) }
 
   let!(:activation) do
@@ -19,7 +21,8 @@ RSpec.describe FederationGrowthReport do
   end
 
   let!(:activation_02) do
-    [organization, identity_provider, rapid_connect_service]
+    [organization, identity_provider,
+     service_provider, rapid_connect_service]
       .map { |o| create(:activation, federation_object: o) }
   end
 
