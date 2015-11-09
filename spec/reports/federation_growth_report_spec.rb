@@ -15,6 +15,11 @@ RSpec.describe FederationGrowthReport do
   let(:service_provider) { create(:service_provider) }
   let(:rapid_connect_service) { create(:rapid_connect_service) }
 
+  let(:organization_2) { create(:organization) }
+  let(:identity_provider_2) { create(:identity_provider) }
+  let(:service_provider_2) { create(:service_provider) }
+  let(:rapid_connect_service_2) { create(:rapid_connect_service) }
+
   let!(:activation) do
     [organization, identity_provider,
      service_provider, rapid_connect_service]
@@ -48,6 +53,22 @@ RSpec.describe FederationGrowthReport do
       it 'does not include dublicate activations' do
         expect(subject.generate)
           .not_to include(data: (include "#{type}": include([0, 2])))
+      end
+
+      context 'with objects deactivated after current point' do
+        let!(:activation_deactivated_latter) do
+          [organization_2, identity_provider_2,
+           service_provider_2, rapid_connect_service_2]
+            .map do |o|
+              create(:activation, federation_object: o,
+                                  deactivated_at: start + 1.day)
+            end
+        end
+
+        it 'shoud count objects deactivated after current point' do
+          expect(subject.generate)
+            .to include(data: (include "#{type}": include([0, 2])))
+        end
       end
     end
   end
