@@ -16,7 +16,8 @@ RSpec.describe FederationGrowthReport do
   let(:rapid_connect_service) { create(:rapid_connect_service) }
 
   let!(:activation) do
-    [organization, identity_provider, rapid_connect_service]
+    [organization, identity_provider,
+     service_provider, rapid_connect_service]
       .map { |o| create(:activation, federation_object: o) }
   end
 
