@@ -27,26 +27,53 @@ RSpec.describe FederationGrowthReport do
       .map { |o| create(:activation, federation_object: o) }
   end
 
-  let(:start) { Time.zone.today - 10.days }
-  let(:finish) { Time.zone.today }
-  let(:range) { { start: start.xmlschema, end: finish.xmlschema } }
-
   subject { FederationGrowthReport.new(title, start, finish) }
 
-  context 'growth report generate' do
-    it 'includes title, units, lables and range' do
-      expect(subject.generate).to include(title: title, units: units,
-                                          labels: labels, range: range)
+  shared_examples 'a report which generates growth analytics' do
+    let(:start) { Time.zone.today - 10.days }
+    let(:finish) { Time.zone.today }
+    let(:range) { { start: start.xmlschema, end: finish.xmlschema } }
+
+    context 'growth report generate' do
+      it 'includes title, units, lables and range' do
+        expect(subject.generate).to include(title: title, units: units,
+                                            labels: labels, range: range)
+      end
+
+      it 'includes unique activations only' do
+        expect(subject.generate)
+          .to include(data: (include "#{type}": include([0, 1])))
+      end
+
+      it 'does not include dublicate activations' do
+        expect(subject.generate)
+          .not_to include(data: (include "#{type}": include([0, 2])))
+      end
+    end
+  end
+
+  context 'report generation' do
+    context 'for Organizations' do
+      let(:type) { :organizations }
+
+      it_behaves_like 'a report which generates growth analytics'
     end
 
-    it 'includes unique activations only' do
-      expect(subject.generate)
-        .to include(data: (include organizations: include([0, 1])))
+    context 'for Identity Providers' do
+      let(:type) { :identity_providers }
+
+      it_behaves_like 'a report which generates growth analytics'
     end
 
-    it 'does not include dublicate activations' do
-      expect(subject.generate)
-        .not_to include(data: (include organizations: include([0, 2])))
+    context 'for Service Providers' do
+      let(:type) { :service_providers }
+
+      it_behaves_like 'a report which generates growth analytics'
+    end
+
+    context 'for Rapid Connect Services' do
+      let(:type) { :rapid_connect_services }
+      it_behaves_like 'a report which generates growth analytics'
     end
   end
 end
