@@ -10,23 +10,13 @@ RSpec.describe FederationGrowthReport do
       rapid_connect_services: 'Rapid Connect Services' }
   end
 
-  let(:organization) { create(:organization) }
-  let(:identity_provider) { create(:identity_provider) }
-  let(:service_provider) { create(:service_provider) }
-  let(:rapid_connect_service) { create(:rapid_connect_service) }
-
-  let(:organization_2) { create(:organization) }
-  let(:identity_provider_2) { create(:identity_provider) }
-  let(:service_provider_2) { create(:service_provider) }
-  let(:rapid_connect_service_2) { create(:rapid_connect_service) }
-
-  let!(:activation) do
-    [organization, identity_provider,
-     service_provider, rapid_connect_service]
-      .map { |o| create(:activation, federation_object: o) }
+  [:organization, :identity_provider,
+   :service_provider, :rapid_connect_service].each do |o|
+    let(o) { create(o) }
+    let("#{o}_02".to_sym) { create(o) }
   end
 
-  let!(:activation_02) do
+  let!(:activation) do
     [organization, identity_provider,
      service_provider, rapid_connect_service]
       .map { |o| create(:activation, federation_object: o) }
@@ -50,22 +40,45 @@ RSpec.describe FederationGrowthReport do
           .to include(data: (include "#{type}": include([0, 1])))
       end
 
-      it 'does not include dublicate activations' do
-        expect(subject.generate)
-          .not_to include(data: (include "#{type}": include([0, 2])))
+      context 'with deactivated objects' do
+        let!(:activation_02) do
+          [organization, identity_provider,
+           service_provider, rapid_connect_service]
+            .map do |o|
+              create(:activation, federation_object: o, deactivated_at: start)
+            end
+        end
+
+        it 'does not include deactivated objects' do
+          expect(subject.generate)
+            .not_to include(data: (include "#{type}": include([0, 2])))
+        end
+      end
+
+      context 'with dublicate object ids' do
+        let!(:activation_03) do
+          [organization, identity_provider,
+           service_provider, rapid_connect_service]
+            .map { |o| create(:activation, federation_object: o) }
+        end
+
+        it 'does not include dublicate activations' do
+          expect(subject.generate)
+            .not_to include(data: (include "#{type}": include([0, 2])))
+        end
       end
 
       context 'with objects deactivated after current point' do
         let!(:activation_deactivated_latter) do
-          [organization_2, identity_provider_2,
-           service_provider_2, rapid_connect_service_2]
+          [organization_02, identity_provider_02,
+           service_provider_02, rapid_connect_service_02]
             .map do |o|
               create(:activation, federation_object: o,
                                   deactivated_at: start + 1.day)
             end
         end
 
-        it 'shoud count objects deactivated after current point' do
+        it 'shoud count objects if deactivated after current point' do
           expect(subject.generate)
             .to include(data: (include "#{type}": include([0, 2])))
         end
