@@ -107,6 +107,7 @@ RSpec.describe FederationGrowthReport do
 
     context 'for Rapid Connect Services' do
       let(:type) { :rapid_connect_services }
+
       it_behaves_like 'a report which generates growth analytics'
     end
   end

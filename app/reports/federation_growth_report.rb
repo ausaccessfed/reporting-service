@@ -40,9 +40,9 @@ class FederationGrowthReport < TimeSeriesReport
   def active_objects(seconds, activations)
     timestamp = @start + seconds
 
-    objects = activations.select do |a|
-      a.activated_at <= timestamp &&
-      (a.deactivated_at.nil? || a.deactivated_at > timestamp)
+    objects = activations.select do |o|
+      o.activated_at <= timestamp &&
+      (o.deactivated_at.nil? || o.deactivated_at > timestamp)
     end
 
     objects.group_by(&:federation_object_type)
