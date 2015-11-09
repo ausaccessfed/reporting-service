@@ -16,18 +16,18 @@ RSpec.describe FederationGrowthReport do
     let("#{o}_02".to_sym) { create(o) }
   end
 
-  let!(:activation) do
-    [organization, identity_provider,
-     service_provider, rapid_connect_service]
-      .map { |o| create(:activation, federation_object: o) }
-  end
+  let(:start) { Time.zone.today - 10.days }
+  let(:finish) { Time.zone.today }
+  let(:range) { { start: start.xmlschema, end: finish.xmlschema } }
 
   subject { FederationGrowthReport.new(title, start, finish) }
 
   shared_examples 'a report which generates growth analytics' do
-    let(:start) { Time.zone.today - 10.days }
-    let(:finish) { Time.zone.today }
-    let(:range) { { start: start.xmlschema, end: finish.xmlschema } }
+    before :example do
+      [organization, identity_provider,
+       service_provider, rapid_connect_service]
+        .map { |o| create(:activation, federation_object: o) }
+    end
 
     context 'growth report generate' do
       it 'includes title, units, lables and range' do
@@ -41,7 +41,7 @@ RSpec.describe FederationGrowthReport do
       end
 
       context 'with deactivated objects' do
-        let!(:activation_02) do
+        before :example do
           [organization, identity_provider,
            service_provider, rapid_connect_service]
             .map do |o|
@@ -56,12 +56,6 @@ RSpec.describe FederationGrowthReport do
       end
 
       context 'with dublicate object ids' do
-        let!(:activation_03) do
-          [organization, identity_provider,
-           service_provider, rapid_connect_service]
-            .map { |o| create(:activation, federation_object: o) }
-        end
-
         it 'does not include dublicate activations' do
           expect(subject.generate)
             .not_to include(data: (include "#{type}": include([0, 2])))
@@ -69,7 +63,7 @@ RSpec.describe FederationGrowthReport do
       end
 
       context 'with objects deactivated after current point' do
-        let!(:activation_deactivated_latter) do
+        before :example do
           [organization_02, identity_provider_02,
            service_provider_02, rapid_connect_service_02]
             .map do |o|
