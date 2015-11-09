@@ -56,6 +56,12 @@ RSpec.describe FederationGrowthReport do
       end
 
       context 'with dublicate object ids' do
+        before :example do
+          [organization, identity_provider,
+           service_provider, rapid_connect_service]
+            .map { |o| create(:activation, federation_object: o) }
+        end
+
         it 'does not include dublicate activations' do
           expect(subject.generate)
             .not_to include(data: (include "#{type}": include([0, 2])))
