@@ -37,7 +37,7 @@ RSpec.describe FederationGrowthReport do
       end
 
       it 'includes unique activations only' do
-        expect(report[:data][type]).to include([anything, 1])
+        expect(report[:data][type]).to include([anything, 1, 1])
       end
 
       context 'with dublicate object ids' do
@@ -48,7 +48,7 @@ RSpec.describe FederationGrowthReport do
         end
 
         it 'should not include dublicate activations' do
-          expect(report[:data][type]).not_to include([anything, 2])
+          expect(report[:data][type]).not_to include([anything, 1, 2])
         end
       end
 
@@ -62,7 +62,7 @@ RSpec.describe FederationGrowthReport do
         end
 
         it 'should not include deactivated objects' do
-          expect(report[:data][type]).not_to include([anything, 2])
+          expect(report[:data][type]).not_to include([anything, 1, 2])
         end
       end
 
@@ -77,7 +77,7 @@ RSpec.describe FederationGrowthReport do
         end
 
         it 'shoud not count objects if deactivated before starting point' do
-          expect(report[:data][type]).not_to include([anything, 2])
+          expect(report[:data][type]).not_to include([anything, 1, 2])
         end
       end
 
@@ -100,13 +100,18 @@ RSpec.describe FederationGrowthReport do
 
         it 'shoud not count objects after deactivated_at' do
           before_midtime.each do |time|
-            expect(report[:data][type]).to include([time, 2])
+            expect(report[:data][type]).to include([time, 2, 2])
           end
         end
 
         it 'shoud count objects before deactivated_at' do
           expect(report[:data][type])
-            .not_to include([after_midtime, 2])
+            .not_to include([after_midtime, 1, 2])
+        end
+
+        it 'shoud keep total objects value' do
+          expect(report[:data][type])
+            .to include([after_midtime, 2, 1])
         end
       end
     end
