@@ -23,6 +23,8 @@ RSpec.describe FederationGrowthReport do
   subject { FederationGrowthReport.new(title, start, finish) }
 
   shared_examples 'a report which generates growth analytics' do
+    let(:report) { subject.generate }
+
     before :example do
       [organization, identity_provider,
        service_provider, rapid_connect_service]
@@ -31,13 +33,12 @@ RSpec.describe FederationGrowthReport do
 
     context 'growth report generate' do
       it 'includes title, units, lables and range' do
-        expect(subject.generate).to include(title: title, units: units,
-                                            labels: labels, range: range)
+        expect(report).to include(title: title, units: units,
+                                  labels: labels, range: range)
       end
 
       it 'includes unique activations only' do
-        expect(subject.generate)
-          .to include(data: (include "#{type}": include([anything, 1])))
+        expect(report[:data][type]).to include([anything, 1])
       end
 
       context 'with dublicate object ids' do
@@ -48,8 +49,7 @@ RSpec.describe FederationGrowthReport do
         end
 
         it 'should not include dublicate activations' do
-          expect(subject.generate)
-            .not_to include(data: (include "#{type}": include([anything, 2])))
+          expect(report[:data][type]).not_to include([anything, 2])
         end
       end
 
@@ -63,8 +63,7 @@ RSpec.describe FederationGrowthReport do
         end
 
         it 'should not include deactivated objects' do
-          expect(subject.generate)
-            .not_to include(data: (include "#{type}": include([anything, 2])))
+          expect(report[:data][type]).not_to include([anything, 2])
         end
       end
 
@@ -79,8 +78,7 @@ RSpec.describe FederationGrowthReport do
         end
 
         it 'shoud not count objects if deactivated before starting point' do
-          expect(subject.generate)
-            .not_to include(data: (include "#{type}": include([anything, 2])))
+          expect(report[:data][type]).not_to include([anything, 2])
         end
       end
 
@@ -103,15 +101,13 @@ RSpec.describe FederationGrowthReport do
 
         it 'shoud not count objects after deactivated_at' do
           before_midtime.each do |time|
-            expect(subject.generate)
-              .to include(data: (include "#{type}": include([time, 2])))
+            expect(report[:data][type]).to include([time, 2])
           end
         end
 
         it 'shoud count objects before deactivated_at' do
-          expect(subject.generate)
-            .not_to include(data: (include "#{type}":
-                                   include([after_midtime, 2])))
+          expect(report[:data][type])
+            .not_to include([after_midtime, 2])
         end
       end
     end
