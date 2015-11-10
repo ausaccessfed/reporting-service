@@ -31,8 +31,8 @@ class FederationGrowthReport < TimeSeriesReport
                            service_providers: [], rapid_connect_services: []
                           ) do |seconds, data|
       objects_count = active_objects seconds, activations
-      objects_count.each do |a|
-        data[DATA_SERIES[a[0]]] << [seconds, a[1]]
+      objects_count.each do |k, v|
+        data[DATA_SERIES[k]] << [seconds, v]
       end
     end
   end

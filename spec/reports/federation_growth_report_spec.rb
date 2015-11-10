@@ -16,8 +16,8 @@ RSpec.describe FederationGrowthReport do
     let("#{o}_02".to_sym) { create(o) }
   end
 
-  let(:start) { Time.zone.today - 10.days }
-  let(:finish) { Time.zone.today }
+  let(:start) { Time.zone.now - 10.days }
+  let(:finish) { Time.zone.now }
   let(:range) { { start: start.xmlschema, end: finish.xmlschema } }
 
   subject { FederationGrowthReport.new(title, start, finish) }
@@ -37,7 +37,20 @@ RSpec.describe FederationGrowthReport do
 
       it 'includes unique activations only' do
         expect(subject.generate)
-          .to include(data: (include "#{type}": include([0, 1])))
+          .to include(data: (include "#{type}": include([anything, 1])))
+      end
+
+      context 'with dublicate object ids' do
+        before :example do
+          [organization, identity_provider,
+           service_provider, rapid_connect_service]
+            .map { |o| create(:activation, federation_object: o) }
+        end
+
+        it 'should not include dublicate activations' do
+          expect(subject.generate)
+            .not_to include(data: (include "#{type}": include([anything, 2])))
+        end
       end
 
       context 'with deactivated objects' do
@@ -49,38 +62,43 @@ RSpec.describe FederationGrowthReport do
             end
         end
 
-        it 'does not include deactivated objects' do
+        it 'should not include deactivated objects' do
           expect(subject.generate)
-            .not_to include(data: (include "#{type}": include([0, 2])))
+            .not_to include(data: (include "#{type}": include([anything, 2])))
         end
       end
 
-      context 'with dublicate object ids' do
-        before :example do
-          [organization, identity_provider,
-           service_provider, rapid_connect_service]
-            .map { |o| create(:activation, federation_object: o) }
-        end
-
-        it 'does not include dublicate activations' do
-          expect(subject.generate)
-            .not_to include(data: (include "#{type}": include([0, 2])))
-        end
-      end
-
-      context 'with objects deactivated after current point' do
+      context 'with objects deactivated before start' do
         before :example do
           [organization_02, identity_provider_02,
            service_provider_02, rapid_connect_service_02]
             .map do |o|
               create(:activation, federation_object: o,
-                                  deactivated_at: start + 1.day)
+                                  deactivated_at: (start - 1.day))
             end
         end
 
-        it 'shoud count objects if deactivated after current point' do
+        it 'shoud not count objects if deactivated before starting point' do
           expect(subject.generate)
-            .to include(data: (include "#{type}": include([0, 2])))
+            .not_to include(data: (include "#{type}": include([anything, 2])))
+        end
+      end
+
+      context 'with objects deactivated within the range' do
+        let(:midtime) { start + ((finish - start) / 2) }
+
+        before :example do
+          [organization_02, identity_provider_02,
+           service_provider_02, rapid_connect_service_02]
+            .map do |o|
+              create(:activation, federation_object: o,
+                                  deactivated_at: midtime)
+            end
+        end
+
+        it 'shoud count objects before deactivated_at' do
+          expect(subject.generate)
+            .not_to include(data: (include "#{type}": include([midtime, 2])))
         end
       end
     end
