@@ -86,6 +86,11 @@ RSpec.describe FederationGrowthReport do
 
       context 'with objects deactivated within the range' do
         let(:midtime) { start + ((finish - start) / 2) }
+        let(:midtime_point) { (finish - midtime).to_i }
+        let(:before_midtime) { (0...(midtime.to_i - start.to_i)).step(1.day) }
+        let(:after_midtime) do
+          ((midtime.to_i - start.to_i)..finish.to_i).step(1.day)
+        end
 
         before :example do
           [organization_02, identity_provider_02,
@@ -96,9 +101,17 @@ RSpec.describe FederationGrowthReport do
             end
         end
 
+        it 'shoud not count objects after deactivated_at' do
+          before_midtime.each do |time|
+            expect(subject.generate)
+              .to include(data: (include "#{type}": include([time, 2])))
+          end
+        end
+
         it 'shoud count objects before deactivated_at' do
           expect(subject.generate)
-            .not_to include(data: (include "#{type}": include([midtime, 2])))
+            .not_to include(data: (include "#{type}":
+                                   include([after_midtime, 2])))
         end
       end
     end
