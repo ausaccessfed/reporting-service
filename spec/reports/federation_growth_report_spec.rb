@@ -86,7 +86,7 @@ RSpec.describe FederationGrowthReport do
         let(:midtime_point) { (finish - midtime).to_i }
         let(:before_midtime) { (0...(midtime.to_i - start.to_i)).step(1.day) }
         let(:after_midtime) do
-          ((midtime.to_i - start.to_i)..finish.to_i).step(1.day)
+          ((midtime.to_i - start.to_i)..(finish.to_i - start.to_i)).step(1.day)
         end
 
         before :example do
