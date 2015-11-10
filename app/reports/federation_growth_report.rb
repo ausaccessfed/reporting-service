@@ -5,8 +5,7 @@ class FederationGrowthReport < TimeSeriesReport
 
   series organizations: 'Organizations',
          identity_providers: 'Identity Providers',
-         service_providers: 'Service Providers',
-         rapid_connect_services: 'Rapid Connect Services'
+         services: 'Services'
 
   units ''
 
@@ -28,7 +27,7 @@ class FederationGrowthReport < TimeSeriesReport
     activations = Activation.where('activated_at <= ?', @finish)
 
     range.each_with_object(organizations: [], identity_providers: [],
-                           service_providers: [], rapid_connect_services: []
+                           services: []
                           ) do |seconds, data|
       objects_count = active_objects seconds, activations
       objects_count.each do |k, v|
@@ -51,6 +50,6 @@ class FederationGrowthReport < TimeSeriesReport
 
   DATA_SERIES = { 'Organization' => :organizations,
                   'IdentityProvider' => :identity_providers,
-                  'ServiceProvider' => :service_providers,
-                  'RapidConnectService' => :rapid_connect_services }
+                  'ServiceProvider' => :services,
+                  'RapidConnectService' => :services }
 end

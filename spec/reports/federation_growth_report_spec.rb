@@ -6,8 +6,7 @@ RSpec.describe FederationGrowthReport do
   let(:labels) do
     { y: '', organizations: 'Organizations',
       identity_providers: 'Identity Providers',
-      service_providers: 'Service Providers',
-      rapid_connect_services: 'Rapid Connect Services' }
+      services: 'Services' }
   end
 
   [:organization, :identity_provider,
@@ -126,14 +125,8 @@ RSpec.describe FederationGrowthReport do
       it_behaves_like 'a report which generates growth analytics'
     end
 
-    context 'for Service Providers' do
-      let(:type) { :service_providers }
-
-      it_behaves_like 'a report which generates growth analytics'
-    end
-
-    context 'for Rapid Connect Services' do
-      let(:type) { :rapid_connect_services }
+    context 'for Services' do
+      let(:type) { :services }
 
       it_behaves_like 'a report which generates growth analytics'
     end
