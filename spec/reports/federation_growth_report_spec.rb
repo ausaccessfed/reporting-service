@@ -24,11 +24,12 @@ RSpec.describe FederationGrowthReport do
   shared_examples 'a report which generates growth analytics' do
     let(:report) { subject.generate }
 
-    before :example do
-      [*objects].each { |o| create(:activation, federation_object: o) }
-    end
+    context 'growth report generate when all objects are included' do
+      let!(:activations) do
+        [*included_objects, *excluded_objects]
+          .each { |o| create(:activation, federation_object: o) }
+      end
 
-    context 'growth report generate' do
       it 'includes title, units, lables and range' do
         expect(report).to include(title: title, units: units,
                                   labels: labels, range: range)
@@ -36,6 +37,7 @@ RSpec.describe FederationGrowthReport do
 
       it 'includes unique activations only' do
         expect(report[:data][type]).to include([anything, anything, value])
+        puts report[:data]
       end
 
       context 'with dublicate object ids' do
@@ -50,6 +52,17 @@ RSpec.describe FederationGrowthReport do
       context 'with objects deactivated within the range' do
       end
     end
+
+    context 'growth report when some objects are not included' do
+      let!(:activations) do
+        included_objects
+          .each { |o| create(:activation, federation_object: o) }
+      end
+
+      it 'will not fail if objects are nil' do
+        expect(report[:data][type]).to include([anything, anything, value])
+      end
+    end
   end
 
   context 'report generation' do
@@ -57,7 +70,11 @@ RSpec.describe FederationGrowthReport do
       let(:type) { :organizations }
       let(:value) { 1 }
       let(:total) { 1 }
-      let(:objects) { [organization] }
+      let(:included_objects) { [organization] }
+      let(:excluded_objects) do
+        [identity_provider, service_provider, rapid_connect_service]
+      end
+
       it_behaves_like 'a report which generates growth analytics'
     end
 
@@ -65,7 +82,10 @@ RSpec.describe FederationGrowthReport do
       let(:type) { :identity_providers }
       let(:value) { 1 }
       let(:total) { 1 }
-      let(:objects) { [identity_provider] }
+      let(:included_objects) { [identity_provider] }
+      let(:excluded_objects) do
+        [organization, service_provider, rapid_connect_service]
+      end
 
       it_behaves_like 'a report which generates growth analytics'
     end
@@ -74,7 +94,8 @@ RSpec.describe FederationGrowthReport do
       let(:type) { :services }
       let(:value) { 2 }
       let(:total) { 2 }
-      let(:objects) { [rapid_connect_service, service_provider] }
+      let(:included_objects) { [service_provider, rapid_connect_service] }
+      let(:excluded_objects) { [organization, identity_provider] }
 
       it_behaves_like 'a report which generates growth analytics'
     end
