@@ -44,15 +44,17 @@ class FederationGrowthReport < TimeSeriesReport
     end
 
     data = objects.group_by(&:federation_object_type)
-           .transform_values { |a| a.uniq(&:federation_object_id).count }
+           .transform_values { |a| a.uniq(&:federation_object_id) }
 
     merged_services data
   end
 
   def merged_services(data)
-    { organizations: data['Organization'].to_i,
-      identity_providers: data['IdentityProvider'].to_i,
-      services: data['RapidConnectService'].to_i +
-        data['ServiceProvider'].to_i }
+    report = Hash.new([]).merge(data)
+
+    { organizations: report['Organization'].count,
+      identity_providers: report['IdentityProvider'].count,
+      services: report['RapidConnectService'].count +
+        report['ServiceProvider'].count }
   end
 end

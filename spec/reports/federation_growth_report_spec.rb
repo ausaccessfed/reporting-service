@@ -36,7 +36,7 @@ RSpec.describe FederationGrowthReport do
       end
 
       it 'includes unique activations only' do
-        expect(report[:data][type]).to include([anything, anything, value])
+        expect(report[:data][type]).to include([anything, total, value])
         puts report[:data]
       end
 
@@ -60,7 +60,7 @@ RSpec.describe FederationGrowthReport do
       end
 
       it 'will not fail if objects are nil' do
-        expect(report[:data][type]).to include([anything, anything, value])
+        expect(report[:data][type]).to include([anything, total, value])
       end
     end
   end
