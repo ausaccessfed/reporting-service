@@ -25,9 +25,7 @@ RSpec.describe FederationGrowthReport do
     let(:report) { subject.generate }
 
     before :example do
-      [organization, identity_provider,
-       service_provider, rapid_connect_service]
-        .map { |o| create(:activation, federation_object: o) }
+      [*objects].each { |o| create(:activation, federation_object: o) }
     end
 
     context 'growth report generate' do
@@ -59,7 +57,7 @@ RSpec.describe FederationGrowthReport do
       let(:type) { :organizations }
       let(:value) { 1 }
       let(:total) { 1 }
-
+      let(:objects) { [organization] }
       it_behaves_like 'a report which generates growth analytics'
     end
 
@@ -67,6 +65,7 @@ RSpec.describe FederationGrowthReport do
       let(:type) { :identity_providers }
       let(:value) { 1 }
       let(:total) { 1 }
+      let(:objects) { [identity_provider] }
 
       it_behaves_like 'a report which generates growth analytics'
     end
@@ -75,6 +74,7 @@ RSpec.describe FederationGrowthReport do
       let(:type) { :services }
       let(:value) { 2 }
       let(:total) { 2 }
+      let(:objects) { [rapid_connect_service, service_provider] }
 
       it_behaves_like 'a report which generates growth analytics'
     end
