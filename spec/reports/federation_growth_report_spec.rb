@@ -41,62 +41,15 @@ RSpec.describe FederationGrowthReport do
       end
 
       context 'with dublicate object ids' do
-        before :example do
-          [organization, identity_provider,
-           service_provider, rapid_connect_service]
-            .map { |o| create(:activation, federation_object: o) }
-        end
-
-        it 'should not include dublicate activations' do
-          expect(report[:data][type]).not_to include([anything, 1, 2])
-        end
       end
 
       context 'with deactivated objects' do
-        before :example do
-          [organization, identity_provider,
-           service_provider, rapid_connect_service]
-            .map do |o|
-              create(:activation, federation_object: o, deactivated_at: start)
-            end
-        end
-
-        it 'should not include deactivated objects' do
-          expect(report[:data][type]).not_to include([anything, 1, 2])
-        end
       end
 
       context 'with objects deactivated before start' do
-        before :example do
-          [organization_02, identity_provider_02,
-           service_provider_02, rapid_connect_service_02]
-            .map do |o|
-              create(:activation, federation_object: o,
-                                  deactivated_at: (start - 1.day))
-            end
-        end
-
-        it 'shoud not count objects if deactivated before starting point' do
-          expect(report[:data][type]).not_to include([anything, 1, 2])
-        end
       end
 
       context 'with objects deactivated within the range' do
-        let(:midtime) { start + ((finish - start) / 2) }
-        let(:midtime_point) { (finish - midtime).to_i }
-        let(:before_midtime) { (0...(midtime.to_i - start.to_i)).step(1.day) }
-        let(:after_midtime) do
-          ((midtime.to_i - start.to_i)..(finish.to_i - start.to_i)).step(1.day)
-        end
-
-        before :example do
-          [organization_02, identity_provider_02,
-           service_provider_02, rapid_connect_service_02]
-            .map do |o|
-              create(:activation, federation_object: o,
-                                  deactivated_at: midtime)
-            end
-        end
       end
     end
   end
@@ -105,6 +58,7 @@ RSpec.describe FederationGrowthReport do
     context 'for Organizations' do
       let(:type) { :organizations }
       let(:value) { 1 }
+      let(:total) { 1 }
 
       it_behaves_like 'a report which generates growth analytics'
     end
@@ -112,6 +66,7 @@ RSpec.describe FederationGrowthReport do
     context 'for Identity Providers' do
       let(:type) { :identity_providers }
       let(:value) { 1 }
+      let(:total) { 1 }
 
       it_behaves_like 'a report which generates growth analytics'
     end
@@ -119,6 +74,7 @@ RSpec.describe FederationGrowthReport do
     context 'for Services' do
       let(:type) { :services }
       let(:value) { 2 }
+      let(:total) { 2 }
 
       it_behaves_like 'a report which generates growth analytics'
     end

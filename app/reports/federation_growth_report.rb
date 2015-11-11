@@ -52,6 +52,8 @@ class FederationGrowthReport < TimeSeriesReport
   def merged_services(data)
     { organizations: data['Organization'],
       identity_providers: data['IdentityProvider'],
-      services: data['RapidConnectService'] + data['ServiceProvider'] }
+      # TODO
+      services: (data['RapidConnectService'] || 0) +
+        (data['ServiceProvider'] || 0) }
   end
 end
