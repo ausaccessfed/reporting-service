@@ -25,7 +25,7 @@ RSpec.describe FederationGrowthReport do
     let(:report) { subject.generate }
 
     context 'growth report generate when all objects are included' do
-      let!(:activations) do
+      before do
         [*included_objects, *excluded_objects]
           .each { |o| create(:activation, federation_object: o) }
       end
@@ -37,19 +37,57 @@ RSpec.describe FederationGrowthReport do
 
       it 'includes unique activations only' do
         expect(report[:data][type]).to include([anything, total, value])
-        puts report[:data]
       end
 
       context 'with dublicate object ids' do
-      end
+        before do
+          [*included_objects, *excluded_objects]
+            .each { |o| create(:activation, federation_object: o) }
+        end
 
-      context 'with deactivated objects' do
+        let(:bad_value) { value * 2 }
+
+        it 'should not include dublicate activations' do
+          expect(report[:data][type]).not_to include([anything,
+                                                      total, bad_value])
+        end
       end
 
       context 'with objects deactivated before start' do
+        before :example do
+          [organization_02, identity_provider_02,
+           service_provider_02, rapid_connect_service_02]
+            .each do |o|
+              create(:activation, federation_object: o,
+                                  deactivated_at: (start - 1.day))
+            end
+        end
+
+        let(:bad_value) { value * 2 }
+        let(:bad_total) { total + bad_value }
+
+        it 'shoud not count objects if deactivated before starting point' do
+          expect(report[:data][type]).not_to include([anything,
+                                                      bad_total, bad_value])
+        end
       end
 
       context 'with objects deactivated within the range' do
+        let(:midtime) { start + ((finish - start) / 2) }
+        let(:midtime_point) { (finish - midtime).to_i }
+        let(:before_midtime) { (0...(midtime.to_i - start.to_i)).step(1.day) }
+        let(:after_midtime) do
+          ((midtime.to_i - start.to_i)..(finish.to_i - start.to_i)).step(1.day)
+        end
+
+        before :example do
+          [organization_02, identity_provider_02,
+           service_provider_02, rapid_connect_service_02]
+            .each do |o|
+              create(:activation, federation_object: o,
+                                  deactivated_at: midtime)
+            end
+        end
       end
     end
 
@@ -59,7 +97,7 @@ RSpec.describe FederationGrowthReport do
           .each { |o| create(:activation, federation_object: o) }
       end
 
-      it 'will not fail if objects are nil' do
+      it 'will not fail if some object types are not existing' do
         expect(report[:data][type]).to include([anything, total, value])
       end
     end
@@ -81,7 +119,7 @@ RSpec.describe FederationGrowthReport do
     context 'for Identity Providers' do
       let(:type) { :identity_providers }
       let(:value) { 1 }
-      let(:total) { 1 }
+      let(:total) { 2 }
       let(:included_objects) { [identity_provider] }
       let(:excluded_objects) do
         [organization, service_provider, rapid_connect_service]
@@ -93,7 +131,7 @@ RSpec.describe FederationGrowthReport do
     context 'for Services' do
       let(:type) { :services }
       let(:value) { 2 }
-      let(:total) { 2 }
+      let(:total) { 4 }
       let(:included_objects) { [service_provider, rapid_connect_service] }
       let(:excluded_objects) { [organization, identity_provider] }
 
