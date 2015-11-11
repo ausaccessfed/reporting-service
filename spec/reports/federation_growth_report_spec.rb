@@ -37,7 +37,7 @@ RSpec.describe FederationGrowthReport do
       end
 
       it 'includes unique activations only' do
-        expect(report[:data][type]).to include([anything, 1, 1])
+        expect(report[:data][type]).to include([anything, anything, value])
       end
 
       context 'with dublicate object ids' do
@@ -97,22 +97,6 @@ RSpec.describe FederationGrowthReport do
                                   deactivated_at: midtime)
             end
         end
-
-        it 'shoud not count objects after deactivated_at' do
-          before_midtime.each do |time|
-            expect(report[:data][type]).to include([time, 2, 2])
-          end
-        end
-
-        it 'shoud count objects before deactivated_at' do
-          expect(report[:data][type])
-            .not_to include([after_midtime, 1, 2])
-        end
-
-        it 'shoud keep total objects value' do
-          expect(report[:data][type])
-            .to include([after_midtime, 2, 1])
-        end
       end
     end
   end
@@ -120,18 +104,21 @@ RSpec.describe FederationGrowthReport do
   context 'report generation' do
     context 'for Organizations' do
       let(:type) { :organizations }
+      let(:value) { 1 }
 
       it_behaves_like 'a report which generates growth analytics'
     end
 
     context 'for Identity Providers' do
       let(:type) { :identity_providers }
+      let(:value) { 1 }
 
       it_behaves_like 'a report which generates growth analytics'
     end
 
     context 'for Services' do
       let(:type) { :services }
+      let(:value) { 2 }
 
       it_behaves_like 'a report which generates growth analytics'
     end
