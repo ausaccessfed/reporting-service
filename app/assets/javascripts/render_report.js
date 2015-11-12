@@ -66,7 +66,8 @@ jQuery(function($) {
 
     var kinds = {
       'random-time-series': charts.area,
-      'random-time-series-line': charts.line
+      'random-time-series-line': charts.line,
+      'federation-growth': charts.area
     };
 
     kinds[report.type]();
@@ -110,7 +111,8 @@ jQuery(function($) {
   var renderer = {
     'random-time-series': renderGraph,
     'random-time-series-line': renderGraph,
-    'random-tabular-data': renderTable
+    'random-tabular-data': renderTable,
+    'federation-growth': renderGraph
   };
 
   var json = $('#report-data').html();

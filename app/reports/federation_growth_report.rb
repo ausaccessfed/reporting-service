@@ -1,11 +1,11 @@
 class FederationGrowthReport < TimeSeriesReport
-  report_type 'federation-growth-report'
+  report_type 'federation-growth'
 
   y_label ''
 
-  series organizations: 'Organizations',
+  series services: 'Services',
          identity_providers: 'Identity Providers',
-         services: 'Services'
+         organizations: 'Organizations'
 
   units ''
 

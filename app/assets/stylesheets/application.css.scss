@@ -120,6 +120,20 @@ svg#report-output {
       fill: $graph-color-dull;
     }
   }
+
+  &.federation-growth {
+    .organizations {
+      fill: $graph-color-vibrant;
+    }
+
+    .identity_providers {
+      fill: $graph-color-primary;
+    }
+
+    .services {
+      fill: $graph-color-dull;
+    }
+  }
 }
 
 table#report-output {
