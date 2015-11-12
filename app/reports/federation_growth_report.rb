@@ -26,9 +26,9 @@ class FederationGrowthReport < TimeSeriesReport
   def data
     range.each_with_object(organizations: [], identity_providers: [],
                            services: []) do |time, data|
-      data[:organizations] << [time, 1, 1]
-      data[:identity_providers] << [time, 1, 1]
-      data[:services] << [time, 1, 1]
+      data[:organizations] << [time, 1, 0]
+      data[:identity_providers] << [time, 1, 0]
+      data[:services] << [time, 1, 0]
     end
   end
 end

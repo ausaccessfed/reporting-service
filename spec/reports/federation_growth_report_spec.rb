@@ -22,5 +22,12 @@ RSpec.describe FederationGrowthReport do
       expect(report).to include(title: title, units: units,
                                 labels: labels, range: range)
     end
+
+    it 'output structure should match stacked_report' do
+      [:organizations,
+       :identity_providers, :services].each do |type|
+        report[:data][type].each { |i| expect(i.count).to eq(3) }
+      end
+    end
   end
 end
