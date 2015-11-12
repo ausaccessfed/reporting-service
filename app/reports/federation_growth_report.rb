@@ -24,37 +24,11 @@ class FederationGrowthReport < TimeSeriesReport
   end
 
   def data
-    activations = Activation.where('activated_at <= ?', @finish)
-    total = 0
-
     range.each_with_object(organizations: [], identity_providers: [],
                            services: []) do |time, data|
-      report = active_objects time, activations
-      report.each do |k, v|
-        total += v
-        data[k] << [time, total, v]
-      end
+      data[:organizations] << [time, 1, 1]
+      data[:identity_providers] << [time, 1, 1]
+      data[:services] << [time, 1, 1]
     end
-  end
-
-  def active_objects(time, activations)
-    objects = activations.select do |o|
-      o.activated_at <= @start + time &&
-      (o.deactivated_at.nil? || o.deactivated_at > @start + time)
-    end
-
-    data = objects.group_by(&:federation_object_type)
-           .transform_values { |a| a.uniq(&:federation_object_id) }
-
-    merged_services data
-  end
-
-  def merged_services(data)
-    report = Hash.new([]).merge(data)
-
-    { organizations: report['Organization'].count,
-      identity_providers: report['IdentityProvider'].count,
-      services: report['RapidConnectService'].count +
-        report['ServiceProvider'].count }
   end
 end
