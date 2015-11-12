@@ -9,8 +9,8 @@ RSpec.describe FederationGrowthReport do
       services: 'Services' }
   end
 
-  let!(:start) { Time.zone.now - 1.week }
-  let!(:finish) { Time.zone.now }
+  let(:start) { Time.zone.now - 1.week }
+  let(:finish) { Time.zone.now }
   let!(:range) { { start: start.xmlschema, end: finish.xmlschema } }
 
   [:organization, :identity_provider,
@@ -41,13 +41,28 @@ RSpec.describe FederationGrowthReport do
       end
     end
 
-    xit 'data sholud hold number of each type and seconds on each point' do
-      counter = 0
-      (0..(finish.to_i - start.to_i)).step(1.day) do |t|
-        { organizations: 1, identity_providers: 1, services: 2 }.map do |k, v|
-          expect(report[:data][k][counter]).to match([t, anything, v])
+    context 'within some range' do
+      let(:start) { Time.zone.now }
+      let(:finish) { Time.zone.now }
+      let(:range) { (0..(finish.to_i - start.to_i)).step(1.day) }
+      let(:total_array) { [1, 2, 4, 1, 2, 4, 1, 2, 4] }
+      let(:type_count) do
+        { organizations: 1, identity_providers: 1, services: 2 }
+      end
+
+      it 'data sholud hold number of each type and seconds on each point' do
+        counter = 0
+
+        range.each do |time|
+          stamp = 0
+
+          type_count.map do |k, val|
+            total = total_array[stamp]
+            expect(report[:data][k][counter]).to match_array([time, total, val])
+            stamp += 1
+          end
+          counter += 1
         end
-        counter += 1
       end
     end
   end

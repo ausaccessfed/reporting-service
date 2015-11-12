@@ -24,11 +24,17 @@ class FederationGrowthReport < TimeSeriesReport
   end
 
   def data
+    activations = Activation.where('activated_at <= ?', @finish)
+
     range.each_with_object(organizations: [], identity_providers: [],
                            services: []) do |time, data|
-      data[:organizations] << [time, 1, 0]
-      data[:identity_providers] << [time, 1, 0]
-      data[:services] << [time, 1, 0]
+      report = data_report activations
+      total = 0
+
+      report.each do |k, v|
+        total += v
+        data[k] << [time, total, v]
+      end
     end
   end
 
