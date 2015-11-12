@@ -28,7 +28,7 @@ class FederationGrowthReport < TimeSeriesReport
 
     range.each_with_object(organizations: [], identity_providers: [],
                            services: []) do |time, data|
-      report = data_report activations
+      report = data_report time, activations
       total = 0
 
       report.each do |k, v|
@@ -38,8 +38,13 @@ class FederationGrowthReport < TimeSeriesReport
     end
   end
 
-  def data_report(activations)
-    data = activations.group_by(&:federation_object_type)
+  def data_report(time, activations)
+    objects = activations.select do |o|
+      o.activated_at <= @start + time &&
+      (o.deactivated_at.nil? || o.deactivated_at > @start + time)
+    end
+
+    data = objects.group_by(&:federation_object_type)
            .transform_values { |a| a.uniq(&:federation_object_id) }
 
     merged_report data
