@@ -15,7 +15,10 @@ RSpec.describe FederationGrowthReport do
   let(:int_range) { (0..(finish.to_i - start.to_i)).step(1.day) }
 
   let(:count_in_range) do
+    type_count = { organizations: 1, identity_providers: 1, services: 2 }
+    total_array = [1, 2, 4]
     counter = 0
+
     int_range.each do |time|
       stamp = 0
       type_count.map do |k, val|
@@ -50,7 +53,7 @@ RSpec.describe FederationGrowthReport do
       end
 
       it 'will not fail if some object types are not existing' do
-        expect(report[:data][type]).to include([anything, total, value])
+        count_in_range
       end
     end
   end
@@ -58,8 +61,6 @@ RSpec.describe FederationGrowthReport do
   context 'report generation' do
     context 'for Organizations' do
       let(:type) { :organizations }
-      let(:value) { 1 }
-      let(:total) { 1 }
       let(:included_objects) { [organization] }
       let(:excluded_objects) do
         [identity_provider, service_provider, rapid_connect_service]
@@ -70,8 +71,6 @@ RSpec.describe FederationGrowthReport do
 
     context 'for Identity Providers' do
       let(:type) { :identity_providers }
-      let(:value) { 1 }
-      let(:total) { 2 }
       let(:included_objects) { [identity_provider] }
       let(:excluded_objects) do
         [organization, service_provider, rapid_connect_service]
@@ -82,8 +81,6 @@ RSpec.describe FederationGrowthReport do
 
     context 'for Services' do
       let(:type) { :services }
-      let(:value) { 2 }
-      let(:total) { 4 }
       let(:included_objects) { [service_provider, rapid_connect_service] }
       let(:excluded_objects) { [organization, identity_provider] }
 
@@ -93,10 +90,6 @@ RSpec.describe FederationGrowthReport do
 
   context '#generate report' do
     let(:report) { subject.generate }
-    let(:total_array) { [1, 2, 4] }
-    let(:type_count) do
-      { organizations: 1, identity_providers: 1, services: 2 }
-    end
 
     it 'output structure should match stacked_report' do
       [:organizations,
