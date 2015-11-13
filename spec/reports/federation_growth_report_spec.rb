@@ -12,6 +12,20 @@ RSpec.describe FederationGrowthReport do
   let(:start) { Time.zone.now - 1.week }
   let(:finish) { Time.zone.now }
   let!(:range) { { start: start.xmlschema, end: finish.xmlschema } }
+  let(:int_range) { (0..(finish.to_i - start.to_i)).step(1.day) }
+
+  let(:count_in_range) do
+    counter = 0
+    int_range.each do |time|
+      stamp = 0
+      type_count.map do |k, val|
+        total = total_array[stamp]
+        expect(report[:data][k][counter]).to match_array([time, total, val])
+        stamp += 1
+      end
+      counter += 1
+    end
+  end
 
   [:organization, :identity_provider,
    :rapid_connect_service, :service_provider].each do |type|
@@ -26,67 +40,9 @@ RSpec.describe FederationGrowthReport do
   end
 
   subject { FederationGrowthReport.new(title, start, finish) }
+  let(:report) { subject.generate }
 
   shared_examples 'a report which generates growth analytics' do
-    let(:report) { subject.generate }
-
-    context 'growth report generate when all objects are included' do
-      it 'includes title, units, lables and range' do
-        expect(report).to include(title: title, units: units,
-                                  labels: labels, range: range)
-      end
-
-      it 'includes unique activations only' do
-        expect(report[:data][type]).to include([anything, total, value])
-      end
-
-      context 'with dublicate object ids' do
-        let(:bad_value) { value * 2 }
-
-        it 'should not include dublicate activations' do
-          expect(report[:data][type]).not_to include([anything,
-                                                      total, bad_value])
-        end
-      end
-
-      context 'with objects deactivated before start' do
-        before :example do
-          [organization_02, identity_provider_02,
-           service_provider_02, rapid_connect_service_02]
-            .each do |o|
-              create(:activation, federation_object: o,
-                                  deactivated_at: (start - 1.day))
-            end
-        end
-
-        let(:bad_value) { value * 2 }
-        let(:bad_total) { total + bad_value }
-
-        it 'shoud not count objects if deactivated before starting point' do
-          expect(report[:data][type]).not_to include([anything,
-                                                      bad_total, bad_value])
-        end
-      end
-
-      context 'with objects deactivated within the range' do
-        let(:midtime) { start + ((finish - start) / 2) }
-        let(:midtime_point) { (finish - midtime).to_i }
-        let(:before_midtime) { (0...(midtime.to_i - start.to_i)).step(1.day) }
-        let(:after_midtime) do
-          ((midtime.to_i - start.to_i)..(finish.to_i - start.to_i)).step(1.day)
-        end
-
-        before :example do
-          [organization_02, identity_provider_02,
-           service_provider_02, rapid_connect_service_02]
-            .each do |o|
-              create(:activation, federation_object: o,
-                                  deactivated_at: midtime)
-            end
-        end
-      end
-    end
-
     context 'growth report when some objects are not included' do
       before :example do
         included_objects
@@ -137,6 +93,10 @@ RSpec.describe FederationGrowthReport do
 
   context '#generate report' do
     let(:report) { subject.generate }
+    let(:total_array) { [1, 2, 4] }
+    let(:type_count) do
+      { organizations: 1, identity_providers: 1, services: 2 }
+    end
 
     it 'output structure should match stacked_report' do
       [:organizations,
@@ -145,29 +105,57 @@ RSpec.describe FederationGrowthReport do
       end
     end
 
-    context 'within some range' do
-      let(:start) { Time.zone.now }
-      let(:finish) { Time.zone.now }
-      let(:range) { (0..(finish.to_i - start.to_i)).step(1.day) }
-      let(:total_array) { [1, 2, 4, 1, 2, 4, 1, 2, 4] }
-      let(:type_count) do
-        { organizations: 1, identity_providers: 1, services: 2 }
-      end
+    it 'includes title, units, lables and range' do
+      expect(report).to include(title: title, units: units,
+                                labels: labels, range: range)
+    end
 
-      it 'data sholud hold number of each type and seconds on each point' do
-        counter = 0
-
-        range.each do |time|
-          stamp = 0
-
-          type_count.map do |k, val|
-            total = total_array[stamp]
-            expect(report[:data][k][counter]).to match_array([time, total, val])
-            stamp += 1
+    context 'with objects deactivated before start' do
+      before :example do
+        [organization_02, identity_provider_02,
+         service_provider_02, rapid_connect_service_02]
+          .each do |o|
+            create(:activation, federation_object: o,
+                                deactivated_at: (start - 1.day))
           end
-          counter += 1
-        end
       end
+
+      it 'shoud not count objects if deactivated before starting point' do
+        count_in_range
+      end
+    end
+
+    context 'with dublicate dublicate' do
+      before :example do
+        [organization, identity_provider,
+         rapid_connect_service, service_provider]
+          .each { |o| create(:activation, federation_object: o) }
+      end
+
+      it 'data sholud hold number of unique types on each point' do
+        count_in_range
+      end
+    end
+
+    context 'with objects deactivated within the range' do
+      let(:midtime) { start + ((finish - start) / 2) }
+      let(:midtime_point) { (finish - midtime).to_i }
+      let(:before_midtime) { (0...(midtime.to_i - start.to_i)).step(1.day) }
+      let(:after_midtime) do
+        ((midtime.to_i - start.to_i)..(finish.to_i - start.to_i)).step(1.day)
+      end
+
+      before :example do
+        [organization_02, identity_provider_02,
+         service_provider_02, rapid_connect_service_02]
+          .each do |o|
+            create(:activation, federation_object: o,
+                                deactivated_at: midtime)
+          end
+      end
+
+      xit 'shoud count objects before deactivation'
+      xit 'shoud not count objects after deactivation'
     end
   end
 end
