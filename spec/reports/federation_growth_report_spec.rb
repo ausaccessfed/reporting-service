@@ -28,7 +28,7 @@ RSpec.describe FederationGrowthReport do
     counter = 0
     scope_range.each do |time|
       type_count.each do |k, val|
-        expect(data[k].slice(start_index...end_index)[counter])
+        expect(data[k].slice(start_index..end_index)[counter])
           .to match_array([time, type_total[k], val])
       end
       counter += 1
