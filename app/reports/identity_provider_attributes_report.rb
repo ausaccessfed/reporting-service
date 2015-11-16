@@ -1,0 +1,2 @@
+class IdentityProviderAttributesReport < TabularReport
+end
