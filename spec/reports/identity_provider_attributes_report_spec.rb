@@ -5,6 +5,17 @@ RSpec.describe IdentityProviderAttributesReport do
   let(:header) { [['Name', 'Core Attributes', 'Optional Attributes']] }
   let(:title) { 'Identity Provider Attributes' }
 
+  let(:saml_attributes) { create_list :saml_attribute, 10 }
+
+  let(:identity_provider) do
+    create :identity_provider,
+           saml_attributes: saml_attributes
+  end
+
+  let!(:activation) do
+    create :activation, federation_object: identity_provider
+  end
+
   subject { IdentityProviderAttributesReport.new }
 
   context 'a tabular repot which lists IdPs attributes' do
@@ -16,5 +27,12 @@ RSpec.describe IdentityProviderAttributesReport do
       expect(subject.generate).to include(type: type,
                                           title: title, header: header)
     end
+
+    it 'inludes only activated IdPs' do
+      expect(subject.rows).to include([identity_provider.name,
+                                       anything, '10'])
+    end
+
+    xit 'will not inlude deactivated IdPs'
   end
 end

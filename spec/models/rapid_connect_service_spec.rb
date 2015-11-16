@@ -9,5 +9,7 @@ RSpec.describe RapidConnectService, type: :model do
     it { is_expected.to validate_presence_of(:service_type) }
 
     it { is_expected.to validate_uniqueness_of(:identifier) }
+
+    it_behaves_like 'a federation object'
   end
 end

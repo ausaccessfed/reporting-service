@@ -8,6 +8,20 @@ class IdentityProviderAttributesReport < TabularReport
   end
 
   def rows
-    [%w(a a a), %w(b b b), %w(c c c)]
+    sorted_idps = activated_identitiy_providers.sort_by do |idp|
+      idp.name.downcase
+    end
+
+    sorted_idps.map do |idp|
+      [idp.name, '2', "#{idp.saml_attributes.count}"]
+    end
+  end
+
+  private
+
+  def activated_identitiy_providers
+    IdentityProvider.joins(:activations)
+      .preload(:activations).where(activations: { deactivated_at: nil })
+      .joins(:saml_attributes).preload(:saml_attributes)
   end
 end
