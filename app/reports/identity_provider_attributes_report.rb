@@ -13,8 +13,8 @@ class IdentityProviderAttributesReport < TabularReport
     end
 
     sorted_idps.map do |idp|
-      optional_attributes = idp.saml_attributes.select { |a| !a.core? }
-      core_attributes = idp.saml_attributes.select(&:core)
+      core_attributes, optional_attributes =
+        idp.saml_attributes.partition(&:core?)
 
       [idp.name, "#{core_attributes.count}",
        "#{optional_attributes.count}"]
