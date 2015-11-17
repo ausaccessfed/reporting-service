@@ -13,19 +13,18 @@ class IdentityProviderAttributesReport < TabularReport
     end
 
     sorted_idps.map do |idp|
-      core_attributes = idp.saml_attributes
-                        .where(core: true).count
-      optional_attributes = idp.saml_attributes
-                            .where(core: false).count
+      optional_attributes = idp.saml_attributes.select { |a| !a.core? }
+      core_attributes = idp.saml_attributes.select(&:core)
 
-      [idp.name, "#{core_attributes}", "#{optional_attributes}"]
+      [idp.name, "#{core_attributes.count}",
+       "#{optional_attributes.count}"]
     end
   end
 
   private
 
   def activated_identitiy_providers
-    IdentityProvider.find_active.joins(:saml_attributes)
-      .preload(:saml_attributes)
+    IdentityProvider.find_active
+      .joins(:saml_attributes).preload(:saml_attributes)
   end
 end
