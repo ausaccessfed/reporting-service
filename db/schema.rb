@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151028023321) do
+ActiveRecord::Schema.define(version: 20151117011808) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(version: 20151028023321) do
     t.string   "description", limit: 255, null: false
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.boolean  "core",                    null: false
   end
 
   add_index "saml_attributes", ["name"], name: "index_saml_attributes_on_name", unique: true, using: :btree
