@@ -13,8 +13,12 @@ class IdentityProviderAttributesReport < TabularReport
     end
 
     sorted_idps.map do |idp|
-      _optional_attributes = idp.saml_attributes.count
-      [idp.name, '1', '10']
+      core_attributes = idp.saml_attributes
+                        .where(core: true).count
+      optional_attributes = idp.saml_attributes
+                            .where(core: false).count
+
+      [idp.name, "#{core_attributes}", "#{optional_attributes}"]
     end
   end
 
