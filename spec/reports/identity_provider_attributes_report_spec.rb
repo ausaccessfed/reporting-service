@@ -28,11 +28,9 @@ RSpec.describe IdentityProviderAttributesReport do
                                           title: title, header: header)
     end
 
-    it 'inludes only activated IdPs' do
+    it 'generate row array' do
       expect(subject.rows).to include([identity_provider.name,
                                        anything, '10'])
     end
-
-    xit 'will not inlude deactivated IdPs'
   end
 end
