@@ -24,7 +24,7 @@ class IdentityProviderAttributesReport < TabularReport
   private
 
   def activated_identitiy_providers
-    IdentityProvider.find_active
+    IdentityProvider.active
       .joins(:saml_attributes).preload(:saml_attributes)
   end
 end

@@ -5,8 +5,8 @@ RSpec.shared_examples 'a federation object' do
     end
 
     it '#find_active should invoke all objects' do
-      expect(described_class).to respond_to :find_active
-      expect(described_class.find_active.count).to eq(5)
+      expect(described_class).to respond_to :active
+      expect(described_class.active.count).to eq(5)
     end
   end
 
@@ -23,7 +23,7 @@ RSpec.shared_examples 'a federation object' do
     end
 
     it '#find_active should find only active objects' do
-      expect(described_class.find_active.count).to eq(2)
+      expect(described_class.active.count).to eq(2)
     end
   end
 end
