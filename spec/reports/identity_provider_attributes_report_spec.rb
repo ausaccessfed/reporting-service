@@ -5,11 +5,13 @@ RSpec.describe IdentityProviderAttributesReport do
   let(:header) { [['Name', 'Core Attributes', 'Optional Attributes']] }
   let(:title) { 'Identity Provider Attributes' }
 
-  let(:saml_attributes) { create_list :saml_attribute, 10 }
+  let(:optional_attributes) { create_list :saml_attribute, 10 }
+  let(:core_attribute) { create :saml_attribute, :core_attribute }
+  let(:all_attributes) { optional_attributes << core_attribute }
 
   let(:identity_provider) do
     create :identity_provider,
-           saml_attributes: saml_attributes
+           saml_attributes: all_attributes
   end
 
   let!(:activation) do
@@ -28,9 +30,9 @@ RSpec.describe IdentityProviderAttributesReport do
                                           title: title, header: header)
     end
 
-    it 'generate row array' do
+    it '#row sould be :core and :optioanl attributes' do
       expect(subject.rows).to include([identity_provider.name,
-                                       anything, '10'])
+                                       '1', '10'])
     end
   end
 end

@@ -5,7 +5,7 @@ FactoryGirl.define do
     core { false }
 
     trait :core_attribute do
-      core { true }
+      core true
     end
   end
 end
