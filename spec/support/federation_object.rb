@@ -4,13 +4,13 @@ RSpec.shared_examples 'a federation object' do
       5.times { create :activation, federation_object: subject }
     end
 
-    it 'should respond to #active' do
-      expect(described_class).to respond_to :active
-      expect(described_class.active.count).to eq(5)
+    it '#find_active should invoke all objects' do
+      expect(described_class).to respond_to :find_active
+      expect(described_class.find_active.count).to eq(5)
     end
   end
 
-  context 'when all objects are deactivated' do
+  context 'when some objects are deactivated' do
     before do
       2.times do
         create :activation, federation_object: subject
@@ -22,9 +22,8 @@ RSpec.shared_examples 'a federation object' do
       end
     end
 
-    it 'should respond to #active' do
-      expect(described_class).to respond_to :active
-      expect(described_class.active.count).to eq(2)
+    it '#find_active should find only active objects' do
+      expect(described_class.find_active.count).to eq(2)
     end
   end
 end
