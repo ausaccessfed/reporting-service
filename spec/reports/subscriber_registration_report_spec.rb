@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe SubscriberRegistrationReport do
-  let(:header) { [['Name', 'Registration Date']] }
+  let(:header) { [%w(Name Registration\ Date)] }
   let(:type) { 'subscriber-registrations' }
 
   let(:organization) { create(:organization) }
