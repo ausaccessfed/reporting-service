@@ -1,0 +1,2 @@
+class ProvidedAttributeReport < TabularReport
+end
