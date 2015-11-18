@@ -20,6 +20,7 @@ RSpec.describe IdentityProviderAttributesReport do
   end
 
   subject { IdentityProviderAttributesReport.new }
+  let(:report) { subject.generate }
 
   context 'a tabular repot which lists IdPs attributes' do
     let!(:activation) do
@@ -31,13 +32,13 @@ RSpec.describe IdentityProviderAttributesReport do
     end
 
     it 'includes report :type, :header, :footer' do
-      expect(subject.generate).to include(type: type,
-                                          title: title, header: header)
+      expect(report).to include(type: type,
+                                title: title, header: header)
     end
 
     it '#row sould be :core and :optioanl attributes' do
-      expect(subject.rows).to include([identity_provider.name,
-                                       '1', '10'])
+      expect(subject.rows)
+        .to match_array([[identity_provider.name, '1', '10']])
     end
 
     context 'when there are inactive objects' do
@@ -47,7 +48,9 @@ RSpec.describe IdentityProviderAttributesReport do
       end
 
       it 'shoud generate report only for active objects' do
-        expect(subject.rows.count).to eq(11)
+        name = identity_provider_02.name
+
+        expect(report[:rows]).not_to include([name, anything, anything])
       end
     end
   end
