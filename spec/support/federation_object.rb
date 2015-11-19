@@ -21,7 +21,7 @@ RSpec.shared_examples 'a federation object' do
     end
   end
 
-  context 'when some all objects are inactive' do
+  context 'when all objects are inactive' do
     before do
       2.times do
         create :activation, :deactivated,
