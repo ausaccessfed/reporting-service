@@ -15,6 +15,13 @@ RSpec.shared_examples 'a federation object' do
       2.times { create :activation, federation_object: subject }
     end
 
+    before do
+      2.times do
+        create :activation, :deactivated,
+               federation_object: subject
+      end
+    end
+
     it '#active should invoke all objects' do
       expect(described_class).to respond_to :active
       expect(described_class.active.all.count).to eq(1)
