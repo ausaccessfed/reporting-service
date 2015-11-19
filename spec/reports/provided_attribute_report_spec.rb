@@ -20,10 +20,20 @@ RSpec.describe ProvidedAttributeReport do
            saml_attributes: [first_attribute, second_attribute]
   end
 
-  let!(:identity_providers) do
+  let(:inactive_identity_provider) do
+    create :identity_provider,
+           saml_attributes: [first_attribute, second_attribute]
+  end
+
+  let!(:active_identity_providers) do
     { identity_provider_01: identity_provider_01,
       identity_provider_02: identity_provider_02,
       identity_provider_03: identity_provider_03 }
+  end
+
+  before do
+    [identity_provider_01, identity_provider_02, identity_provider_03]
+      .each { |o| create(:activation, federation_object: o) }
   end
 
   shared_examples 'an attribute report' do
@@ -37,15 +47,23 @@ RSpec.describe ProvidedAttributeReport do
     end
 
     it 'should generate an array of report rows' do
-      identity_providers.each do |_k, v|
+      active_identity_providers.each do |_k, v|
         expect(report[:rows]).to include([v.name, anything])
       end
     end
 
     it 'determines whether idp is supported or not' do
       supported_idps.each do |k, v|
-        expect(report[:rows]).to include([identity_providers[k].name, v])
+        idp_name = active_identity_providers[k].name
+
+        expect(report[:rows]).to include([idp_name, v])
       end
+    end
+
+    it 'should never include inactive idps' do
+      idp_name = inactive_identity_provider.name
+
+      expect(report[:rows]).not_to include([idp_name, anything])
     end
   end
 
