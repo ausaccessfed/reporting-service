@@ -22,8 +22,7 @@ class ProvidedAttributeReport < TabularReport
   private
 
   def identity_providers
-    IdentityProvider.joins(:saml_attributes)
-      .preload(:saml_attributes)
+    IdentityProvider.preload(:saml_attributes)
   end
 
   def supported(idp)
