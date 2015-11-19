@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe IdentityProvider, type: :model do
   context 'validations' do
+    let(:factory) { :identity_provider }
+
     subject { build(:identity_provider) }
 
     it { is_expected.to validate_presence_of(:entity_id) }
