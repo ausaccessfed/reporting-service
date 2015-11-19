@@ -27,12 +27,9 @@ class ProvidedAttributeReport < TabularReport
   end
 
   def supported(idp)
-    names = []
-    idp.saml_attributes.map do |a|
-      names << a.name
-    end
+    names = idp.saml_attributes.map(&:name)
 
-    return 'no' unless names.include?(@name)
-    'yes'
+    return 'yes' if names.include?(@name)
+    'no'
   end
 end
