@@ -12,7 +12,7 @@ RSpec.shared_examples 'a federation object' do
         end
       end
 
-      it 'should invoke all objects' do
+      it 'should include all objects' do
         expect(described_class.active.all)
           .to contain_exactly(subject, object)
       end
@@ -30,7 +30,7 @@ RSpec.shared_examples 'a federation object' do
         end
       end
 
-      it 'should invoke all objects' do
+      it 'should include only active objects' do
         expect(described_class.active.all)
           .to contain_exactly(subject)
 
@@ -50,7 +50,7 @@ RSpec.shared_examples 'a federation object' do
         end
       end
 
-      it 'should find only active objects' do
+      it 'should include no objects' do
         expect(described_class.active.all).not_to include(subject)
         expect(described_class.active.all).not_to include(object)
       end
