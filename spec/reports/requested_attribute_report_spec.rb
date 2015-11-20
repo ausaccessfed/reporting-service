@@ -6,12 +6,20 @@ RSpec.describe RequestedAttributeReport do
 
   let(:required_attribute) { create :saml_attribute }
   let(:optional_attribute) { create :saml_attribute }
+  let(:not_requested_attribute) { create :saml_attribute }
 
-  let(:service_provider_01) do
-    create :service_provider
+  (1..4).each do |i|
+    let("service_provider_0#{i}".to_sym) do
+      create :service_provider
+    end
   end
 
-  let(:service_provider_02) do
+  let(:active_service_provders) do
+    [service_provider_01, service_provider_02,
+     service_provider_03, service_provider_04]
+  end
+
+  let(:inacvtive_service_provider) do
     create :service_provider
   end
 
@@ -21,6 +29,17 @@ RSpec.describe RequestedAttributeReport do
              optional: false,
              saml_attribute: required_attribute,
              service_provider: object
+    end
+
+    [service_provider_03, service_provider_04].each do |object|
+      create :service_provider_saml_attribute,
+             optional: false,
+             saml_attribute: optional_attribute,
+             service_provider: object
+    end
+
+    active_service_provders.each do |object|
+      create :activation, federation_object: object
     end
   end
 
@@ -38,6 +57,18 @@ RSpec.describe RequestedAttributeReport do
 
       expect(report).to include(type: type, title: title, header: header)
       expect(report[:footer]).not_to be_nil
+    end
+
+    it 'should include active SPs only' do
+      active_service_provders.each do |sp|
+        expect(report[:rows]).to include([sp.name, anything])
+      end
+    end
+
+    it 'should never include inactive SPs' do
+      sp_name = inacvtive_service_provider.name
+
+      expect(report[:rows]).not_to include([sp_name, anything])
     end
   end
 

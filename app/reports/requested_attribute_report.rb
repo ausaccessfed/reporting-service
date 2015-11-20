@@ -9,6 +9,18 @@ class RequestedAttributeReport < TabularReport
   end
 
   def rows
-    [%w(1, 2)]
+    sorted_sps = service_providers.sort_by do |sp|
+      sp.name.downcase
+    end
+
+    sorted_sps.map do |sp|
+      [sp.name, 'none']
+    end
+  end
+
+  private
+
+  def service_providers
+    ServiceProvider.active.preload(:saml_attributes)
   end
 end
