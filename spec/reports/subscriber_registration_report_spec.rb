@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe SubscriberRegistrationReport do
-  let(:header) { [['Name', 'Registration Date']] }
+  let(:header) { [%w(Name Registration\ Date)] }
   let(:type) { 'subscriber-registrations' }
 
   let(:organization) { create(:organization) }
@@ -24,7 +24,7 @@ RSpec.describe SubscriberRegistrationReport do
     context 'when all objects are activated' do
       let!(:activations) do
         [*reported_objects, *excluded_objects]
-          .map { |o| create(:activation, federation_object: o) }
+          .each { |o| create(:activation, federation_object: o) }
       end
 
       it 'includes reported objects' do
@@ -40,7 +40,7 @@ RSpec.describe SubscriberRegistrationReport do
     context 'when all objects are deactivated' do
       let!(:activations) do
         [*reported_objects, *excluded_objects]
-          .map { |o| create(:activation, :deactivated, federation_object: o) }
+          .each { |o| create(:activation, :deactivated, federation_object: o) }
       end
 
       it 'excludes all objects' do
