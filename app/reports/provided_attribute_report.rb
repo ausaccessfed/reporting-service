@@ -1,10 +1,11 @@
 class ProvidedAttributeReport < TabularReport
-  report_type 'provided-attribute-report'
+  report_type 'provided-attribute'
   header %w(Name Supported)
   footer
 
   def initialize(name)
-    super(name)
+    title = "Identity Providers supporting #{name}"
+    super(title)
     @name = name
   end
 

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ProvidedAttributeReport do
-  let(:type) { 'provided-attribute-report' }
+  let(:type) { 'provided-attribute' }
   let(:header) { [%w(Name Supported)] }
 
   let!(:first_attribute) { create :saml_attribute }
@@ -37,11 +37,12 @@ RSpec.describe ProvidedAttributeReport do
   end
 
   shared_examples 'an attribute report' do
-    subject { ProvidedAttributeReport.new(title) }
+    subject { ProvidedAttributeReport.new(name) }
 
     let(:report) { subject.generate }
 
     it 'produces title, header and type' do
+      title = "Identity Providers supporting #{name}"
       expect(report).to include(header: header,
                                 type: type, title: title)
     end
@@ -69,7 +70,7 @@ RSpec.describe ProvidedAttributeReport do
 
   context '#generate' do
     context 'first attribute' do
-      let(:title) { first_attribute.name }
+      let(:name) { first_attribute.name }
       let(:supported_idps) do
         { identity_provider_01: 'yes',
           identity_provider_02: 'no',
@@ -80,7 +81,7 @@ RSpec.describe ProvidedAttributeReport do
     end
 
     context 'second attribute' do
-      let(:title) { second_attribute.name }
+      let(:name) { second_attribute.name }
       let(:supported_idps) do
         { identity_provider_01: 'no',
           identity_provider_02: 'yes',
