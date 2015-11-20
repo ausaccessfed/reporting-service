@@ -34,7 +34,7 @@ RSpec.describe RequestedAttributeReport do
   end
 
   shared_examples 'a tabular report for requested attributes' do
-    subject { RequestedAttributeReport.new(name) }
+    subject { RequestedAttributeReport.new(attribute.name) }
 
     let(:report) { subject.generate }
 
@@ -43,27 +43,31 @@ RSpec.describe RequestedAttributeReport do
     end
 
     it 'must contain type' do
-      title = "Service Providers requesting #{name}"
+      title = "Service Providers requesting #{attribute.name}"
 
       expect(report).to include(type: type, title: title, header: header)
+    end
+
+    it 'determines attribute status' do
+      attribute.service_providers.each {}
     end
   end
 
   context '#generate' do
     context 'for required attributes' do
-      let(:name) { required_attribute.name }
+      let(:attribute) { required_attribute }
 
       it_behaves_like 'a tabular report for requested attributes'
     end
 
     context 'for optional attributes' do
-      let(:name) { optional_attribute.name }
+      let(:attribute) { optional_attribute }
 
       it_behaves_like 'a tabular report for requested attributes'
     end
 
     context 'for none requested attributes' do
-      let(:name) { none_requested_attribute.name }
+      let(:attribute) { none_requested_attribute }
 
       it_behaves_like 'a tabular report for requested attributes'
     end
