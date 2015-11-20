@@ -4,8 +4,8 @@ RSpec.describe ProvidedAttributeReport do
   let(:type) { 'provided-attribute' }
   let(:header) { [%w(Name Supported)] }
 
-  let!(:first_attribute) { create :saml_attribute }
-  let!(:second_attribute) { create :saml_attribute }
+  let(:first_attribute) { create :saml_attribute }
+  let(:second_attribute) { create :saml_attribute }
 
   let(:identity_provider_01) do
     create :identity_provider, saml_attributes: [first_attribute]
@@ -20,12 +20,7 @@ RSpec.describe ProvidedAttributeReport do
            saml_attributes: [first_attribute, second_attribute]
   end
 
-  let(:inactive_identity_provider) do
-    create :identity_provider,
-           saml_attributes: [first_attribute, second_attribute]
-  end
-
-  let!(:active_identity_providers) do
+  let(:active_identity_providers) do
     { identity_provider_01: identity_provider_01,
       identity_provider_02: identity_provider_02,
       identity_provider_03: identity_provider_03 }
@@ -47,24 +42,12 @@ RSpec.describe ProvidedAttributeReport do
                                 type: type, title: title)
     end
 
-    it 'should generate an array of report rows' do
-      active_identity_providers.each do |_k, v|
-        expect(report[:rows]).to include([v.name, anything])
-      end
-    end
-
     it 'determines whether idp is supported or not' do
       supported_idps.each do |k, v|
         idp_name = active_identity_providers[k].name
 
         expect(report[:rows]).to include([idp_name, v])
       end
-    end
-
-    it 'should never include inactive idps' do
-      idp_name = inactive_identity_provider.name
-
-      expect(report[:rows]).not_to include([idp_name, anything])
     end
   end
 
@@ -89,6 +72,28 @@ RSpec.describe ProvidedAttributeReport do
       end
 
       it_behaves_like 'an attribute report'
+    end
+
+    context 'report rows' do
+      subject { ProvidedAttributeReport.new('any-name') }
+
+      let(:report) { subject.generate }
+      let(:inactive_identity_provider) do
+        create :identity_provider,
+               saml_attributes: [first_attribute, second_attribute]
+      end
+
+      it 'should never include inactive idps' do
+        idp_name = inactive_identity_provider.name
+
+        expect(report[:rows]).not_to include([idp_name, anything])
+      end
+
+      it 'should generate an array of report rows' do
+        active_identity_providers.each do |_k, v|
+          expect(report[:rows]).to include([v.name, anything])
+        end
+      end
     end
   end
 end

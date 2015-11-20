@@ -6,21 +6,13 @@ RSpec.describe RequestedAttributeReport do
 
   let(:required_attribute) { create :saml_attribute }
   let(:optional_attribute) { create :saml_attribute }
-  let(:not_requested_attribute) { create :saml_attribute }
+  let(:none_requested_attribute) { create :saml_attribute }
 
-  (1..4).each do |i|
-    let("service_provider_0#{i}".to_sym) do
-      create :service_provider
-    end
-  end
+  let(:service_provider_01) { create :service_provider }
+  let(:service_provider_02) { create :service_provider }
 
   let(:active_service_provders) do
-    [service_provider_01, service_provider_02,
-     service_provider_03, service_provider_04]
-  end
-
-  let(:inacvtive_service_provider) do
-    create :service_provider
+    [service_provider_01, service_provider_02]
   end
 
   before do
@@ -29,11 +21,9 @@ RSpec.describe RequestedAttributeReport do
              optional: false,
              saml_attribute: required_attribute,
              service_provider: object
-    end
 
-    [service_provider_03, service_provider_04].each do |object|
       create :service_provider_saml_attribute,
-             optional: false,
+             optional: true,
              saml_attribute: optional_attribute,
              service_provider: object
     end
@@ -56,19 +46,6 @@ RSpec.describe RequestedAttributeReport do
       title = "Service Providers requesting #{name}"
 
       expect(report).to include(type: type, title: title, header: header)
-      expect(report[:footer]).not_to be_nil
-    end
-
-    it 'should include active SPs only' do
-      active_service_provders.each do |sp|
-        expect(report[:rows]).to include([sp.name, anything])
-      end
-    end
-
-    it 'should never include inactive SPs' do
-      sp_name = inacvtive_service_provider.name
-
-      expect(report[:rows]).not_to include([sp_name, anything])
     end
   end
 
@@ -83,6 +60,33 @@ RSpec.describe RequestedAttributeReport do
       let(:name) { optional_attribute.name }
 
       it_behaves_like 'a tabular report for requested attributes'
+    end
+
+    context 'for none requested attributes' do
+      let(:name) { none_requested_attribute.name }
+
+      it_behaves_like 'a tabular report for requested attributes'
+    end
+
+    context 'report rows' do
+      subject { RequestedAttributeReport.new('any-name') }
+
+      let(:report) { subject.generate }
+      let(:inacvtive_service_provider) do
+        create :service_provider
+      end
+
+      it 'should never include inactive SPs' do
+        sp_name = inacvtive_service_provider.name
+
+        expect(report[:rows]).not_to include([sp_name, anything])
+      end
+
+      it 'should include active SPs only' do
+        active_service_provders.each do |sp|
+          expect(report[:rows]).to include([sp.name, anything])
+        end
+      end
     end
   end
 end
