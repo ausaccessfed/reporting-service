@@ -48,26 +48,38 @@ RSpec.describe RequestedAttributeReport do
       expect(report).to include(type: type, title: title, header: header)
     end
 
-    it 'determines attribute status' do
-      attribute.service_providers.each {}
+    it 'determines attribute status for each SP' do
+      status_flags = %w(required optional none)
+      status_flags.delete(status)
+
+      active_service_provders.map do |k|
+        expect(report[:rows]).to include([k.name, status])
+
+        status_flags.each do |flag|
+          expect(report[:rows]).not_to include([k.name, flag])
+        end
+      end
     end
   end
 
   context '#generate' do
-    context 'for required attributes' do
+    xcontext 'for required attributes' do
       let(:attribute) { required_attribute }
+      let(:status) { 'required' }
 
       it_behaves_like 'a tabular report for requested attributes'
     end
 
-    context 'for optional attributes' do
+    xcontext 'for optional attributes' do
       let(:attribute) { optional_attribute }
+      let(:status) { 'optional' }
 
       it_behaves_like 'a tabular report for requested attributes'
     end
 
     context 'for none requested attributes' do
       let(:attribute) { none_requested_attribute }
+      let(:status) { 'none' }
 
       it_behaves_like 'a tabular report for requested attributes'
     end

@@ -6,6 +6,7 @@ class RequestedAttributeReport < TabularReport
   def initialize(name)
     title = "Service Providers requesting #{name}"
     super(title)
+    @name = name
   end
 
   def rows
@@ -14,13 +15,20 @@ class RequestedAttributeReport < TabularReport
     end
 
     sorted_sps.map do |sp|
-      [sp.name, 'none']
+      status = attribute_status sp
+      [sp.name, status]
     end
   end
 
   private
 
   def service_providers
-    ServiceProvider.active.preload(:saml_attributes)
+    ServiceProvider.active
+  end
+
+  def attribute_status(sp)
+    names = sp.saml_attributes.map(&:name)
+
+    return 'none' unless names.include?(@name)
   end
 end
