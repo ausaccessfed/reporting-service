@@ -70,7 +70,7 @@ RSpec.describe RequestedAttributeReport do
       it_behaves_like 'a tabular report for requested attributes'
     end
 
-    xcontext 'for optional attributes' do
+    context 'for optional attributes' do
       let(:attribute) { optional_attribute }
       let(:status) { 'optional' }
 
