@@ -11,7 +11,7 @@ RSpec.describe RequestedAttributeReport do
   let(:service_provider_01) { create :service_provider }
   let(:service_provider_02) { create :service_provider }
 
-  let(:active_service_provders) do
+  let(:active_service_providers) do
     [service_provider_01, service_provider_02]
   end
 
