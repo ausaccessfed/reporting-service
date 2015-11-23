@@ -26,7 +26,7 @@ class ServiceCompatibilityReport < TabularReport
   private
 
   def active_identity_providers
-    IdentityProvider.preload(:saml_attributes)
+    IdentityProvider.active.preload(:saml_attributes)
   end
 
   def service_provider_atrributes
