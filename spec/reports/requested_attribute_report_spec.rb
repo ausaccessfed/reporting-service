@@ -28,7 +28,7 @@ RSpec.describe RequestedAttributeReport do
              service_provider: object
     end
 
-    active_service_provders.each do |object|
+    active_service_providers.each do |object|
       create :activation, federation_object: object
     end
   end
@@ -52,7 +52,7 @@ RSpec.describe RequestedAttributeReport do
       status_flags = %w(required optional none)
       status_flags.delete(status)
 
-      active_service_provders.map do |k|
+      active_service_providers.map do |k|
         expect(report[:rows]).to include([k.name, status])
 
         status_flags.each do |flag|
