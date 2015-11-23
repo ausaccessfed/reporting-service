@@ -10,18 +10,37 @@ class ServiceCompatibilityReport < TabularReport
   end
 
   def rows
-    sorted_idps = identity_providers.sort_by do |idp|
+    sorted_idps = active_identity_providers.sort_by do |idp|
       idp.name.downcase
     end
 
     sorted_idps.map do |idp|
-      [idp.name, '2', '1', 'yes']
+      required = common_attributes idp
+      optional = common_attributes idp
+
+      [idp.name, required[false].count.to_s,
+       optional[true].count.to_s, 'no']
     end
   end
 
   private
 
-  def identity_providers
-    IdentityProvider.active
+  def active_identity_providers
+    IdentityProvider.preload(:saml_attributes)
+  end
+
+  def service_provider_atrributes
+    @service_provider.service_provider_saml_attributes
+  end
+
+  def common_attributes(idp)
+    atrributes = service_provider_atrributes
+                 .group_by(&:optional).transform_values do |group|
+      group.select do |g|
+        idp.saml_attributes.any? { |saml| saml.id == g.saml_attribute_id }
+      end
+    end
+
+    Hash.new([]).merge(atrributes)
   end
 end
