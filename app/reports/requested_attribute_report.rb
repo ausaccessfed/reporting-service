@@ -6,8 +6,7 @@ class RequestedAttributeReport < TabularReport
   def initialize(name)
     title = "Service Providers requesting #{name}"
     super(title)
-    @name = name
-    @saml_attribute = SAMLAttribute.find_by(name: @name)
+    @saml_attribute = SAMLAttribute.find_by(name: name)
   end
 
   def rows
@@ -24,16 +23,17 @@ class RequestedAttributeReport < TabularReport
   private
 
   def service_providers
-    ServiceProvider.active.preload(:saml_attributes)
+    ServiceProvider.active
+      .preload(:service_provider_saml_attributes)
   end
 
   def attribute_status(sp)
-    names = sp.saml_attributes.map(&:name)
-    return 'none' unless names.include?(@name)
+    joint = sp.service_provider_saml_attributes
+            .detect { |o| o.saml_attribute == @saml_attribute }
 
-    joint = ServiceProviderSAMLAttribute
-            .service_provider_attribute_joint sp, @saml_attribute
+    return 'none' unless joint 
+    return 'optional'  if joint.optional?
 
-    return 'optional' if joint.optional?
+    'required'
   end
 end

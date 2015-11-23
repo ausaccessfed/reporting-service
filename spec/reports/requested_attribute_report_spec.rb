@@ -63,7 +63,7 @@ RSpec.describe RequestedAttributeReport do
   end
 
   context '#generate' do
-    xcontext 'for required attributes' do
+    context 'for required attributes' do
       let(:attribute) { required_attribute }
       let(:status) { 'required' }
 
