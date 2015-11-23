@@ -3,8 +3,10 @@ class ServiceCompatibilityReport < TabularReport
   header %w(Name Required Optional Compatible)
   footer
 
-  def initialize(name)
-    super(name)
+  def initialize(entity_id)
+    @service_provider = ServiceProvider.find_by(entity_id: entity_id)
+    title = @service_provider.name
+    super(title)
   end
 
   def rows
