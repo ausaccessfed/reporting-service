@@ -28,11 +28,11 @@ class RequestedAttributeReport < TabularReport
   end
 
   def attribute_status(sp)
-    joint = sp.service_provider_saml_attributes
-            .detect { |o| o.saml_attribute == @saml_attribute }
+    attribute_sp_joint = sp.service_provider_saml_attributes
+                         .detect { |o| o.saml_attribute == @saml_attribute }
 
-    return 'none' unless joint 
-    return 'optional'  if joint.optional?
+    return 'none' unless attribute_sp_joint
+    return 'optional' if attribute_sp_joint.optional?
 
     'required'
   end
