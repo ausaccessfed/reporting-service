@@ -10,6 +10,18 @@ class ServiceCompatibilityReport < TabularReport
   end
 
   def rows
-    [%w(name 2 1 yes)]
+    sorted_idps = identity_providers.sort_by do |idp|
+      idp.name.downcase
+    end
+
+    sorted_idps.map do |idp|
+      [idp.name, '2', '1', 'yes']
+    end
+  end
+
+  private
+
+  def identity_providers
+    IdentityProvider.active
   end
 end
