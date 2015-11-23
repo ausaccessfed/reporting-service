@@ -86,7 +86,7 @@ RSpec.describe RequestedAttributeReport do
 
     context 'report rows' do
       let(:report) { subject.generate }
-      let(:inacvtive_service_provider) do
+      let(:inactive_service_provider) do
         create :service_provider
       end
 
@@ -94,13 +94,13 @@ RSpec.describe RequestedAttributeReport do
         create :service_provider_saml_attribute,
                optional: false,
                saml_attribute: required_attribute,
-               service_provider: inacvtive_service_provider
+               service_provider: inactive_service_provider
       end
 
       subject { RequestedAttributeReport.new(required_attribute.name) }
 
       it 'should never include inactive SPs' do
-        sp_name = inacvtive_service_provider.name
+        sp_name = inactive_service_provider.name
 
         expect(report[:rows]).not_to include([sp_name, anything])
       end
