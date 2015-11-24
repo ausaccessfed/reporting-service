@@ -38,7 +38,7 @@ class ServiceCompatibilityReport < TabularReport
     data = grouped_attributes.transform_values do |group|
       group.select do |g|
         idp.saml_attributes
-        .any? { |saml| saml[:id] == g[:saml_attribute_id] }
+        .any? { |saml| saml.id == g.saml_attribute_id }
       end
     end
 
@@ -55,7 +55,7 @@ class ServiceCompatibilityReport < TabularReport
   def compatibility_check(required_attributes, idp)
     required_attributes.each do |a|
       return 'no' unless idp.saml_attributes.any? do |o|
-        o[:id] == a[:saml_attribute_id]
+        o.id == a.saml_attribute_id
       end
     end
 
