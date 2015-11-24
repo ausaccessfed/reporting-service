@@ -15,7 +15,7 @@ RSpec.describe ServiceCompatibilityReport do
 
   let(:incompatible_identity_provider) do
     create :identity_provider,
-           saml_attributes: core_attributes[0..6]
+           saml_attributes: core_attributes[0..2]
   end
 
   let(:inactive_identity_provider) do

@@ -29,40 +29,30 @@ class ServiceCompatibilityReport < TabularReport
     IdentityProvider.active.preload(:saml_attributes)
   end
 
-  def service_provider_atrributes
+  def requested_atrributes
     @service_provider.service_provider_saml_attributes
   end
 
   def report(idp)
-    data = common_attributes idp
-    report = Hash.new([]).merge(data)
+    idp_saml_attribute_ids = idp.saml_attributes.map(&:id)
 
-    { required: report[false].count,
-      optional: report[true].count, compatible: compatibility(idp) }
+    required_attributes = grouped_attributes[:required]
+                          .map(&:saml_attribute_id) & idp_saml_attribute_ids
+    optional_attributes = grouped_attributes[:optional]
+                          .map(&:saml_attribute_id) & idp_saml_attribute_ids
+
+    { required: required_attributes.count,
+      optional: optional_attributes.count,
+      compatible: compatibility(idp_saml_attribute_ids) }
   end
 
-  def common_attributes(idp)
-    grouped_attributes.transform_values do |group|
-      group.select do |attribute|
-        idp.saml_attributes.any? do |idp_saml|
-          idp_saml.id == attribute.saml_attribute_id
-        end
-      end
-    end
-  end
-
-  def compatibility(idp)
-    grouped_attributes[false].each do |reqired|
-      return false unless idp.saml_attributes.any? do |a|
-        a.id == reqired.saml_attribute_id
-      end
-    end
-
-    true
+  def compatibility(idp_attribute_ids)
+    required_ids = grouped_attributes[:required].map(&:saml_attribute_id)
+    (required_ids & idp_attribute_ids).sort == required_ids.sort
   end
 
   def grouped_attributes
-    Hash.new([]).merge(service_provider_atrributes
-                       .group_by(&:optional))
+    optional, required = requested_atrributes.partition(&:optional)
+    { optional: optional, required: required }
   end
 end
