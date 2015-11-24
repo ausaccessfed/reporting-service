@@ -15,11 +15,12 @@ class ServiceCompatibilityReport < TabularReport
     end
 
     sorted_idps.map do |idp|
-      required = common_attributes idp
-      optional = common_attributes idp
+      atrributes = common_attributes idp
+      required_attributes_count = atrributes[false].count.to_s
+      optional_attributes_count = atrributes[true].count.to_s
 
-      [idp.name, required[false].count.to_s,
-       optional[true].count.to_s, 'no']
+      [idp.name, required_attributes_count,
+       optional_attributes_count, 'no']
     end
   end
 
@@ -34,10 +35,11 @@ class ServiceCompatibilityReport < TabularReport
   end
 
   def common_attributes(idp)
-    atrributes = service_provider_atrributes
+    atrributes = service_provider_atrributes.flat_map
                  .group_by(&:optional).transform_values do |group|
       group.select do |g|
-        idp.saml_attributes.any? { |saml| saml.id == g.saml_attribute_id }
+        idp.saml_attributes
+        .flat_map.any? { |saml| saml[:id] == g.saml_attribute_id }
       end
     end
 

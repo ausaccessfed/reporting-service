@@ -6,7 +6,7 @@ RSpec.describe ServiceCompatibilityReport do
 
   let(:service_provider_01) { create :service_provider }
   let(:core_attributes) { create_list :saml_attribute, 4, :core_attribute }
-  let(:other_attributes) { create_list :saml_attribute, 4 }
+  let(:other_attributes) { create_list :saml_attribute, 3 }
 
   let(:identity_provider_01) do
     create :identity_provider,
@@ -54,7 +54,7 @@ RSpec.describe ServiceCompatibilityReport do
 
     it 'should count required and optional attributes provider by IdP' do
       name = identity_provider_01.name
-      expect(report[:rows]).to include([name, '4', '4', anything])
+      expect(report[:rows]).to include([name, '4', '3', anything])
     end
 
     it 'should not include inactive IdPs' do
