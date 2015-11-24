@@ -15,12 +15,11 @@ class ServiceCompatibilityReport < TabularReport
     end
 
     sorted_idps.map do |idp|
-      atrributes = common_attributes idp
-      required_attributes_count = atrributes[false].count.to_s
-      optional_attributes_count = atrributes[true].count.to_s
+      attributes = report idp
+      compatible = attributes[:compatible] ? 'yes' : 'no'
 
-      [idp.name, required_attributes_count,
-       optional_attributes_count, atrributes[:compatibility]]
+      [idp.name, attributes[:required].to_s,
+       attributes[:optional].to_s, compatible]
     end
   end
 
@@ -34,31 +33,36 @@ class ServiceCompatibilityReport < TabularReport
     @service_provider.service_provider_saml_attributes
   end
 
+  def report(idp)
+    data = common_attributes idp
+    report = Hash.new([]).merge(data)
+
+    { required: report[false].count,
+      optional: report[true].count, compatible: compatibility(idp) }
+  end
+
   def common_attributes(idp)
-    data = grouped_attributes.transform_values do |group|
-      group.select do |g|
-        idp.saml_attributes
-        .any? { |saml| saml.id == g.saml_attribute_id }
+    grouped_attributes.transform_values do |group|
+      group.select do |attribute|
+        idp.saml_attributes.any? do |idp_saml|
+          idp_saml.id == attribute.saml_attribute_id
+        end
+      end
+    end
+  end
+
+  def compatibility(idp)
+    grouped_attributes[false].each do |reqired|
+      return false unless idp.saml_attributes.any? do |a|
+        a.id == reqired.saml_attribute_id
       end
     end
 
-    data[:compatibility] =
-      compatibility_check(grouped_attributes[false], idp)
-
-    Hash.new([]).merge(data)
+    true
   end
 
   def grouped_attributes
-    Hash.new([]).merge(service_provider_atrributes.group_by(&:optional))
-  end
-
-  def compatibility_check(required_attributes, idp)
-    required_attributes.each do |a|
-      return 'no' unless idp.saml_attributes.any? do |o|
-        o.id == a.saml_attribute_id
-      end
-    end
-
-    'yes'
+    Hash.new([]).merge(service_provider_atrributes
+                       .group_by(&:optional))
   end
 end
