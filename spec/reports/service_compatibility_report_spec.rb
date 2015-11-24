@@ -5,17 +5,17 @@ RSpec.describe ServiceCompatibilityReport do
   let(:header) { [%w(Name Required Optional Compatible)] }
 
   let(:service_provider_01) { create :service_provider }
-  let(:core_attributes) { create_list :saml_attribute, 4, :core_attribute }
-  let(:other_attributes) { create_list :saml_attribute, 3 }
+  let(:core_attributes) { create_list :saml_attribute, 8, :core_attribute }
+  let(:other_attributes) { create_list :saml_attribute, 5 }
 
   let(:identity_provider_01) do
     create :identity_provider,
-           saml_attributes: [*core_attributes, *other_attributes]
+           saml_attributes: core_attributes
   end
 
   let(:inactive_identity_provider) do
     create :identity_provider,
-           saml_attributes: [*core_attributes, *other_attributes]
+           saml_attributes: core_attributes
   end
 
   before do
@@ -43,23 +43,23 @@ RSpec.describe ServiceCompatibilityReport do
     let(:report) { subject.generate }
 
     it 'must contain type, header, title' do
-      name = service_provider_01.name
-      expect(report).to include(type: type, title: name, header: header)
-    end
-
-    it '#rows include active IdPs name' do
-      name = identity_provider_01.name
-      expect(report[:rows]).to include([name, anything, anything, anything])
+      title = "Service Compatibility for #{service_provider_01.name}"
+      expect(report).to include(type: type, title: title, header: header)
     end
 
     it 'should count required and optional attributes provider by IdP' do
       name = identity_provider_01.name
-      expect(report[:rows]).to include([name, '4', '3', anything])
+      expect(report[:rows]).to include([name, '8', '0', anything])
     end
 
     it 'should not include inactive IdPs' do
       name = inactive_identity_provider.name
       expect(report[:rows]).not_to include([name, anything, anything, anything])
+    end
+
+    it 'should determine whether IdP is compatible or not' do
+      name = identity_provider_01.name
+      expect(report[:rows]).to include([name, anything, anything, 'yes'])
     end
   end
 end
