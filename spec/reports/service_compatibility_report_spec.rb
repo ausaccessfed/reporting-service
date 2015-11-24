@@ -10,12 +10,17 @@ RSpec.describe ServiceCompatibilityReport do
 
   let(:identity_provider_01) do
     create :identity_provider,
-           saml_attributes: core_attributes
+           saml_attributes: [*core_attributes, *other_attributes]
+  end
+
+  let(:incompatible_identity_provider) do
+    create :identity_provider,
+           saml_attributes: core_attributes[0..6]
   end
 
   let(:inactive_identity_provider) do
     create :identity_provider,
-           saml_attributes: core_attributes
+           saml_attributes: [*core_attributes, *other_attributes]
   end
 
   before do
@@ -34,6 +39,7 @@ RSpec.describe ServiceCompatibilityReport do
     end
 
     create :activation, federation_object: identity_provider_01
+    create :activation, federation_object: incompatible_identity_provider
     create :activation, federation_object: service_provider_01
   end
 
@@ -49,7 +55,7 @@ RSpec.describe ServiceCompatibilityReport do
 
     it 'should count required and optional attributes provider by IdP' do
       name = identity_provider_01.name
-      expect(report[:rows]).to include([name, '8', '0', anything])
+      expect(report[:rows]).to include([name, '8', '5', 'yes'])
     end
 
     it 'should not include inactive IdPs' do
@@ -60,6 +66,11 @@ RSpec.describe ServiceCompatibilityReport do
     it 'should determine whether IdP is compatible or not' do
       name = identity_provider_01.name
       expect(report[:rows]).to include([name, anything, anything, 'yes'])
+    end
+
+    it 'should determine whether IdP is compatible or not' do
+      name = incompatible_identity_provider.name
+      expect(report[:rows]).to include([name, anything, anything, 'no'])
     end
   end
 end
