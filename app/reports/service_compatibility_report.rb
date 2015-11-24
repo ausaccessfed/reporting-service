@@ -29,21 +29,18 @@ class ServiceCompatibilityReport < TabularReport
     IdentityProvider.active.preload(:saml_attributes)
   end
 
-  def requested_atrributes
+  def requested_attributes
     @service_provider.service_provider_saml_attributes
   end
 
   def report(idp)
     idp_saml_attribute_ids = idp.saml_attributes.map(&:id)
 
-    required_attributes = grouped_attributes[:required]
-                          .map(&:saml_attribute_id) & idp_saml_attribute_ids
-    optional_attributes = grouped_attributes[:optional]
-                          .map(&:saml_attribute_id) & idp_saml_attribute_ids
+    data = grouped_attributes.transform_values do |attrs|
+      (attrs.map(&:saml_attribute_id) & idp_saml_attribute_ids).count
+    end
 
-    { required: required_attributes.count,
-      optional: optional_attributes.count,
-      compatible: compatibility(idp_saml_attribute_ids) }
+    data.merge(compatible: compatibility(idp_saml_attribute_ids))
   end
 
   def compatibility(idp_attribute_ids)
@@ -52,7 +49,7 @@ class ServiceCompatibilityReport < TabularReport
   end
 
   def grouped_attributes
-    optional, required = requested_atrributes.partition(&:optional)
+    optional, required = requested_attributes.partition(&:optional)
     { optional: optional, required: required }
   end
 end
