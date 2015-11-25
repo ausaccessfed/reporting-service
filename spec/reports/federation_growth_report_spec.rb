@@ -176,6 +176,7 @@ RSpec.describe FederationGrowthReport do
         let(:scope_range) { range_after_midtime }
 
         it 'should not count objects after deactivation' do
+          count_in_range scope_range.count
         end
       end
     end
