@@ -101,7 +101,7 @@ RSpec.describe FederationGrowthReport do
       end
     end
 
-    it 'includes title, units, lables and range' do
+    it 'includes title, units, labels and range' do
       expect(report).to include(title: title, units: units,
                                 labels: labels, range: range)
     end
@@ -116,19 +116,19 @@ RSpec.describe FederationGrowthReport do
           end
       end
 
-      it 'shoud not count objects if deactivated before starting point' do
+      it 'should not count objects if deactivated before starting point' do
         count_in_range
       end
     end
 
-    context 'with dublicate dublicate' do
+    context 'with duplicate objects' do
       before :example do
         [organization, identity_provider,
          rapid_connect_service, service_provider]
           .each { |o| create(:activation, federation_object: o) }
       end
 
-      it 'data sholud hold number of unique types on each point' do
+      it 'data should hold number of unique types on each point' do
         count_in_range
       end
     end
@@ -166,7 +166,7 @@ RSpec.describe FederationGrowthReport do
           { organizations: 2, identity_providers: 4, services: 8 }
         end
 
-        it 'shoud count objects before deactivation' do
+        it 'should count objects before deactivation' do
           count_in_range
         end
       end
@@ -174,7 +174,7 @@ RSpec.describe FederationGrowthReport do
       context 'when objects are deactivated' do
         let(:scope_range) { range_after_midtime }
 
-        it 'shoud not count objects after deactivation' do
+        it 'should not count objects after deactivation' do
           count_in_range scope_range.count
         end
       end

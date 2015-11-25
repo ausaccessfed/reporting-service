@@ -22,7 +22,7 @@ RSpec.describe IdentityProviderAttributesReport do
   subject { IdentityProviderAttributesReport.new }
   let(:report) { subject.generate }
 
-  context 'a tabular repot which lists IdPs attributes' do
+  context 'a tabular report which lists IdPs attributes' do
     let!(:activation) do
       create :activation, federation_object: identity_provider
     end
@@ -36,7 +36,7 @@ RSpec.describe IdentityProviderAttributesReport do
                                 title: title, header: header)
     end
 
-    it '#row sould be :core and :optioanl attributes' do
+    it '#row should be :core and :optional attributes' do
       expect(subject.rows)
         .to match_array([[identity_provider.name, '1', '10']])
     end
@@ -47,7 +47,7 @@ RSpec.describe IdentityProviderAttributesReport do
                federation_object: identity_provider_02
       end
 
-      it 'shoud generate report only for active objects' do
+      it 'should generate report only for active objects' do
         name = identity_provider_02.name
 
         expect(report[:rows]).not_to include([name, anything, anything])
