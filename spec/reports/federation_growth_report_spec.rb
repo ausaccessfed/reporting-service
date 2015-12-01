@@ -24,7 +24,7 @@ RSpec.describe FederationGrowthReport do
 
   let(:data) { report[:data] }
 
-  def count_in_range(start_point = 0)
+  def expect_in_range(start_point = 0)
     scope_range.each_with_index do |time, index|
       type_count.each do |k, val|
         expect(data[k].slice((mod_range start_point)..range_count)[index])
@@ -119,7 +119,7 @@ RSpec.describe FederationGrowthReport do
       end
 
       it 'should not count objects if deactivated before starting point' do
-        count_in_range
+        expect_in_range
       end
     end
 
@@ -131,7 +131,7 @@ RSpec.describe FederationGrowthReport do
       end
 
       it 'data should hold number of unique types on each point' do
-        count_in_range
+        expect_in_range
       end
     end
 
@@ -168,7 +168,7 @@ RSpec.describe FederationGrowthReport do
         end
 
         it 'should count objects before deactivation' do
-          count_in_range
+          expect_in_range
         end
       end
 
@@ -176,7 +176,7 @@ RSpec.describe FederationGrowthReport do
         let(:scope_range) { range_after_midtime }
 
         it 'should not count objects after deactivation' do
-          count_in_range scope_range.count
+          expect_in_range scope_range.count
         end
       end
     end
