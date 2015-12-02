@@ -42,7 +42,7 @@ RSpec.describe ProvidedAttributeReport do
                                 type: type, title: title)
     end
 
-    it 'determines whether idp is supported or not' do
+    it 'determines whether IdP is supported or not' do
       supported_idps.each do |k, v|
         idp_name = active_identity_providers[k].name
 
@@ -83,7 +83,7 @@ RSpec.describe ProvidedAttributeReport do
                saml_attributes: [first_attribute, second_attribute]
       end
 
-      it 'should never include inactive idps' do
+      it 'should never include inactive IdP' do
         idp_name = inactive_identity_provider.name
 
         expect(report[:rows]).not_to include([idp_name, anything])
