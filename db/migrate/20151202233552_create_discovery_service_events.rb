@@ -16,7 +16,7 @@ class CreateDiscoveryServiceEvents < ActiveRecord::Migration
       t.belongs_to :service_provider, null: false
       t.belongs_to :identity_provider
 
-      t.foreign_key :service_providers, null: false
+      t.foreign_key :service_providers
       t.foreign_key :identity_providers
 
       t.index :timestamp
