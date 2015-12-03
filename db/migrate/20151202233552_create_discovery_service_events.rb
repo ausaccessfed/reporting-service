@@ -7,7 +7,6 @@ class CreateDiscoveryServiceEvents < ActiveRecord::Migration
       t.string :group, null: false
       t.string :phase, null: false
       t.string :unique_id, null: false
-
       t.datetime :timestamp, null: false
 
       t.string :selection_method
@@ -15,6 +14,11 @@ class CreateDiscoveryServiceEvents < ActiveRecord::Migration
       t.string :selected_idp
 
       t.timestamps null: false
+
+      t.references :service_provider, null: false, index: true
+      t.references :identity_providers, index: true
+
+      t.index :timestamp
     end
   end
 end
