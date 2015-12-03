@@ -47,14 +47,12 @@ ActiveRecord::Schema.define(version: 20151202233552) do
   create_table "discovery_service_events", force: :cascade do |t|
     t.string   "user_agent",            limit: 255, null: false
     t.string   "ip",                    limit: 255, null: false
-    t.string   "initiating_sp",         limit: 255, null: false
     t.string   "group",                 limit: 255, null: false
     t.string   "phase",                 limit: 255, null: false
     t.string   "unique_id",             limit: 255, null: false
     t.datetime "timestamp",                         null: false
     t.string   "selection_method",      limit: 255
     t.string   "return_url",            limit: 255
-    t.string   "selected_idp",          limit: 255
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
     t.integer  "service_provider_id",   limit: 4,   null: false
