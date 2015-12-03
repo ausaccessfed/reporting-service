@@ -6,5 +6,7 @@ class IdentityProvider < ActiveRecord::Base
   has_many :saml_attributes,
            through: :identity_provider_saml_attributes
 
+  has_many :discovery_service_events
+
   valhammer
 end
