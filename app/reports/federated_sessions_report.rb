@@ -7,17 +7,24 @@ class FederatedSessionsReport < TimeSeriesReport
 
   units ''
 
-  def initialize(start, finish)
+  def initialize(start, finish, steps)
     title = 'Federated Sessions'
 
     super(title, start, finish)
     @start = start
     @finish = finish
+    @steps = steps.to_f.round(2)
   end
 
   private
 
+  def range
+    start = @start
+    finish = @finish
+    (0..(finish.to_i - start.to_i)).step(@steps.minutes)
+  end
+
   def data
-    { sessions: (1..10).map { |t| [t, 1] } }
+    { sessions: range.map { |t| [t, 1] } }
   end
 end
