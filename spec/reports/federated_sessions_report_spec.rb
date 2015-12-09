@@ -66,12 +66,12 @@ RSpec.describe FederatedSessionsReport do
       end
 
       it 'should contain 2.0 objects/m during first 5 minutes of 2 days ago' do
-        time = 2.days.ago.beginning_of_day - start + steps.minutes
+        time = 2.days.ago.beginning_of_day - start
         expect(data[:sessions]).to include([time, 2.0])
       end
 
       it 'should contain 4.0 objects/m during first 5 minutes of 5 days ago' do
-        time = 5.days.ago.beginning_of_day - start + steps.minutes
+        time = 5.days.ago.beginning_of_day - start
         expect(data[:sessions]).to include([time, 4.0])
       end
     end
