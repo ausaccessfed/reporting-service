@@ -11,7 +11,7 @@ RSpec.describe FederatedSessionsReport do
   let(:steps) { 5 }
   let!(:range) { { start: start.xmlschema, end: finish.xmlschema } }
   let(:scope_range) do
-    ((steps.minutes.to_i)..(finish - start).to_i).step(steps.minutes)
+    (0..(finish - start).to_i).step(steps.minutes)
   end
 
   subject { FederatedSessionsReport.new(start, finish, steps) }
