@@ -13,15 +13,13 @@ class FederatedSessionsReport < TimeSeriesReport
     super(title, start, finish)
     @start = start
     @finish = finish
-    @steps = steps
+    @steps = steps.minutes.to_i
   end
 
   private
 
   def range
-    start = @start
-    finish = @finish
-    ((@steps.minutes.to_i)..(finish - start).to_i).step(@steps.minutes)
+    ((@steps)..(@finish - @start)).step(@steps)
   end
 
   def data
@@ -29,19 +27,20 @@ class FederatedSessionsReport < TimeSeriesReport
               .where('timestamp >= ? AND timestamp <= ? AND phase LIKE ?',
                      @start, @finish, 'response').pluck(:timestamp)
 
-    index = 0
+    increment = 0
     range.each_with_object(sessions: []) do |time, data|
-      rate = average_rate time, index, objects
-      index = time + @steps.minutes
-      data[:sessions] << [time, rate]
+      rate = average_rate time, increment, objects
+      increment += @steps
+
+      data[:sessions] << [increment, rate]
     end
   end
 
-  def average_rate(time, index, sessions)
+  def average_rate(time, increment, sessions)
     data = sessions.select do |s|
-      (s >= (@start + index)) && (s <= (@start + time))
+      (s >= @start + increment) && (s < @start + time)
     end
 
-    (data.count / @steps).round(1)
+    (data.count.to_f / (@steps / 60)).round(1)
   end
 end
