@@ -19,26 +19,25 @@ class FederatedSessionsReport < TimeSeriesReport
   private
 
   def range
-    (0..(@finish - @start)).step(@steps)
+    (0..(@finish - @start).to_i).step(@steps)
   end
 
   def data
-    objects = DiscoveryServiceEvent
-              .where('timestamp >= ? AND timestamp <= ? AND phase LIKE ?',
-                     @start, @finish, 'response').pluck(:timestamp)
+    sessions = DiscoveryServiceEvent
+               .where('timestamp >= ? AND timestamp <= ? AND phase LIKE ?',
+                      @start, @finish, 'response').pluck(:timestamp)
 
+    report = average_rate sessions
     range.each_with_object(sessions: []) do |t, data|
-      rate = average_rate t, objects
-      data[:sessions] << [t, rate]
+      average = report[t] ? (report[t].to_f / (@steps / 60)).round(1) : 0.0
+      data[:sessions] << [t, average]
     end
   end
 
-  def average_rate(time, sessions)
-    data = sessions.select do |s|
-      ending_point = @start.to_i + time + @steps
-      (s >= @start + time) && (s.to_i < ending_point)
+  def average_rate(sessions)
+    sessions.each_with_object({}) do |session, data|
+      point = (session - @start) - ((session - @start) % @steps)
+      (data[point.to_i] ||= 0) << data[point.to_i] += 1
     end
-
-    (data.count.to_f / (@steps / 60)).round(1)
   end
 end

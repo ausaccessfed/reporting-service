@@ -6,8 +6,8 @@ RSpec.describe FederatedSessionsReport do
   let(:units) { '' }
   let(:labels) { { y: '', sessions: 'Rate/m' } }
 
-  let!(:start) { 11.days.ago.beginning_of_day }
-  let!(:finish) { Time.zone.now }
+  let!(:start) { 10.days.ago.beginning_of_day }
+  let!(:finish) { 1.day.ago.beginning_of_day }
   let(:steps) { 5 }
   let!(:range) { { start: start.xmlschema, end: finish.xmlschema } }
   let(:scope_range) do
@@ -67,12 +67,12 @@ RSpec.describe FederatedSessionsReport do
 
       it 'should contain 2.0 objects/m during first 5 minutes of 2 days ago' do
         time = 2.days.ago.beginning_of_day - start
-        expect(data[:sessions]).to include([time, 2.0])
+        expect(data[:sessions]).to include([time.to_i, 2.0])
       end
 
       it 'should contain 4.0 objects/m during first 5 minutes of 5 days ago' do
         time = 5.days.ago.beginning_of_day - start
-        expect(data[:sessions]).to include([time, 4.0])
+        expect(data[:sessions]).to include([time.to_i, 4.0])
       end
     end
   end
