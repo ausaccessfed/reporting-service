@@ -36,7 +36,8 @@ class FederatedSessionsReport < TimeSeriesReport
 
   def average_rate(sessions)
     sessions.each_with_object({}) do |session, data|
-      point = (session - @start) - ((session - @start) % @steps)
+      offset = session - @start
+      point = offset - (offset % @steps)
       (data[point.to_i] ||= 0) << data[point.to_i] += 1
     end
   end
