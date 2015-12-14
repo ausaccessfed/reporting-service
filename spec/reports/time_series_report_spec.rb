@@ -16,7 +16,7 @@ RSpec.describe TimeSeriesReport do
       units ' Hz'
 
       def initialize(title, start, finish, data)
-        super(title, start, finish)
+        super(title, start: start, finish: finish)
         @data = data
       end
     end
