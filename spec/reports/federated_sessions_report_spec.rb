@@ -6,8 +6,9 @@ RSpec.describe FederatedSessionsReport do
   let(:units) { '' }
   let(:labels) { { y: '', sessions: 'Rate/m' } }
 
-  let!(:start) { 10.days.ago.beginning_of_day }
-  let!(:finish) { 1.day.ago.beginning_of_day }
+  let!(:start) { Timecop.freeze { 10.days.ago.beginning_of_day } }
+  let!(:finish) { Timecop.freeze { 1.day.ago.beginning_of_day } }
+
   let(:steps) { 5 }
   let!(:range) { { start: start.xmlschema, end: finish.xmlschema } }
   let(:scope_range) do
@@ -48,7 +49,7 @@ RSpec.describe FederatedSessionsReport do
                   timestamp: 1.day.ago.beginning_of_day
     end
 
-    let(:value) { 0 }
+    let(:value) { 0.0 }
 
     it 'should not count any sessions' do
       expect_in_range
@@ -63,6 +64,11 @@ RSpec.describe FederatedSessionsReport do
 
         create_list :discovery_service_event, 20, :response,
                     timestamp: 5.days.ago.beginning_of_day
+      end
+
+      it 'should contain no objects/m during first 5 minutes of 4 days ago' do
+        time = 4.days.ago.beginning_of_day - start
+        expect(data[:sessions]).to include([time.to_i, 0.0])
       end
 
       it 'should contain 2.0 objects/m during first 5 minutes of 2 days ago' do
