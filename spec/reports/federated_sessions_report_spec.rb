@@ -38,7 +38,7 @@ RSpec.describe FederatedSessionsReport do
 
     let(:value) { anything }
 
-    it 'includes title' do
+    it it 'should include title, units, labels and range' do
       expect(report).to include(title: title, units: units,
                                 labels: labels, range: range)
     end
