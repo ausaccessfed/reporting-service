@@ -56,11 +56,13 @@ class TimeSeriesReport
         fail_with("data for #{k} is not an Array") unless v.is_a?(Array)
         fail_with("data for #{k} is blank") if v.empty?
 
-        validate_data_range(output, k, v) if output[:range]
+        validate_data_range(output, k, v)
       end
     end
 
     def validate_data_range(output, series, data)
+      return unless output[:range]
+
       start, finish = time_range(output)
 
       prev = -1
