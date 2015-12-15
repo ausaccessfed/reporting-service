@@ -74,13 +74,13 @@ ActiveRecord::Base.transaction do
   time = start
 
   while time < finish
-    attrs = { service_provider: sps.sample, timestamp: Time.at(time) }
+    attrs = { service_provider: sps.sample, timestamp: Time.zone.at(time) }
 
     create(:discovery_service_event, attrs.slice(:service_provider, :timestamp))
 
     if rand < 0.95
       attrs[:identity_provider] = idps.sample
-      attrs[:timestamp] = Time.at(time + rand(30))
+      attrs[:timestamp] = Time.zone.at(time + rand(30))
       create(:discovery_service_event, :response, attrs)
     end
 
