@@ -90,7 +90,6 @@ RSpec.describe TimeSeriesReport::Lint do
   include_context 'required field', :labels, Hash
   include_context 'required field', :series, Array
   include_context 'required field', :title, String
-  include_context 'required field', :range, Hash
   include_context 'required field', :data, Hash
 
   context 'when a label is missing' do
@@ -193,6 +192,14 @@ RSpec.describe TimeSeriesReport::Lint do
     end
 
     fails_with 'end of time range is invalid'
+  end
+
+  context 'when range is nil' do
+    let(:output) { valid_output.except(:range) }
+
+    it 'is valid' do
+      expect { subject.generate }.not_to raise_error
+    end
   end
 
   context 'when data for a series is missing' do

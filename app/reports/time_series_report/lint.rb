@@ -36,7 +36,9 @@ class TimeSeriesReport
     end
 
     def validate_range(output)
-      validate_required_field(output, :range, Hash)
+      validate_required_field(output, :range, Hash, allow_nil: true)
+
+      return unless output[:range]
 
       [:start, :end].each do |k|
         v = output[:range][k]
@@ -54,7 +56,7 @@ class TimeSeriesReport
         fail_with("data for #{k} is not an Array") unless v.is_a?(Array)
         fail_with("data for #{k} is blank") if v.empty?
 
-        validate_data_range(output, k, v)
+        validate_data_range(output, k, v) unless output[:range].blank?
       end
     end
 

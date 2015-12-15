@@ -10,7 +10,7 @@ class FederationGrowthReport < TimeSeriesReport
   units ''
 
   def initialize(title, start, finish)
-    super(title, start, finish)
+    super(title, start: start, end: finish)
     @start = start
     @finish = finish
   end
