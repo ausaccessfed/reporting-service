@@ -36,9 +36,9 @@ class TimeSeriesReport
     end
 
     def validate_range(output)
-      validate_required_field(output, :range, Hash, allow_nil: true)
-
       return unless output[:range]
+
+      validate_required_field(output, :range, Hash)
 
       [:start, :end].each do |k|
         v = output[:range][k]
