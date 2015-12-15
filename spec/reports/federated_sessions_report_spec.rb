@@ -15,6 +15,9 @@ RSpec.describe FederatedSessionsReport do
     (0..(finish - start).to_i).step(steps.minutes)
   end
 
+  let(:identity_provider) { create :identity_provider }
+  let(:service_provider) { create :service_provider }
+
   subject { FederatedSessionsReport.new(start, finish, steps) }
 
   let(:report) { subject.generate }
@@ -28,7 +31,9 @@ RSpec.describe FederatedSessionsReport do
 
   context 'when objects are sessions' do
     before do
-      create_list :discovery_service_event, 20, :response
+      create_list :discovery_service_event, 20, :response,
+                  identity_provider: identity_provider,
+                  service_provider: service_provider
     end
 
     let(:value) { anything }
@@ -46,6 +51,7 @@ RSpec.describe FederatedSessionsReport do
   context 'when sessions are not responded' do
     before do
       create_list :discovery_service_event, 20,
+                  service_provider: service_provider,
                   timestamp: 1.day.ago.beginning_of_day
     end
 
@@ -60,9 +66,13 @@ RSpec.describe FederatedSessionsReport do
     context '2 days ago' do
       before :example do
         create_list :discovery_service_event, 10, :response,
+                    identity_provider: identity_provider,
+                    service_provider: service_provider,
                     timestamp: 2.days.ago.beginning_of_day
 
         create_list :discovery_service_event, 20, :response,
+                    identity_provider: identity_provider,
+                    service_provider: service_provider,
                     timestamp: 5.days.ago.beginning_of_day
       end
 
