@@ -32,13 +32,14 @@ class TimeSeriesReport
     end
   end
 
-  def initialize(title, start, finish)
+  def initialize(title, range = nil)
     @title = title
-    @range = { start: start, end: finish }
+    @range = range
   end
 
   def generate
-    range = @range.transform_values(&:xmlschema)
-    self.class.options.merge(title: @title, range: range, data: data)
+    range = @range.try(:transform_values, &:xmlschema)
+
+    self.class.options.merge(title: @title, data: data, range: range).compact
   end
 end

@@ -10,11 +10,18 @@ module GenericLint
     validate_required_field(output, :title, String)
   end
 
-  def validate_required_field(output, field, type, allow_blank: false)
+  def validate_required_field(output, field, type, allow_blank: false,
+                                                   allow_nil: false)
     f = output[field]
+
+    return if allow_nil_and_nill(f, allow_nil)
 
     fail_with("#{field} is nil") unless f
     fail_with("incorrect type for #{field}") unless f.is_a?(type)
     fail_with("#{field} is blank") if f.blank? && !allow_blank
+  end
+
+  def allow_nil_and_nill(object, allow_nil)
+    object.nil? && allow_nil
   end
 end
