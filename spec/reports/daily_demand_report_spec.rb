@@ -1,13 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe DailyDemandReport do
+  around { |spec| Timecop.freeze { spec.run } }
+
   let(:type) { 'daily-demand' }
   let(:title) { 'Daily Demand' }
   let(:units) { '' }
   let(:labels) { { y: '', sessions: 'daily_demand' } }
 
-  let!(:start) { Timecop.freeze { 10.days.ago.beginning_of_day } }
-  let!(:finish) { Timecop.freeze { Time.zone.now.beginning_of_day } }
+  let!(:start) { 10.days.ago.beginning_of_day }
+  let!(:finish) { Time.zone.now.beginning_of_day }
 
   let!(:days_count) { ((finish - start).to_i / 86_400).to_i }
 
