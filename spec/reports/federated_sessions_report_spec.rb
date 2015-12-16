@@ -63,33 +63,31 @@ RSpec.describe FederatedSessionsReport do
   end
 
   context 'when events timestamps are specified manually' do
-    context '2 days ago' do
-      before :example do
-        create_list :discovery_service_event, 10, :response,
-                    identity_provider: identity_provider,
-                    service_provider: service_provider,
-                    timestamp: 2.days.ago.beginning_of_day
+    before :example do
+      create_list :discovery_service_event, 10, :response,
+                  identity_provider: identity_provider,
+                  service_provider: service_provider,
+                  timestamp: 2.days.ago.beginning_of_day
 
-        create_list :discovery_service_event, 20, :response,
-                    identity_provider: identity_provider,
-                    service_provider: service_provider,
-                    timestamp: 5.days.ago.beginning_of_day
-      end
+      create_list :discovery_service_event, 20, :response,
+                  identity_provider: identity_provider,
+                  service_provider: service_provider,
+                  timestamp: 5.days.ago.beginning_of_day
+    end
 
-      it 'should contain no objects/m during first 5 minutes of 4 days ago' do
-        time = 4.days.ago.beginning_of_day - start
-        expect(data[:sessions]).to include([time.to_i, 0.0])
-      end
+    it 'should contain no objects/m during first 5 minutes of 4 days ago' do
+      time = 4.days.ago.beginning_of_day - start
+      expect(data[:sessions]).to include([time.to_i, 0.0])
+    end
 
-      it 'should contain 2.0 objects/m during first 5 minutes of 2 days ago' do
-        time = 2.days.ago.beginning_of_day - start
-        expect(data[:sessions]).to include([time.to_i, 2.0])
-      end
+    it 'should contain 2.0 objects/m during first 5 minutes of 2 days ago' do
+      time = 2.days.ago.beginning_of_day - start
+      expect(data[:sessions]).to include([time.to_i, 2.0])
+    end
 
-      it 'should contain 4.0 objects/m during first 5 minutes of 5 days ago' do
-        time = 5.days.ago.beginning_of_day - start
-        expect(data[:sessions]).to include([time.to_i, 4.0])
-      end
+    it 'should contain 4.0 objects/m during first 5 minutes of 5 days ago' do
+      time = 5.days.ago.beginning_of_day - start
+      expect(data[:sessions]).to include([time.to_i, 4.0])
     end
   end
 end
