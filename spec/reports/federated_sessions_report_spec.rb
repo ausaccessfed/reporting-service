@@ -29,7 +29,7 @@ RSpec.describe FederatedSessionsReport do
     end
   end
 
-  context 'when objects are sessions' do
+  context 'when events are sessions with response' do
     before do
       create_list :discovery_service_event, 20, :response,
                   identity_provider: identity_provider,
@@ -43,12 +43,12 @@ RSpec.describe FederatedSessionsReport do
                                 labels: labels, range: range)
     end
 
-    it 'sessions are response types generated within given range' do
+    it 'sessions should be generated within given range' do
       expect_in_range
     end
   end
 
-  context 'when sessions are not responded' do
+  context 'when events are not responded' do
     before do
       create_list :discovery_service_event, 20,
                   service_provider: service_provider,
@@ -62,7 +62,7 @@ RSpec.describe FederatedSessionsReport do
     end
   end
 
-  context 'when objects timestamp is specified manually' do
+  context 'when events timestamps are specified manually' do
     context '2 days ago' do
       before :example do
         create_list :discovery_service_event, 10, :response,
