@@ -9,7 +9,7 @@ RSpec.describe DailyDemandReport do
   let(:labels) { { y: '', sessions: 'daily_demand' } }
 
   let!(:start) { 10.days.ago.beginning_of_day }
-  let!(:finish) { Time.zone.now.beginning_of_day }
+  let!(:finish) { Time.zone.now.end_of_day }
 
   let!(:days_count) { ((finish - start).to_i / 86_400).to_i }
 
@@ -75,6 +75,11 @@ RSpec.describe DailyDemandReport do
                identity_provider: identity_provider,
                service_provider: service_provider,
                timestamp: n.days.ago.beginning_of_day + 10.minutes
+
+        create :discovery_service_event, :response,
+               identity_provider: identity_provider,
+               service_provider: service_provider,
+               timestamp: finish
       end
     end
 
@@ -88,6 +93,10 @@ RSpec.describe DailyDemandReport do
 
     it 'average at point 300 should be 0.5 for 5 sessions in 10 days' do
       expect(data[:sessions]).to include([600, 0.5])
+    end
+
+    it 'average at point 86_340 should be 0.5 for 5 sessions in 10 days' do
+      expect(data[:sessions]).to include([86_340, 0.5])
     end
   end
 end
