@@ -3,7 +3,7 @@ class FederatedSessionsReport < TimeSeriesReport
 
   y_label ''
 
-  series sessions: 'Rate/m'
+  series sessions: 'Rate/h'
 
   units ''
 
@@ -13,7 +13,7 @@ class FederatedSessionsReport < TimeSeriesReport
     super(title, start: start, end: finish)
     @start = start
     @finish = finish
-    @steps = steps.minutes.to_i
+    @steps = (steps * 3600).to_i
   end
 
   private
@@ -29,7 +29,7 @@ class FederatedSessionsReport < TimeSeriesReport
 
     report = average_rate sessions
     range.each_with_object(sessions: []) do |t, data|
-      average = report[t] ? (report[t].to_f / (@steps / 60)).round(1) : 0.0
+      average = report[t] ? (report[t].to_f / (@steps / 3600)).round(1) : 0.0
       data[:sessions] << [t, average]
     end
   end
