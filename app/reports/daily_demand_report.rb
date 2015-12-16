@@ -23,7 +23,7 @@ class DailyDemandReport < TimeSeriesReport
                .where('timestamp >= ? AND timestamp <= ? AND phase LIKE ?',
                       @start, @finish, 'response').pluck(:timestamp)
 
-    report = demand_average_rate sessions
+    report = demand_average_report sessions
 
     (0..86_340).step(60).each_with_object(sessions: []) do |t, data|
       average = report[t] ? (report[t].to_f / @days_count).round(1) : 0.0
@@ -32,11 +32,12 @@ class DailyDemandReport < TimeSeriesReport
     end
   end
 
-  def demand_average_rate(sessions)
+  def demand_average_report(sessions)
     sessions.each_with_object({}) do |session, data|
       offset = session - @start
-      point = offset - (offset % 60)
-      (data[0] ||= 0) << data[0] += 1
+      increment = offset - offset % 86_400
+      point = offset - (offset % 60) - increment.to_i
+      (data[point.to_i] ||= 0) << data[point.to_i] += 1
     end
   end
 end
