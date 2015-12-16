@@ -1,13 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe FederatedSessionsReport do
+  around { |spec| Timecop.freeze { spec.run } }
+
   let(:type) { 'federated-sessions' }
   let(:title) { 'Federated Sessions' }
   let(:units) { '' }
   let(:labels) { { y: '', sessions: 'Rate/m' } }
 
-  let!(:start) { Timecop.freeze { 10.days.ago.beginning_of_day } }
-  let!(:finish) { Timecop.freeze { 1.day.ago.beginning_of_day } }
+  let!(:start) { 10.days.ago.beginning_of_day }
+  let!(:finish) { 1.day.ago.beginning_of_day }
 
   let(:steps) { 5 }
   let!(:range) { { start: start.xmlschema, end: finish.xmlschema } }

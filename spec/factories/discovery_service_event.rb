@@ -8,8 +8,8 @@ FactoryGirl.define do
     unique_id { Faker::Internet.password(10) }
     phase { 'request' }
     timestamp do
-      Faker::Time.between(Timecop.freeze { 10.days.ago.beginning_of_day },
-                          Timecop.freeze { 1.day.ago.beginning_of_day })
+      Faker::Time.between(10.days.ago.beginning_of_day,
+                          1.day.ago.beginning_of_day)
     end
 
     trait :response do
