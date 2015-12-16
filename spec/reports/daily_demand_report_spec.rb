@@ -91,7 +91,7 @@ RSpec.describe DailyDemandReport do
       expect(data[:sessions]).to include([300, 0.0])
     end
 
-    it 'average at point 300 should be 0.5 for 5 sessions in 10 days' do
+    it 'average at point 600 should be 0.5 for 5 sessions in 10 days' do
       expect(data[:sessions]).to include([600, 0.5])
     end
 
