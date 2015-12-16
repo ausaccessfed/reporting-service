@@ -69,10 +69,10 @@ RSpec.describe DailyDemandReport do
                service_provider: service_provider,
                timestamp: n.days.ago.beginning_of_day
 
-      create :discovery_service_event, :response,
-             identity_provider: identity_provider,
-             service_provider: service_provider,
-             timestamp: n.days.ago.beginning_of_day + 10.minutes
+        create :discovery_service_event, :response,
+               identity_provider: identity_provider,
+               service_provider: service_provider,
+               timestamp: n.days.ago.beginning_of_day + 10.minutes
       end
     end
 
@@ -81,13 +81,11 @@ RSpec.describe DailyDemandReport do
     end
 
     it 'average should be 0.0 when no sessions available at point 300' do
-      time = 5.days.ago.beginning_of_day - start
       expect(data[:sessions]).to include([300, 0.0])
     end
 
     it 'average at point 300 should be 0.5 for 5 sessions in 10 days' do
       expect(data[:sessions]).to include([600, 0.5])
     end
-
   end
 end
