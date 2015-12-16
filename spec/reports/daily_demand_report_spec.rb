@@ -79,7 +79,7 @@ RSpec.describe DailyDemandReport do
         create :discovery_service_event, :response,
                identity_provider: identity_provider,
                service_provider: service_provider,
-               timestamp: finish
+               timestamp: n.days.ago.end_of_day
       end
     end
 
