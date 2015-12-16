@@ -9,7 +9,7 @@ RSpec.describe FederatedSessionsReport do
   let(:labels) { { y: '', sessions: 'Rate/h' } }
 
   let!(:start) { 10.days.ago.beginning_of_day }
-  let!(:finish) { 1.day.ago.beginning_of_day }
+  let!(:finish) { 1.day.ago.end_of_day }
 
   let(:steps) { 5 }
   let!(:range) { { start: start.xmlschema, end: finish.xmlschema } }
@@ -75,10 +75,15 @@ RSpec.describe FederatedSessionsReport do
                   identity_provider: identity_provider,
                   service_provider: service_provider,
                   timestamp: 2.days.ago.beginning_of_day
+
+      create_list :discovery_service_event, 9, :response,
+                  identity_provider: identity_provider,
+                  service_provider: service_provider,
+                  timestamp: finish
     end
 
     it 'average should be 1.0 for 5 sessions during first 5 hours' do
-      time = [*scope_range].first.to_i
+      time = [*scope_range].first
       expect(data[:sessions]).to include([time, 1.0])
     end
 
@@ -86,9 +91,14 @@ RSpec.describe FederatedSessionsReport do
       expect(data[:sessions]).to include([684_000, 2.0])
     end
 
-    it 'average should be 0.0 for no sessions during last 5 hours' do
-      time = [*scope_range].last.to_i
+    it 'average should be 0.0 for no sessions during 2nd last 5 hours' do
+      time = [*scope_range][-2]
       expect(data[:sessions]).to include([time, 0.0])
+    end
+
+    it 'average should be 1.8 for 9 sessions during last 5 hours' do
+      time = [*scope_range].last
+      expect(data[:sessions]).to include([time, 1.8])
     end
   end
 end
