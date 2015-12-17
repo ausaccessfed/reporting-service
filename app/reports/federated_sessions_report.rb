@@ -13,13 +13,13 @@ class FederatedSessionsReport < TimeSeriesReport
     super(title, start: start, end: finish)
     @start = start
     @finish = finish
-    @steps = (steps * 3600).to_i
+    @steps = steps
   end
 
   private
 
   def range
-    (0..(@finish - @start).to_i).step(@steps)
+    (0..(@finish - @start).to_i).step(@steps.hours)
   end
 
   def data
@@ -29,7 +29,7 @@ class FederatedSessionsReport < TimeSeriesReport
 
     report = average_rate sessions
     range.each_with_object(sessions: []) do |t, data|
-      average = report[t] ? (report[t].to_f / (@steps / 3600)).round(1) : 0.0
+      average = report[t] ? (report[t].to_f / @steps).round(1) : 0.0
       data[:sessions] << [t, average]
     end
   end
@@ -37,7 +37,7 @@ class FederatedSessionsReport < TimeSeriesReport
   def average_rate(sessions)
     sessions.each_with_object({}) do |session, data|
       offset = session - @start
-      point = offset - (offset % @steps)
+      point = offset - (offset % @steps.hours)
       (data[point.to_i] ||= 0) << data[point.to_i] += 1
     end
   end
