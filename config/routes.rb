@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   root to: 'welcome#index'
 
   scope '/public_reports' do
-    get 'federation_growth' => 'public_reports#federation_growth'
+    get 'federation_growth' => 'public_reports#federation_growth',
+        as: :public_federation_growth_report
   end
 
   namespace :api, defaults: { format: 'json' } do

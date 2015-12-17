@@ -1,0 +1,11 @@
+= breadcrumbs('Dashboard')
+
+h1 Public Reports
+
+.list-group
+  = link_to(public_federation_growth_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Federation Growth Report
+    p.list-group-item-text
+      | Shows the growth of the federation over the last 12 months, in number of
+        Organisations, Service Providers, Identity Providers and Rapid Connect
+        Services
