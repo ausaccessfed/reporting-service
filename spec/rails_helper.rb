@@ -8,6 +8,8 @@ end
 require 'spec_helper'
 require 'rspec/rails'
 require 'webmock/rspec'
+require 'capybara/rspec'
+require 'capybara/poltergeist'
 
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
@@ -28,4 +30,15 @@ RSpec.configure do |config|
   end
 
   config.infer_spec_type_from_file_location!
+
+  Capybara.default_driver = Capybara.javascript_driver = :poltergeist
+
+  config.around(:each, type: :feature) do |spec|
+    begin
+      WebMock.disable!
+      spec.run
+    ensure
+      WebMock.enable!
+    end
+  end
 end
