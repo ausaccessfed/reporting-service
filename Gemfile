@@ -15,14 +15,15 @@ gem 'valhammer'
 gem 'accession'
 
 gem 'aaf-lipstick', git: 'https://github.com/ausaccessfed/aaf-lipstick',
-                    branch: 'develop'
+                    branch: 'private/lipstick-2.0-pre'
 
 gem 'unicorn', require: false
 gem 'god', require: false
 
 source 'https://rails-assets.org' do
-  gem 'rails-assets-semantic-ui', '~> 2.0'
+  gem 'rails-assets-bootstrap', '~> 3.3'
   gem 'rails-assets-jquery', '~> 1.11'
+  gem 'rails-assets-jquery-validate'
   gem 'rails-assets-pickadate', '3.5.6'
   gem 'rails-assets-d3', '~> 3.5'
 end
