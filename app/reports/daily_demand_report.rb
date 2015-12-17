@@ -3,7 +3,7 @@ class DailyDemandReport < TimeSeriesReport
 
   y_label ''
 
-  series sessions: 'daily_demand'
+  series sessions: 'demand'
 
   units ''
 
