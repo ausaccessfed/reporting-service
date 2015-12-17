@@ -49,6 +49,7 @@ group :development, :test do
   gem 'capybara', require: false
   gem 'poltergeist', require: false
   gem 'phantomjs', require: 'phantomjs/poltergeist'
+  gem 'launchy', require: false
 
   gem 'brakeman', require: false
   gem 'simplecov', require: false
