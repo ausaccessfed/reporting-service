@@ -36,6 +36,8 @@ RSpec.configure do |config|
   config.around(:each, type: :feature) do |spec|
     begin
       WebMock.disable!
+
+      visit '/'
       spec.run
     ensure
       WebMock.enable!
