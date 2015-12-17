@@ -9,7 +9,7 @@ $graph-color-primary: #2a3689;
 $graph-color-vibrant: #f5811d;
 $graph-color-retina-burn: #6aff7f;
 
-#report-output-container {
+.report-output-container {
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
@@ -23,7 +23,7 @@ $graph-color-retina-burn: #6aff7f;
   }
 }
 
-svg#report-output {
+svg.report-output {
   .axis {
     path, line {
       fill: none;
@@ -136,7 +136,7 @@ svg#report-output {
   }
 }
 
-table#report-output {
+table.report-output {
   width: 100%;
   th, td {
     padding-right: 1em;
