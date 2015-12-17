@@ -15,27 +15,21 @@ html lang='en'
 
     = disable_animations if Rails.env.test?
   body
-    = aaf_header(title: 'AAF Reporting Service', environment: environment_string)
+    - auth = @subject ? :logout : :login
+    = aaf_header(title: 'AAF Reporting Service', environment: environment_string, auth: auth)
       = nav_bar do
         - if @subject
-          = nav_item('Dashboard', dashboard_path)
+          = nav_first_item('Dashboard', dashboard_path)
         - else
-          = nav_item('Welcome', root_path)
+          = nav_first_item('Welcome', root_path)
 
         = nav_collapsing_items do
           - if permitted?('admin:menu')
-            = nav_dropdown 'Administration' do
-              - if permitted?('admin:blah')
-                = nav_item('Blah', '/admin/blah')
+            - if permitted?('admin:blah')
+              = nav_item('Blah', '/admin/blah')
 
-              - if permitted?('admin:blah')
-                = nav_item('Blah', '/admin/blah')
-
-          = nav_items_right do
-            - if @subject
-              = nav_item('Logout', '/auth/logout')
-            - else
-              = nav_item('Login', '/auth/login')
+            - if permitted?('admin:blah')
+              = nav_item('Blah', '/admin/blah')
 
     section class='content'
       = render(partial: 'layouts/flashes')
