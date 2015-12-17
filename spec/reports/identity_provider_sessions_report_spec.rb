@@ -79,17 +79,17 @@ RSpec.describe IdentityProviderSessionsReport do
       create_list :discovery_service_event, 10, :response,
                   identity_provider: idp,
                   service_provider: sp,
-                  timestamp: 2.days.ago.beginning_of_day
+                  timestamp: finish - 2.days
 
       create_list :discovery_service_event, 9, :response,
                   identity_provider: idp,
                   service_provider: sp,
                   timestamp: finish
 
-      create_list :discovery_service_event, 5, :response,
+      create_list :discovery_service_event, 9, :response,
                   identity_provider: idp_2,
                   service_provider: sp,
-                  timestamp: 3.days.ago.beginning_of_day
+                  timestamp: finish
     end
 
     it 'average should be 1.0 for 5 IdP sessions during first 5 hours' do
@@ -109,11 +109,6 @@ RSpec.describe IdentityProviderSessionsReport do
     it 'average should be 1.8 for 9 IdP sessions during last 5 hours' do
       time = [*scope_range].last
       expect(data[:sessions]).to include([time, 1.8])
-    end
-
-    it 'report should not count sessions of an other IdP' do
-      time = [*scope_range][-4]
-      expect(data[:sessions]).to include([time, 0.0])
     end
   end
 end
