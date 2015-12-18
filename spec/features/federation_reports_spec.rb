@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Public Reports' do
+RSpec.feature 'Federation Reports' do
   include IdentityEnhancementStub
 
   given(:user) { create(:subject) }
@@ -19,7 +19,7 @@ RSpec.feature 'Public Reports' do
     expect(current_path).to eq('/dashboard')
 
     click_link('Federation Growth Report')
-    expect(current_path).to eq('/public_reports/federation_growth')
+    expect(current_path).to eq('/federation_reports/federation_growth')
     expect(page).to have_css('svg.federation-growth')
   end
 end

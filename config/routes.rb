@@ -6,8 +6,8 @@ Rails.application.routes.draw do
   get '/dashboard' => 'dashboard#index', as: 'dashboard'
   root to: 'welcome#index'
 
-  scope '/public_reports' do
-    get 'federation_growth' => 'public_reports#federation_growth',
+  scope '/federation_reports' do
+    get 'federation_growth' => 'federation_reports#federation_growth',
         as: :public_federation_growth_report
   end
 
