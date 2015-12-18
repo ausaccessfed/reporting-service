@@ -1,4 +1,4 @@
-module IdentityEnhancementQuery
+module IdentityEnhancementStub
   def stub_ide(shared_token:, entitlements: [], **)
     host = Rails.application.config.reporting_service.ide[:host]
     url =  "https://#{host}/api/subjects/#{shared_token}/attributes"

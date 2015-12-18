@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Public Reports' do
-  include IdentityEnhancementQuery
+  include IdentityEnhancementStub
 
   given(:user) { create(:subject) }
 
