@@ -1,6 +1,6 @@
 = breadcrumbs('Dashboard')
 
-h1 Public Reports
+h1 Federation Reports
 
 .list-group
   = link_to(public_federation_growth_report_path, class: 'list-group-item') do
@@ -9,3 +9,46 @@ h1 Public Reports
       | Shows the growth of the federation over the last 12 months, in number of
         Organisations, Service Providers, Identity Providers and Rapid Connect
         Services
+
+  = link_to('#TODO', class: 'list-group-item') do
+    h4.list-group-item-heading Federated Sessions Report
+    p.list-group-item-text
+      | Graphs the hourly number of sessions established via AAF's central
+        Discovery Service
+
+  = link_to('#TODO', class: 'list-group-item') do
+    h4.list-group-item-heading Daily Demand Report
+    p.list-group-item-text
+      | Graphs the daily trend of sessions established via AAF's central
+        Discovery Service, highlighting which time of day users are most active
+
+h1 Compliance Reports
+
+.list-group
+  = link_to('#TODO', class: 'list-group-item') do
+    h4.list-group-item-heading Identity Provider Attributes Report
+    p.list-group-item-text
+      | Graphs the number of attributes which are supported by each Identity
+        Provider in the federation
+
+  = link_to('#TODO', class: 'list-group-item') do
+    h4.list-group-item-heading
+      | Single Attribute Report &ndash; Identity Providers
+    p.list-group-item-text
+      | Describes support for an attribute among the federation's Identity
+        Providers
+
+  = link_to('#TODO', class: 'list-group-item') do
+    h4.list-group-item-heading
+      | Single Attribute Report &ndash; Service Providers
+    p.list-group-item-text
+      ' Describes Service Providers' requests for a specific attribute, and
+        whether they have marked the attribute as
+      strong required
+
+  = link_to('#TODO', class: 'list-group-item') do
+    h4.list-group-item-heading
+      | Service Compatibility Report
+    p.list-group-item-text
+      | Highlights Identity Providers' ability to meet the attribute
+        requirements of a federated service
