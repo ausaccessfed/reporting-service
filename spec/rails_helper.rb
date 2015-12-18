@@ -26,12 +26,12 @@ RSpec.configure do |config|
 
   config.around(:each, type: :feature) do |spec|
     begin
-      WebMock.disable!
+      WebMock.allow_net_connect!
 
       visit '/'
       spec.run
     ensure
-      WebMock.enable!
+      WebMock.disable_net_connect!
     end
   end
 end
