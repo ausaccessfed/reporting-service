@@ -37,7 +37,14 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
                   timestamp: Faker::Time.between(start, finish)
     end
 
-    let(:sessions) { DiscoveryServiceEvent.within_range(start, finish) }
+    let(:none_session_event) do
+      create :discovery_service_event,
+             timestamp: Faker::Time.between(start, finish)
+    end
+
+    let(:sessions) do
+      DiscoveryServiceEvent.within_range(start, finish).sessions
+    end
 
     it 'should not select session out of range' do
       expect(sessions).not_to include(event_before_start)
@@ -46,6 +53,10 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
 
     it 'should select sessions within given range' do
       expect(sessions).to match_array(events_within_range)
+    end
+
+    it 'should select not none sessions events' do
+      expect(sessions).not_to include(none_session_event)
     end
   end
 end

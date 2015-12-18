@@ -23,8 +23,8 @@ class FederatedSessionsReport < TimeSeriesReport
   end
 
   def data
-    sessions = DiscoveryServiceEvent
-               .within_range(@start, @finish).pluck(:timestamp)
+    sessions = DiscoveryServiceEvent.within_range(@start, @finish)
+               .sessions.pluck(:timestamp)
 
     report = average_rate sessions
     range.each_with_object(sessions: []) do |t, data|

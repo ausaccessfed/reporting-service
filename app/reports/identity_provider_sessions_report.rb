@@ -43,7 +43,7 @@ class IdentityProviderSessionsReport < TimeSeriesReport
 
   def idp_sessions(idp_id)
     DiscoveryServiceEvent
-      .within_range(@start, @finish)
-      .where(identity_provider: idp_id).pluck(:timestamp)
+      .within_range(@start, @finish).where(identity_provider: idp_id)
+      .sessions.pluck(:timestamp)
   end
 end

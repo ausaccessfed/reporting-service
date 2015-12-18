@@ -18,9 +18,6 @@ class DailyDemandReport < TimeSeriesReport
   private
 
   def data
-    sessions = DiscoveryServiceEvent
-               .within_range(@start, @finish).pluck(:timestamp)
-
     report = demand_average_report sessions
 
     (0..86_340).step(1.minute).each_with_object(sessions: []) do |t, data|
@@ -28,6 +25,11 @@ class DailyDemandReport < TimeSeriesReport
 
       data[:sessions] << [t, average]
     end
+  end
+
+  def sessions
+    DiscoveryServiceEvent.within_range(@start, @finish)
+      .sessions.pluck(:timestamp)
   end
 
   def days_count
