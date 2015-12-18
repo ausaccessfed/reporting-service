@@ -7,7 +7,6 @@ RSpec.describe PublicReportsController, type: :controller do
 
   describe 'get :federation_growth' do
     let(:data) { { a: 1 } }
-    before { Rails.cache.clear }
 
     def run
       expect_any_instance_of(FederationGrowthReport).to receive(:generate)

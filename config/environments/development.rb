@@ -15,8 +15,4 @@ Rails.application.configure do
   config.assets.debug = true
   config.assets.digest = true
   config.assets.raise_runtime_errors = true
-
-  config.cache_store = :redis_store,
-                       'redis://127.0.0.1/0/reporting-service-cache',
-                       { expire_in: 1.day }
 end

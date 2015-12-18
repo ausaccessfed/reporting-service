@@ -35,6 +35,7 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'database_cleaner'
+  gem 'fakeredis'
   gem 'webmock', require: false
 
   gem 'distribution' # TODO: Remove this when not needed anymore.
