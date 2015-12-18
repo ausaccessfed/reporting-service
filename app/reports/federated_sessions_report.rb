@@ -24,8 +24,7 @@ class FederatedSessionsReport < TimeSeriesReport
 
   def data
     sessions = DiscoveryServiceEvent
-               .where('timestamp >= ? AND timestamp <= ? AND phase LIKE ?',
-                      @start, @finish, 'response').pluck(:timestamp)
+               .within_range(@start, @finish).pluck(:timestamp)
 
     report = average_rate sessions
     range.each_with_object(sessions: []) do |t, data|

@@ -19,8 +19,7 @@ class DailyDemandReport < TimeSeriesReport
 
   def data
     sessions = DiscoveryServiceEvent
-               .where('timestamp >= ? AND timestamp <= ? AND phase LIKE ?',
-                      @start, @finish, 'response').pluck(:timestamp)
+               .within_range(@start, @finish).pluck(:timestamp)
 
     report = demand_average_report sessions
 

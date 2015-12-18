@@ -42,10 +42,8 @@ class IdentityProviderSessionsReport < TimeSeriesReport
   end
 
   def idp_sessions(idp_id)
-    query = 'identity_provider_id = ? AND timestamp >= ?'\
-            'AND timestamp <= ? AND phase LIKE ?'
-
     DiscoveryServiceEvent
-      .where(query, idp_id, @start, @finish, 'response').pluck(:timestamp)
+      .within_range(@start, @finish)
+      .where(identity_provider: idp_id).pluck(:timestamp)
   end
 end
