@@ -1,6 +1,4 @@
 class DailyDemandReport < TimeSeriesReport
-  prepend Data::ReportData
-
   report_type 'daily-demand'
 
   y_label ''
@@ -18,6 +16,8 @@ class DailyDemandReport < TimeSeriesReport
   end
 
   private
+
+  prepend Data::ReportData
 
   def data
     output_data 0..86_340, 1.minute, days_count
