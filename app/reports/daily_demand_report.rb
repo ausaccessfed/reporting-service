@@ -1,4 +1,6 @@
 class DailyDemandReport < TimeSeriesReport
+  include Data::ReportData
+
   report_type 'daily-demand'
 
   y_label ''
@@ -18,28 +20,21 @@ class DailyDemandReport < TimeSeriesReport
   private
 
   def data
-    report = demand_average_report sessions
-
-    (0..86_340).step(1.minute).each_with_object(sessions: []) do |t, data|
-      average = report[t] ? (report[t].to_f / days_count).round(1) : 0.0
-
-      data[:sessions] << [t, average]
-    end
-  end
-
-  def sessions
-    DiscoveryServiceEvent.within_range(@start, @finish)
-      .sessions.pluck(:timestamp)
+    output_data 0..86_340, 1.minute, days_count
   end
 
   def days_count
     (@start.to_i..@finish.to_i).step(1.day).count
   end
 
-  def demand_average_report(sessions)
+  def sessions
+    DiscoveryServiceEvent.within_range(@start, @finish).sessions
+  end
+
+  def average_rate(sessions)
     sessions.each_with_object({}) do |session, data|
-      t = (session - session.beginning_of_day).to_i
-      point = t - t % 1.minute
+      offset = (session - session.beginning_of_day).to_i
+      point = offset - offset % 1.minute
       (data[point.to_i] ||= 0) << data[point.to_i] += 1
     end
   end

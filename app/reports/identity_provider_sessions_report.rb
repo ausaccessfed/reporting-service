@@ -1,4 +1,6 @@
 class IdentityProviderSessionsReport < TimeSeriesReport
+  include Data::ReportData
+
   report_type 'identity-provider-sessions'
 
   y_label ''
@@ -20,17 +22,11 @@ class IdentityProviderSessionsReport < TimeSeriesReport
   private
 
   def range
-    (0..(@finish - @start).to_i).step(@steps.hours)
+    (0..(@finish - @start).to_i)
   end
 
   def data
-    sessions = idp_sessions(@identity_provider.id)
-
-    report = average_rate sessions
-    range.each_with_object(sessions: []) do |t, data|
-      average = report[t] ? (report[t].to_f / @steps).round(1) : 0.0
-      data[:sessions] << [t, average]
-    end
+    output_data range, @steps.hours, @steps
   end
 
   def average_rate(sessions)
@@ -41,9 +37,9 @@ class IdentityProviderSessionsReport < TimeSeriesReport
     end
   end
 
-  def idp_sessions(idp_id)
+  def sessions
     DiscoveryServiceEvent
-      .within_range(@start, @finish).where(identity_provider: idp_id)
-      .sessions.pluck(:timestamp)
+      .within_range(@start, @finish)
+      .where(identity_provider: @identity_provider.id).sessions
   end
 end

@@ -1,4 +1,6 @@
 class FederatedSessionsReport < TimeSeriesReport
+  include Data::ReportData
+
   report_type 'federated-sessions'
 
   y_label ''
@@ -19,18 +21,15 @@ class FederatedSessionsReport < TimeSeriesReport
   private
 
   def range
-    (0..(@finish - @start).to_i).step(@steps.hours)
+    (0..(@finish - @start).to_i)
   end
 
   def data
-    sessions = DiscoveryServiceEvent.within_range(@start, @finish)
-               .sessions.pluck(:timestamp)
+    output_data range, @steps.hours, @steps
+  end
 
-    report = average_rate sessions
-    range.each_with_object(sessions: []) do |t, data|
-      average = report[t] ? (report[t].to_f / @steps).round(1) : 0.0
-      data[:sessions] << [t, average]
-    end
+  def sessions
+    DiscoveryServiceEvent.within_range(@start, @finish).sessions
   end
 
   def average_rate(sessions)
