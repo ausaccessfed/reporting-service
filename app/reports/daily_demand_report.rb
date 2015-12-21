@@ -1,5 +1,5 @@
 class DailyDemandReport < TimeSeriesReport
-  include Data::ReportData
+  prepend Data::ReportData
 
   report_type 'daily-demand'
 
