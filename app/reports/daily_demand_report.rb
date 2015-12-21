@@ -1,4 +1,6 @@
 class DailyDemandReport < TimeSeriesReport
+  prepend Data::ReportData
+
   report_type 'daily-demand'
 
   y_label ''
@@ -17,10 +19,10 @@ class DailyDemandReport < TimeSeriesReport
 
   private
 
-  prepend Data::ReportData
-
   def data
-    output_data 0..86_340, 1.minute, days_count
+    report = daily_demand_average_rate sessions
+
+    output_data 0..86_340, report, 1.minute, days_count
   end
 
   def days_count
@@ -28,13 +30,14 @@ class DailyDemandReport < TimeSeriesReport
   end
 
   def sessions
-    DiscoveryServiceEvent.within_range(@start, @finish).sessions
+    DiscoveryServiceEvent
+      .within_range(@start, @finish).sessions.pluck(:timestamp)
   end
 
-  def average_rate(sessions)
+  def daily_demand_average_rate(sessions)
     sessions.each_with_object({}) do |session, data|
       offset = (session - session.beginning_of_day).to_i
-      point = offset - offset % 1.minute
+      point = offset - (offset % 1.minute)
       (data[point.to_i] ||= 0) << data[point.to_i] += 1
     end
   end

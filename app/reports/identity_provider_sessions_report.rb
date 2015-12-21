@@ -26,20 +26,15 @@ class IdentityProviderSessionsReport < TimeSeriesReport
   end
 
   def data
-    output_data range, @steps.hours, @steps
-  end
+    report = average_rate sessions, @start, @steps.hours
 
-  def average_rate(sessions)
-    sessions.each_with_object({}) do |session, data|
-      offset = session - @start
-      point = offset - (offset % @steps.hours)
-      (data[point.to_i] ||= 0) << data[point.to_i] += 1
-    end
+    output_data range, report, @steps.hours, @steps
   end
 
   def sessions
     DiscoveryServiceEvent
       .within_range(@start, @finish)
-      .where(identity_provider: @identity_provider.id).sessions
+      .where(identity_provider: @identity_provider.id)
+      .sessions.pluck(:timestamp)
   end
 end
