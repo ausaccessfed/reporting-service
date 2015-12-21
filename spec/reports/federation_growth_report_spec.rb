@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe FederationGrowthReport do
+  around { |spec| Timecop.freeze { spec.run } }
+
   let(:title) { 'title' }
   let(:units) { '' }
   let(:labels) do

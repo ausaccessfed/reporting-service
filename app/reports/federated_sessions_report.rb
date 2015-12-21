@@ -1,4 +1,6 @@
 class FederatedSessionsReport < TimeSeriesReport
+  prepend TimeSeriesSharedMethods
+
   report_type 'federated-sessions'
 
   y_label ''
@@ -18,27 +20,9 @@ class FederatedSessionsReport < TimeSeriesReport
 
   private
 
-  def range
-    (0..(@finish - @start).to_i).step(@steps.hours)
-  end
-
   def data
-    sessions = DiscoveryServiceEvent
-               .where('timestamp >= ? AND timestamp <= ? AND phase LIKE ?',
-                      @start, @finish, 'response').pluck(:timestamp)
+    report = average_rate sessions, @start, @steps.hours
 
-    report = average_rate sessions
-    range.each_with_object(sessions: []) do |t, data|
-      average = report[t] ? (report[t].to_f / @steps).round(1) : 0.0
-      data[:sessions] << [t, average]
-    end
-  end
-
-  def average_rate(sessions)
-    sessions.each_with_object({}) do |session, data|
-      offset = session - @start
-      point = offset - (offset % @steps.hours)
-      (data[point.to_i] ||= 0) << data[point.to_i] += 1
-    end
+    output_data range, report, @steps.hours, @steps
   end
 end
