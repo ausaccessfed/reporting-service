@@ -1,5 +1,5 @@
 class FederatedSessionsReport < TimeSeriesReport
-  prepend Data::ReportData
+  prepend TimeSeriesSharedMethods
 
   report_type 'federated-sessions'
 

@@ -1,5 +1,5 @@
 class DailyDemandReport < TimeSeriesReport
-  prepend Data::ReportData
+  prepend TimeSeriesSharedMethods
 
   report_type 'daily-demand'
 

@@ -1,5 +1,5 @@
 class IdentityProviderSessionsReport < TimeSeriesReport
-  prepend Data::ReportData
+  prepend TimeSeriesSharedMethods
 
   report_type 'identity-provider-sessions'
 
