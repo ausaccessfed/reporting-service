@@ -30,7 +30,7 @@ class DailyDemandReport < TimeSeriesReport
   end
 
   def daily_demand_average_rate(sessions)
-    sessions.each_with_object({}) do |session, data|
+    sessions.pluck(:timestamp).each_with_object({}) do |session, data|
       offset = (session - session.beginning_of_day).to_i
       point = offset - (offset % 1.minute)
       (data[point.to_i] ||= 0) << data[point.to_i] += 1

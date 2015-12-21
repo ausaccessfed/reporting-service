@@ -11,7 +11,7 @@ class Data
     end
 
     def average_rate(sessions, offset, divider)
-      sessions.each_with_object({}) do |session, data|
+      sessions.pluck(:timestamp).each_with_object({}) do |session, data|
         t = session - offset
         point = t - (t % divider)
         (data[point.to_i] ||= 0) << data[point.to_i] += 1
@@ -19,8 +19,7 @@ class Data
     end
 
     def sessions
-      DiscoveryServiceEvent.within_range(@start, @finish)
-        .sessions.pluck(:timestamp)
+      DiscoveryServiceEvent.within_range(@start, @finish).sessions
     end
   end
 end
