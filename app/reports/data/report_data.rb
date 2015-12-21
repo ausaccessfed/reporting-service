@@ -10,6 +10,10 @@ class Data
       end
     end
 
+    def range
+      (0..(@finish - @start).to_i)
+    end
+
     def average_rate(sessions, offset, divider)
       sessions.pluck(:timestamp).each_with_object({}) do |session, data|
         t = session - offset

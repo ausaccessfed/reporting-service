@@ -1,4 +1,6 @@
 class FederatedSessionsReport < TimeSeriesReport
+  prepend Data::ReportData
+
   report_type 'federated-sessions'
 
   y_label ''
@@ -17,12 +19,6 @@ class FederatedSessionsReport < TimeSeriesReport
   end
 
   private
-
-  prepend Data::ReportData
-
-  def range
-    (0..(@finish - @start).to_i)
-  end
 
   def data
     report = average_rate sessions, @start, @steps.hours

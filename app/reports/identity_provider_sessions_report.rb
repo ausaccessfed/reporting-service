@@ -1,4 +1,6 @@
 class IdentityProviderSessionsReport < TimeSeriesReport
+  prepend Data::ReportData
+
   report_type 'identity-provider-sessions'
 
   y_label ''
@@ -18,12 +20,6 @@ class IdentityProviderSessionsReport < TimeSeriesReport
   end
 
   private
-
-  prepend Data::ReportData
-
-  def range
-    (0..(@finish - @start).to_i)
-  end
 
   def data
     report = average_rate idp_sessions, @start, @steps.hours
