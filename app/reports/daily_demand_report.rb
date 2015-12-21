@@ -29,11 +29,6 @@ class DailyDemandReport < TimeSeriesReport
     (@start.to_i..@finish.to_i).step(1.day).count
   end
 
-  def sessions
-    DiscoveryServiceEvent
-      .within_range(@start, @finish).sessions.pluck(:timestamp)
-  end
-
   def daily_demand_average_rate(sessions)
     sessions.each_with_object({}) do |session, data|
       offset = (session - session.beginning_of_day).to_i

@@ -17,5 +17,10 @@ class Data
         (data[point.to_i] ||= 0) << data[point.to_i] += 1
       end
     end
+
+    def sessions
+      DiscoveryServiceEvent.within_range(@start, @finish)
+        .sessions.pluck(:timestamp)
+    end
   end
 end

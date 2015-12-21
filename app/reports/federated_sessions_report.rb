@@ -29,9 +29,4 @@ class FederatedSessionsReport < TimeSeriesReport
 
     output_data range, report, @steps.hours, @steps
   end
-
-  def sessions
-    DiscoveryServiceEvent
-      .within_range(@start, @finish).sessions.pluck(:timestamp)
-  end
 end

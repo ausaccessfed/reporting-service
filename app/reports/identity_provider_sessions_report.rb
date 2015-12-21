@@ -26,14 +26,13 @@ class IdentityProviderSessionsReport < TimeSeriesReport
   end
 
   def data
-    report = average_rate sessions, @start, @steps.hours
+    report = average_rate idp_sessions, @start, @steps.hours
 
     output_data range, report, @steps.hours, @steps
   end
 
-  def sessions
-    DiscoveryServiceEvent
-      .within_range(@start, @finish)
+  def idp_sessions
+    DiscoveryServiceEvent.within_range(@start, @finish)
       .where(identity_provider: @identity_provider.id)
       .sessions.pluck(:timestamp)
   end
