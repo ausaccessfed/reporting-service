@@ -14,21 +14,31 @@ RSpec.describe ApplicationController, type: :controller do
 
   before do
     @routes.draw do
-      post '/anonymous/federation_growth' => 'anonymous#federation_growth'
-      get '/anonymous/federation_growth' => 'anonymous#federation_growth'
+      match ':controller/:action(/:id)', via: [:get, :post]
     end
   end
 
   context 'when request is session' do
-    it 'POST request should redirect to dashboard_path' do
+    it 'POST request should not create a uri session' do
       post :federation_growth
       expect(session).not_to include(:request_url)
     end
 
-    it 'GET request should redirect to request.url' do
+    it 'GET request should not create a uri session' do
       get :federation_growth
-      expect(session).to include(:request_url)
-      expect(session[:request_url]).to include('/anonymous/federation_growth')
+      uri = URI.parse(session[:request_url])
+      expect(uri.path).to eq('/anonymous/federation_growth')
+      expect(uri.query).to be_blank
+      expect(uri.fragment).to be_blank
+    end
+
+    it 'GET request should create a uri session including fragments' do
+      get :federation_growth, time: 1000
+      uri = URI.parse(session[:request_url])
+
+      expect(uri.path).to eq('/anonymous/federation_growth')
+      expect(uri.query).to eq('time=1000')
+      expect(uri.fragment).to be_blank
     end
   end
 end
