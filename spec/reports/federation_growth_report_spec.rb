@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe FederationGrowthReport do
   around { |spec| Timecop.freeze { spec.run } }
 
-  let(:title) { 'title' }
+  let(:title) { 'Federation Growth' }
   let(:units) { '' }
   let(:labels) do
     { y: '', organizations: 'Organizations',
@@ -51,7 +51,7 @@ RSpec.describe FederationGrowthReport do
       .each { |o| create(:activation, federation_object: o) }
   end
 
-  subject { FederationGrowthReport.new(title, start, finish) }
+  subject { FederationGrowthReport.new(start, finish) }
 
   shared_examples 'a report which generates growth analytics' do
     context 'growth report when some objects are not included' do

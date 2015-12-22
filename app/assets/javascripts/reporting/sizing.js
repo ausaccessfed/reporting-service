@@ -1,7 +1,7 @@
-reporting.sizing = function(report) {
+reporting.sizing = function(report, target) {
   var container = {
     height: 400,
-    width: $('#report-output-container').width()
+    width: $(target).width()
   };
 
   var legend = {

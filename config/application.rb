@@ -25,5 +25,9 @@ module ReportingService
     config.active_record.raise_in_transactional_callbacks = true
 
     config.active_record.logger = Logger.new($stderr) if ENV['AAF_DEBUG']
+
+    config.cache_store = :redis_store,
+                         'redis://127.0.0.1/0/reporting-service-cache',
+                         { expire_in: 1.day }
   end
 end

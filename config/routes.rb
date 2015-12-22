@@ -6,7 +6,10 @@ Rails.application.routes.draw do
   get '/dashboard' => 'dashboard#index', as: 'dashboard'
   root to: 'welcome#index'
 
-  resources :reports, only: :show
+  scope '/public_reports' do
+    get 'federation_growth' => 'public_reports#federation_growth',
+        as: :public_federation_growth_report
+  end
 
   namespace :api, defaults: { format: 'json' } do
     v1_constraints = APIConstraints.new(version: 1, default: true)

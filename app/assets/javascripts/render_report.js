@@ -1,8 +1,9 @@
 jQuery(function($) {
-  var renderGraph = function(report) {
-    var sizing = reporting.sizing(report);
+  var renderGraph = function(report, target) {
+    var sizing = reporting.sizing(report, target);
 
-    var svg = d3.select(reporting.container)
+
+    var svg = d3.select(target)
       .selectAll('svg')
       .data([reporting.id]);
 
@@ -11,7 +12,7 @@ jQuery(function($) {
     svg.enter()
       .append('svg')
       .attr('id', function(id) { return id; })
-      .attr('class', report.type);
+      .attr('class', report.type + ' report-output');
 
     svg.attr('height', sizing.container.height)
       .attr('width', sizing.container.width);
@@ -73,8 +74,8 @@ jQuery(function($) {
     kinds[report.type]();
   };
 
-  var renderTable = function(report) {
-    var table = d3.select(reporting.container)
+  var renderTable = function(report, target) {
+    var table = d3.select(target)
       .selectAll('table')
       .data([reporting.id]);
     table.selectAll('table > *').remove();
@@ -82,7 +83,7 @@ jQuery(function($) {
     table.enter()
       .append('table')
       .attr('id', function(id) { return id; })
-      .attr('class', report.type);
+      .attr('class', report.type + ' report-output');
 
     var appendRow = function(parent, row, tag) {
       var tr = parent.append('tr');
@@ -108,22 +109,26 @@ jQuery(function($) {
     });
   };
 
-  var renderer = {
+  var renderers = {
     'random-time-series': renderGraph,
     'random-time-series-line': renderGraph,
     'random-tabular-data': renderTable,
     'federation-growth': renderGraph
   };
 
-  var json = $('#report-data').html();
-  if (json) {
-    var data = $.parseJSON(json);
-    var target = renderer[data.type];
+  $('.report-data').each(function() {
+    var target = $(this).data('target');
+    var json = $(this).html();
 
-    d3.select(window).on('resize', reporting.throttle(function() {
-      target(data);
-    }, 250));
+    if (json) {
+      var data = $.parseJSON(json);
+      var renderer = renderers[data.type];
 
-    setTimeout(function() { target(data); }, 0);
-  }
+      d3.select(window).on('resize', reporting.throttle(function() {
+        renderer(data, target);
+      }, 250));
+
+      setTimeout(function() { renderer(data, target); }, 100);
+    }
+  });
 });

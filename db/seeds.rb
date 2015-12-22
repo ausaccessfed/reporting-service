@@ -35,8 +35,9 @@ ActiveRecord::Base.transaction do
   idps = create_list(:identity_provider, 70)
   sps = create_list(:service_provider, 70)
   rapid_services = create_list(:rapid_connect_service, 90)
+  orgs = create_list(:organization, 20)
 
-  [*idps, *sps, *rapid_services].each do |object|
+  [*idps, *sps, *rapid_services, *orgs].each do |object|
     next if rand > 0.9
 
     create(:activation, :deactivated, :old, federation_object: object)
