@@ -17,10 +17,26 @@ RSpec.describe WelcomeController, type: :controller do
     it { is_expected.to have_http_status(:ok) }
     it { is_expected.to render_template('welcome/index') }
 
-    context 'when authenticated' do
+    context 'when authenticated and' do
       let(:user) { create(:subject) }
 
-      it { is_expected.to redirect_to(dashboard_path) }
+      context ':request.url is not a session' do
+        before do
+          session.delete(:request_url)
+          get :index
+        end
+
+        it { is_expected.to redirect_to(dashboard_path) }
+      end
+
+      context ':request.url is a session' do
+        before do
+          session[:request_url] = '/public_reports/federation_growth'
+          get :index
+        end
+
+        it { is_expected.to redirect_to('/public_reports/federation_growth') }
+      end
     end
   end
 end

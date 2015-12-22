@@ -20,7 +20,11 @@ class ApplicationController < ActionController::Base
   protected
 
   def ensure_authenticated
+    request_url_session
+
     return redirect_to('/auth/login') unless session[:subject_id]
+
+    session.delete(:request_url)
 
     @subject = Subject.find_by(id: session[:subject_id])
     fail(Unauthorized, 'Subject invalid') unless @subject
@@ -50,5 +54,10 @@ class ApplicationController < ActionController::Base
 
   def forbidden
     render 'errors/forbidden', status: :forbidden
+  end
+
+  def request_url_session
+    return session[:request_url] = request.url if request.get?
+    session.delete(:request_url)
   end
 end
