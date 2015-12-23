@@ -3,6 +3,6 @@ class WelcomeController < ApplicationController
 
   def index
     public_action
-    redirect_to session[:request_url] || dashboard_path if subject
+    redirect_to dashboard_path if subject
   end
 end
