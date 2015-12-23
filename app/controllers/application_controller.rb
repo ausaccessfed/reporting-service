@@ -53,7 +53,6 @@ class ApplicationController < ActionController::Base
   end
 
   def force_authentication
-    session.delete(:request_url)
     session[:request_url] = request.url if request.get?
 
     redirect_to('/auth/login')

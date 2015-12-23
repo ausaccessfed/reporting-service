@@ -23,6 +23,14 @@ module Authentication
 
     private
 
+    def finish(env)
+      url = env['rack.session']['request_url'].to_s
+      env['rack.session'].delete('request_url')
+
+      return redirect_to(url) unless url.blank?
+      super
+    end
+
     def subject_scope(attrs)
       t = Subject.arel_table
       Subject.where(t[:targeted_id].eq(attrs[:targeted_id])
