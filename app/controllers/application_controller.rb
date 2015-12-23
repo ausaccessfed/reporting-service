@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def ensure_authenticated
-    request_url_session
+    request_url_session unless session[:subject_id]
 
     return redirect_to('/auth/login') unless session[:subject_id]
 
