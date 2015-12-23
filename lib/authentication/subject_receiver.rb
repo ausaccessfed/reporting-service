@@ -21,8 +21,6 @@ module Authentication
       subject
     end
 
-    private
-
     def finish(env)
       url = env['rack.session']['request_url'].to_s
       env['rack.session'].delete('request_url')
@@ -30,6 +28,8 @@ module Authentication
       return redirect_to(url) unless url.blank?
       super
     end
+
+    private
 
     def subject_scope(attrs)
       t = Subject.arel_table
