@@ -17,7 +17,7 @@ RSpec.describe WelcomeController, type: :controller do
     it { is_expected.to have_http_status(:ok) }
     it { is_expected.to render_template('welcome/index') }
 
-    context 'when authenticated and' do
+    context 'when authenticated' do
       let(:user) { create(:subject) }
 
       context ':request.url is not a session' do
