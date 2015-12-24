@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Public Reports' do
+RSpec.feature 'Login Process' do
   include IdentityEnhancementStub
 
   given(:user) { create(:subject) }
