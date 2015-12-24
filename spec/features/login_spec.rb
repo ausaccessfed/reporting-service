@@ -20,8 +20,6 @@ RSpec.feature 'Login Process' do
 
     scenario 'viewing the Dashboard' do
       expect(current_path).to eq('/dashboard')
-
-      click_link('Federation Growth Report')
     end
   end
 
