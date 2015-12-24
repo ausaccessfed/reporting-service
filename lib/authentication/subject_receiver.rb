@@ -21,6 +21,14 @@ module Authentication
       subject
     end
 
+    def finish(env)
+      url = env['rack.session']['request_url'].to_s
+      env['rack.session'].delete('request_url')
+
+      return redirect_to(url) unless url.blank?
+      super
+    end
+
     private
 
     def subject_scope(attrs)

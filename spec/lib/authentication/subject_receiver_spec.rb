@@ -89,5 +89,33 @@ RSpec.describe Authentication::SubjectReceiver do
         end
       end
     end
+
+    context '#finish' do
+      context 'when request url is available' do
+        let(:session) { { 'request_url' => 'url' } }
+        let(:env) { { 'rack.session' => session } }
+
+        def run
+          subject.finish(env)
+        end
+
+        it 'should redirect to request url' do
+          expect(run).to eq([302, { 'Location' => 'url' }, []])
+        end
+      end
+
+      context 'when request url is blank' do
+        let(:session) { { 'request_url' => '' } }
+        let(:env) { { 'rack.session' => session } }
+
+        def run
+          subject.finish(env)
+        end
+
+        it 'should redirect to request url' do
+          expect(run).to eq([302, { 'Location' => '/' }, []])
+        end
+      end
+    end
   end
 end
