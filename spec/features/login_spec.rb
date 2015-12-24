@@ -12,12 +12,27 @@ RSpec.feature 'Login Process' do
     stub_ide(shared_token: user.shared_token)
   end
 
-  background do
-    visit '/public_reports/federation_growth'
-    click_button 'Login'
+  feature 'requesting /auth/login path' do
+    background do
+      visit '/auth/login'
+      click_button 'Login'
+    end
+
+    scenario 'viewing the Dashboard' do
+      expect(current_path).to eq('/dashboard')
+
+      click_link('Federation Growth Report')
+    end
   end
 
-  scenario 'viewing the Federation Growth Report directly' do
-    expect(current_path).to eq('/public_reports/federation_growth')
+  feature 'requesting /public_reports/federation_growth path' do
+    background do
+      visit '/public_reports/federation_growth'
+      click_button 'Login'
+    end
+
+    scenario 'viewing the Federation Growth Report directly' do
+      expect(current_path).to eq('/public_reports/federation_growth')
+    end
   end
 end
