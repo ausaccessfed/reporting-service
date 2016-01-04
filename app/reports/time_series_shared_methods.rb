@@ -9,8 +9,8 @@ module TimeSeriesSharedMethods
     end
   end
 
-  def sessions_rate_output(default_sessions = sessions)
-    report = average_rate(default_sessions) do |session|
+  def per_hour_output(default_sessions = sessions)
+    report = sessions_count(default_sessions) do |session|
       offset = session - @start
       offset - (offset % @steps.hour.to_i)
     end
@@ -19,7 +19,7 @@ module TimeSeriesSharedMethods
   end
 
   def daily_demand_output(default_sessions = sessions)
-    report = average_rate(default_sessions) do |session|
+    report = sessions_count(default_sessions) do |session|
       offset = (session - session.beginning_of_day).to_i
       offset - (offset % 1.minute)
     end
@@ -31,7 +31,7 @@ module TimeSeriesSharedMethods
     (0..(@finish - @start).to_i)
   end
 
-  def average_rate(sessions)
+  def sessions_count(sessions)
     sessions.pluck(:timestamp).each_with_object({}) do |session, data|
       point = yield session
       (data[point.to_i] ||= 0) << data[point.to_i] += 1
