@@ -22,6 +22,6 @@ class IdentityProviderSessionsReport < TimeSeriesReport
   private
 
   def data
-    output_data idp_sessions
+    sessions_rate_output idp_sessions
   end
 end

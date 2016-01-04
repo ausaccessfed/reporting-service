@@ -1,14 +1,18 @@
 module TimeSeriesSharedMethods
   private
 
-  def output_data(default_sessions = sessions)
-    report = average_rate default_sessions
-
-    range.step(@steps.hours).each_with_object(sessions: []) do |t, data|
-      average = report[t] ? (report[t].to_f / @steps).round(1) : 0.0
+  def output_data(range, report, step_width, divider)
+    range.step(step_width).each_with_object(sessions: []) do |t, data|
+      average = report[t] ? (report[t].to_f / divider).round(1) : 0.0
 
       data[:sessions] << [t, average]
     end
+  end
+
+  def sessions_rate_output(default_sessions = sessions)
+    report = average_rate default_sessions
+
+    output_data range, report, @steps.hours, @steps
   end
 
   def daily_demand_output(default_sessions = sessions)

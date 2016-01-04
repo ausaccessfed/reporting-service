@@ -21,6 +21,6 @@ class FederatedSessionsReport < TimeSeriesReport
   private
 
   def data
-    output_data
+    sessions_rate_output
   end
 end
