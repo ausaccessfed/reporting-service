@@ -14,15 +14,13 @@ class IdentityProviderDailyDemandReport < TimeSeriesReport
     title = "IdP Daily Demand Report for #{@identity_provider.name}"
 
     super(title)
-    @start = start
-    @finish = finish
+    @start = start.beginning_of_day
+    @finish = finish.end_of_day
   end
 
   private
 
   def data
-    report = daily_demand_average_rate idp_sessions
-
-    output_data 0..86_340, report, 1.minute, days_count
+    daily_demand_output idp_sessions
   end
 end
