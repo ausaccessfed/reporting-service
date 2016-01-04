@@ -21,7 +21,24 @@ module TimeSeriesSharedMethods
     end
   end
 
-  def sessions
-    DiscoveryServiceEvent.within_range(@start, @finish).sessions
+  def daily_demand_average_rate(sessions)
+    sessions.pluck(:timestamp).each_with_object({}) do |session, data|
+      offset = (session - session.beginning_of_day).to_i
+      point = offset - (offset % 1.minute)
+      (data[point.to_i] ||= 0) << data[point.to_i] += 1
+    end
+  end
+
+  def days_count
+    (@start.to_i..@finish.to_i).step(1.day).count
+  end
+
+  def sessions(where_args = {})
+    DiscoveryServiceEvent
+      .within_range(@start, @finish).where(where_args).sessions
+  end
+
+  def idp_sessions
+    sessions identity_provider: @identity_provider
   end
 end
