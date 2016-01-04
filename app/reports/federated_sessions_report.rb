@@ -21,8 +21,6 @@ class FederatedSessionsReport < TimeSeriesReport
   private
 
   def data
-    report = average_rate sessions, @start, @steps.hours
-
-    output_data range, report, @steps.hours, @steps
+    per_hour_output
   end
 end
