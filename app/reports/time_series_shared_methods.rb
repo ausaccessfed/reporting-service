@@ -50,4 +50,8 @@ module TimeSeriesSharedMethods
   def idp_sessions
     sessions identity_provider: @identity_provider
   end
+
+  def sp_sessions
+    sessions service_provider: @service_provider
+  end
 end
