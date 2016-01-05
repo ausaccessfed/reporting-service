@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PublicReportsController, type: :controller do
+RSpec.describe FederationReportsController, type: :controller do
   let(:user) { create(:subject) }
 
   before { session[:subject_id] = user.try(:id) }
@@ -18,7 +18,8 @@ RSpec.describe PublicReportsController, type: :controller do
 
     it 'renders the page successfully' do
       expect(response).to have_http_status(:ok)
-      expect(response).to render_template('public_reports/federation_growth')
+      expect(response)
+        .to render_template('federation_reports/federation_growth')
     end
 
     it 'assigns the report data' do

@@ -1,4 +1,4 @@
-class PublicReportsController < ApplicationController
+class FederationReportsController < ApplicationController
   def federation_growth
     public_action
 
