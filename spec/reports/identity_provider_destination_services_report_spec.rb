@@ -53,7 +53,7 @@ RSpec.describe IdentityProviderDestinationServicesReport do
       expect(report[:rows]).to include([sp_name_02, '5'])
     end
 
-    fit 'report should not include sessions out of range' do
+    it 'report should not include sessions out of range' do
       sp_name_03 = sp_03.name
       expect(report[:rows]).not_to include([sp_name_03, anything])
     end
