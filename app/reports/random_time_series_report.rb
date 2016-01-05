@@ -1,13 +1,11 @@
 class RandomTimeSeriesReport < TimeSeriesReport
   report_type 'random-time-series'
-
   y_label 'randomly generated number'
+  units ' ms'
 
   series total: 'Total Response Time',
          database: 'Database Time',
          render: 'Render Time'
-
-  units ' ms'
 
   def initialize(host, start, finish)
     super("A randomly generated graph for #{host}", start, finish)

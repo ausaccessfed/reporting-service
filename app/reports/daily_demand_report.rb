@@ -2,12 +2,9 @@ class DailyDemandReport < TimeSeriesReport
   prepend TimeSeriesSharedMethods
 
   report_type 'daily-demand'
-
   y_label ''
-
-  series sessions: 'demand'
-
   units ''
+  series sessions: 'demand'
 
   def initialize(start, finish)
     title = 'Daily Demand'

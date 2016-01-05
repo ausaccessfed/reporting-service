@@ -2,12 +2,9 @@ class IdentityProviderDailyDemandReport < TimeSeriesReport
   prepend TimeSeriesSharedMethods
 
   report_type 'identity-provider-daily-demand'
-
   y_label ''
-
-  series sessions: 'demand'
-
   units ''
+  series sessions: 'demand'
 
   def initialize(entity_id, start, finish)
     @identity_provider = IdentityProvider.find_by(entity_id: entity_id)
