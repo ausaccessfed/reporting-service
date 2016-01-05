@@ -51,8 +51,8 @@ ActiveRecord::Base.transaction do
 
   idps.each do |idp|
     [
-      *core_attributes.reject { rand > 0.95 },
-      *optional_attributes.reject { rand > 0.5 }
+      *core_attributes.reject { rand > 0.99 },
+      *optional_attributes.reject { rand > 0.8 }
     ].each do |attr|
       create(:identity_provider_saml_attribute,
              identity_provider: idp, saml_attribute: attr)
@@ -62,9 +62,9 @@ ActiveRecord::Base.transaction do
   sps.each do |sp|
     [
       *core_attributes.reject { rand > 0.3 },
-      *optional_attributes.reject { rand > 0.3 }
+      *optional_attributes.reject { rand > 0.05 }
     ].each do |attr|
-      optional = (rand > 0.5 && attr.core?) || (rand > 0.7)
+      optional = (rand > 0.7 && attr.core?) || (rand > 0.95)
       create(:service_provider_saml_attribute,
              service_provider: sp, saml_attribute: attr, optional: optional)
     end
