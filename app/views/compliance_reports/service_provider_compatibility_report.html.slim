@@ -9,16 +9,22 @@ markdown:
   it supports all attributes which the Service Provider has indicated are
   **required**.
 
-= form_tag do
+= form_tag({}, id: 'report-form') do
   = field_block do
     = label_tag(:entity_id) do
       | Service Provider
 
-    = select_tag(:entity_id, options_from_collection_for_select(@service_providers, :entity_id, :name, @entity_id))
+    - options = @service_providers.map { |sp| [sp.name, sp.entity_id] }
+    - options.unshift(['(Please select a Service Provider...)', ''])
+
+    = select_tag(:entity_id, options_for_select(options, @entity_id))
 
   = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
     => icon_tag('ok')
     | Generate
+
+= validate_form('#report-form', nil) do |v|
+  - v.validate_field(:entity_id, required: { message: 'Please select a Service Provider' })
 
 - if @data
   = render(partial: 'shared/report_output', locals: { data: @data })
