@@ -16,6 +16,6 @@ class IdentityProviderDestinationServicesReport < TabularReport
 
   def rows
     idp_sessions.group_by(&:service_provider)
-      .map { |sp, val| [sp.name, val.count] }
+      .map { |sp, val| [sp.name.to_s, val.count.to_s] }
   end
 end

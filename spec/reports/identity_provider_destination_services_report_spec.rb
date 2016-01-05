@@ -49,8 +49,8 @@ RSpec.describe IdentityProviderDestinationServicesReport do
       sp_name_01 = sp_01.name
       sp_name_02 = sp_02.name
 
-      expect(subject.rows).to include([sp_name_01, 20])
-      expect(subject.rows).to include([sp_name_02, 5])
+      expect(report[:rows]).to include([sp_name_01, '20'])
+      expect(report[:rows]).to include([sp_name_02, '5'])
     end
 
     it 'report should not include sessions out of range' do
