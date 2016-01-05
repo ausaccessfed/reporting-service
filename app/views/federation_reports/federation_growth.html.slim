@@ -2,7 +2,4 @@
               { 'Public Reports' => dashboard_path },
               'Federation Growth Report')
 
-script.report-data(type='application/json' data-target='#output')
-  == @data
-
-#output.report-output-container
+= render(partial: 'shared/report_output', locals: { data: @data })
