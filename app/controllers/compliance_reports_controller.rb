@@ -1,7 +1,7 @@
 class ComplianceReportsController < ApplicationController
   def service_provider_compatibility_report
     public_action
-    @service_providers = ServiceProvider.active.all
+    @service_providers = ServiceProvider.active
     @entity_id = params[:entity_id]
     return unless @entity_id
 
