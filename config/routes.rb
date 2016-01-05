@@ -11,6 +11,15 @@ Rails.application.routes.draw do
         as: :public_federation_growth_report
   end
 
+  scope '/compliance_reports' do
+    def match_report(prefix, name)
+      match "/#{prefix}/#{name}", to: "compliance_reports##{prefix}_#{name}",
+                                  via: [:get, :post], as: :"#{prefix}_#{name}"
+    end
+
+    match_report('service_provider', 'compatibility_report')
+  end
+
   namespace :api, defaults: { format: 'json' } do
     v1_constraints = APIConstraints.new(version: 1, default: true)
     scope constraints: v1_constraints do

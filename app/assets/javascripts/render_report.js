@@ -113,7 +113,8 @@ jQuery(function($) {
     'random-time-series': renderGraph,
     'random-time-series-line': renderGraph,
     'random-tabular-data': renderTable,
-    'federation-growth': renderGraph
+    'federation-growth': renderGraph,
+    'service-compatibility': renderTable
   };
 
   $('.report-data').each(function() {
