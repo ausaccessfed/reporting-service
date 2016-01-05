@@ -3,6 +3,8 @@ class RandomTabularDataReport < TabularReport
   header ['Sentence', 'Number of words', 'Random number']
   footer
 
+  private
+
   def rows
     (1..100).map do
       s = Faker::Lorem.sentence

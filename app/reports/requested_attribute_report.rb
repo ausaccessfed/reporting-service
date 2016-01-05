@@ -9,6 +9,8 @@ class RequestedAttributeReport < TabularReport
     @saml_attribute = SAMLAttribute.find_by(name: name)
   end
 
+  private
+
   def rows
     sorted_sps = service_providers.sort_by do |sp|
       sp.name.downcase
@@ -19,8 +21,6 @@ class RequestedAttributeReport < TabularReport
       [sp.name, status]
     end
   end
-
-  private
 
   def service_providers
     ServiceProvider.active

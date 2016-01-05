@@ -7,6 +7,8 @@ class IdentityProviderAttributesReport < TabularReport
     super('Identity Provider Attributes')
   end
 
+  private
+
   def rows
     sorted_idps = activated_identitiy_providers.sort_by do |idp|
       idp.name.downcase
@@ -20,8 +22,6 @@ class IdentityProviderAttributesReport < TabularReport
        "#{optional_attributes.count}"]
     end
   end
-
-  private
 
   def activated_identitiy_providers
     IdentityProvider.active.preload(:saml_attributes)

@@ -9,6 +9,8 @@ class ProvidedAttributeReport < TabularReport
     @name = name
   end
 
+  private
+
   def rows
     sorted_idps = identity_providers.sort_by do |idp|
       idp.name.downcase
@@ -19,8 +21,6 @@ class ProvidedAttributeReport < TabularReport
       [idp.name, yes_or_no]
     end
   end
-
-  private
 
   def identity_providers
     IdentityProvider.active.preload(:saml_attributes)

@@ -28,7 +28,7 @@ RSpec.describe IdentityProviderAttributesReport do
     end
 
     it 'rows data is an array' do
-      expect(subject.rows).to be_a(Array)
+      expect(report[:rows]).to be_a(Array)
     end
 
     it 'includes report :type, :header, :footer' do
@@ -37,7 +37,7 @@ RSpec.describe IdentityProviderAttributesReport do
     end
 
     it '#row should be :core and :optional attributes' do
-      expect(subject.rows)
+      expect(report[:rows])
         .to match_array([[identity_provider.name, '1', '10']])
     end
 

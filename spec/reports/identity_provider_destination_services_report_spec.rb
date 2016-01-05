@@ -55,7 +55,7 @@ RSpec.describe IdentityProviderDestinationServicesReport do
 
     it 'report should not include sessions out of range' do
       sp_name_03 = sp_03.name
-      expect(subject.rows).not_to include([sp_name_03, anything])
+      expect(report[:rows]).not_to include([sp_name_03, anything])
     end
   end
 end

@@ -13,6 +13,8 @@ class RandomTimeSeriesReport < TimeSeriesReport
     @finish = finish
   end
 
+  private
+
   def data
     range.each_with_object(total: [], database: [], render: []) do |n, map|
       d, r, t = points(n)
@@ -21,8 +23,6 @@ class RandomTimeSeriesReport < TimeSeriesReport
       map[:total] << t
     end
   end
-
-  private
 
   def rng
     @rng ||= Distribution::Normal.rng

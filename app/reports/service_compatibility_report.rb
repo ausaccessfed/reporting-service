@@ -9,6 +9,8 @@ class ServiceCompatibilityReport < TabularReport
     super(title)
   end
 
+  private
+
   def rows
     sorted_idps = active_identity_providers.sort_by do |idp|
       idp.name.downcase
@@ -22,8 +24,6 @@ class ServiceCompatibilityReport < TabularReport
        attributes[:optional].to_s, compatible]
     end
   end
-
-  private
 
   def active_identity_providers
     IdentityProvider.active.preload(:saml_attributes)
