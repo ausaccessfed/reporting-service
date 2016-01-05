@@ -4,7 +4,7 @@ RSpec.describe IdentityProviderDestinationServicesReport do
   around { |spec| Timecop.freeze { spec.run } }
 
   let(:type) { 'identity-provider-destination-services' }
-  let(:header) { [['IdP Name', 'Total']] }
+  let(:header) { [['SP Name', 'Total']] }
   let(:title) { 'IdP Destination Report for' }
 
   let(:start) { 11.days.ago.beginning_of_day }
@@ -53,7 +53,7 @@ RSpec.describe IdentityProviderDestinationServicesReport do
       expect(report[:rows]).to include([sp_name_02, '5'])
     end
 
-    it 'report should not include sessions out of range' do
+    fit 'report should not include sessions out of range' do
       sp_name_03 = sp_03.name
       expect(report[:rows]).not_to include([sp_name_03, anything])
     end
