@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe IdentityProviderDestinationServicesReport do
   around { |spec| Timecop.freeze { spec.run } }
 
-  let(:type) { 'identity-provider-destination-services-report' }
+  let(:type) { 'identity-provider-destination-services' }
   let(:header) { [['IdP Name', 'Total']] }
   let(:title) { 'IdP Destination Report for' }
 
@@ -45,13 +45,16 @@ RSpec.describe IdentityProviderDestinationServicesReport do
                   timestamp: 20.day.ago.beginning_of_day
     end
 
-    it 'should include sessions within range only' do
+    it 'creates report :rows with number of related SPs and SP names' do
       sp_name_01 = sp_01.name
       sp_name_02 = sp_02.name
-      sp_name_03 = sp_03.name
 
       expect(subject.rows).to include([sp_name_01, 20])
       expect(subject.rows).to include([sp_name_02, 5])
+    end
+
+    it 'report should not include sessions out of range' do
+      sp_name_03 = sp_03.name
       expect(subject.rows).not_to include([sp_name_03, anything])
     end
   end
