@@ -4,13 +4,16 @@ RSpec.describe IdentityProviderDestinationServicesReport do
   around { |spec| Timecop.freeze { spec.run } }
 
   let(:type) { 'identity-provider-destination-services-report' }
-  let(:header) { [['Name']] }
+  let(:header) { [['IdP Name', 'Total']] }
   let(:title) { 'IdP Destination Report for' }
 
-  let(:start) { 10.days.ago.beginning_of_day }
+  let(:start) { 11.days.ago.beginning_of_day }
   let(:finish) { Time.zone.now.end_of_day }
 
   let(:idp) { create :identity_provider }
+  let(:sp_01) { create :service_provider }
+  let(:sp_02) { create :service_provider }
+  let(:sp_03) { create :service_provider }
 
   subject do
     IdentityProviderDestinationServicesReport.new(idp.entity_id, start, finish)
@@ -23,6 +26,33 @@ RSpec.describe IdentityProviderDestinationServicesReport do
       output_title = "#{title} #{idp.name}"
       expect(report).to include(type: type,
                                 title: output_title, header: header)
+    end
+  end
+
+  context '#generate' do
+    before do
+      create_list :discovery_service_event, 20, :response,
+                  identity_provider: idp,
+                  service_provider: sp_01
+
+      create_list :discovery_service_event, 5, :response,
+                  identity_provider: idp,
+                  service_provider: sp_02
+
+      create_list :discovery_service_event, 10,
+                  identity_provider: idp,
+                  service_provider: sp_03,
+                  timestamp: 20.day.ago.beginning_of_day
+    end
+
+    it 'should include sessions within range only' do
+      sp_name_01 = sp_01.name
+      sp_name_02 = sp_02.name
+      sp_name_03 = sp_03.name
+
+      expect(subject.rows).to include([sp_name_01, 20])
+      expect(subject.rows).to include([sp_name_02, 5])
+      expect(subject.rows).not_to include([sp_name_03, anything])
     end
   end
 end

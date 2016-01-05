@@ -1,6 +1,8 @@
 class IdentityProviderDestinationServicesReport < TabularReport
+  prepend TimeSeriesSharedMethods
+
   report_type 'identity-provider-destination-services-report'
-  header ['Name']
+  header ['IdP Name', 'Total']
   footer
 
   def initialize(entity_id, start, finish)
@@ -13,6 +15,7 @@ class IdentityProviderDestinationServicesReport < TabularReport
   end
 
   def rows
-    [['']]
+    idp_sessions.group_by(&:service_provider)
+      .map { |k, v| [k[:name], v.count] }
   end
 end
