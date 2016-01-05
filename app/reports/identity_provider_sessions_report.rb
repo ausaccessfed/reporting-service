@@ -2,12 +2,9 @@ class IdentityProviderSessionsReport < TimeSeriesReport
   prepend TimeSeriesSharedMethods
 
   report_type 'identity-provider-sessions'
-
   y_label ''
-
-  series sessions: 'Rate/h'
-
   units ''
+  series sessions: 'Rate/h'
 
   def initialize(entity_id, start, finish, steps)
     @identity_provider = IdentityProvider.find_by(entity_id: entity_id)

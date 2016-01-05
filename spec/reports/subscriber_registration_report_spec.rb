@@ -10,15 +10,16 @@ RSpec.describe SubscriberRegistrationReport do
   let(:rapid_connect_service) { create(:rapid_connect_service) }
 
   subject { SubscriberRegistrationReport.new(report_type) }
+  let(:report) { subject.generate }
 
   shared_examples 'a report which lists federation objects' do
     it 'returns an array' do
-      expect(subject.rows).to be_an(Array)
+      expect(report[:rows]).to be_an(Array)
     end
 
     it 'produces title, header and type' do
-      expect(subject.generate).to include(title: title,
-                                          header: header, type: type)
+      expect(report).to include(title: title,
+                                header: header, type: type)
     end
 
     context 'when all objects are activated' do
@@ -32,7 +33,7 @@ RSpec.describe SubscriberRegistrationReport do
           activated_date = o.activations(true)
                            .flat_map(&:activated_at).min
 
-          expect(subject.rows).to include([o.name, activated_date])
+          expect(report[:rows]).to include([o.name, activated_date])
         end
       end
     end
@@ -45,7 +46,7 @@ RSpec.describe SubscriberRegistrationReport do
 
       it 'excludes all objects' do
         [*reported_objects, *excluded_objects].each do |o|
-          expect(subject.rows).not_to include([o.name, anything])
+          expect(report[:rows]).not_to include([o.name, anything])
         end
       end
     end
@@ -53,7 +54,7 @@ RSpec.describe SubscriberRegistrationReport do
     context 'when objects have no activations' do
       it 'excludes object without activations' do
         [*reported_objects, *excluded_objects].each do |o|
-          expect(subject.rows).not_to include([o.name, anything])
+          expect(report[:rows]).not_to include([o.name, anything])
         end
       end
     end

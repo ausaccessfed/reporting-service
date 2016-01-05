@@ -1,8 +1,9 @@
 class RandomTabularDataReport < TabularReport
   report_type 'random-tabular-data'
-
   header ['Sentence', 'Number of words', 'Random number']
   footer
+
+  private
 
   def rows
     (1..100).map do

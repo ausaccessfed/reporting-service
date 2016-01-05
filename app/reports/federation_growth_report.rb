@@ -1,13 +1,11 @@
 class FederationGrowthReport < TimeSeriesReport
   report_type 'federation-growth'
-
   y_label ''
+  units ''
 
   series services: 'Services',
          identity_providers: 'Identity Providers',
          organizations: 'Organizations'
-
-  units ''
 
   def initialize(start, finish)
     super('Federation Growth', start: start, end: finish)

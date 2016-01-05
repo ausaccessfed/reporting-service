@@ -1,19 +1,19 @@
 class RandomTimeSeriesReport < TimeSeriesReport
   report_type 'random-time-series'
-
   y_label 'randomly generated number'
+  units ' ms'
 
   series total: 'Total Response Time',
          database: 'Database Time',
          render: 'Render Time'
-
-  units ' ms'
 
   def initialize(host, start, finish)
     super("A randomly generated graph for #{host}", start, finish)
     @start = start
     @finish = finish
   end
+
+  private
 
   def data
     range.each_with_object(total: [], database: [], render: []) do |n, map|
@@ -23,8 +23,6 @@ class RandomTimeSeriesReport < TimeSeriesReport
       map[:total] << t
     end
   end
-
-  private
 
   def rng
     @rng ||= Distribution::Normal.rng
