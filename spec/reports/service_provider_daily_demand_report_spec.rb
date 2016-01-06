@@ -78,7 +78,7 @@ RSpec.describe ServiceProviderDailyDemandReport do
         create :discovery_service_event, :response,
                identity_provider: identity_provider,
                service_provider: service_provider_01,
-               timestamp: n.days.ago.beginning_of_day + 10.minutes
+               timestamp: n.days.ago.beginning_of_day + 15.minutes
 
         create :discovery_service_event, :response,
                identity_provider: identity_provider,
@@ -100,8 +100,8 @@ RSpec.describe ServiceProviderDailyDemandReport do
       expect(data[:sessions]).to include([300, 0.0])
     end
 
-    it 'average at point 600 should be 0.5 for 5 sessions in 10 days' do
-      expect(data[:sessions]).to include([600, 0.5])
+    it 'average at point 900 should be 0.5 for 5 sessions in 10 days' do
+      expect(data[:sessions]).to include([900, 0.5])
     end
 
     it 'should not include sessions for irrelevant SP (average must be 0.5)' do
