@@ -23,6 +23,12 @@ RSpec.describe ServiceProviderDailyDemandReport do
   let(:report) { subject.generate }
   let(:data) { report[:data] }
 
+  def expect_in_range
+    (0..(86_340)).step(60).each_with_index do |t, index|
+      expect(data[:sessions][index]).to match_array([t, value])
+    end
+  end
+
   context 'sessions with response' do
     before do
       create_list :discovery_service_event, 5, :response,
@@ -36,6 +42,14 @@ RSpec.describe ServiceProviderDailyDemandReport do
       output_title = title + ' ' + service_provider_01.name
       expect(report).to include(title: output_title,
                                 units: units, labels: labels)
+    end
+
+    it 'should not include range' do
+      expect(report).not_to include(:range)
+    end
+
+    it 'sessions generated within given range' do
+      expect_in_range
     end
   end
 end

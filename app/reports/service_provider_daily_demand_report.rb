@@ -6,11 +6,13 @@ class ServiceProviderDailyDemandReport < TimeSeriesReport
   units ''
   series sessions: 'demand'
 
-  def initialize(entity_id, _start, _finish)
+  def initialize(entity_id, start, finish)
     @service_provider = ServiceProvider.find_by(entity_id: entity_id)
     title = "SP Daily Demand Report for #{@service_provider.name}"
 
     super(title)
+    @start = start.beginning_of_day
+    @finish = finish.end_of_day
   end
 
   private
