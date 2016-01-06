@@ -68,7 +68,8 @@ jQuery(function($) {
     var kinds = {
       'random-time-series': charts.area,
       'random-time-series-line': charts.line,
-      'federation-growth': charts.area
+      'federation-growth': charts.area,
+      'federated-sessions': charts.area
     };
 
     kinds[report.type]();
@@ -114,6 +115,7 @@ jQuery(function($) {
     'random-time-series-line': renderGraph,
     'random-tabular-data': renderTable,
     'federation-growth': renderGraph,
+    'federated-sessions': renderGraph,
     'service-compatibility': renderTable
   };
 

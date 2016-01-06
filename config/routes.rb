@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   scope '/federation_reports' do
     get 'federation_growth' => 'federation_reports#federation_growth',
         as: :public_federation_growth_report
+
+    get 'federated_sessions' => 'federation_reports#federated_sessions',
+        as: :public_federated_sessions_report
   end
 
   scope '/compliance_reports' do
