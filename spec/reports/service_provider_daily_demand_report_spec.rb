@@ -52,4 +52,18 @@ RSpec.describe ServiceProviderDailyDemandReport do
       expect_in_range
     end
   end
+
+  context 'sessions without response' do
+    before do
+      create_list :discovery_service_event, 10,
+                  service_provider: service_provider_01,
+                  timestamp: 1.day.ago.beginning_of_day
+    end
+
+    let(:value) { 0.0 }
+
+    it 'should not count any sessions' do
+      expect_in_range
+    end
+  end
 end
