@@ -1,4 +1,4 @@
-class ServiceProviderSourceIdentityProviderReport < TabularReport
+class ServiceProviderSourceIdentityProvidersReport < TabularReport
   prepend TimeSeriesSharedMethods
 
   report_type 'service-provider-source-identity-providers'
@@ -7,7 +7,7 @@ class ServiceProviderSourceIdentityProviderReport < TabularReport
 
   def initialize(entity_id, start, finish)
     @service_provider = ServiceProvider.find_by(entity_id: entity_id)
-    title = "SP Source Identity Provider Report for #{@service_provider.name}"
+    title = "SP Source Identity Providers Report for #{@service_provider.name}"
     @start = start
     @finish = finish
 

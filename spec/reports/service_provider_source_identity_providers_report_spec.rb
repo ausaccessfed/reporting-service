@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe ServiceProviderSourceIdentityProviderReport do
+RSpec.describe ServiceProviderSourceIdentityProvidersReport do
   around { |spec| Timecop.freeze { spec.run } }
 
   let(:type) { 'service-provider-source-identity-providers' }
   let(:header) { [['IdP Name', 'Total']] }
-  let(:title) { 'SP Source Identity Provider Report for' }
+  let(:title) { 'SP Source Identity Providers Report for' }
 
   let(:start) { 11.days.ago.beginning_of_day }
   let(:finish) { Time.zone.now.end_of_day }
@@ -16,7 +16,8 @@ RSpec.describe ServiceProviderSourceIdentityProviderReport do
   let(:idp_03) { create :identity_provider }
 
   subject do
-    ServiceProviderSourceIdentityProviderReport.new(sp.entity_id, start, finish)
+    ServiceProviderSourceIdentityProvidersReport
+      .new(sp.entity_id, start, finish)
   end
 
   let(:report) { subject.generate }
