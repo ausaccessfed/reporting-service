@@ -20,8 +20,4 @@ class ServiceProviderDailyDemandReport < TimeSeriesReport
   def data
     daily_demand_output sp_sessions
   end
-
-  def sp_sessions
-    sessions service_provider: @service_provider
-  end
 end
