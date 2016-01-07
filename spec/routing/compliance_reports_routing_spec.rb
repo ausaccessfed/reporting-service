@@ -19,21 +19,26 @@ RSpec.describe ComplianceReportsController, type: :routing do
     it { is_expected.to route_to(controller + action) }
   end
 
-  describe 'get /service_provider/compatibility_report' do
+  describe 'post & get on /service_provider/compatibility_report' do
     let(:action) { '#service_provider_compatibility_report' }
     let(:path) { '/service_provider/compatibility_report' }
+
+    it_behaves_like 'post request'
     it_behaves_like 'get request'
   end
 
-  describe 'get /identity_provider/attributes_report' do
+  describe 'get on /identity_provider/attributes_report' do
     let(:action) { '#identity_provider_attributes_report' }
     let(:path) { '/identity_provider/attributes_report' }
+
     it_behaves_like 'get request'
   end
 
-  describe 'post /service_provider/compatibility_report' do
-    let(:action) { '#service_provider_compatibility_report' }
-    let(:path) { '/service_provider/compatibility_report' }
+  describe 'post & get on /attribute/identity_providers' do
+    let(:action) { '#attribute_identity_providers' }
+    let(:path) { '/attribute/identity_providers' }
+
     it_behaves_like 'post request'
+    it_behaves_like 'get request'
   end
 end

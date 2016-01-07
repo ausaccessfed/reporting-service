@@ -16,4 +16,7 @@ class ComplianceReportsController < ApplicationController
     report = IdentityProviderAttributesReport.new
     @data = JSON.generate(report.generate)
   end
+
+  def attribute_identity_providers
+  end
 end
