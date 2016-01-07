@@ -4,7 +4,7 @@ RSpec.describe ComplianceReportsController, type: :controller do
   let(:user) { create(:subject) }
   before { session[:subject_id] = user.try(:id) }
 
-  shared_examples 'get on :compliance_reports action' do
+  shared_examples 'get request' do
     let!(:provider) { create object }
     let!(:activation) { create(:activation, federation_object: provider) }
 
@@ -24,71 +24,74 @@ RSpec.describe ComplianceReportsController, type: :controller do
     it 'renders the page' do
       run
       expect(response).to have_http_status(:ok)
-      expect(response).to render_template(template)
+      expect(response).to render_template("compliance_reports#{template}")
     end
 
-    it 'assigns the identity providers' do
+    it 'assigns the objects' do
       run
       expect(assigns["#{object}s".to_sym]).to include(provider)
     end
 
-    it 'excludes inactive identity providers' do
+    it 'excludes inactive objects' do
       activation.update!(deactivated_at: 1.second.ago.utc)
       run
       expect(assigns["#{object}s".to_sym]).not_to include(provider)
     end
   end
 
-  describe 'get :service_provider_compatibility_report' do
-    let(:object) { :service_provider }
-    let(:route_path) { :service_provider_compatibility_report }
-    let(:template) do
-      'compliance_reports/service_provider_compatibility_report'
-    end
-
-    it_behaves_like 'get on :compliance_reports action'
-  end
-
-  describe 'get :identity_provider_attributes_report' do
-    let(:object) { :identity_provider }
-    let(:route_path) { :identity_provider_attributes_report }
-    let(:template) do
-      'compliance_reports/identity_provider_attributes_report'
-    end
-
-    it_behaves_like 'get on :compliance_reports action'
-  end
-
-  describe 'post :service_provider_compatibility_report' do
-    let!(:sp) { create(:service_provider) }
-    let!(:activation) { create(:activation, federation_object: sp) }
+  shared_examples 'post request' do
+    let!(:provider) { create object }
+    let!(:activation) { create(:activation, federation_object: provider) }
 
     def run
-      post :service_provider_compatibility_report, entity_id: sp.entity_id
+      post route_path, entity_id: provider.entity_id
     end
 
     it 'renders the page' do
       run
       expect(response).to have_http_status(:ok)
-      template = 'compliance_reports/service_provider_compatibility_report'
-      expect(response).to render_template(template)
+      expect(response).to render_template("compliance_reports#{template}")
     end
 
     it 'assigns the identity providers' do
       run
-      expect(assigns[:service_providers]).to include(sp)
+      expect(assigns[:service_providers]).to include(provider)
     end
 
     it 'assigns the entity_id' do
       run
-      expect(assigns[:entity_id]).to eq(sp.entity_id)
+      expect(assigns[:entity_id]).to eq(provider.entity_id)
     end
 
     it 'assigns the report data' do
       run
       expect(assigns[:data]).to be_a(String)
       data = JSON.parse(assigns[:data], symbolize_names: true)
-      expect(data[:type]).to eq('service-compatibility')
+      expect(data[:type]).to eq(cache_type)
     end
+  end
+
+  describe 'get & post on /service_provider/compatibility_report' do
+    let(:object) { :service_provider }
+    let(:route_path) { :service_provider_compatibility_report }
+    let(:cache_type) { 'service-compatibility' }
+
+    let(:template) do
+      '/service_provider_compatibility_report'
+    end
+
+    it_behaves_like 'post request'
+    it_behaves_like 'get request'
+  end
+
+  describe 'get /identity_provider/attributes_report' do
+    let(:object) { :identity_provider }
+    let(:route_path) { :identity_provider_attributes_report }
+
+    let(:template) do
+      '/identity_provider_attributes_report'
+    end
+
+    it_behaves_like 'get request'
   end
 end
