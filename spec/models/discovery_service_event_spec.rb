@@ -14,11 +14,11 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
   end
 
   context 'sessions' do
-    let(:start) { 10.days.ago.beginning_of_day }
-    let(:finish) { 1.days.ago.beginning_of_day }
+    let!(:start) { 10.days.ago.beginning_of_day }
+    let!(:finish) { 1.days.ago.beginning_of_day }
 
-    let(:identity_provider) { create :identity_provider }
-    let(:service_provider) { create :service_provider }
+    let!(:identity_provider) { create :identity_provider }
+    let!(:service_provider) { create :service_provider }
 
     %w(before_start after_finish).each do |event|
       let("event_#{event}".to_sym) do
@@ -26,12 +26,12 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
                identity_provider: identity_provider,
                service_provider: service_provider,
                timestamp:
-               event == :before_start ? start - 1.day : finish + 1.day
+               event == :before_start ? start - 1.second : finish + 1.second
       end
     end
 
-    let(:events_within_range) do
-      create_list :discovery_service_event, 5, :response,
+    let!(:events_within_range) do
+      create_list :discovery_service_event, 20, :response,
                   identity_provider: identity_provider,
                   service_provider: service_provider,
                   timestamp: Faker::Time.between(start, finish)
@@ -43,7 +43,7 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
     end
 
     let(:sessions) do
-      DiscoveryServiceEvent.within_range(start, finish).sessions
+      DiscoveryServiceEvent.within_range(start, finish).sessions.sort
     end
 
     it 'should not select session out of range' do
@@ -52,7 +52,7 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
     end
 
     it 'should select sessions within given range' do
-      expect(sessions).to match_array(events_within_range)
+      expect(sessions).to match_array(events_within_range.sort)
     end
 
     it 'should select not none sessions events' do
