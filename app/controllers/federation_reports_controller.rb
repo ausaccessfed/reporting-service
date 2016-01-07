@@ -3,8 +3,8 @@ class FederationReportsController < ApplicationController
     public_action
 
     @data = Rails.cache.fetch('public/federation-growth') do
-      data = FederationGrowthReport.new(1.year.ago.utc, Time.now.utc).generate
-      JSON.generate(data)
+      data = FederationGrowthReport.new(1.year.ago.utc, Time.now.utc)
+      JSON.generate(data.generate)
     end
   end
 
@@ -12,10 +12,8 @@ class FederationReportsController < ApplicationController
     public_action
 
     @data = Rails.cache.fetch('public/federated-sessions') do
-      data = FederatedSessionsReport
-             .new(1.year.ago.utc, Time.now.utc, 10).generate
-
-      JSON.generate(data)
+      data = FederatedSessionsReport.new(1.year.ago.utc, Time.now.utc, 10)
+      JSON.generate(data.generate)
     end
   end
 end

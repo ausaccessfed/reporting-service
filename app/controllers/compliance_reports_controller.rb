@@ -12,7 +12,6 @@ class ComplianceReportsController < ApplicationController
 
   def identity_provider_attributes_report
     public_action
-
     @identity_providers = IdentityProvider.active
     report = IdentityProviderAttributesReport.new
     @data = JSON.generate(report.generate)
