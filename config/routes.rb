@@ -15,13 +15,13 @@ Rails.application.routes.draw do
   end
 
   scope '/compliance_reports' do
-    def match_report(prefix, name)
+    def match_report(prefix, name, verbs)
       match "/#{prefix}/#{name}", to: "compliance_reports##{prefix}_#{name}",
-                                  via: [:get, :post], as: :"#{prefix}_#{name}"
+                                  via: verbs, as: :"#{prefix}_#{name}"
     end
 
-    match_report('service_provider', 'compatibility_report')
-    match_report('identity_provider', 'attributes_report')
+    match_report('service_provider', 'compatibility_report', [:get, :post])
+    match_report('identity_provider', 'attributes_report', :get)
   end
 
   namespace :api, defaults: { format: 'json' } do

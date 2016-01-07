@@ -21,11 +21,11 @@ RSpec.describe ComplianceReportsController, type: :routing do
     it { is_expected.to route_to(action) }
   end
 
-  describe 'post /compliance_reports/identity_provider/attributes_report' do
+  describe 'get /compliance_reports/identity_provider/attributes_report' do
     let(:action) { 'compliance_reports#identity_provider_attributes_report' }
 
     subject do
-      { post: '/compliance_reports/identity_provider/attributes_report' }
+      { get: '/compliance_reports/identity_provider/attributes_report' }
     end
 
     it { is_expected.to route_to(action) }
