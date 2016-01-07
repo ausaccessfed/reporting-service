@@ -22,4 +22,12 @@ RSpec.feature 'Federation Reports' do
     expect(current_path).to eq('/federation_reports/federation_growth')
     expect(page).to have_css('svg.federation-growth')
   end
+
+  scenario 'viewing the Federated Sessions Report' do
+    expect(current_path).to eq('/dashboard')
+
+    click_link('Federated Sessions Report')
+    expect(current_path).to eq('/federation_reports/federated_sessions')
+    expect(page).to have_css('svg.federated-sessions')
+  end
 end

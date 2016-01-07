@@ -134,6 +134,12 @@ svg.report-output {
       fill: $graph-color-dull;
     }
   }
+
+  &.federated-sessions {
+    .sessions {
+      fill: $graph-color-vibrant;
+    }
+  }
 }
 
 table.report-output {

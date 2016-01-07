@@ -4,9 +4,9 @@ RSpec.describe ComplianceReportsController, type: :controller do
   let(:user) { create(:subject) }
   before { session[:subject_id] = user.try(:id) }
 
-  describe 'get :service_provider_compatibility_report' do
-    let!(:sp) { create(:service_provider) }
-    let!(:activation) { create(:activation, federation_object: sp) }
+  shared_examples 'get on :compliance_reports action' do
+    let!(:provider) { create object }
+    let!(:activation) { create(:activation, federation_object: provider) }
 
     context 'with no user' do
       let(:user) { nil }
@@ -18,26 +18,45 @@ RSpec.describe ComplianceReportsController, type: :controller do
     end
 
     def run
-      get :service_provider_compatibility_report
+      get route_path
     end
 
     it 'renders the page' do
       run
       expect(response).to have_http_status(:ok)
-      template = 'compliance_reports/service_provider_compatibility_report'
       expect(response).to render_template(template)
     end
 
     it 'assigns the identity providers' do
       run
-      expect(assigns[:service_providers]).to include(sp)
+      expect(assigns["#{object}s".to_sym]).to include(provider)
     end
 
     it 'excludes inactive identity providers' do
       activation.update!(deactivated_at: 1.second.ago.utc)
       run
-      expect(assigns[:service_providers]).not_to include(sp)
+      expect(assigns["#{object}s".to_sym]).not_to include(provider)
     end
+  end
+
+  describe 'get :service_provider_compatibility_report' do
+    let(:object) { :service_provider }
+    let(:route_path) { :service_provider_compatibility_report }
+    let(:template) do
+      'compliance_reports/service_provider_compatibility_report'
+    end
+
+    it_behaves_like 'get on :compliance_reports action'
+  end
+
+  describe 'get :identity_provider_attributes_report' do
+    let(:object) { :identity_provider }
+    let(:route_path) { :identity_provider_attributes_report }
+    let(:template) do
+      'compliance_reports/identity_provider_attributes_report'
+    end
+
+    it_behaves_like 'get on :compliance_reports action'
   end
 
   describe 'post :service_provider_compatibility_report' do

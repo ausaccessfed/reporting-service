@@ -2,7 +2,6 @@ jQuery(function($) {
   var renderGraph = function(report, target) {
     var sizing = reporting.sizing(report, target);
 
-
     var svg = d3.select(target)
       .selectAll('svg')
       .data([reporting.id]);
@@ -68,7 +67,8 @@ jQuery(function($) {
     var kinds = {
       'random-time-series': charts.area,
       'random-time-series-line': charts.line,
-      'federation-growth': charts.area
+      'federation-growth': charts.area,
+      'federated-sessions': charts.area
     };
 
     kinds[report.type]();
@@ -114,7 +114,9 @@ jQuery(function($) {
     'random-time-series-line': renderGraph,
     'random-tabular-data': renderTable,
     'federation-growth': renderGraph,
-    'service-compatibility': renderTable
+    'federated-sessions': renderGraph,
+    'service-compatibility': renderTable,
+    'identity-provider-attributes': renderTable
   };
 
   $('.report-data').each(function() {
