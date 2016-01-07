@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     end
 
     match_report('service_provider', 'compatibility_report')
+    match_report('identity_provider', 'attributes_report')
   end
 
   namespace :api, defaults: { format: 'json' } do

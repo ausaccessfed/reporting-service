@@ -25,4 +25,10 @@ RSpec.feature 'Compliance Reports' do
 
     expect(page).to have_css('#output table.service-compatibility')
   end
+
+  scenario 'viewing the Identity Provider Attributes Report' do
+    click_link 'Identity Provider Attributes'
+
+    expect(page).to have_css('#output table.identity-provider-attributes')
+  end
 end

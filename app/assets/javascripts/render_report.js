@@ -2,7 +2,6 @@ jQuery(function($) {
   var renderGraph = function(report, target) {
     var sizing = reporting.sizing(report, target);
 
-
     var svg = d3.select(target)
       .selectAll('svg')
       .data([reporting.id]);
@@ -116,7 +115,8 @@ jQuery(function($) {
     'random-tabular-data': renderTable,
     'federation-growth': renderGraph,
     'federated-sessions': renderGraph,
-    'service-compatibility': renderTable
+    'service-compatibility': renderTable,
+    'identity-provider-attributes': renderTable
   };
 
   $('.report-data').each(function() {

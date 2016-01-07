@@ -1,0 +1,10 @@
+= breadcrumbs({ 'Dashboard' => dashboard_path },
+              { 'Compliance Reports' => dashboard_path },
+              'Identity Provider Attributes Report')
+
+h1 Identity Provider Attributes Report
+
+markdown:
+  The users of these reports are our subscribers, so terms like “Identity Providers” and “attributes” are completely acceptable.
+
+= render(partial: 'shared/report_output', locals: { data: @data })
