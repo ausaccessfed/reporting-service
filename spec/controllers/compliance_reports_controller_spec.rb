@@ -84,7 +84,7 @@ RSpec.describe ComplianceReportsController, type: :controller do
     it_behaves_like 'get request'
   end
 
-  describe 'get /identity_provider/attributes_report' do
+  describe 'get on /identity_provider/attributes_report' do
     let(:object) { :identity_provider }
     let(:route_path) { :identity_provider_attributes_report }
 
