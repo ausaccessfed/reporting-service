@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :organization do
-    identifier { "http://#{Faker::Internet.domain_name}" }
+    identifier { SecureRandom.hex }
     name { Faker::Lorem.sentence }
   end
 end

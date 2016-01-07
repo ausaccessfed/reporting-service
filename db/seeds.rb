@@ -32,10 +32,19 @@ ActiveRecord::Base.transaction do
     SAMLAttribute
   ].each(&:delete_all)
 
-  idps = create_list(:identity_provider, 70)
-  sps = create_list(:service_provider, 70)
-  rapid_services = create_list(:rapid_connect_service, 90)
   orgs = create_list(:organization, 20)
+
+  idps = (1..70).map do
+    create(:identity_provider, organization: orgs.sample)
+  end
+
+  sps = (1..70).map do
+    create(:service_provider, organization: orgs.sample)
+  end
+
+  rapid_services = (1..90).map do
+    create(:rapid_connect_service, organization: orgs.sample)
+  end
 
   [*idps, *sps, *rapid_services, *orgs].each do |object|
     next if rand > 0.9

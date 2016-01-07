@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151202233552) do
+ActiveRecord::Schema.define(version: 20160107032344) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -74,13 +74,15 @@ ActiveRecord::Schema.define(version: 20151202233552) do
   add_index "identity_provider_saml_attributes", ["saml_attribute_id"], name: "fk_rails_94f14b5952", using: :btree
 
   create_table "identity_providers", force: :cascade do |t|
-    t.string   "entity_id",  limit: 255, null: false
-    t.string   "name",       limit: 255, null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "entity_id",       limit: 255, null: false
+    t.string   "name",            limit: 255, null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "organization_id", limit: 4,   null: false
   end
 
   add_index "identity_providers", ["entity_id"], name: "index_identity_providers_on_entity_id", unique: true, using: :btree
+  add_index "identity_providers", ["organization_id"], name: "fk_rails_7a44c5f546", using: :btree
 
   create_table "organizations", force: :cascade do |t|
     t.string   "identifier", limit: 255, null: false
@@ -101,14 +103,16 @@ ActiveRecord::Schema.define(version: 20151202233552) do
   add_index "permissions", ["role_id", "value"], name: "index_permissions_on_role_id_and_value", unique: true, using: :btree
 
   create_table "rapid_connect_services", force: :cascade do |t|
-    t.string   "identifier",   limit: 255, null: false
-    t.string   "name",         limit: 255, null: false
-    t.string   "service_type", limit: 255, null: false
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.string   "identifier",      limit: 255, null: false
+    t.string   "name",            limit: 255, null: false
+    t.string   "service_type",    limit: 255, null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "organization_id", limit: 4,   null: false
   end
 
   add_index "rapid_connect_services", ["identifier"], name: "index_rapid_connect_services_on_identifier", unique: true, using: :btree
+  add_index "rapid_connect_services", ["organization_id"], name: "fk_rails_b509da8b0a", using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.string   "name",        limit: 255, null: false
@@ -141,13 +145,15 @@ ActiveRecord::Schema.define(version: 20151202233552) do
   add_index "service_provider_saml_attributes", ["service_provider_id", "saml_attribute_id"], name: "unique_service_provider_attribute", unique: true, using: :btree
 
   create_table "service_providers", force: :cascade do |t|
-    t.string   "entity_id",  limit: 255, null: false
-    t.string   "name",       limit: 255, null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "entity_id",       limit: 255, null: false
+    t.string   "name",            limit: 255, null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "organization_id", limit: 4,   null: false
   end
 
   add_index "service_providers", ["entity_id"], name: "index_service_providers_on_entity_id", unique: true, using: :btree
+  add_index "service_providers", ["organization_id"], name: "fk_rails_36567d88d4", using: :btree
 
   create_table "subject_roles", force: :cascade do |t|
     t.integer  "subject_id", limit: 4, null: false
@@ -179,9 +185,12 @@ ActiveRecord::Schema.define(version: 20151202233552) do
   add_foreign_key "discovery_service_events", "service_providers"
   add_foreign_key "identity_provider_saml_attributes", "identity_providers"
   add_foreign_key "identity_provider_saml_attributes", "saml_attributes"
+  add_foreign_key "identity_providers", "organizations"
   add_foreign_key "permissions", "roles"
+  add_foreign_key "rapid_connect_services", "organizations"
   add_foreign_key "service_provider_saml_attributes", "saml_attributes"
   add_foreign_key "service_provider_saml_attributes", "service_providers"
+  add_foreign_key "service_providers", "organizations"
   add_foreign_key "subject_roles", "roles"
   add_foreign_key "subject_roles", "subjects"
 end
