@@ -1,22 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe ComplianceReportsController, type: :routing do
-  let(:controller) { 'compliance_reports' }
-
   shared_examples 'get request' do
     subject do
-      { get: controller + path }
+      { get: "compliance_reports#{path}" }
     end
 
-    it { is_expected.to route_to(controller + action) }
+    it { is_expected.to route_to("compliance_reports#{action}") }
   end
 
   shared_examples 'post request' do
     subject do
-      { post: controller + path }
+      { post: "compliance_reports#{path}" }
     end
 
-    it { is_expected.to route_to(controller + action) }
+    it { is_expected.to route_to("compliance_reports#{action}") }
   end
 
   describe 'post & get on /service_provider/compatibility_report' do
