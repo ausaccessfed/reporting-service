@@ -39,4 +39,12 @@ RSpec.describe ComplianceReportsController, type: :routing do
     it_behaves_like 'post request'
     it_behaves_like 'get request'
   end
+
+  describe 'post & get on /attribute/service_providers_report' do
+    let(:action) { '#attribute_service_providers_report' }
+    let(:path) { '/attribute/service_providers_report' }
+
+    it_behaves_like 'post request'
+    it_behaves_like 'get request'
+  end
 end
