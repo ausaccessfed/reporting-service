@@ -3,4 +3,6 @@ class AutomatedReportSubscription < ActiveRecord::Base
   belongs_to :automated_report
 
   valhammer
+
+  validates :identifier, format: /\A[a-zA-Z0-9_-]+\z/
 end
