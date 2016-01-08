@@ -44,7 +44,7 @@ RSpec.describe ComplianceReportsController, type: :controller do
     let!(:activation) { create(:activation, federation_object: provider) }
 
     def run
-      post route_path, entity_id: provider.entity_id
+      post route_path, "#{finder}": provider.send(finder)
     end
 
     it 'renders the page' do
@@ -53,14 +53,14 @@ RSpec.describe ComplianceReportsController, type: :controller do
       expect(response).to render_template("compliance_reports#{template}")
     end
 
-    it 'assigns the identity providers' do
+    it 'assigns the objects' do
       run
-      expect(assigns[:service_providers]).to include(provider)
+      expect(assigns["#{object}s".to_sym]).to include(provider)
     end
 
-    it 'assigns the entity_id' do
+    it 'assigns the name or entity_id' do
       run
-      expect(assigns[:entity_id]).to eq(provider.entity_id)
+      expect(assigns[finder]).to eq(provider.send(finder))
     end
 
     it 'assigns the report data' do
@@ -75,6 +75,7 @@ RSpec.describe ComplianceReportsController, type: :controller do
     let(:object) { :service_provider }
     let(:route_path) { :service_provider_compatibility_report }
     let(:cache_type) { 'service-compatibility' }
+    let(:finder) { :entity_id }
 
     let(:template) do
       '/service_provider_compatibility_report'
