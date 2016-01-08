@@ -34,16 +34,18 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
              timestamp: finish + 1.second
     end
 
-    let(:events_within_range) do
-      create_list :discovery_service_event, 5, :response,
-                  identity_provider: identity_provider,
-                  service_provider: service_provider,
-                  timestamp: Faker::Time.between(start, finish)
-    end
+    10.times do |t|
+      let(:events_within_range) do
+        create :discovery_service_event, :response,
+               identity_provider: identity_provider,
+               service_provider: service_provider,
+               timestamp: t.days.ago
+      end
 
-    let(:none_session_event) do
-      create :discovery_service_event,
-             timestamp: Faker::Time.between(start, finish)
+      let(:none_session_event) do
+        create :discovery_service_event,
+               timestamp: t.days.ago
+      end
     end
 
     let(:sessions) do
