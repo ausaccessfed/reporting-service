@@ -6,4 +6,8 @@ class RapidConnectService < ActiveRecord::Base
   has_many :activations, as: :federation_object
 
   valhammer
+
+  def self.find_by_identifying_attribute(value)
+    find_by(identifier: value)
+  end
 end
