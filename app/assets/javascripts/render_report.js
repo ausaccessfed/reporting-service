@@ -117,7 +117,8 @@ jQuery(function($) {
     'federated-sessions': renderGraph,
     'service-compatibility': renderTable,
     'identity-provider-attributes': renderTable,
-    'provided-attribute': renderTable
+    'provided-attribute': renderTable,
+    'requested-attribute': renderTable,
   };
 
   $('.report-data').each(function() {

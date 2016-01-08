@@ -40,4 +40,12 @@ RSpec.feature 'Compliance Reports' do
     click_button 'Generate'
     expect(page).to have_css('#output table.provided-attribute')
   end
+
+  scenario 'viewing the Single Attribute Report – Service Providers Report' do
+    click_link 'Single Attribute Report – Service Providers'
+
+    select attribute.name, from: 'Attribute'
+    click_button 'Generate'
+    expect(page).to have_css('#output table.requested-attribute')
+  end
 end
