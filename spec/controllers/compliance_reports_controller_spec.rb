@@ -4,67 +4,69 @@ RSpec.describe ComplianceReportsController, type: :controller do
   let(:user) { create(:subject) }
   before { session[:subject_id] = user.try(:id) }
 
-  shared_examples 'get request' do
-    let!(:provider) { create object }
-    let!(:activation) { create(:activation, federation_object: provider) }
+  def run_get
+    get route_path
+  end
+
+  def run_post
+    post route_path, "#{finder}": object.send(finder)
+  end
+
+  shared_examples 'get request for provider object' do
+    let!(:object) { create object_type }
+    let!(:activation) { create(:activation, federation_object: object) }
+    let(:finder) { :entity_id }
 
     context 'with no user' do
       let(:user) { nil }
 
       it 'requires authentication' do
-        run
+        run_get
         expect(response).to redirect_to('/auth/login')
       end
     end
 
-    def run
-      get route_path
-    end
-
     it 'renders the page' do
-      run
+      run_get
       expect(response).to have_http_status(:ok)
       expect(response).to render_template("compliance_reports#{template}")
     end
 
     it 'assigns the objects' do
-      run
-      expect(assigns["#{object}s".to_sym]).to include(provider)
+      run_get
+      expect(assigns["#{object_type}s".to_sym]).to include(object)
     end
 
     it 'excludes inactive objects' do
       activation.update!(deactivated_at: 1.second.ago.utc)
-      run
-      expect(assigns["#{object}s".to_sym]).not_to include(provider)
+      run_get
+      expect(assigns["#{object_type}s".to_sym]).not_to include(object)
     end
   end
 
-  shared_examples 'post request' do
-    let!(:provider) { create object }
-    let!(:activation) { create(:activation, federation_object: provider) }
-
-    def run
-      post route_path, "#{finder}": provider.send(finder)
-    end
+  shared_examples 'post request for provider object' do
+    let!(:object) { create object_type }
+    let!(:activation) { create(:activation, federation_object: object) }
+    let(:finder) { :entity_id }
 
     it 'renders the page' do
-      run
+      run_post
       expect(response).to have_http_status(:ok)
       expect(response).to render_template("compliance_reports#{template}")
     end
 
     it 'assigns the objects' do
-      run
-      expect(assigns["#{object}s".to_sym]).to include(provider)
+      run_post
+      expect(assigns["#{object_type}s".to_sym]).to include(object)
     end
 
-    it 'assigns the name or entity_id' do
-      run
-      expect(assigns[finder]).to eq(provider.send(finder))
+    it 'assigns the attribute entity_id' do
+      run_post
+      expect(assigns[finder]).to eq(object.send(finder))
     end
 
     it 'assigns the report data' do
-      run
+      run_post
       expect(assigns[:data]).to be_a(String)
       data = JSON.parse(assigns[:data], symbolize_names: true)
       expect(data[:type]).to eq(cache_type)
@@ -72,27 +74,76 @@ RSpec.describe ComplianceReportsController, type: :controller do
   end
 
   describe 'get & post on /service_provider/compatibility_report' do
-    let(:object) { :service_provider }
+    let(:object_type) { :service_provider }
     let(:route_path) { :service_provider_compatibility_report }
     let(:cache_type) { 'service-compatibility' }
-    let(:finder) { :entity_id }
+    let(:template) { '/service_provider_compatibility_report' }
 
-    let(:template) do
-      '/service_provider_compatibility_report'
-    end
-
-    it_behaves_like 'post request'
-    it_behaves_like 'get request'
+    it_behaves_like 'post request for provider object'
+    it_behaves_like 'get request for provider object'
   end
 
   describe 'get on /identity_provider/attributes_report' do
-    let(:object) { :identity_provider }
+    let(:object_type) { :identity_provider }
     let(:route_path) { :identity_provider_attributes_report }
+    let(:template) { '/identity_provider_attributes_report' }
 
-    let(:template) do
-      '/identity_provider_attributes_report'
+    it_behaves_like 'get request for provider object'
+  end
+
+  describe 'attribute identity providers' do
+    let!(:object) { create :saml_attribute }
+    let(:route_path) { :attribute_identity_providers_report }
+    let(:cache_type) { 'provided-attribute' }
+    let(:template) { '/attribute_identity_providers_report' }
+    let(:finder) { :name }
+    let(:saml_attributes) { SAMLAttribute.all }
+
+    context 'get request for attribute object' do
+      context 'with no user' do
+        let(:user) { nil }
+
+        it 'requires authentication' do
+          run_get
+          expect(response).to redirect_to('/auth/login')
+        end
+      end
+
+      it 'renders the page' do
+        run_get
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template("compliance_reports#{template}")
+      end
+
+      it 'assigns the objects' do
+        run_get
+        expect(assigns[:saml_attributes]).to match_array(saml_attributes)
+      end
     end
 
-    it_behaves_like 'get request'
+    context 'post request for attribute object' do
+      it 'renders the page' do
+        run_post
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template("compliance_reports#{template}")
+      end
+
+      it 'assigns the objects' do
+        run_post
+        expect(assigns[:saml_attributes]).to include(object)
+      end
+
+      it 'assigns the attribute name' do
+        run_post
+        expect(assigns[finder]).to eq(object.send(finder))
+      end
+
+      it 'assigns the report data' do
+        run_post
+        expect(assigns[:data]).to be_a(String)
+        data = JSON.parse(assigns[:data], symbolize_names: true)
+        expect(data[:type]).to eq(cache_type)
+      end
+    end
   end
 end
