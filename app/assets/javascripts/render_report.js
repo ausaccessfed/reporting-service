@@ -116,7 +116,8 @@ jQuery(function($) {
     'federation-growth': renderGraph,
     'federated-sessions': renderGraph,
     'service-compatibility': renderTable,
-    'identity-provider-attributes': renderTable
+    'identity-provider-attributes': renderTable,
+    'provided-attribute': renderTable
   };
 
   $('.report-data').each(function() {
