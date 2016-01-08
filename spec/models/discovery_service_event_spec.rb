@@ -20,14 +20,18 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
     let(:identity_provider) { create :identity_provider }
     let(:service_provider) { create :service_provider }
 
-    %w(before_start after_finish).each do |event|
-      let("event_#{event}".to_sym) do
-        create :discovery_service_event, :response,
-               identity_provider: identity_provider,
-               service_provider: service_provider,
-               timestamp:
-               event == :before_start ? start - 1.second : finish + 1.second
-      end
+    let(:event_before_start) do
+      create :discovery_service_event, :response,
+             identity_provider: identity_provider,
+             service_provider: service_provider,
+             timestamp: start - 1.second
+    end
+
+    let(:event_after_finish) do
+      create :discovery_service_event, :response,
+             identity_provider: identity_provider,
+             service_provider: service_provider,
+             timestamp: finish + 1.second
     end
 
     let(:events_within_range) do
