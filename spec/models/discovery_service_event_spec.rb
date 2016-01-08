@@ -15,7 +15,7 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
 
   context 'sessions' do
     let(:start) { 10.days.ago.beginning_of_day }
-    let(:finish) { 1.days.ago.end_of_day }
+    let(:finish) { 1.days.ago.beginning_of_day }
 
     let(:identity_provider) { create :identity_provider }
     let(:service_provider) { create :service_provider }
@@ -26,7 +26,7 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
                identity_provider: identity_provider,
                service_provider: service_provider,
                timestamp:
-               event == :before_start ? start - 1.day : finish + 1.day
+               event == :before_start ? start - 1.second : finish + 1.second
       end
     end
 
