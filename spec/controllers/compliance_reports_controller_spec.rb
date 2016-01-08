@@ -15,7 +15,6 @@ RSpec.describe ComplianceReportsController, type: :controller do
   shared_examples 'get request for provider object' do
     let!(:object) { create object_type }
     let!(:activation) { create(:activation, federation_object: object) }
-    let(:finder) { :entity_id }
 
     context 'with no user' do
       let(:user) { nil }
@@ -91,59 +90,73 @@ RSpec.describe ComplianceReportsController, type: :controller do
     it_behaves_like 'get request for provider object'
   end
 
-  describe 'attribute identity providers' do
+  shared_examples 'post request for attribute object' do
     let!(:object) { create :saml_attribute }
+    let(:finder) { :name }
+
+    it 'renders the page' do
+      run_post
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template("compliance_reports#{template}")
+    end
+
+    it 'assigns the objects' do
+      run_post
+      expect(assigns[:saml_attributes]).to include(object)
+    end
+
+    it 'assigns the attribute name' do
+      run_post
+      expect(assigns[finder]).to eq(object.send(finder))
+    end
+
+    it 'assigns the report data' do
+      run_post
+      expect(assigns[:data]).to be_a(String)
+      data = JSON.parse(assigns[:data], symbolize_names: true)
+      expect(data[:type]).to eq(cache_type)
+    end
+  end
+
+  shared_examples 'get request for attribute object' do
+    let!(:object) { create :saml_attribute }
+    let(:saml_attributes) { SAMLAttribute.all }
+    context 'with no user' do
+      let(:user) { nil }
+
+      it 'requires authentication' do
+        run_get
+        expect(response).to redirect_to('/auth/login')
+      end
+    end
+
+    it 'renders the page' do
+      run_get
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template("compliance_reports#{template}")
+    end
+
+    it 'assigns the objects' do
+      run_get
+      expect(assigns[:saml_attributes]).to match_array(saml_attributes)
+    end
+  end
+
+  describe 'get & post on /attribute/identity_providers_report' do
     let(:route_path) { :attribute_identity_providers_report }
     let(:cache_type) { 'provided-attribute' }
     let(:template) { '/attribute_identity_providers_report' }
-    let(:finder) { :name }
-    let(:saml_attributes) { SAMLAttribute.all }
 
-    context 'get request for attribute object' do
-      context 'with no user' do
-        let(:user) { nil }
+    it_behaves_like 'post request for attribute object'
+    it_behaves_like 'get request for attribute object'
+  end
 
-        it 'requires authentication' do
-          run_get
-          expect(response).to redirect_to('/auth/login')
-        end
-      end
+  describe 'get & post on /attribute/service_providers_report' do
+    let(:route_path) { :attribute_service_providers_report }
+    let(:cache_type) { 'requested-attribute' }
+    let(:template) { '/attribute_service_providers_report' }
 
-      it 'renders the page' do
-        run_get
-        expect(response).to have_http_status(:ok)
-        expect(response).to render_template("compliance_reports#{template}")
-      end
-
-      it 'assigns the objects' do
-        run_get
-        expect(assigns[:saml_attributes]).to match_array(saml_attributes)
-      end
-    end
-
-    context 'post request for attribute object' do
-      it 'renders the page' do
-        run_post
-        expect(response).to have_http_status(:ok)
-        expect(response).to render_template("compliance_reports#{template}")
-      end
-
-      it 'assigns the objects' do
-        run_post
-        expect(assigns[:saml_attributes]).to include(object)
-      end
-
-      it 'assigns the attribute name' do
-        run_post
-        expect(assigns[finder]).to eq(object.send(finder))
-      end
-
-      it 'assigns the report data' do
-        run_post
-        expect(assigns[:data]).to be_a(String)
-        data = JSON.parse(assigns[:data], symbolize_names: true)
-        expect(data[:type]).to eq(cache_type)
-      end
-    end
+    it_behaves_like 'post request for attribute object'
+    it_behaves_like 'get request for attribute object'
   end
 end

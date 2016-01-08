@@ -27,4 +27,15 @@ class ComplianceReportsController < ApplicationController
     report = ProvidedAttributeReport.new(@name)
     @data = JSON.generate(report.generate)
   end
+
+  def attribute_service_providers_report
+    public_action
+    @name = params[:name]
+    @saml_attributes = SAMLAttribute.all
+
+    return unless @name
+
+    report = RequestedAttributeReport.new(@name)
+    @data = JSON.generate(report.generate)
+  end
 end
