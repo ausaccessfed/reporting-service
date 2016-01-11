@@ -6,6 +6,7 @@ RSpec.feature 'Compliance Reports' do
   given(:user) { create(:subject) }
   given!(:sp) { create(:service_provider) }
   given!(:activation) { create(:activation, federation_object: sp) }
+  given!(:attribute) { create(:saml_attribute) }
 
   background do
     attrs = create(:aaf_attributes, :from_subject, subject: user)
@@ -30,5 +31,21 @@ RSpec.feature 'Compliance Reports' do
     click_link 'Identity Provider Attributes'
 
     expect(page).to have_css('#output table.identity-provider-attributes')
+  end
+
+  scenario 'viewing the Single Attribute Report – Identity Providers Report' do
+    click_link 'Single Attribute Report – Identity Providers'
+
+    select attribute.name, from: 'Attribute'
+    click_button 'Generate'
+    expect(page).to have_css('#output table.provided-attribute')
+  end
+
+  scenario 'viewing the Single Attribute Report – Service Providers Report' do
+    click_link 'Single Attribute Report – Service Providers'
+
+    select attribute.name, from: 'Attribute'
+    click_button 'Generate'
+    expect(page).to have_css('#output table.requested-attribute')
   end
 end
