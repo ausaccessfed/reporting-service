@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160108034614) do
+ActiveRecord::Schema.define(version: 20160111005859) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -43,6 +43,13 @@ ActiveRecord::Schema.define(version: 20160108034614) do
   end
 
   add_index "api_subjects", ["x509_cn"], name: "index_api_subjects_on_x509_cn", unique: true, using: :btree
+
+  create_table "automated_report_instances", force: :cascade do |t|
+    t.integer  "automated_report_id", limit: 4, null: false
+    t.datetime "range_start",                   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "automated_report_subscriptions", force: :cascade do |t|
     t.integer  "automated_report_id", limit: 4,   null: false
