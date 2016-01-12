@@ -15,31 +15,37 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
 
   context 'sessions' do
     let(:start) { 10.days.ago.beginning_of_day }
-    let(:finish) { 1.days.ago.end_of_day }
+    let(:finish) { 1.days.ago.beginning_of_day }
 
     let(:identity_provider) { create :identity_provider }
     let(:service_provider) { create :service_provider }
 
-    %w(before_start after_finish).each do |event|
-      let("event_#{event}".to_sym) do
+    let(:event_before_start) do
+      create :discovery_service_event, :response,
+             identity_provider: identity_provider,
+             service_provider: service_provider,
+             timestamp: start - 1.second
+    end
+
+    let(:event_after_finish) do
+      create :discovery_service_event, :response,
+             identity_provider: identity_provider,
+             service_provider: service_provider,
+             timestamp: finish + 1.second
+    end
+
+    10.times do |t|
+      let(:events_within_range) do
         create :discovery_service_event, :response,
                identity_provider: identity_provider,
                service_provider: service_provider,
-               timestamp:
-               event == :before_start ? start - 1.day : finish + 1.day
+               timestamp: t.days.ago
       end
-    end
 
-    let(:events_within_range) do
-      create_list :discovery_service_event, 5, :response,
-                  identity_provider: identity_provider,
-                  service_provider: service_provider,
-                  timestamp: Faker::Time.between(start, finish)
-    end
-
-    let(:none_session_event) do
-      create :discovery_service_event,
-             timestamp: Faker::Time.between(start, finish)
+      let(:none_session_event) do
+        create :discovery_service_event,
+               timestamp: t.days.ago
+      end
     end
 
     let(:sessions) do
