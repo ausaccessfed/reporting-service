@@ -27,7 +27,7 @@ RSpec.describe AutomatedReport, type: :model do
     it 'requires no target for targetless reports' do
       targetless_reports = %w(
         DailyDemandReport FederatedSessionsReport FederationGrowthReport
-        SubscriberRegistrationReport
+        SubscriberRegistrationReport IdentityProviderAttributesReport
       )
       targetless_reports.each do |klass|
         subject.report_class = klass
@@ -42,7 +42,6 @@ RSpec.describe AutomatedReport, type: :model do
       idp_reports = %w(
         IdentityProviderSessionsReport IdentityProviderDailyDemandReport
         IdentityProviderDestinationServicesReport
-        IdentityProviderAttributesReport
       )
 
       idp_reports.each do |klass|

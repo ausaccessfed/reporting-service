@@ -18,7 +18,7 @@ class AutomatedReport < ActiveRecord::Base
     'FederatedSessionsReport' => nil,
     'FederationGrowthReport' => nil,
     'SubscriberRegistrationReport' => nil,
-    'IdentityProviderAttributesReport' => IdentityProvider,
+    'IdentityProviderAttributesReport' => nil,
     'IdentityProviderDailyDemandReport' => IdentityProvider,
     'IdentityProviderDestinationServicesReport' => IdentityProvider,
     'IdentityProviderSessionsReport' => IdentityProvider,
