@@ -3,7 +3,9 @@ class CreateAutomatedReportInstances < ActiveRecord::Migration
     create_table :automated_report_instances do |t|
       t.references :automated_report, null: false
       t.timestamp :range_start, null: false
-      t.timestamps
+      t.timestamps null: false
+
+      t.foreign_key :automated_reports
     end
   end
 end
