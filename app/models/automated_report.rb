@@ -6,6 +6,11 @@ class AutomatedReport < ActiveRecord::Base
   validate :target_must_be_valid_for_report_type,
            :report_class_must_be_known
 
+  def interval
+    value = super
+    value && ActiveSupport::StringInquirer.new(value)
+  end
+
   private
 
   TARGET_CLASSES = {
