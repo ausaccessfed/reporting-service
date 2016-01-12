@@ -93,11 +93,10 @@ RSpec.describe AutomatedReportInstance, type: :model do
       let(:report_class) { 'FederatedSessionsReport' }
     end
 
-    # TODO: This report needs a target, but the model doesn't permit the valid
-    #       targets.
-    # it_behaves_like 'an instantiated report', 'subscriber-registration' do
-    #   let(:report_class) { 'SubscriberRegistrationReport' }
-    # end
+    it_behaves_like 'an instantiated report', 'subscriber-registrations' do
+      let(:target) { 'organizations' }
+      let(:report_class) { 'SubscriberRegistrationReport' }
+    end
 
     it_behaves_like 'an instantiated report', 'identity-provider-attributes' do
       let(:report_class) { 'IdentityProviderAttributesReport' }
