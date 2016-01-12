@@ -17,8 +17,8 @@ class AutomatedReport < ActiveRecord::Base
     'DailyDemandReport' => nil,
     'FederatedSessionsReport' => nil,
     'FederationGrowthReport' => nil,
-    'SubscriberRegistrationReport' => nil,
     'IdentityProviderAttributesReport' => nil,
+    'SubscriberRegistrationReport' => :object_type,
     'IdentityProviderDailyDemandReport' => IdentityProvider,
     'IdentityProviderDestinationServicesReport' => IdentityProvider,
     'IdentityProviderSessionsReport' => IdentityProvider,
@@ -42,6 +42,7 @@ class AutomatedReport < ActiveRecord::Base
 
     klass = TARGET_CLASSES[report_class]
     return target_must_be_nil if klass.nil?
+    return target_must_be_object_type_identifier if klass == :object_type
 
     return if klass.find_by_identifying_attribute(target)
     errors.add(:target, 'must be appropriate for the report type')
@@ -50,5 +51,14 @@ class AutomatedReport < ActiveRecord::Base
   def target_must_be_nil
     return if target.nil?
     errors.add(:target, 'must be omitted for the report type')
+  end
+
+  OBJECT_TYPE_IDENTIFIERS =
+    %w(identity_providers service_providers organizations
+       rapid_connect_services services)
+
+  def target_must_be_object_type_identifier
+    return if OBJECT_TYPE_IDENTIFIERS.include?(target)
+    errors.add(:target, 'must be an object type identifier')
   end
 end

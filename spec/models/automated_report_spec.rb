@@ -27,7 +27,7 @@ RSpec.describe AutomatedReport, type: :model do
     it 'requires no target for targetless reports' do
       targetless_reports = %w(
         DailyDemandReport FederatedSessionsReport FederationGrowthReport
-        SubscriberRegistrationReport IdentityProviderAttributesReport
+        IdentityProviderAttributesReport
       )
       targetless_reports.each do |klass|
         subject.report_class = klass
@@ -36,6 +36,16 @@ RSpec.describe AutomatedReport, type: :model do
         expect(subject).not_to allow_value(sp.entity_id).for(:target)
         expect(subject).not_to allow_value(attribute.name).for(:target)
       end
+    end
+
+    it 'requires an object type identifier for object reports' do
+      subject.report_class = 'SubscriberRegistrationReport'
+      types = %w(identity_providers service_providers organizations
+                 rapid_connect_services services)
+      types.each do |type|
+        expect(subject).to allow_value(type).for(:target)
+      end
+      expect(subject).not_to allow_value(:object).for(:target)
     end
 
     it 'requires an IdP entity_id for IdP reports' do
