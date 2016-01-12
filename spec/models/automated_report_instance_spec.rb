@@ -71,6 +71,15 @@ RSpec.describe AutomatedReportInstance, type: :model do
               expect(report.generate[:range]).to eq(expected_range)
             end
           end
+
+          context 'for a yearly report' do
+            let(:interval) { 'yearly' }
+            let(:range_start) { 12.months.ago.utc.beginning_of_month }
+
+            it 'sets the correct range' do
+              expect(report.generate[:range]).to eq(expected_range)
+            end
+          end
         else
           it 'has no range' do
             expect(report.generate).not_to have_key(:range)
