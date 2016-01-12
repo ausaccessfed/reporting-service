@@ -18,4 +18,18 @@ RSpec.describe Organization, type: :model do
 
     it_behaves_like 'a federation object'
   end
+
+  describe '::find_by_identifying_attribute' do
+    let!(:org) { create(:organization) }
+
+    it 'finds by entity id' do
+      expect(described_class.find_by_identifying_attribute(org.identifier))
+        .to eq(org)
+    end
+
+    it 'returns nil when not found' do
+      expect(described_class.find_by_identifying_attribute('urn:nonexistent'))
+        .to be_nil
+    end
+  end
 end

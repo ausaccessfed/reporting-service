@@ -10,7 +10,7 @@ class IdentityProviderAttributesReport < TabularReport
   private
 
   def rows
-    sorted_idps = activated_identitiy_providers.sort_by do |idp|
+    sorted_idps = active_identity_providers.sort_by do |idp|
       idp.name.downcase
     end
 
@@ -23,7 +23,7 @@ class IdentityProviderAttributesReport < TabularReport
     end
   end
 
-  def activated_identitiy_providers
+  def active_identity_providers
     IdentityProvider.active.preload(:saml_attributes)
   end
 end

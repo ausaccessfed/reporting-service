@@ -4,4 +4,8 @@ class SAMLAttribute < ActiveRecord::Base
            through: :service_provider_saml_attributes
 
   valhammer
+
+  def self.find_by_identifying_attribute(value)
+    find_by(name: value)
+  end
 end

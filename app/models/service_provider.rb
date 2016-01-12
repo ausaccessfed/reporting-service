@@ -11,4 +11,8 @@ class ServiceProvider < ActiveRecord::Base
   has_many :discovery_service_events
 
   valhammer
+
+  def self.find_by_identifying_attribute(value)
+    find_by(entity_id: value)
+  end
 end
