@@ -68,7 +68,8 @@ jQuery(function($) {
       'random-time-series': charts.area,
       'random-time-series-line': charts.line,
       'federation-growth': charts.area,
-      'federated-sessions': charts.area
+      'federated-sessions': charts.area,
+      'daily-demand': charts.area
     };
 
     kinds[report.type]();
@@ -115,10 +116,11 @@ jQuery(function($) {
     'random-tabular-data': renderTable,
     'federation-growth': renderGraph,
     'federated-sessions': renderGraph,
+    'daily-demand': renderGraph,
     'service-compatibility': renderTable,
     'identity-provider-attributes': renderTable,
     'provided-attribute': renderTable,
-    'requested-attribute': renderTable,
+    'requested-attribute': renderTable
   };
 
   $('.report-data').each(function() {

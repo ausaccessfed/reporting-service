@@ -140,6 +140,12 @@ svg.report-output {
       fill: $graph-color-vibrant;
     }
   }
+
+  &.daily-demand {
+    .sessions {
+      fill: $graph-color-primary;
+    }
+  }
 }
 
 table.report-output {
