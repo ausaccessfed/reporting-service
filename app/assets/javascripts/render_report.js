@@ -17,20 +17,24 @@ jQuery(function($) {
       .attr('width', sizing.container.width);
 
     var hourlyTimeFormat = d3.time.format('%H:%M');
-    var dateTimeFormat = d3.time.format('%Y-%m-%d');
+    var dateFormat = d3.time.format('%Y-%m-%d');
+    var dateTimeFormat = d3.time.format('%Y-%m-%dT%H:%M:%SZ');
+    var report_range = report.range;
+    var daily_range = { start: "00:00", end: "23:59" };
 
     var range_specs = {
-      'random-time-series': ['report_range', dateTimeFormat],
-      'random-time-series-line': ['report_range', dateTimeFormat],
-      'federation-growth': ['report_range', dateTimeFormat],
-      'federated-sessions': ['report_range', hourlyTimeFormat],
-      'daily-demand': ['daily_range', hourlyTimeFormat]
+      'random-time-series': [report_range, dateTimeFormat, dateFormat],
+      'random-time-series-line': [report_range, dateTimeFormat, dateFormat],
+      'federation-growth': [report_range, dateTimeFormat, dateFormat],
+      'federated-sessions': [report_range, dateTimeFormat, hourlyTimeFormat],
+      'daily-demand': [daily_range, hourlyTimeFormat, hourlyTimeFormat]
     };
 
-    var scale_range = reporting.range[range_specs[report.type][0]](report);
-    var hoverbox_timeformat = range_specs[report.type][1];
+    var range_args = range_specs[report.type].slice(0, 2);
+    var scale_range = reporting.range.apply(null, range_args);
+    var hoverbox_timeformat = range_specs[report.type][2];
 
-    var range = reporting.range['report_range'](report);
+    var range = reporting.range(report_range, dateTimeFormat);
     var scale = reporting.scale(report, scale_range, sizing);
     var translate = reporting.translate;
     var graph = sizing.graph;
