@@ -9,7 +9,7 @@ class DailyDemandReport < TimeSeriesReport
   def initialize(start, finish)
     title = 'Daily Demand'
 
-    super(title)
+    super(title, start: start, end: finish)
     @start = start.beginning_of_day
     @finish = finish.end_of_day
   end

@@ -41,7 +41,7 @@ RSpec.describe DailyDemandReport do
     end
 
     it 'should not include range' do
-      expect(report).not_to include(:range)
+      expect(report).to include(:range)
     end
 
     it 'sessions are response types generated within given range' do

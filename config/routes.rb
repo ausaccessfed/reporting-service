@@ -12,6 +12,9 @@ Rails.application.routes.draw do
 
     get 'federated_sessions' => 'federation_reports#federated_sessions',
         as: :public_federated_sessions_report
+
+    get 'daily_demand' => 'federation_reports#daily_demand',
+        as: :public_daily_demand_report
   end
 
   scope '/compliance_reports' do

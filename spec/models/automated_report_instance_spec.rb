@@ -93,7 +93,8 @@ RSpec.describe AutomatedReportInstance, type: :model do
       let(:report_class) { 'FederationGrowthReport' }
     end
 
-    it_behaves_like 'an instantiated report', 'daily-demand' do
+    it_behaves_like 'an instantiated report', 'daily-demand',
+                    range: true do
       let(:report_class) { 'DailyDemandReport' }
     end
 
