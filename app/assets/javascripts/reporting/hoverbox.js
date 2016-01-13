@@ -1,6 +1,6 @@
-reporting.hoverbox = function(report, scale, range, sizing) {
+reporting.hoverbox = function(report, scale, range, sizing, timeformat) {
   return function(selection) {
-    var timeOnly = d3.time.format('%H:%M');
+    var timeOnly = timeformat;
     var translate = reporting.translate;
     var graph = sizing.graph;
     var margin = graph.margin;
