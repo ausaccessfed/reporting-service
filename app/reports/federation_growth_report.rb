@@ -39,11 +39,11 @@ class FederationGrowthReport < TimeSeriesReport
   def data_report(time, activations)
     objects = activations.select do |o|
       o.activated_at <= @start + time &&
-      (o.deactivated_at.nil? || o.deactivated_at > @start + time)
+        (o.deactivated_at.nil? || o.deactivated_at > @start + time)
     end
 
     data = objects.group_by(&:federation_object_type)
-           .transform_values { |a| a.uniq(&:federation_object_id) }
+                  .transform_values { |a| a.uniq(&:federation_object_id) }
 
     merged_report data
   end

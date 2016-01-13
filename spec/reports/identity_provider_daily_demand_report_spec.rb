@@ -24,7 +24,7 @@ RSpec.describe IdentityProviderDailyDemandReport do
   let(:data) { report[:data] }
 
   def expect_in_range
-    (0..(86_340)).step(300).each_with_index do |t, index|
+    (0..86_340).step(300).each_with_index do |t, index|
       expect(data[:sessions][index]).to match_array([t, value])
     end
   end

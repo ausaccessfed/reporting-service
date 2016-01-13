@@ -28,7 +28,7 @@ class AutomatedReport < ActiveRecord::Base
     'ServiceProviderDailyDemandReport' => ServiceProvider,
     'ServiceProviderSessionsReport' => ServiceProvider,
     'ServiceProviderSourceIdentityProvidersReport' => ServiceProvider
-  }
+  }.freeze
 
   private_constant :TARGET_CLASSES
 
@@ -55,7 +55,7 @@ class AutomatedReport < ActiveRecord::Base
 
   OBJECT_TYPE_IDENTIFIERS =
     %w(identity_providers service_providers organizations
-       rapid_connect_services services)
+       rapid_connect_services services).freeze
 
   def target_must_be_object_type_identifier
     return if OBJECT_TYPE_IDENTIFIERS.include?(target)

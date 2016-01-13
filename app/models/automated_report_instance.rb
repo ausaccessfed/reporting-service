@@ -44,7 +44,7 @@ class AutomatedReportInstance < ActiveRecord::Base
     IdentityProviderSessionsReport
     ServiceProviderDailyDemandReport ServiceProviderSessionsReport
     ServiceProviderSourceIdentityProvidersReport
-  )
+  ).freeze
 
   def needs_range?
     REPORTS_THAT_NEED_RANGE.include?(automated_report.report_class)
@@ -53,7 +53,7 @@ class AutomatedReportInstance < ActiveRecord::Base
   REPORTS_THAT_NEED_STEP_WIDTH = %w(
     FederatedSessionsReport IdentityProviderSessionsReport
     ServiceProviderSessionsReport
-  )
+  ).freeze
 
   def needs_step_width?
     REPORTS_THAT_NEED_STEP_WIDTH.include?(automated_report.report_class)

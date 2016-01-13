@@ -37,7 +37,7 @@ module API
 
       x509_dn_parsed = OpenSSL::X509::Name.parse(x509_dn)
       x509_dn_hash = Hash[x509_dn_parsed.to_a
-                          .map { |components| components[0..1] }]
+                     .map { |components| components[0..1] }]
 
       x509_dn_hash['CN'] || fail(Unauthorized, 'Subject CN invalid')
 
