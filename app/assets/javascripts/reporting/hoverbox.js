@@ -35,7 +35,7 @@ reporting.hoverbox = function(report, scale, range, sizing, timeformat) {
         var data = report.data[k];
         var i = bisectDate(data, x0, 1);
         var d0 = data[i - 1];
-        var d1 = data[i];
+        var d1 = i < data.length ? data[i] : d0;
         var d = x0 - d0[0] > d1[0] - x0 ? d1 : d0;
 
         date = Math.abs(x0 - d[0]) > Math.abs(x0 - date) ? date : d[0];
