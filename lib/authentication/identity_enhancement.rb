@@ -1,5 +1,3 @@
-require 'pry'
-
 module Authentication
   module IdentityEnhancement
     def update_roles(subject)
