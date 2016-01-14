@@ -60,7 +60,7 @@ RSpec.describe ServiceProviderDailyDemandReport do
                   timestamp: 1.day.ago.beginning_of_day
     end
 
-    let(:value) { 0.0 }
+    let(:value) { 0.00 }
 
     it 'should not count any sessions' do
       expect_in_range
@@ -93,7 +93,7 @@ RSpec.describe ServiceProviderDailyDemandReport do
     end
 
     it 'average at point 0 should be 0.5 for 5 sessions in 10 days' do
-      expect(data[:sessions]).to include([0, 0.5])
+      expect(data[:sessions]).to include([0, 0.45])
     end
 
     it 'average should be 0.0 when no sessions available at point 300' do
@@ -101,11 +101,11 @@ RSpec.describe ServiceProviderDailyDemandReport do
     end
 
     it 'average at point 900 should be 0.5 for 5 sessions in 10 days' do
-      expect(data[:sessions]).to include([900, 0.5])
+      expect(data[:sessions]).to include([900, 0.45])
     end
 
     it 'should not include sessions for irrelevant SP (average must be 0.5)' do
-      expect(data[:sessions]).to include([86_340, 0.5])
+      expect(data[:sessions]).to include([86_340, 0.45])
     end
   end
 end
