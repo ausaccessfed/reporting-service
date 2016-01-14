@@ -16,19 +16,7 @@ jQuery(function($) {
     svg.attr('height', sizing.container.height)
       .attr('width', sizing.container.width);
 
-    var hourlyTimeFormat = d3.time.format('%H:%M');
-    var dateFormat = d3.time.format('%Y-%m-%d');
-    var dateTimeFormat = d3.time.format('%Y-%m-%dT%H:%M:%SZ');
-    var report_range = report.range;
-    var daily_range = { start: "00:00", end: "23:59" };
-
-    var range_specs = {
-      'random-time-series': [report_range, dateTimeFormat, dateFormat],
-      'random-time-series-line': [report_range, dateTimeFormat, dateFormat],
-      'federation-growth': [report_range, dateTimeFormat, dateFormat],
-      'federated-sessions': [report_range, dateTimeFormat, hourlyTimeFormat],
-      'daily-demand': [daily_range, hourlyTimeFormat, hourlyTimeFormat]
-    };
+    timeRanegeConfig(report);
 
     var range_args = range_specs[report.type].slice(0, 2);
     var scale_range = reporting.range.apply(null, range_args);
@@ -127,6 +115,22 @@ jQuery(function($) {
       appendRow(tfoot, row, 'td');
     });
   };
+
+  function timeRanegeConfig (report) {
+    this.hourlyTimeFormat = d3.time.format('%H:%M'),
+    this.dateFormat = d3.time.format('%Y-%m-%d'),
+    this.dateTimeFormat = d3.time.format('%Y-%m-%dT%H:%M:%SZ'),
+    this.report_range = report.range,
+    this.daily_range = { start: "00:00", end: "23:59" }
+
+    this.range_specs = {
+      'random-time-series': [report_range, dateTimeFormat, dateFormat],
+      'random-time-series-line': [report_range, dateTimeFormat, dateFormat],
+      'federation-growth': [report_range, dateTimeFormat, dateFormat],
+      'federated-sessions': [report_range, dateTimeFormat, hourlyTimeFormat],
+      'daily-demand': [daily_range, hourlyTimeFormat, hourlyTimeFormat]
+    };
+  }
 
   var renderers = {
     'random-time-series': renderGraph,
