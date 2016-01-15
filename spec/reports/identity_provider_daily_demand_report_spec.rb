@@ -24,7 +24,7 @@ RSpec.describe IdentityProviderDailyDemandReport do
   let(:data) { report[:data] }
 
   def expect_in_range
-    (0..(86_340)).step(60).each_with_index do |t, index|
+    (0..(86_340)).step(300).each_with_index do |t, index|
       expect(data[:sessions][index]).to match_array([t, value])
     end
   end
@@ -105,7 +105,7 @@ RSpec.describe IdentityProviderDailyDemandReport do
     end
 
     it 'should not include sessions for irrelevant IdP (average must be 0.5)' do
-      expect(data[:sessions]).to include([86_340, 0.45])
+      expect(data[:sessions]).to include([86_100, 0.45])
     end
   end
 end

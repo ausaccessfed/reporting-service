@@ -21,10 +21,10 @@ module TimeSeriesSharedMethods
   def daily_demand_output(default_sessions = sessions)
     report = sessions_count(default_sessions) do |session|
       offset = (session - session.beginning_of_day).to_i
-      offset - (offset % 1.minute)
+      offset - (offset % 5.minute)
     end
 
-    output_data 0..86_340, report, 1.minute, days_count, 2
+    output_data 0..86_340, report, 5.minute, days_count, 2
   end
 
   def range
