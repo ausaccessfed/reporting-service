@@ -8,5 +8,10 @@ Rails.application.configure do
       cert: 'spec/api.crt',
       key: 'spec/api.key'
     }
+
+    config.reporting_service.federationregistry = {
+      host: 'manager.example.edu',
+      secret: 'abcdef'
+    }
   end
 end
