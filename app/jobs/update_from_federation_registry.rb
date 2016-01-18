@@ -1,17 +1,26 @@
 class UpdateFromFederationRegistry
   def perform
-    touched = fr_objects(:organizations, 'organizations').flat_map do |org_data|
+    touched = sync_attributes + sync_organizations
+    clean(touched)
+  end
+
+  private
+
+  def sync_attributes
+    fr_objects(:attributes, 'attributes').map do |attr_data|
+      sync_attribute(attr_data)
+    end
+  end
+
+  def sync_organizations
+    fr_objects(:organizations, 'organizations').flat_map do |org_data|
       org = sync_organization(org_data)
       idps = sync_identity_providers(org)
       sps = sync_service_providers(org)
 
       [org, *idps, *sps].compact
     end
-
-    clean(touched)
   end
-
-  private
 
   def sync_identity_providers(org)
     fr_objects(:identity_providers, 'identityproviders').map do |idp_data|
@@ -63,6 +72,14 @@ class UpdateFromFederationRegistry
     Rails.application.config.reporting_service
   end
 
+  def sync_attribute(attr_data)
+    attribute = SAMLAttribute.find_or_initialize_by(name: attr_data[:name])
+    attribute.update!(core: (attr_data[:category][:name] == 'Core'),
+                      description: attr_data[:description])
+
+    attribute
+  end
+
   def sync_organization(org_data)
     identifier = org_identifier(org_data[:id])
     sync_object(Organization, org_data, { identifier: identifier },
@@ -96,7 +113,8 @@ class UpdateFromFederationRegistry
 
   def clean(touched_objs)
     grouped_objs = touched_objs.group_by(&:class)
-    [Organization, IdentityProvider, ServiceProvider].each do |klass|
+    klasses = [Organization, IdentityProvider, ServiceProvider, SAMLAttribute]
+    klasses.each do |klass|
       objs = grouped_objs.fetch(klass, [])
       klass.where.not(id: objs.map(&:id)).destroy_all
     end
