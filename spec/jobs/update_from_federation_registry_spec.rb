@@ -5,7 +5,9 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
 
   let(:default_org_data) do
     {
-      id: 1, display_name: Faker::Company.name, functioning: true,
+      id: org_fr_id,
+      display_name: Faker::Company.name,
+      functioning: true,
       created_at: 2.years.ago.utc.xmlschema,
       updated_at: 1.year.ago.utc.xmlschema,
       identity_providers: [],
@@ -21,9 +23,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         id: default_org_data[:id]
       },
       saml: {
-        entity: {
-          entity_id: Faker::Internet.url
-        }
+        entity: { entity_id: idp_entity_id }
       },
       functioning: true,
       created_at: 2.years.ago.utc.xmlschema,
@@ -39,7 +39,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         id: default_org_data[:id]
       },
       saml: {
-        entity: { entity_id: Faker::Internet.url }
+        entity: { entity_id: sp_entity_id }
       },
       functioning: true,
       created_at: 2.years.ago.utc.xmlschema,
@@ -47,6 +47,9 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
     }
   end
 
+  let(:org_fr_id) { rand(10000) }
+  let(:sp_entity_id) { Faker::Internet.url }
+  let(:idp_entity_id) { Faker::Internet.url }
   let(:org_data) { default_org_data }
   let(:idp_data) { nil }
   let(:sp_data) { nil }
@@ -54,7 +57,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
   let(:base_url) { 'https://manager.example.edu/federationregistry' }
 
   let(:organizations_response) do
-    JSON.pretty_generate(organizations: [org_data])
+    JSON.pretty_generate(organizations: [org_data].compact)
   end
 
   let(:identityproviders_response) do
@@ -66,7 +69,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
   end
 
   let(:org_identifier) do
-    hash = OpenSSL::Digest::SHA256.new.digest("aaf:subscriber:#{org_data[:id]}")
+    hash = OpenSSL::Digest::SHA256.new.digest("aaf:subscriber:#{org_fr_id}")
     Base64.urlsafe_encode64(hash, padding: false)
   end
 
@@ -150,6 +153,13 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
       end
     end
 
+    shared_examples 'sync of a removed object' do
+      it 'removes the object' do
+        expect { run }.to change(scope, :count).by(-1)
+        expect { object.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
     describe 'Organization sync' do
       let(:scope) { Organization }
       let(:expected_attrs) do
@@ -168,6 +178,13 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         let!(:object) { create(:organization, identifier: org_identifier) }
 
         it_behaves_like 'sync of an existing object'
+      end
+
+      context 'for a removed organiation' do
+        let!(:object) { create(:organization, identifier: org_identifier) }
+        let(:org_data) { nil }
+
+        it_behaves_like 'sync of a removed object'
       end
     end
 
@@ -210,11 +227,22 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
 
         context 'for an existing identity provider' do
           let!(:object) do
-            create(:identity_provider, entity_id: expected_attrs[:entity_id],
+            create(:identity_provider, entity_id: idp_entity_id,
                                        organization: organization)
           end
 
           it_behaves_like 'sync of an existing object'
+        end
+
+        context 'for a removed identity provider' do
+          let(:idp_data) { nil }
+
+          let!(:object) do
+            create(:identity_provider, entity_id: idp_entity_id,
+                                       organization: organization)
+          end
+
+          it_behaves_like 'sync of a removed object'
         end
       end
 
@@ -241,11 +269,22 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
 
         context 'for an existing service provider' do
           let!(:object) do
-            create(:service_provider, entity_id: expected_attrs[:entity_id],
+            create(:service_provider, entity_id: sp_entity_id,
                                       organization: organization)
           end
 
           it_behaves_like 'sync of an existing object'
+        end
+
+        context 'for a removed service provider' do
+          let(:sp_data) { nil }
+
+          let!(:object) do
+            create(:service_provider, entity_id: sp_entity_id,
+                                      organization: organization)
+          end
+
+          it_behaves_like 'sync of a removed object'
         end
       end
     end

@@ -1,17 +1,20 @@
 class UpdateFromFederationRegistry
   def perform
-    each_fr_object(:organizations, 'organizations') do |org_data|
+    touched = fr_objects(:organizations, 'organizations').flat_map do |org_data|
       org = sync_organization(org_data)
+      idps = sync_identity_providers(org)
+      sps = sync_service_providers(org)
 
-      sync_identity_providers(org)
-      sync_service_providers(org)
+      [org, *idps, *sps].compact
     end
+
+    clean(touched)
   end
 
   private
 
   def sync_identity_providers(org)
-    each_fr_object(:identity_providers, 'identityproviders') do |idp_data|
+    fr_objects(:identity_providers, 'identityproviders').map do |idp_data|
       next unless org_identifier(idp_data[:organization][:id]) == org.identifier
 
       sync_saml_entity(org, IdentityProvider, idp_data)
@@ -19,7 +22,7 @@ class UpdateFromFederationRegistry
   end
 
   def sync_service_providers(org)
-    each_fr_object(:service_providers, 'serviceproviders') do |sp_data|
+    fr_objects(:service_providers, 'serviceproviders').map do |sp_data|
       next unless org_identifier(sp_data[:organization][:id]) == org.identifier
 
       sync_saml_entity(org, ServiceProvider, sp_data)
@@ -31,9 +34,9 @@ class UpdateFromFederationRegistry
     Base64.urlsafe_encode64(digest, padding: false)
   end
 
-  def each_fr_object(sym, path)
+  def fr_objects(sym, path)
     data = fr_data("/federationregistry/export/#{path}")
-    data[sym].each { |o| yield o }
+    Enumerator.new { |y| data[sym].each { |o| y << o } }
   end
 
   def fr_data(endpoint)
@@ -89,5 +92,13 @@ class UpdateFromFederationRegistry
     end
 
     obj.activations.find_or_initialize_by({}).update!(activation_attrs)
+  end
+
+  def clean(touched_objs)
+    grouped_objs = touched_objs.group_by(&:class)
+    [Organization, IdentityProvider, ServiceProvider].each do |klass|
+      objs = grouped_objs.fetch(klass, [])
+      klass.where.not(id: objs.map(&:id)).destroy_all
+    end
   end
 end
