@@ -100,7 +100,7 @@ ActiveRecord::Schema.define(version: 20160111005859) do
   end
 
   add_index "identity_provider_saml_attributes", ["identity_provider_id", "saml_attribute_id"], name: "unique_identity_provider_attribute", unique: true, using: :btree
-  add_index "identity_provider_saml_attributes", ["saml_attribute_id"], name: "fk_rails_94f14b5952", using: :btree
+  add_index "identity_provider_saml_attributes", ["saml_attribute_id"], name: "fk_rails_3afed16ec1", using: :btree
 
   create_table "identity_providers", force: :cascade do |t|
     t.string   "entity_id",       limit: 255, null: false
@@ -170,7 +170,7 @@ ActiveRecord::Schema.define(version: 20160111005859) do
     t.datetime "updated_at",                    null: false
   end
 
-  add_index "service_provider_saml_attributes", ["saml_attribute_id"], name: "fk_rails_de72af15ed", using: :btree
+  add_index "service_provider_saml_attributes", ["saml_attribute_id"], name: "fk_rails_5dcfbc93eb", using: :btree
   add_index "service_provider_saml_attributes", ["service_provider_id", "saml_attribute_id"], name: "unique_service_provider_attribute", unique: true, using: :btree
 
   create_table "service_providers", force: :cascade do |t|

@@ -4,6 +4,7 @@ gem 'rails', '4.2.3'
 gem 'mysql2'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier'
+gem 'therubyracer'
 gem 'jbuilder'
 gem 'slim'
 
