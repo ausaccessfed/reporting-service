@@ -22,23 +22,34 @@ jQuery(function($) {
     svg.attr('height', sizing.container.height)
       .attr('width', sizing.container.width);
 
-    var reportRange = report.range;
     var dailyRange = { start: "00:00", end: "23:59" };
-    var defaultRangeArgs = [reportRange, timeFormats.dateTime, timeFormats.date];
 
-    rangeSpecs = {
+    var defaultRangeArgs =
+      {
+        range : report.range,
+        timeFormat : timeFormats.dateTime,
+        hoverBoxFormat : timeFormats.date
+      }
+
+    var rangeSpecs = {
       'random-time-series': defaultRangeArgs,
       'random-time-series-line': defaultRangeArgs,
       'federation-growth': defaultRangeArgs,
-      'federated-sessions': [reportRange, timeFormats.dateTime, timeFormats.time],
-      'daily-demand': [dailyRange, timeFormats.time, timeFormats.time]
+      'federated-sessions': {
+                              range : report.range,
+                              timeFormat : timeFormats.dateTime,
+                              hoverBoxFormat : timeFormats.time
+                            },
+      'daily-demand': {
+                        range : dailyRange,
+                        timeFormat : timeFormats.time,
+                        hoverBoxFormat : timeFormats.time
+                      },
     };
 
-    var rangeArgs = rangeSpecs[report.type].slice(0, 2);
-    var scaleRange = reporting.range.apply(null, rangeArgs);
-    var hoverboxTimeformat = rangeSpecs[report.type][2];
-
-    var range = reporting.range(reportRange, timeFormats.dateTime);
+    var scaleRange = reporting.range(rangeSpecs[report.type]);
+    var hoverboxTimeformat = rangeSpecs[report.type].hoverBoxFormat;
+    var range = reporting.range(defaultRangeArgs);
     var scale = reporting.scale(report, scaleRange, sizing);
     var translate = reporting.translate;
     var graph = sizing.graph;

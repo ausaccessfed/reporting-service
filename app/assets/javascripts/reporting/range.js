@@ -1,6 +1,6 @@
-reporting.range = function (range, timeFormat) {
+reporting.range = function (rangeSpecs) {
   return {
-    start: timeFormat.parse(range.start),
-    end: timeFormat.parse(range.end)
+    start: rangeSpecs.timeFormat.parse(rangeSpecs.range.start),
+    end: rangeSpecs.timeFormat.parse(rangeSpecs.range.end)
   };
 };
