@@ -10,4 +10,9 @@ RSpec.describe FederationReportsController, type: :routing do
     subject { { get: '/federation_reports/federated_sessions' } }
     it { is_expected.to route_to('federation_reports#federated_sessions') }
   end
+
+  describe 'GET /federation_reports/daily_demand' do
+    subject { { get: '/federation_reports/daily_demand' } }
+    it { is_expected.to route_to('federation_reports#daily_demand') }
+  end
 end

@@ -30,4 +30,12 @@ RSpec.feature 'Federation Reports' do
     expect(current_path).to eq('/federation_reports/federated_sessions')
     expect(page).to have_css('svg.federated-sessions')
   end
+
+  scenario 'viewing the Daily Demand Report' do
+    expect(current_path).to eq('/dashboard')
+
+    click_link('Daily Demand Report')
+    expect(current_path).to eq('/federation_reports/daily_demand')
+    expect(page).to have_css('svg.daily-demand')
+  end
 end

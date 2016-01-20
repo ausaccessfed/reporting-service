@@ -22,7 +22,7 @@ RSpec.describe DailyDemandReport do
   let(:data) { report[:data] }
 
   def expect_in_range
-    (0..(86_340)).step(60).each_with_index do |t, index|
+    (0..(86_340)).step(300).each_with_index do |t, index|
       expect(data[:sessions][index]).to match_array([t, value])
     end
   end
@@ -41,7 +41,7 @@ RSpec.describe DailyDemandReport do
     end
 
     it 'should not include range' do
-      expect(report).not_to include(:range)
+      expect(report).to include(:range)
     end
 
     it 'sessions are response types generated within given range' do
@@ -56,7 +56,7 @@ RSpec.describe DailyDemandReport do
                   timestamp: 1.day.ago.beginning_of_day
     end
 
-    let(:value) { 0.0 }
+    let(:value) { 0.00 }
 
     it 'should not count any sessions' do
       expect_in_range
@@ -84,19 +84,19 @@ RSpec.describe DailyDemandReport do
     end
 
     it 'average at point 0 should be 0.5 for 5 sessions in 10 days' do
-      expect(data[:sessions]).to include([0, 0.5])
+      expect(data[:sessions]).to include([0, 0.45])
     end
 
     it 'average should be 0.0 when no sessions available at point 300' do
-      expect(data[:sessions]).to include([300, 0.0])
+      expect(data[:sessions]).to include([300, 0.00])
     end
 
     it 'average at point 600 should be 0.5 for 5 sessions in 10 days' do
-      expect(data[:sessions]).to include([600, 0.5])
+      expect(data[:sessions]).to include([600, 0.45])
     end
 
     it 'average at point 86_340 should be 0.5 for 5 sessions in 10 days' do
-      expect(data[:sessions]).to include([86_340, 0.5])
+      expect(data[:sessions]).to include([86_100, 0.45])
     end
   end
 end

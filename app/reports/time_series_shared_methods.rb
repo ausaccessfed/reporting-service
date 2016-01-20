@@ -1,9 +1,9 @@
 module TimeSeriesSharedMethods
   private
 
-  def output_data(range, report, step_width, divider)
+  def output_data(range, report, step_width, divider, decimal_places = 1)
     range.step(step_width).each_with_object(sessions: []) do |t, data|
-      average = report[t] ? (report[t].to_f / divider).round(1) : 0.0
+      average = average report, t, divider, decimal_places
 
       data[:sessions] << [t, average]
     end
@@ -21,10 +21,10 @@ module TimeSeriesSharedMethods
   def daily_demand_output(default_sessions = sessions)
     report = sessions_count(default_sessions) do |session|
       offset = (session - session.beginning_of_day).to_i
-      offset - (offset % 1.minute)
+      offset - (offset % 5.minute)
     end
 
-    output_data 0..86_340, report, 1.minute, days_count
+    output_data 0..86_340, report, 5.minute, days_count, 2
   end
 
   def range
@@ -40,6 +40,10 @@ module TimeSeriesSharedMethods
 
   def days_count
     (@start.to_i..@finish.to_i).step(1.day).count
+  end
+
+  def average(report, time, divider, decimal_places = 1)
+    report[time] ? (report[time].to_f / divider).round(decimal_places) : 0.0
   end
 
   def sessions(where_args = {})

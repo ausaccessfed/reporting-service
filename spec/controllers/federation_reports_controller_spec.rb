@@ -58,4 +58,12 @@ RSpec.describe FederationReportsController, type: :controller do
 
     it_behaves_like 'a federation report controller'
   end
+
+  context 'get :daily_demand' do
+    let(:report_class) { DailyDemandReport }
+    let(:route_value) { 'daily_demand' }
+    let(:cach_template) { 'daily-demand' }
+
+    it_behaves_like 'a federation report controller'
+  end
 end

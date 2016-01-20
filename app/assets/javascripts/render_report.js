@@ -1,4 +1,10 @@
 jQuery(function($) {
+  var timeFormats = {
+    time : d3.time.format('%H:%M'),
+    date : d3.time.format('%Y-%m-%d'),
+    dateTime : d3.time.format('%Y-%m-%dT%H:%M:%SZ')
+  }
+
   var renderGraph = function(report, target) {
     var sizing = reporting.sizing(report, target);
 
@@ -16,14 +22,41 @@ jQuery(function($) {
     svg.attr('height', sizing.container.height)
       .attr('width', sizing.container.width);
 
-    var range = reporting.range(report);
-    var scale = reporting.scale(report, range, sizing);
+    var dailyRange = { start: "00:00", end: "23:59" };
+
+    var defaultRangeArgs =
+      {
+        range : report.range,
+        timeFormat : timeFormats.dateTime,
+        hoverBoxFormat : timeFormats.date
+      }
+
+    var rangeSpecs = {
+      'random-time-series': defaultRangeArgs,
+      'random-time-series-line': defaultRangeArgs,
+      'federation-growth': defaultRangeArgs,
+      'federated-sessions': {
+                              range : report.range,
+                              timeFormat : timeFormats.dateTime,
+                              hoverBoxFormat : timeFormats.time
+                            },
+      'daily-demand': {
+                        range : dailyRange,
+                        timeFormat : timeFormats.time,
+                        hoverBoxFormat : timeFormats.time
+                      },
+    };
+
+    var scaleRange = reporting.range(rangeSpecs[report.type]);
+    var hoverboxTimeformat = rangeSpecs[report.type].hoverBoxFormat;
+    var range = reporting.range(defaultRangeArgs);
+    var scale = reporting.scale(report, scaleRange, sizing);
     var translate = reporting.translate;
     var graph = sizing.graph;
     var margin = graph.margin;
 
     var mappers = {
-      x: function(e) { return scale.x(d3.time.second.offset(range.start, e[0])); },
+      x: function(e) { return scale.x(d3.time.second.offset(scaleRange.start, e[0])); },
       y: function(e) { return scale.y(e[1]); }
     };
 
@@ -42,7 +75,7 @@ jQuery(function($) {
 
         svg.call(reporting.axes(scale, sizing))
           .call(reporting.legend(report, sizing))
-          .call(reporting.hoverbox(report, scale, range, sizing))
+          .call(reporting.hoverbox(report, scale, scaleRange, sizing, hoverboxTimeformat))
           .call(reporting.labels(report, range, sizing));
       },
 
@@ -68,7 +101,8 @@ jQuery(function($) {
       'random-time-series': charts.area,
       'random-time-series-line': charts.line,
       'federation-growth': charts.area,
-      'federated-sessions': charts.area
+      'federated-sessions': charts.area,
+      'daily-demand': charts.area
     };
 
     kinds[report.type]();
@@ -115,10 +149,11 @@ jQuery(function($) {
     'random-tabular-data': renderTable,
     'federation-growth': renderGraph,
     'federated-sessions': renderGraph,
+    'daily-demand': renderGraph,
     'service-compatibility': renderTable,
     'identity-provider-attributes': renderTable,
     'provided-attribute': renderTable,
-    'requested-attribute': renderTable,
+    'requested-attribute': renderTable
   };
 
   $('.report-data').each(function() {

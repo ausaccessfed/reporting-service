@@ -1,6 +1,6 @@
-reporting.hoverbox = function(report, scale, range, sizing) {
+reporting.hoverbox = function(report, scale, range, sizing, timeformat) {
   return function(selection) {
-    var timeOnly = d3.time.format('%H:%M');
+    var timeOnly = timeformat;
     var translate = reporting.translate;
     var graph = sizing.graph;
     var margin = graph.margin;
@@ -35,7 +35,7 @@ reporting.hoverbox = function(report, scale, range, sizing) {
         var data = report.data[k];
         var i = bisectDate(data, x0, 1);
         var d0 = data[i - 1];
-        var d1 = data[i];
+        var d1 = i < data.length ? data[i] : d0;
         var d = x0 - d0[0] > d1[0] - x0 ? d1 : d0;
 
         date = Math.abs(x0 - d[0]) > Math.abs(x0 - date) ? date : d[0];
@@ -44,7 +44,7 @@ reporting.hoverbox = function(report, scale, range, sizing) {
         if (d.length > 2) value = d[2];
 
         selection.select('.legend .' + k + '-text')
-          .text(d3.round(value, 1) + report.units);
+          .text(d3.round(value, 2) + report.units);
       });
 
       selection.select('.x-text').text(

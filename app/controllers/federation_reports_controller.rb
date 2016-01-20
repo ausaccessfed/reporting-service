@@ -16,4 +16,13 @@ class FederationReportsController < ApplicationController
       JSON.generate(report.generate)
     end
   end
+
+  def daily_demand
+    public_action
+
+    @data = Rails.cache.fetch('public/daily-demand') do
+      report = DailyDemandReport.new(1.year.ago.utc, Time.now.utc)
+      JSON.generate(report.generate)
+    end
+  end
 end
