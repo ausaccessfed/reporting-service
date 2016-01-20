@@ -9,9 +9,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
       display_name: Faker::Company.name,
       functioning: true,
       created_at: 2.years.ago.utc.xmlschema,
-      updated_at: 1.year.ago.utc.xmlschema,
-      identity_providers: [],
-      service_providers: []
+      updated_at: 1.year.ago.utc.xmlschema
     }
   end
 
