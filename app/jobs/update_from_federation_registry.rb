@@ -29,8 +29,7 @@ class UpdateFromFederationRegistry
       next unless org_identifier(idp_data[:organization][:id]) == org.identifier
 
       idp = sync_saml_entity(org, IdentityProvider, idp_data)
-      attrs = sync_saml_entity_attributes(idp.identity_provider_saml_attributes,
-                                          idp_data)
+      attrs = sync_idp_attributes(idp, idp_data)
 
       attrs.unshift(idp)
     end
@@ -41,8 +40,7 @@ class UpdateFromFederationRegistry
       next unless org_identifier(sp_data[:organization][:id]) == org.identifier
 
       sp = sync_saml_entity(org, ServiceProvider, sp_data)
-      attrs = sync_saml_entity_attributes(sp.service_provider_saml_attributes,
-                                          sp_data)
+      attrs = sync_sp_attributes(sp, sp_data)
 
       attrs.unshift(sp)
     end
@@ -68,17 +66,26 @@ class UpdateFromFederationRegistry
                 name: obj_data[:display_name], organization: org)
   end
 
-  def sync_saml_entity_attributes(scope, obj_data)
-    obj_data[:saml][:attributes].map do |attr_data|
-      attribute = SAMLAttribute.find_by_name(attr_data[:name])
-      finder = scope
-      # TODO: Ew!
-      if scope.columns.find { |c| c.name == 'optional' }
-        finder = scope.create_with(optional: !attr_data[:is_required])
-      end
-
-      finder.find_or_create_by!(saml_attribute_id: attribute.id)
+  def sync_idp_attributes(idp, idp_data)
+    idp_data[:saml][:attributes].map do |attr_data|
+      sync_saml_entity_attribute(idp.identity_provider_saml_attributes,
+                                 attr_data)
     end
+  end
+
+  def sync_sp_attributes(sp, sp_data)
+    sp_data[:saml][:attributes].map do |attr_data|
+      sync_saml_entity_attribute(sp.service_provider_saml_attributes,
+                                 attr_data,
+                                 optional: !attr_data[:is_required])
+    end
+  end
+
+  def sync_saml_entity_attribute(scope, attr_data, extra_attrs = {})
+    attribute = SAMLAttribute.find_by_name(attr_data[:name])
+    assoc = scope.find_or_initialize_by(saml_attribute_id: attribute.id)
+    assoc.update!(extra_attrs)
+    assoc
   end
 
   def sync_object(klass, obj_data, identifying_attr, attrs)
