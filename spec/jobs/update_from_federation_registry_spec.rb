@@ -95,23 +95,17 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
   end
 
   before do
-    export_api_opts = { headers: { 'Authorization' => /AAF-FR-EXPORT .+/ } }
-
-    stub_request(:get, "#{base_url}/export/organizations")
-      .with(export_api_opts)
-      .to_return(status: 200, body: organizations_response)
-
-    stub_request(:get, "#{base_url}/export/attributes")
-      .with(export_api_opts)
-      .to_return(status: 200, body: attributes_response)
-
-    stub_request(:get, "#{base_url}/export/identityproviders")
-      .with(export_api_opts)
-      .to_return(status: 200, body: identityproviders_response)
-
-    stub_request(:get, "#{base_url}/export/serviceproviders")
-      .with(export_api_opts)
-      .to_return(status: 200, body: serviceproviders_response)
+    {
+      organizations: organizations_response,
+      attributes: attributes_response,
+      identityproviders: identityproviders_response,
+      serviceproviders: serviceproviders_response
+    }.each do |endpoint, body|
+      stub_request(:get, "#{base_url}/export/#{endpoint}")
+        .with(headers: { 'Authorization' => /AAF-FR-EXPORT .+/ })
+        .to_return(status: 200, body: body)
+        .then.to_return { fail('endpoint should only be called once') }
+    end
   end
 
   describe '#perform' do

@@ -52,8 +52,9 @@ class UpdateFromFederationRegistry
   end
 
   def fr_objects(sym, path)
-    data = fr_data("/federationregistry/export/#{path}")
-    Enumerator.new { |y| data[sym].each { |o| y << o } }
+    @fr_objects ||= {}
+    @fr_objects[sym] ||= fr_data("/federationregistry/export/#{path}")
+    Enumerator.new { |y| @fr_objects[sym][sym].each { |o| y << o } }
   end
 
   def fr_data(endpoint)
