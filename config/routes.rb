@@ -29,6 +29,9 @@ Rails.application.routes.draw do
     match_report('attribute', 'service_providers_report', [:get, :post])
   end
 
+  get '/subscriber_reports' => 'subscriber_reports#index',
+      as: 'subscriber_reports'
+
   namespace :api, defaults: { format: 'json' } do
     v1_constraints = APIConstraints.new(version: 1, default: true)
     scope constraints: v1_constraints do
