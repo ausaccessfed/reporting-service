@@ -23,18 +23,26 @@ class UpdateFromFederationRegistry
   end
 
   def sync_identity_providers(org)
-    fr_objects(:identity_providers, 'identityproviders').map do |idp_data|
+    fr_objects(:identity_providers, 'identityproviders').flat_map do |idp_data|
       next unless org_identifier(idp_data[:organization][:id]) == org.identifier
 
-      sync_saml_entity(org, IdentityProvider, idp_data)
+      idp = sync_saml_entity(org, IdentityProvider, idp_data)
+      attrs = sync_saml_entity_attributes(idp.identity_provider_saml_attributes,
+                                          idp_data)
+
+      attrs.unshift(idp)
     end
   end
 
   def sync_service_providers(org)
-    fr_objects(:service_providers, 'serviceproviders').map do |sp_data|
+    fr_objects(:service_providers, 'serviceproviders').flat_map do |sp_data|
       next unless org_identifier(sp_data[:organization][:id]) == org.identifier
 
-      sync_saml_entity(org, ServiceProvider, sp_data)
+      sp = sync_saml_entity(org, ServiceProvider, sp_data)
+      attrs = sync_saml_entity_attributes(sp.service_provider_saml_attributes,
+                                          sp_data)
+
+      attrs.unshift(sp)
     end
   end
 
@@ -92,6 +100,19 @@ class UpdateFromFederationRegistry
                 name: obj_data[:display_name], organization: org)
   end
 
+  def sync_saml_entity_attributes(scope, obj_data)
+    obj_data[:saml][:attributes].map do |attr_data|
+      attribute = SAMLAttribute.find_by_name(attr_data[:name])
+      finder = scope
+      # TODO: Ew!
+      if scope.columns.find { |c| c.name == 'optional' }
+        finder = scope.create_with(optional: !attr_data[:is_required])
+      end
+
+      finder.find_or_create_by!(saml_attribute_id: attribute.id)
+    end
+  end
+
   def sync_object(klass, obj_data, identifying_attr, attrs)
     obj = klass.find_or_initialize_by(identifying_attr)
     obj.update!(attrs)
@@ -113,7 +134,8 @@ class UpdateFromFederationRegistry
 
   def clean(touched_objs)
     grouped_objs = touched_objs.group_by(&:class)
-    klasses = [Organization, IdentityProvider, ServiceProvider, SAMLAttribute]
+    klasses = [Organization, IdentityProvider, ServiceProvider, SAMLAttribute,
+               IdentityProviderSAMLAttribute, ServiceProviderSAMLAttribute]
     klasses.each do |klass|
       objs = grouped_objs.fetch(klass, [])
       klass.where.not(id: objs.map(&:id)).destroy_all

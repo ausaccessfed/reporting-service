@@ -23,7 +23,8 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         id: default_org_data[:id]
       },
       saml: {
-        entity: { entity_id: idp_entity_id }
+        entity: { entity_id: idp_entity_id },
+        attributes: []
       },
       functioning: true,
       created_at: 2.years.ago.utc.xmlschema,
@@ -39,7 +40,8 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         id: default_org_data[:id]
       },
       saml: {
-        entity: { entity_id: sp_entity_id }
+        entity: { entity_id: sp_entity_id },
+        attributes: []
       },
       functioning: true,
       created_at: 2.years.ago.utc.xmlschema,
@@ -183,6 +185,49 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
       end
     end
 
+    shared_examples 'sync of an object with attributes' do
+      context 'with a new attribute' do
+        it 'adds the attribute' do
+          expect { run }.to change(attribute_scope, :count).by(1)
+          expect(attribute_scope.last.saml_attribute).to have_attributes(
+            name: attr_data[:name], description: attr_data[:description]
+          )
+        end
+      end
+
+      context 'with an existing attribute' do
+        let!(:attr) do
+          create(:saml_attribute, name: attr_data[:name],
+                                  core: false)
+        end
+
+        let!(:attr_assoc) do
+          attribute_scope.create!(extra_assoc_attrs.merge(saml_attribute: attr))
+        end
+
+        it 'does not create a new object' do
+          expect { run }.not_to change(attribute_scope, :count)
+        end
+      end
+
+      context 'with a removed attribute' do
+        let(:object_attribute_list) { [] }
+
+        let!(:attr) do
+          create(:saml_attribute, name: attr_data[:name],
+                                  core: false)
+        end
+
+        let!(:attr_assoc) do
+          attribute_scope.create!(extra_assoc_attrs.merge(saml_attribute: attr))
+        end
+
+        it 'removes the association object' do
+          expect { run }.to change(attribute_scope, :count).by(-1)
+        end
+      end
+    end
+
     describe 'Organization sync' do
       let(:scope) { Organization }
       let(:expected_attrs) do
@@ -267,6 +312,29 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
 
           it_behaves_like 'sync of a removed object'
         end
+
+        context 'provided attributes' do
+          let!(:object) do
+            create(:identity_provider, entity_id: idp_entity_id,
+                                       organization: organization)
+          end
+
+          let(:attribute_scope) { object.identity_provider_saml_attributes }
+          let(:object_attribute_list) { [attr_data.slice(:id, :name)] }
+
+          let(:expected_assoc_attrs) { {} }
+          let(:extra_assoc_attrs) { {} }
+
+          let(:idp_data) do
+            default_idp_data.deep_merge(
+              saml: {
+                attributes: object_attribute_list
+              }
+            )
+          end
+
+          it_behaves_like 'sync of an object with attributes'
+        end
       end
 
       describe 'ServiceProvider sync' do
@@ -308,6 +376,31 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
           end
 
           it_behaves_like 'sync of a removed object'
+        end
+
+        context 'requested attributes' do
+          let!(:object) do
+            create(:service_provider, entity_id: sp_entity_id,
+                                      organization: organization)
+          end
+
+          let(:attribute_scope) { object.service_provider_saml_attributes }
+          let(:object_attribute_list) do
+            [attr_data.slice(:id, :name).merge(is_required: true)]
+          end
+
+          let(:expected_assoc_attrs) { { optional: false } }
+          let(:extra_assoc_attrs) { { optional: true } }
+
+          let(:sp_data) do
+            default_sp_data.deep_merge(
+              saml: {
+                attributes: object_attribute_list
+              }
+            )
+          end
+
+          it_behaves_like 'sync of an object with attributes'
         end
       end
     end
