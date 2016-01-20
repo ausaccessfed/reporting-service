@@ -43,7 +43,7 @@ RSpec.describe ServiceProviderSourceIdentityProvidersReport do
       create_list :discovery_service_event, 10,
                   service_provider: sp,
                   identity_provider: idp_03,
-                  timestamp: 20.day.ago.beginning_of_day
+                  timestamp: 20.days.ago.beginning_of_day
     end
 
     it 'creates report :rows with number of related IdPs and IdP names' do

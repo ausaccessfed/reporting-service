@@ -3,6 +3,9 @@ AllCops:
   Exclude:
     - db/schema.rb
 
+Rails:
+  Enabled: true
+
 Style/Documentation:
   Enabled: false
 
