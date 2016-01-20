@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe UpdateFromFederationRegistry, type: :job do
   before(:all) { DatabaseCleaner.clean_with(:truncation) }
 
+  around { |spec| Timecop.freeze { spec.run } }
+
   let(:default_org_data) do
     {
       id: org_fr_id,
@@ -52,7 +54,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
                             .join('.')
     {
       id: 1,
-      name: Faker::Lorem.words.map(&:titleize).join.camelize,
+      name: Faker::Lorem.words.join('_').camelize(:lower),
       description: Faker::Lorem.sentence,
       oid: Faker::Base.numerify("#.#.#.#{oid_tail_pattern}"),
       category: {
@@ -438,6 +440,146 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
           expect { run }.to change(SAMLAttribute, :count).by(-1)
           expect { attr.reload }.to raise_error(ActiveRecord::RecordNotFound)
         end
+      end
+    end
+
+    describe 'complete federation example' do
+      let(:entity_ids) { Set.new }
+
+      def unique_entity_id
+        entity_id = Faker::Internet.url
+        entity_id = Faker::Internet.url while entity_ids.include?(entity_id)
+
+        entity_ids << entity_id
+        entity_id
+      end
+
+      let(:organizations) do
+        i = rand(9999)
+        Array.new(10) do
+          {
+            id: (i += 1),
+            display_name: Faker::Company.name,
+            functioning: true,
+            created_at: 2.years.ago.utc.xmlschema,
+            updated_at: 1.year.ago.utc.xmlschema,
+            identity_providers: [],
+            service_providers: []
+          }
+        end
+      end
+
+      let(:attributes) do
+        i = rand(9999)
+        oid_tail_pattern = Array.new(rand(6)) { %w(# # # ## #####).sample }
+                                .join('.')
+
+        Array.new(20) do
+          {
+            id: (i += 1),
+            name: Faker::Lorem.words.join('_').camelize(:lower),
+            description: Faker::Lorem.sentence,
+            oid: Faker::Base.numerify("#.#.#.#{oid_tail_pattern}"),
+            category: {
+              name: 'Core'
+            }
+          }
+        end
+      end
+
+      let(:identity_providers) do
+        i = rand(9999)
+        Array.new(20) do
+          attrs = attributes.sample(rand(10)).map do |a|
+            a.slice(:name, :id)
+          end
+
+          {
+            id: (i += 1),
+            display_name: Faker::Company.name,
+            organization: {
+              id: organizations.sample[:id]
+            },
+            saml: {
+              entity: { entity_id: unique_entity_id },
+              attributes: attrs
+            },
+            functioning: true,
+            created_at: 2.years.ago.utc.xmlschema,
+            updated_at: 1.year.ago.utc.xmlschema
+          }
+        end
+      end
+
+      let(:service_providers) do
+        i = rand(9999)
+        Array.new(30) do
+          attrs = attributes.sample(rand(10)).map do |a|
+            a.slice(:name, :id).merge(is_required: [true, false].sample)
+          end
+
+          {
+            id: (i += 1),
+            display_name: Faker::Company.name,
+            organization: {
+              id: organizations.sample[:id]
+            },
+            saml: {
+              entity: { entity_id: unique_entity_id },
+              attributes: attrs
+            },
+            functioning: true,
+            created_at: 2.years.ago.utc.xmlschema,
+            updated_at: 1.year.ago.utc.xmlschema
+          }
+        end
+      end
+
+      let(:organizations_response) do
+        JSON.pretty_generate(organizations: organizations)
+      end
+
+      let(:identityproviders_response) do
+        JSON.pretty_generate(identity_providers: identity_providers)
+      end
+
+      let(:serviceproviders_response) do
+        JSON.pretty_generate(service_providers: service_providers)
+      end
+
+      let(:attributes_response) do
+        JSON.pretty_generate(attributes: attributes)
+      end
+
+      it 'syncs the objects' do
+        idp_attrs = identity_providers.flat_map { |o| o[:saml][:attributes] }
+        sp_attrs = service_providers.flat_map { |o| o[:saml][:attributes] }
+
+        expect { run }.to change(Organization, :count).by(organizations.count)
+          .and change(IdentityProvider, :count).by(identity_providers.count)
+          .and change(ServiceProvider, :count).by(service_providers.count)
+          .and change(SAMLAttribute, :count).by(attributes.count)
+          .and change(IdentityProviderSAMLAttribute, :count).by(idp_attrs.count)
+          .and change(ServiceProviderSAMLAttribute, :count).by(sp_attrs.count)
+
+        expect(Organization.all.map(&:name))
+          .to contain_exactly(*organizations.map { |o| o[:display_name] })
+
+        expect(IdentityProvider.all.map(&:name))
+          .to contain_exactly(*identity_providers.map { |o| o[:display_name] })
+
+        expect(ServiceProvider.all.map(&:name))
+          .to contain_exactly(*service_providers.map { |o| o[:display_name] })
+
+        expect(SAMLAttribute.all.map(&:name))
+          .to contain_exactly(*attributes.map { |o| o[:name] })
+
+        expect { run }.to not_change(Organization, :count)
+          .and not_change(IdentityProvider, :count)
+          .and not_change(ServiceProvider, :count)
+          .and not_change(SAMLAttribute, :count)
+          .and not_change(IdentityProviderSAMLAttribute, :count)
+          .and not_change(ServiceProviderSAMLAttribute, :count)
       end
     end
   end
