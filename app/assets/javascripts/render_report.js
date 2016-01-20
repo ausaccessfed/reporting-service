@@ -32,8 +32,6 @@ jQuery(function($) {
       }
 
     var rangeSpecs = {
-      'random-time-series': defaultRangeArgs,
-      'random-time-series-line': defaultRangeArgs,
       'federation-growth': defaultRangeArgs,
       'federated-sessions': {
                               range : report.range,
@@ -98,8 +96,6 @@ jQuery(function($) {
     };
 
     var kinds = {
-      'random-time-series': charts.area,
-      'random-time-series-line': charts.line,
       'federation-growth': charts.area,
       'federated-sessions': charts.area,
       'daily-demand': charts.area
@@ -144,9 +140,6 @@ jQuery(function($) {
   };
 
   var renderers = {
-    'random-time-series': renderGraph,
-    'random-time-series-line': renderGraph,
-    'random-tabular-data': renderTable,
     'federation-growth': renderGraph,
     'federated-sessions': renderGraph,
     'daily-demand': renderGraph,
