@@ -24,6 +24,7 @@ html lang='en'
           = nav_first_item('Welcome', root_path)
 
         = nav_collapsing_items do
+          = nav_item('Subscriber Reports', subscriber_reports_path)
           - if permitted?('admin:menu')
             - if permitted?('admin:blah')
               = nav_item('Blah', '/admin/blah')

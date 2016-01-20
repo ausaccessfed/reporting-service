@@ -98,6 +98,12 @@ svg.report-output {
     }
   }
 
+  &.identity-providers-sessions {
+    .sessions {
+      fill: $graph-color-vibrant;
+    }
+  }
+
   &.daily-demand {
     .sessions {
       fill: $graph-color-dull;

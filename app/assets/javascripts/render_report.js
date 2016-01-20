@@ -24,20 +24,22 @@ jQuery(function($) {
 
     var dailyRange = { start: "00:00", end: "23:59" };
 
-    var defaultRangeArgs =
-      {
+    var defaultRangeArgs = {
         range : report.range,
         timeFormat : timeFormats.dateTime,
         hoverBoxFormat : timeFormats.date
       }
 
+    var sessionsReportRange = {
+        range : report.range,
+        timeFormat : timeFormats.dateTime,
+        hoverBoxFormat : timeFormats.time
+      }
+
     var rangeSpecs = {
       'federation-growth': defaultRangeArgs,
-      'federated-sessions': {
-                              range : report.range,
-                              timeFormat : timeFormats.dateTime,
-                              hoverBoxFormat : timeFormats.time
-                            },
+      'federated-sessions': sessionsReportRange,
+      'identity-provider-sessions': sessionsReportRange,
       'daily-demand': {
                         range : dailyRange,
                         timeFormat : timeFormats.time,
@@ -99,6 +101,7 @@ jQuery(function($) {
     var kinds = {
       'federation-growth': charts.area,
       'federated-sessions': charts.area,
+      'identity-provider-sessions': charts.area,
       'daily-demand': charts.area
     };
 
@@ -143,6 +146,7 @@ jQuery(function($) {
   var renderers = {
     'federation-growth': renderGraph,
     'federated-sessions': renderGraph,
+    'identity-provider-sessions': renderGraph,
     'daily-demand': renderGraph,
     'service-compatibility': renderTable,
     'identity-provider-attributes': renderTable,
