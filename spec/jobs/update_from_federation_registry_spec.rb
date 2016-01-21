@@ -41,7 +41,9 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
       },
       saml: {
         entity: { entity_id: sp_entity_id },
-        attributes: []
+        attribute_consuming_services: [
+          { attributes: [] }
+        ]
       },
       functioning: true,
       created_at: 2.years.ago.utc.xmlschema,
@@ -389,7 +391,9 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
           let(:sp_data) do
             default_sp_data.deep_merge(
               saml: {
-                attributes: object_attribute_list
+                attribute_consuming_services: [
+                  { attributes: object_attribute_list }
+                ]
               }
             )
           end
@@ -520,7 +524,9 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
             },
             saml: {
               entity: { entity_id: unique_entity_id },
-              attributes: attrs
+              attribute_consuming_services: [
+                { attributes: attrs }
+              ]
             },
             functioning: true,
             created_at: 2.years.ago.utc.xmlschema,
@@ -547,7 +553,10 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
 
       it 'syncs the objects' do
         idp_attrs = identity_providers.flat_map { |o| o[:saml][:attributes] }
-        sp_attrs = service_providers.flat_map { |o| o[:saml][:attributes] }
+        sp_attrs = service_providers.flat_map do |o|
+          o[:saml][:attribute_consuming_services]
+            .flat_map { |s| s[:attributes] }
+        end
 
         expect { run }.to change(Organization, :count).by(organizations.count)
           .and change(IdentityProvider, :count).by(identity_providers.count)

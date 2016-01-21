@@ -76,10 +76,12 @@ class UpdateFromFederationRegistry
   end
 
   def sync_sp_attributes(sp, sp_data)
-    sp_data[:saml][:attributes].map do |attr_data|
-      sync_saml_entity_attribute(sp.service_provider_saml_attributes,
-                                 attr_data,
-                                 optional: !attr_data[:is_required])
+    sp_data[:saml][:attribute_consuming_services].flat_map do |acs|
+      acs[:attributes].map do |attr_data|
+        sync_saml_entity_attribute(sp.service_provider_saml_attributes,
+                                   attr_data,
+                                   optional: !attr_data[:is_required])
+      end
     end
   end
 
