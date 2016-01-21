@@ -19,7 +19,7 @@ end
 
 class Unicorn::HttpServer # rubocop:disable ClassAndModuleChildren
   def proc_name(tag)
-    $0 = ([File.basename(START_CTX[0]), 'reporting',
-           tag]).concat(START_CTX[:argv]).join(' ')
+    $0 = [File.basename(START_CTX[0]), 'reporting',
+          tag].concat(START_CTX[:argv]).join(' ')
   end
 end

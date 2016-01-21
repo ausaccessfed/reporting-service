@@ -18,8 +18,8 @@ class IdentityProviderAttributesReport < TabularReport
       core_attributes, optional_attributes =
         idp.saml_attributes.partition(&:core?)
 
-      [idp.name, "#{core_attributes.count}",
-       "#{optional_attributes.count}"]
+      [idp.name, core_attributes.count.to_s,
+       optional_attributes.count.to_s]
     end
   end
 

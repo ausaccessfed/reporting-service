@@ -14,6 +14,7 @@ gem 'redis-rails'
 gem 'rapid-rack'
 gem 'valhammer'
 gem 'accession'
+gem 'implicit-schema'
 
 gem 'aaf-lipstick', git: 'https://github.com/ausaccessfed/aaf-lipstick',
                     branch: 'private/lipstick-2.0-pre'

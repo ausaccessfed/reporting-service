@@ -21,4 +21,6 @@ RSpec.configure do |config|
 
   config.order = :random
   Kernel.srand config.seed
+
+  RSpec::Matchers.define_negated_matcher :not_change, :change
 end

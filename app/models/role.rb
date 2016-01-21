@@ -11,7 +11,7 @@ class Role < ActiveRecord::Base
 
   def self.for_entitlement(entitlement)
     create_with(name: 'auto').find_or_create_by!(entitlement: entitlement)
-      .tap(&:update_permissions)
+                             .tap(&:update_permissions)
   end
 
   def update_permissions

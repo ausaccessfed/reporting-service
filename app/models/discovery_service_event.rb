@@ -5,7 +5,7 @@ class DiscoveryServiceEvent < ActiveRecord::Base
   valhammer
 
   scope :within_range, lambda { |start, finish|
-    where((arel_table[:timestamp].gteq(start))
+    where(arel_table[:timestamp].gteq(start)
       .and(arel_table[:timestamp].lteq(finish)))
   }
 

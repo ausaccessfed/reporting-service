@@ -31,7 +31,7 @@ RSpec.describe SubscriberRegistrationReport do
       it 'includes reported objects' do
         reported_objects.each do |o|
           activated_date = o.activations(true)
-                           .flat_map(&:activated_at).min
+                            .flat_map(&:activated_at).min
 
           expect(report[:rows]).to include([o.name, activated_date])
         end

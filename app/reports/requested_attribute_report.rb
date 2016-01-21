@@ -24,7 +24,7 @@ class RequestedAttributeReport < TabularReport
 
   def service_providers
     ServiceProvider.active
-      .preload(:service_provider_saml_attributes)
+                   .preload(:service_provider_saml_attributes)
   end
 
   def attribute_status(sp)
