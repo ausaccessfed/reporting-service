@@ -1,20 +1,20 @@
 = breadcrumbs({ 'Subscriber Reports' => subscriber_reports_path },
-              { 'IdP Sessions Report' => subscriber_reports_path },
-              'Service Provider Sessions Report')
+              { 'Service Provider Reports' => subscriber_reports_path },
+                'Sessions Report')
 
 h1 Service Provider Sessions Report
 
 markdown:
-  Shows the sessions of an IdP within a time range, in number of
+  Shows the sessions of an Service Provider within a time range, in number of
   Sessions
 
-- unless @service_providers.blank?
+- if @service_providers
   = form_tag({}, id: 'report-form') do
     = field_block do
       = label_tag(:entity_id) do
         | Service Providers
 
-      - options = @service_providers.map { |idp| [idp.name, idp.entity_id] }.sort_by { |a| a[0].downcase }
+      - options = @service_providers.map { |sp| [sp.name, sp.entity_id] }.sort_by { |a| a[0].downcase }
       - options.unshift(['(Please select an Service Provider...)', ''])
 
       = select_tag(:entity_id, options_for_select(options, @entity_id))

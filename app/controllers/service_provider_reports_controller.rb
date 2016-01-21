@@ -45,10 +45,11 @@ class ServiceProviderReportsController < ApplicationController
   end
 
   def generate_report(report_type, step = nil)
-    return report_type
-      .new(params[:entity_id], range[:start], range[:end]) unless step
-
-    report_type.new(params[:entity_id], range[:start], range[:end], step)
+    if step
+      report_type.new(params[:entity_id], range[:start], range[:end], step)
+    else
+      report_type.new(params[:entity_id], range[:start], range[:end])
+    end
   end
 
   def access_method

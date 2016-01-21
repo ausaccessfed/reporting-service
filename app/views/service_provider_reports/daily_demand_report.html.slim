@@ -1,6 +1,6 @@
 = breadcrumbs({ 'Subscriber Reports' => subscriber_reports_path },
-              { 'IdP Daily Demand Report' => subscriber_reports_path },
-              'Service Provider Daily Demand Report')
+              { 'Service Provider Reports' => subscriber_reports_path },
+                'Daily Demand Report')
 
 h1 Service Provider Daily Demand  Report
 
@@ -8,7 +8,7 @@ markdown:
   Shows the daily demand of an IdP within a time range, in number of
   Sessions
 
-- unless @service_providers.blank?
+- if @service_providers
   = form_tag({}, id: 'report-form') do
     = field_block do
       = label_tag(:entity_id) do

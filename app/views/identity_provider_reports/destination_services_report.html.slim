@@ -1,6 +1,6 @@
 = breadcrumbs({ 'Subscriber Reports' => subscriber_reports_path },
-              { 'IdP Destination Services Report' => subscriber_reports_path },
-              'Identity Provider Destination Services Report')
+              { 'Identity Provider Reports' => subscriber_reports_path },
+                'Destination Services Report')
 
 h1 Identity Provider Destination Services Report
 
@@ -8,7 +8,7 @@ markdown:
   Shows the requested services of an IdP within a time range, in number of
   requests to
 
-- unless @identity_providers.blank?
+- if @identity_providers
   = form_tag({}, id: 'report-form') do
     = field_block do
       = label_tag(:entity_id) do
