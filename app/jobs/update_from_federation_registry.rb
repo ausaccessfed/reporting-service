@@ -2,8 +2,10 @@ class UpdateFromFederationRegistry
   include QueryFederationRegistry
 
   def perform
-    touched = sync_attributes + sync_organizations
-    clean(touched)
+    ActiveRecord::Base.transaction do
+      touched = sync_attributes + sync_organizations
+      clean(touched)
+    end
   end
 
   private
