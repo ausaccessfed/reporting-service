@@ -109,6 +109,12 @@ svg.report-output {
       fill: $graph-color-dull;
     }
   }
+
+  &.identity-provider-daily-demand {
+    .sessions {
+      fill: $graph-color-dull;
+    }
+  }
 }
 
 table.report-output {

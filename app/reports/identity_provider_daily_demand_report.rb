@@ -10,7 +10,7 @@ class IdentityProviderDailyDemandReport < TimeSeriesReport
     @identity_provider = IdentityProvider.find_by(entity_id: entity_id)
     title = "IdP Daily Demand Report for #{@identity_provider.name}"
 
-    super(title)
+    super(title, start: start, end: finish)
     @start = start.beginning_of_day
     @finish = finish.end_of_day
   end

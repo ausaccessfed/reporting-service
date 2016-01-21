@@ -24,4 +24,12 @@ RSpec.describe IdentityProviderReportsController do
     it_behaves_like 'get request'
     it_behaves_like 'post request'
   end
+
+  describe 'get & post identity_provider/daily_demand_report' do
+    let(:action) { 'identity_provider_reports#daily_demand_report' }
+    let(:path) { '/identity_provider/daily_demand_report' }
+
+    it_behaves_like 'get request'
+    it_behaves_like 'post request'
+  end
 end

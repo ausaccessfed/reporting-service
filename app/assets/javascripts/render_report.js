@@ -25,26 +25,29 @@ jQuery(function($) {
     var dailyRange = { start: "00:00", end: "23:59" };
 
     var defaultRangeArgs = {
-        range : report.range,
-        timeFormat : timeFormats.dateTime,
-        hoverBoxFormat : timeFormats.date
-      }
+      range : report.range,
+      timeFormat : timeFormats.dateTime,
+      hoverBoxFormat : timeFormats.date
+    }
 
     var sessionsReportRange = {
-        range : report.range,
-        timeFormat : timeFormats.dateTime,
-        hoverBoxFormat : timeFormats.time
-      }
+      range : report.range,
+      timeFormat : timeFormats.dateTime,
+      hoverBoxFormat : timeFormats.time
+    }
+
+    var dailyDemandReportRange = {
+      range : dailyRange,
+      timeFormat : timeFormats.time,
+      hoverBoxFormat : timeFormats.time
+    }
 
     var rangeSpecs = {
       'federation-growth': defaultRangeArgs,
       'federated-sessions': sessionsReportRange,
       'identity-provider-sessions': sessionsReportRange,
-      'daily-demand': {
-                        range : dailyRange,
-                        timeFormat : timeFormats.time,
-                        hoverBoxFormat : timeFormats.time
-                      },
+      'daily-demand': dailyDemandReportRange,
+      'identity-provider-daily-demand': dailyDemandReportRange
     };
 
     var scaleRange = reporting.range(rangeSpecs[report.type]);
@@ -102,7 +105,8 @@ jQuery(function($) {
       'federation-growth': charts.area,
       'federated-sessions': charts.area,
       'identity-provider-sessions': charts.area,
-      'daily-demand': charts.area
+      'daily-demand': charts.area,
+      'identity-provider-daily-demand': charts.area
     };
 
     kinds[report.type]();
@@ -148,6 +152,7 @@ jQuery(function($) {
     'federated-sessions': renderGraph,
     'identity-provider-sessions': renderGraph,
     'daily-demand': renderGraph,
+    'identity-provider-daily-demand': renderGraph,
     'service-compatibility': renderTable,
     'identity-provider-attributes': renderTable,
     'provided-attribute': renderTable,
@@ -161,7 +166,7 @@ jQuery(function($) {
     if (json) {
       var data = $.parseJSON(json);
       var renderer = renderers[data.type];
-
+      console.log(data.type);
       d3.select(window).on('resize', reporting.throttle(function() {
         renderer(data, target);
       }, 250));

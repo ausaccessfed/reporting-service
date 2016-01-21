@@ -4,8 +4,17 @@ class IdentityProviderReportsController < ApplicationController
   before_action :access_method
 
   def sessions_report
-    @data = data_output('public/identity-provider-sessions') unless
-      params[:entity_id].blank?
+    report_type = IdentityProviderSessionsReport
+
+    @data = data_output('public/identity-provider-sessions',
+                        report_type, 10) unless params[:entity_id].blank?
+  end
+
+  def daily_demand_report
+    report_type = IdentityProviderDailyDemandReport
+
+    @data = data_output('public/identity-provider-daily-demand',
+                        report_type) unless params[:entity_id].blank?
   end
 
   private
@@ -19,6 +28,8 @@ class IdentityProviderReportsController < ApplicationController
     end
   end
 
+  private
+
   def identity_provider
     return unless params[:entity_id].present?
 
@@ -27,12 +38,18 @@ class IdentityProviderReportsController < ApplicationController
     end
   end
 
-  def data_output(template)
+  def data_output(template, report_type, step = nil)
     Rails.cache.fetch(template) do
-      report = IdentityProviderSessionsReport
-               .new(params[:entity_id], range[:start], range[:end], 10)
+      report = generate_report(report_type, step)
       JSON.generate(report.generate)
     end
+  end
+
+  def generate_report(report_type, step = nil)
+    return report_type
+      .new(params[:entity_id], range[:start], range[:end]) unless step
+
+    report_type.new(params[:entity_id], range[:start], range[:end], step)
   end
 
   def access_method

@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     end
 
     match_report('identity_provider', 'sessions_report', [:get, :post])
+    match_report('identity_provider', 'daily_demand_report', [:get, :post])
   end
 
   namespace :api, defaults: { format: 'json' } do
