@@ -175,7 +175,7 @@ jQuery(function($) {
     if (json) {
       var data = $.parseJSON(json);
       var renderer = renderers[data.type];
-      console.log(data.type);
+
       d3.select(window).on('resize', reporting.throttle(function() {
         renderer(data, target);
       }, 250));
