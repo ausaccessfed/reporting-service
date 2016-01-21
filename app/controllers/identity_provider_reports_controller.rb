@@ -17,6 +17,13 @@ class IdentityProviderReportsController < ApplicationController
                         report_type) unless params[:entity_id].blank?
   end
 
+  def destination_services_report
+    report_type = IdentityProviderDestinationServicesReport
+
+    @data = data_output('public/identity-provider-destination-services',
+                        report_type) unless params[:entity_id].blank?
+  end
+
   private
 
   def permitted_identity_providers

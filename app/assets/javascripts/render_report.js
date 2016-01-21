@@ -155,8 +155,10 @@ jQuery(function($) {
     'identity-provider-daily-demand': renderGraph,
     'service-compatibility': renderTable,
     'identity-provider-attributes': renderTable,
+    'identity-provider-destination-services': renderTable,
     'provided-attribute': renderTable,
-    'requested-attribute': renderTable
+    'requested-attribute': renderTable,
+    'requested-attribute': renderTable,
   };
 
   $('.report-data').each(function() {

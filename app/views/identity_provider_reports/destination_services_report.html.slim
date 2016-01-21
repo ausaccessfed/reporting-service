@@ -1,0 +1,40 @@
+= breadcrumbs({ 'Subscriber Reports' => subscriber_reports_path },
+              { 'IdP Destination Services Report' => subscriber_reports_path },
+              'Identity Provider Destination Services Report')
+
+h1 Identity Provider Destination Services Report
+
+markdown:
+  Shows the requested services of an IdP within a time range, in number of
+  requests to
+
+
+= form_tag({}, id: 'report-form') do
+  = field_block do
+    = label_tag(:entity_id) do
+      | Identity Providers
+
+    - options = @identity_providers.map { |idp| [idp.name, idp.entity_id] }.sort_by { |a| a[0].downcase }
+    - options.unshift(['(Please select an Identity Provider...)', ''])
+
+    = select_tag(:entity_id, options_for_select(options, @entity_id))
+
+    = label_tag(:start) do
+      | from
+    = date_field_tag :start, value = 1.year.ago.utc
+
+    = label_tag(:end) do
+      | to
+    = date_field_tag :end, value = Time.now.utc
+
+  = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
+    => icon_tag('ok')
+    | Generate
+
+= validate_form('#report-form', nil) do |v|
+  - v.validate_field(:entity_id, required: { message: 'Please select an Identity Provider' })
+  - v.validate_field(:start, required: { message: 'Please pick start date' })
+  - v.validate_field(:end, required: { message: 'Please pick end date' })
+
+- if @data
+  = render(partial: 'shared/report_output', locals: { data: @data })

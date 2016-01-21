@@ -15,7 +15,7 @@ h1 Identity Provider Reports
       | Graphs the daily trend of sessions established for an Identity Provider via AAF's central
         Discovery Service, highlighting which time of day users are most active
 
-  = link_to('#TODO', class: 'list-group-item') do
+  = link_to(identity_provider_destination_services_report_path, class: 'list-group-item') do
     h4.list-group-item-heading Identity Provider Destination Services Report
     p.list-group-item-text
       | Graphs the number of sessions from an Identity Provider going to each Service.

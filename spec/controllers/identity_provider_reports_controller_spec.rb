@@ -66,4 +66,10 @@ RSpec.describe IdentityProviderReportsController, type: :controller do
     let(:template) { 'identity-provider-daily-demand' }
     it_behaves_like 'an Identity Provider Report Controller'
   end
+
+  context 'Identity Provider Destination Services' do
+    let(:report_path) { :destination_services_report }
+    let(:template) { 'identity-provider-destination-services' }
+    it_behaves_like 'an Identity Provider Report Controller'
+  end
 end

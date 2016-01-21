@@ -56,4 +56,22 @@ RSpec.feature 'Identity Provider Reports' do
       .to eq('/subscriber_reports/identity_provider/daily_demand_report')
     expect(page).to have_css('svg.identity-provider-daily-demand')
   end
+
+  scenario 'viewing the IdP Destination Services Report' do
+    click_link('Identity Provider Destination Services Report')
+
+    expect(current_path)
+      .to eq('/subscriber_reports/identity_provider/'\
+             'destination_services_report')
+
+    select idp.name, from: 'Identity Providers'
+    fill_in 'start', with: 1.year.ago
+    fill_in 'end', with: Time.zone.now
+
+    click_button 'Generate'
+
+    expect(current_path)
+      .to eq('/subscriber_reports/identity_provider/'\
+             'destination_services_report')
+  end
 end
