@@ -145,7 +145,8 @@ RSpec.describe AutomatedReportInstance, type: :model do
       let(:report_class) { 'ServiceCompatibilityReport' }
     end
 
-    it_behaves_like 'an instantiated report', 'service-provider-daily-demand' do
+    it_behaves_like 'an instantiated report', 'service-provider-daily-demand',
+                    range: true do
       let(:target) { create(:service_provider).entity_id }
       let(:report_class) { 'ServiceProviderDailyDemandReport' }
     end

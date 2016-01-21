@@ -46,8 +46,10 @@ jQuery(function($) {
       'federation-growth': defaultRangeArgs,
       'federated-sessions': sessionsReportRange,
       'identity-provider-sessions': sessionsReportRange,
+      'service-provider-sessions': sessionsReportRange,
       'daily-demand': dailyDemandReportRange,
-      'identity-provider-daily-demand': dailyDemandReportRange
+      'identity-provider-daily-demand': dailyDemandReportRange,
+      'service-provider-daily-demand': dailyDemandReportRange
     };
 
     var scaleRange = reporting.range(rangeSpecs[report.type]);
@@ -105,8 +107,10 @@ jQuery(function($) {
       'federation-growth': charts.area,
       'federated-sessions': charts.area,
       'identity-provider-sessions': charts.area,
+      'service-provider-sessions': charts.area,
       'daily-demand': charts.area,
-      'identity-provider-daily-demand': charts.area
+      'identity-provider-daily-demand': charts.area,
+      'service-provider-daily-demand': charts.area
     };
 
     kinds[report.type]();
@@ -151,11 +155,14 @@ jQuery(function($) {
     'federation-growth': renderGraph,
     'federated-sessions': renderGraph,
     'identity-provider-sessions': renderGraph,
+    'service-provider-sessions': renderGraph,
     'daily-demand': renderGraph,
     'identity-provider-daily-demand': renderGraph,
+    'service-provider-daily-demand': renderGraph,
     'service-compatibility': renderTable,
     'identity-provider-attributes': renderTable,
     'identity-provider-destination-services': renderTable,
+    'service-provider-source-identity-providers': renderTable,
     'provided-attribute': renderTable,
     'requested-attribute': renderTable,
     'requested-attribute': renderTable,

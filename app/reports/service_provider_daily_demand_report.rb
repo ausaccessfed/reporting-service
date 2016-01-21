@@ -10,7 +10,7 @@ class ServiceProviderDailyDemandReport < TimeSeriesReport
     @service_provider = ServiceProvider.find_by(entity_id: entity_id)
     title = "SP Daily Demand Report for #{@service_provider.name}"
 
-    super(title)
+    super(title, start: start, end: finish)
     @start = start.beginning_of_day
     @finish = finish.end_of_day
   end

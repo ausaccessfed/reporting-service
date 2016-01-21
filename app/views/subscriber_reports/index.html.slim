@@ -23,20 +23,20 @@ h1 Identity Provider Reports
 h1 Service Provider Reports
 
 .list-group
-  = link_to('#TODO', class: 'list-group-item') do
+  = link_to(service_provider_sessions_report_path, class: 'list-group-item') do
     h4.list-group-item-heading Service Provider Sessions Report
     p.list-group-item-text
       | Graphs the hourly number of sessions initiated with a Service Provider via AAF's central
         Discovery Service
 
-  = link_to('#TODO', class: 'list-group-item') do
-    h4.list-group-item-heading Daily Demand Report
+  = link_to(service_provider_daily_demand_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Service Provider Daily Demand Report
     p.list-group-item-text
       | Graphs the daily trend of sessions initiated with a Service Provider via AAF's central
         Discovery Service, highlighting which time of day services are most requested
 
-  = link_to('#TODO', class: 'list-group-item') do
-    h4.list-group-item-heading Source Identity Providers Report
+  = link_to(service_provider_source_identity_providers_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Service Provider Source Identity Providers Report
     p.list-group-item-text
       | Graphs the number of sessions for a Service which were
         authenticated via each Identity Provider
