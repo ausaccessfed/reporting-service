@@ -10,3 +10,4 @@ log
 vendor
 .DS_Store
 dump.rdb
+spec/screenshot.png
