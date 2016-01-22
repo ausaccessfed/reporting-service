@@ -40,8 +40,8 @@ RSpec.describe ServiceProviderReportsController, type: :controller do
     context 'with user' do
       it 'assigns only permitted SPs to the SPs list' do
         run_get
-        expect(assigns[:service_providers]).to include(object)
-        expect(assigns[:service_providers]).not_to include(bad_object)
+        expect(assigns[:entities]).to include(object)
+        expect(assigns[:entities]).not_to include(bad_object)
       end
     end
 

@@ -40,8 +40,8 @@ RSpec.describe IdentityProviderReportsController, type: :controller do
     context 'with user' do
       it 'assigns only permitted IdP to the IdPs list' do
         run_get
-        expect(assigns[:identity_providers]).to include(object)
-        expect(assigns[:identity_providers]).not_to include(bad_object)
+        expect(assigns[:entities]).to include(object)
+        expect(assigns[:entities]).not_to include(bad_object)
       end
     end
 

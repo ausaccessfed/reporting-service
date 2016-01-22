@@ -7,36 +7,14 @@ h1 Service Provider Destination Services Report
 markdown:
   Shows the source SPs requested a service within a time range, in number of Requests
 
--if !@service_providers.blank?
-  = form_tag({}, id: 'report-form') do
-    = field_block do
-      = label_tag(:entity_id) do
-        | Service Providers
+- entity_type = 'Service Provider'
 
-      - options = @service_providers.map { |sp| [sp.name, sp.entity_id] }.sort_by { |a| a[0].downcase }
-      - options.unshift(['(Please select an Service Provider...)', ''])
-
-      = select_tag(:entity_id, options_for_select(options, @entity_id))
-
-      = label_tag(:start) do
-        | from
-      = date_field_tag :start, value = 1.month.ago.utc
-
-      = label_tag(:end) do
-        | to
-      = date_field_tag :end, value = Time.now.utc
-
-    = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
-      => icon_tag('ok')
-      | Generate
-
-  = validate_form('#report-form', nil) do |v|
-    - v.validate_field(:entity_id, required: { message: 'Please select an Service Provider' })
-    - v.validate_field(:start, required: { message: 'Please pick start date' })
-    - v.validate_field(:end, required: { message: 'Please pick end date' })
+-if !@entities.blank?
+  = render(partial: 'shared/subscriber_report_form', locals: { entity_type: entity_type })
 
   - if @data
     = render(partial: 'shared/report_output', locals: { data: @data })
+
 -else
-  = render(partial: 'shared/no_report_permission', locals: { entity_type: 'Service Provider' })
+  = render(partial: 'shared/no_report_permission', locals: { entity_type: entity_type })
 

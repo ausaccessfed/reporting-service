@@ -1,6 +1,6 @@
 class IdentityProviderReportsController < ApplicationController
   before_action :permitted_identity_providers
-  before_action :identity_provider
+  before_action :entities
   before_action :access_method
 
   def sessions_report
@@ -23,16 +23,16 @@ class IdentityProviderReportsController < ApplicationController
   def permitted_identity_providers
     active_idps = IdentityProvider.preload(:organization).active
 
-    @identity_providers = active_idps.select do |idp|
+    @entities = active_idps.select do |idp|
       subject.permits? permission_string(idp)
     end
   end
 
-  def identity_provider
+  def entities
     return unless params[:entity_id].present?
 
-    @idp = @identity_providers.detect do |idp|
-      idp.entity_id == params[:entity_id]
+    @entity = @entities.detect do |entity|
+      entity.entity_id == params[:entity_id]
     end
   end
 
@@ -52,7 +52,7 @@ class IdentityProviderReportsController < ApplicationController
 
   def access_method
     return public_action unless params[:entity_id].present?
-    check_access! permission_string(@idp)
+    check_access! permission_string(@entity)
   end
 
   def permission_string(entity)

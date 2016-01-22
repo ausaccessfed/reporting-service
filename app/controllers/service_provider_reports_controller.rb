@@ -1,6 +1,6 @@
 class ServiceProviderReportsController < ApplicationController
   before_action :permitted_service_providers
-  before_action :service_provider
+  before_action :entities
   before_action :access_method
 
   def sessions_report
@@ -23,16 +23,16 @@ class ServiceProviderReportsController < ApplicationController
   def permitted_service_providers
     active_sps = ServiceProvider.preload(:organization).active
 
-    @service_providers = active_sps.select do |sp|
+    @entities = active_sps.select do |sp|
       subject.permits? permission_string(sp)
     end
   end
 
-  def service_provider
+  def entities
     return unless params[:entity_id].present?
 
-    @sp = @service_providers.detect do |sp|
-      sp.entity_id == params[:entity_id]
+    @entity = @entities.detect do |entity|
+      entity.entity_id == params[:entity_id]
     end
   end
 
@@ -52,7 +52,7 @@ class ServiceProviderReportsController < ApplicationController
 
   def access_method
     return public_action unless params[:entity_id].present?
-    check_access! permission_string(@sp)
+    check_access! permission_string(@entity)
   end
 
   def permission_string(entity)
