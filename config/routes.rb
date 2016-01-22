@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     match_report('attribute', 'service_providers_report', [:get, :post])
   end
 
-  get '/subscriber_reports' => 'subscriber_reports#index',
+  get '/subscriber_reports' => 'subscriber_reports_dashboard#index',
       as: 'subscriber_reports'
 
   scope '/subscriber_reports' do
