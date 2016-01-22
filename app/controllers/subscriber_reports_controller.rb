@@ -1,7 +1,7 @@
 class SubscriberReportsController < ApplicationController
   private
 
-  def entities
+  def requested_entity
     return unless params[:entity_id].present?
 
     @entity = @entities.detect do |entity|

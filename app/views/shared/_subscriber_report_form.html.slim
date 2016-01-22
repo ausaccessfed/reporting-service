@@ -4,7 +4,7 @@
         = "#{entity_type}s"
 
       - options = @entities.map { |entity| [entity.name, entity.entity_id] }.sort_by { |a| a[0].downcase }
-      - options.unshift(["(Please select the #{entity_type}...)", ''])
+      - options.unshift(["(Please select one of the the #{entity_type}...)", ''])
 
       = select_tag(:entity_id, options_for_select(options, @entity_id))
 
@@ -21,6 +21,6 @@
       | Generate
 
 = validate_form('#report-form', nil) do |v|
-  - v.validate_field(:entity_id, required: { message: "Please select the #{entity_type}" })
+  - v.validate_field(:entity_id, required: { message: "Please select one of the #{entity_type}" })
   - v.validate_field(:start, required: { message: 'Please pick start date' })
   - v.validate_field(:end, required: { message: 'Please pick end date' })

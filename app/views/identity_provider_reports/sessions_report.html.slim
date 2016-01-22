@@ -7,13 +7,4 @@ h1 Identity Provider Sessions Report
 markdown:
   Shows the sessions of an IdP within a time range, in number of Sessions
 
-- entity_type = 'Identity Provider'
-
--if !@entities.blank?
-  = render(partial: 'shared/subscriber_report_form', locals: { entity_type: entity_type })
-
-  - if @data
-    = render(partial: 'shared/report_output', locals: { data: @data })
-
--else
-  = render(partial: 'shared/no_report_permission', locals: { entity_type: entity_type })
+= render(partial: 'form')

@@ -1,6 +1,6 @@
 class IdentityProviderReportsController < SubscriberReportsController
   before_action :permitted_identity_providers
-  before_action :entities
+  before_action :requested_entity
   before_action :access_method
 
   def sessions_report
