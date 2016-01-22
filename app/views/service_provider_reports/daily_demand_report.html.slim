@@ -5,10 +5,9 @@
 h1 Service Provider Daily Demand  Report
 
 markdown:
-  Shows the daily demand of an IdP within a time range, in number of
-  Sessions
+  Shows the daily demand of an IdP within a time range, in number of Sessions
 
-- if @service_providers
+-if !@service_providers.blank?
   = form_tag({}, id: 'report-form') do
     = field_block do
       = label_tag(:entity_id) do
@@ -38,5 +37,5 @@ markdown:
 
   - if @data
     = render(partial: 'shared/report_output', locals: { data: @data })
-- else
-  = render(partial: 'errors/permissions_error')
+-else
+  = render(partial: 'shared/no_report_permission', locals: { entity_type: 'Service Provider' })

@@ -5,10 +5,9 @@
 h1 Identity Provider Destination Services Report
 
 markdown:
-  Shows the requested services of an IdP within a time range, in number of
-  requests to
+  Shows the requested services of an IdP within a time range, in number of Requests
 
-- if @identity_providers
+-if !@identity_providers.blank?
   = form_tag({}, id: 'report-form') do
     = field_block do
       = label_tag(:entity_id) do
@@ -38,5 +37,5 @@ markdown:
 
   - if @data
     = render(partial: 'shared/report_output', locals: { data: @data })
-- else
-  = render(partial: 'errors/permissions_error')
+-else
+  = render(partial: 'shared/no_report_permission', locals: { entity_type: 'Identity Provider' })

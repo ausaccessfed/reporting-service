@@ -45,7 +45,7 @@ RSpec.describe IdentityProviderReportsController, type: :controller do
       end
     end
 
-    context 'generate sessions report' do
+    context 'generate report' do
       it 'assigns only permitted IdP to the IdPs list' do
         run_post
         expect(assigns[:data]).to be_a(String)

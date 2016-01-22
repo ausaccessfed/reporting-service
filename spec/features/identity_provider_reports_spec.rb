@@ -7,6 +7,15 @@ RSpec.feature 'Identity Provider Reports' do
   given(:idp) { create :identity_provider, organization: organization }
   given(:user) { create :subject }
 
+  given(:not_allowed_message) do
+    'Sorry, your organization did not allow you to generate reports'\
+    ' for any Identity Provider'
+  end
+
+  def show_not_allowed_message
+    expect(page).to have_selector('p', not_allowed_message)
+  end
+
   describe 'subject has permissions' do
     background do
       create :activation, federation_object: idp
@@ -95,13 +104,13 @@ RSpec.feature 'Identity Provider Reports' do
 
     scenario 'viewing the IdP Destination Services Report' do
       visit '/subscriber_reports/identity_provider/sessions_report'
-      expect(page).to have_selector('h4', 'No Permissions')
+      show_not_allowed_message
 
       visit '/subscriber_reports/identity_provider/daily_demand_report'
-      expect(page).to have_selector('h4', 'No Permissions')
+      show_not_allowed_message
 
       visit '/subscriber_reports/identity_provider/destination_services_report'
-      expect(page).to have_selector('h4', 'No Permissions')
+      show_not_allowed_message
     end
   end
 end
