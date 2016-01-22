@@ -20,11 +20,11 @@ markdown:
 
       = label_tag(:start) do
         | from
-      = date_field_tag :start, value = 1.month.ago.utc
+      = date_field_tag :start, value = @start ? @start : 1.month.ago.utc
 
       = label_tag(:end) do
         | to
-      = date_field_tag :end, value = Time.now.utc
+      = date_field_tag :end, value = @end ? @end : Time.now.utc
 
     = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
       => icon_tag('ok')

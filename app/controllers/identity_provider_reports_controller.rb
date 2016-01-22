@@ -24,12 +24,9 @@ class IdentityProviderReportsController < ApplicationController
     active_idps = IdentityProvider.preload(:organization).active
 
     @identity_providers = active_idps.select do |idp|
-      subject
-      .permits?("objects:organization:#{idp.organization.identifier}:report")
+      subject.permits? permission_string(idp)
     end
   end
-
-  private
 
   def identity_provider
     return unless params[:entity_id].present?
@@ -45,20 +42,20 @@ class IdentityProviderReportsController < ApplicationController
   end
 
   def generate_report(report_type, step = nil)
-    if step
-      report_type.new(params[:entity_id], range[:start], range[:end], step)
-    else
-      report_type.new(params[:entity_id], range[:start], range[:end])
-    end
+    @start = Time.zone.parse(params[:start])
+    @end = Time.zone.parse(params[:end])
+    @entity_id = params[:entity_id]
+
+    return report_type.new(@entity_id, @start, @end, step) if step
+    report_type.new(@entity_id, @start, @end)
   end
 
   def access_method
     return public_action unless params[:entity_id].present?
-    check_access!("objects:organization:#{@idp.organization.identifier}:report")
+    check_access! permission_string(@idp)
   end
 
-  def range
-    { start: Time.zone.parse(params[:start]),
-      end: Time.zone.parse(params[:end]) }
+  def permission_string(entity)
+    "objects:organization:#{entity.organization.identifier}:report"
   end
 end
