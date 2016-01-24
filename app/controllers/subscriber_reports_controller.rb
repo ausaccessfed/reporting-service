@@ -1,4 +1,8 @@
 class SubscriberReportsController < ApplicationController
+  before_action { permitted_objects(model_object) }
+  before_action :requested_entity
+  before_action :access_method
+
   private
 
   def requested_entity
@@ -30,5 +34,13 @@ class SubscriberReportsController < ApplicationController
 
   def permission_string(entity)
     "objects:organization:#{entity.organization.identifier}:report"
+  end
+
+  def permitted_objects(model)
+    active_sps = model.preload(:organization).active
+
+    @entities = active_sps.select do |sp|
+      subject.permits? permission_string(sp)
+    end
   end
 end
