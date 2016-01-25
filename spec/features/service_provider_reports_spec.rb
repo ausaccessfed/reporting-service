@@ -68,7 +68,7 @@ RSpec.feature 'Service Provider Reports' do
       expect(page).to have_css('svg.service-provider-daily-demand')
     end
 
-    scenario 'viewing the Destination Services Report' do
+    scenario 'viewing the SP Source Identity Providers Report' do
       click_link('Service Provider Source Identity Providers Report')
 
       expect(current_path)
@@ -102,7 +102,7 @@ RSpec.feature 'Service Provider Reports' do
       visit '/subscriber_reports'
     end
 
-    scenario 'viewing the SP Destination Services Report' do
+    scenario 'viewing the SP Source Identity Providers Report' do
       visit '/subscriber_reports/service_provider/sessions_report'
       show_not_allowed_message
 
