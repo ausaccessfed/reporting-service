@@ -1,6 +1,7 @@
 class SubscriberReportsController < ApplicationController
   before_action { permitted_objects(model_object) }
   before_action :requested_entity
+  before_action :range
   before_action :access_method
 
   private
@@ -13,17 +14,15 @@ class SubscriberReportsController < ApplicationController
     end
   end
 
-  def data_output(report_type, step = nil)
-    report = generate_report(report_type, step)
+  def output(report_type, steps = nil)
+    report = generate_report(report_type, steps)
     JSON.generate(report.generate)
   end
 
-  def generate_report(report_type, step = nil)
-    @start = Time.zone.parse(params[:start])
-    @end = Time.zone.parse(params[:end])
+  def generate_report(report_type, steps = nil)
     @entity_id = params[:entity_id]
 
-    return report_type.new(@entity_id, @start, @end, step) if step
+    return report_type.new(@entity_id, @start, @end, steps) if steps
     report_type.new(@entity_id, @start, @end)
   end
 
@@ -42,5 +41,17 @@ class SubscriberReportsController < ApplicationController
     @entities = active_sps.select do |sp|
       subject.permits? permission_string(sp)
     end
+  end
+
+  def range
+    @start = params[:start] ? Time.zone.parse(params[:start]) : nil
+    @end = params[:end] ? Time.zone.parse(params[:end]) : nil
+  end
+
+  def scaled_steps
+    width = (@end - @start) / 365_000
+    return 35 if width > 35
+    return 5 if width < 5
+    width.to_i
   end
 end
