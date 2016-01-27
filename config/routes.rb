@@ -50,6 +50,9 @@ Rails.application.routes.draw do
                  'source_identity_providers_report', [:get, :post])
   end
 
+  get '/admin/reports' => 'administrator_reports#index',
+      as: :admin_reports
+
   namespace :api, defaults: { format: 'json' } do
     v1_constraints = APIConstraints.new(version: 1, default: true)
     scope constraints: v1_constraints do
