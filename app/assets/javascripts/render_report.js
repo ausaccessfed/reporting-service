@@ -79,6 +79,7 @@ jQuery(function($) {
 
       area: function() {
         var area = d3.svg.area()
+          .interpolate('step')
           .x(mappers.x)
           .y0(graph.height)
           .y1(mappers.y);
