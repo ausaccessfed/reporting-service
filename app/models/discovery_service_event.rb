@@ -1,7 +1,4 @@
 class DiscoveryServiceEvent < ActiveRecord::Base
-  belongs_to :service_provider
-  belongs_to :identity_provider
-
   valhammer
 
   scope :within_range, lambda { |start, finish|
