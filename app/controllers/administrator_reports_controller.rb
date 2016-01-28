@@ -1,5 +1,6 @@
 class AdministratorReportsController < ApplicationController
   before_action { check_access! 'admin:reports' }
+  before_action :range, only: [:federation_growth_report]
 
   def index
   end
@@ -10,5 +11,19 @@ class AdministratorReportsController < ApplicationController
     @identifier = params[:identifier]
     report = SubscriberRegistrationsReport.new(@identifier)
     @data = JSON.generate(report.generate)
+  end
+
+  def federation_growth_report
+    return if params[:start].blank? || params[:end].blank?
+
+    report = FederationGrowthReport.new(@start, @end)
+    @data = JSON.generate(report.generate)
+  end
+
+  private
+
+  def range
+    @start = params[:start] ? Time.zone.parse(params[:start]) : nil
+    @end = params[:end] ? Time.zone.parse(params[:end]) : nil
   end
 end

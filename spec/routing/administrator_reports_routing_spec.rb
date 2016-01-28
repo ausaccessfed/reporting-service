@@ -27,4 +27,12 @@ RSpec.describe AdministratorReportsController, type: :routing do
     it_behaves_like 'post request'
     it_behaves_like 'get request'
   end
+
+  describe 'post & get on /admin/reports/federation_growth_report' do
+    let(:action) { '#federation_growth_report' }
+    let(:path) { '/federation_growth_report' }
+
+    it_behaves_like 'post request'
+    it_behaves_like 'get request'
+  end
 end
