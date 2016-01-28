@@ -61,6 +61,7 @@ Rails.application.routes.draw do
 
     match_report('reports', 'subscriber_registrations_report', [:get, :post])
     match_report('reports', 'federation_growth_report', [:get, :post])
+    match_report('reports', 'daily_demand_report', [:get, :post])
   end
 
   namespace :api, defaults: { format: 'json' } do

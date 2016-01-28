@@ -47,4 +47,18 @@ RSpec.describe AdministratorReportsController, type: :routing do
 
     it_behaves_like 'post request'
   end
+
+  describe 'get on /admin/reports/daily_demand_report' do
+    let(:action) { '#daily_demand_report' }
+    let(:path) { '/daily_demand_report' }
+
+    it_behaves_like 'get request'
+  end
+
+  describe 'post on /admin/reports/daily_demand_report' do
+    let(:action) { '#daily_demand_report' }
+    let(:path) { '/daily_demand_report' }
+
+    it_behaves_like 'post request'
+  end
 end

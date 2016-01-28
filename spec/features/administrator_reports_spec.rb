@@ -59,5 +59,20 @@ RSpec.feature 'Administrator Reports' do
         expect(page).to have_css('svg.federation-growth')
       end
     end
+
+    context 'Daily Demand Report' do
+      scenario 'viewing Report' do
+        click_link 'Daily Demand Report'
+
+        fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
+        fill_in 'end', with: Time.now.utc.beginning_of_month
+
+        click_button('Generate')
+
+        expect(current_path)
+          .to eq('/admin/reports/daily_demand_report')
+        expect(page).to have_css('svg.daily-demand')
+      end
+    end
   end
 end

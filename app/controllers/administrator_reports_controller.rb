@@ -1,6 +1,6 @@
 class AdministratorReportsController < ApplicationController
   before_action { check_access! 'admin:reports' }
-  before_action :range, only: [:federation_growth_report]
+  before_action :range, except: [:subscriber_registrations_report]
 
   def index
   end
@@ -17,6 +17,13 @@ class AdministratorReportsController < ApplicationController
     return if params[:start].blank? || params[:end].blank?
 
     report = FederationGrowthReport.new(@start, @end)
+    @data = JSON.generate(report.generate)
+  end
+
+  def daily_demand_report
+    return if params[:start].blank? || params[:end].blank?
+
+    report = DailyDemandReport.new(@start, @end)
     @data = JSON.generate(report.generate)
   end
 

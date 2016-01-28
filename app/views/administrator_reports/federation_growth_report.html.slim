@@ -8,22 +8,4 @@ p Shows the growth of the federation over given range, in number of
   Organisations, Service Providers, Identity Providers and Rapid Connect
   Services
 
-= form_tag({}, id: 'report-form') do
-  = label_tag(:start) do
-    | from
-  = date_field_tag :start, value = @start ? @start : Time.now.utc.beginning_of_month - 1.month
-
-  = label_tag(:end) do
-    | to
-  = date_field_tag :end, value = @end ? @end : Time.now.utc.beginning_of_month
-
-  = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
-    => icon_tag('ok')
-    | Generate
-
-= validate_form('#report-form', nil) do |v|
-  - v.validate_field(:start, required: { message: 'Please pick start date' })
-  - v.validate_field(:end, required: { message: 'Please pick end date' })
-
-- if @data
-  = render(partial: 'shared/report_output', locals: { data: @data })
+= render(partial: 'form')
