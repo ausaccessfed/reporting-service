@@ -1,4 +1,4 @@
-class SubscriberRegistrationReport < TabularReport
+class SubscriberRegistrationsReport < TabularReport
   report_type 'subscriber-registrations'
   header %w(Name Registration\ Date)
   footer
