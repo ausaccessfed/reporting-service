@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160111005859) do
+ActiveRecord::Schema.define(version: 20160128001716) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -74,22 +74,20 @@ ActiveRecord::Schema.define(version: 20160111005859) do
   end
 
   create_table "discovery_service_events", force: :cascade do |t|
-    t.string   "user_agent",           limit: 255, null: false
-    t.string   "ip",                   limit: 255, null: false
-    t.string   "group",                limit: 255, null: false
-    t.string   "phase",                limit: 255, null: false
-    t.string   "unique_id",            limit: 255, null: false
-    t.datetime "timestamp",                        null: false
-    t.string   "selection_method",     limit: 255
-    t.string   "return_url",           limit: 255
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-    t.integer  "service_provider_id",  limit: 4,   null: false
-    t.integer  "identity_provider_id", limit: 4
+    t.string   "user_agent",       limit: 255, null: false
+    t.string   "ip",               limit: 255, null: false
+    t.string   "group",            limit: 255, null: false
+    t.string   "phase",            limit: 255, null: false
+    t.string   "unique_id",        limit: 255, null: false
+    t.datetime "timestamp",                    null: false
+    t.string   "selection_method", limit: 255
+    t.string   "return_url",       limit: 255
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.string   "initiating_sp",    limit: 255, null: false
+    t.string   "selected_idp",     limit: 255
   end
 
-  add_index "discovery_service_events", ["identity_provider_id"], name: "fk_rails_05778959f9", using: :btree
-  add_index "discovery_service_events", ["service_provider_id"], name: "fk_rails_13fb53a96b", using: :btree
   add_index "discovery_service_events", ["timestamp"], name: "index_discovery_service_events_on_timestamp", using: :btree
 
   create_table "identity_provider_saml_attributes", force: :cascade do |t|
@@ -213,8 +211,6 @@ ActiveRecord::Schema.define(version: 20160111005859) do
   add_foreign_key "automated_report_instances", "automated_reports"
   add_foreign_key "automated_report_subscriptions", "automated_reports"
   add_foreign_key "automated_report_subscriptions", "subjects"
-  add_foreign_key "discovery_service_events", "identity_providers"
-  add_foreign_key "discovery_service_events", "service_providers"
   add_foreign_key "identity_provider_saml_attributes", "identity_providers"
   add_foreign_key "identity_provider_saml_attributes", "saml_attributes"
   add_foreign_key "identity_providers", "organizations"
