@@ -10,11 +10,11 @@
 
       = label_tag(:start) do
         | from
-      = date_field_tag :start, value = @start ? @start : 1.month.ago.utc
+      = date_field_tag :start, value = @start ? @start : Time.now.utc.beginning_of_month - 1.month
 
       = label_tag(:end) do
         | to
-      = date_field_tag :end, value = @end ? @end : Time.now.utc
+      = date_field_tag :end, value = @end ? @end : Time.now.utc.beginning_of_month
 
     = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
       => icon_tag('ok')
