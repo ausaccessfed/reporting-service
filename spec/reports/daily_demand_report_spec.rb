@@ -30,8 +30,8 @@ RSpec.describe DailyDemandReport do
   context 'when events are sessions with response' do
     before do
       create_list :discovery_service_event, 5, :response,
-                  identity_provider: identity_provider,
-                  service_provider: service_provider
+                  selected_idp: identity_provider.entity_id,
+                  initiating_sp: service_provider.entity_id
     end
 
     let(:value) { anything }
@@ -52,7 +52,7 @@ RSpec.describe DailyDemandReport do
   context 'when events are not responded' do
     before do
       create_list :discovery_service_event, 20,
-                  service_provider: service_provider,
+                  initiating_sp: service_provider.entity_id,
                   timestamp: 1.day.ago.beginning_of_day
     end
 
@@ -67,18 +67,18 @@ RSpec.describe DailyDemandReport do
     before :example do
       [*1..5].each do |n|
         create :discovery_service_event, :response,
-               identity_provider: identity_provider,
-               service_provider: service_provider,
+               selected_idp: identity_provider.entity_id,
+               initiating_sp: service_provider.entity_id,
                timestamp: n.days.ago.beginning_of_day
 
         create :discovery_service_event, :response,
-               identity_provider: identity_provider,
-               service_provider: service_provider,
+               selected_idp: identity_provider.entity_id,
+               initiating_sp: service_provider.entity_id,
                timestamp: n.days.ago.beginning_of_day + 10.minutes
 
         create :discovery_service_event, :response,
-               identity_provider: identity_provider,
-               service_provider: service_provider,
+               selected_idp: identity_provider.entity_id,
+               initiating_sp: service_provider.entity_id,
                timestamp: n.days.ago.end_of_day
       end
     end

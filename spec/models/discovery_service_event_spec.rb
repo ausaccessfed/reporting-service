@@ -7,7 +7,7 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
     subject { create :discovery_service_event }
 
     it { is_expected.to validate_presence_of(:user_agent) }
-    it { is_expected.to validate_presence_of(:service_provider) }
+    it { is_expected.to validate_presence_of(:initiating_sp) }
     it { is_expected.to validate_presence_of(:ip) }
     it { is_expected.to validate_presence_of(:unique_id) }
     it { is_expected.to validate_presence_of(:phase) }
@@ -22,23 +22,23 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
 
     let(:event_before_start) do
       create :discovery_service_event, :response,
-             identity_provider: identity_provider,
-             service_provider: service_provider,
+             selected_idp: identity_provider.entity_id,
+             initiating_sp: service_provider.entity_id,
              timestamp: start - 1.second
     end
 
     let(:event_after_finish) do
       create :discovery_service_event, :response,
-             identity_provider: identity_provider,
-             service_provider: service_provider,
+             selected_idp: identity_provider.entity_id,
+             initiating_sp: service_provider.entity_id,
              timestamp: finish + 1.second
     end
 
     let(:events_within_range) do
       [*1..10].map do |t|
         create :discovery_service_event, :response,
-               identity_provider: identity_provider,
-               service_provider: service_provider,
+               selected_idp: identity_provider.entity_id,
+               initiating_sp: service_provider.entity_id,
                timestamp: [t.days.ago.end_of_day,
                            t.days.ago.beginning_of_day].sample
       end

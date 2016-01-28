@@ -32,16 +32,16 @@ RSpec.describe IdentityProviderDestinationServicesReport do
   context '#generate' do
     before do
       create_list :discovery_service_event, 20, :response,
-                  identity_provider: idp,
-                  service_provider: sp_01
+                  selected_idp: idp.entity_id,
+                  initiating_sp: sp_01.entity_id
 
       create_list :discovery_service_event, 5, :response,
-                  identity_provider: idp,
-                  service_provider: sp_02
+                  selected_idp: idp.entity_id,
+                  initiating_sp: sp_02.entity_id
 
       create_list :discovery_service_event, 10,
-                  identity_provider: idp,
-                  service_provider: sp_03,
+                  selected_idp: idp.entity_id,
+                  initiating_sp: sp_03.entity_id,
                   timestamp: 20.days.ago.beginning_of_day
     end
 

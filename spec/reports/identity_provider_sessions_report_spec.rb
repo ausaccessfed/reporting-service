@@ -39,8 +39,8 @@ RSpec.describe IdentityProviderSessionsReport do
   context 'when events are sessions with response' do
     before do
       create_list :discovery_service_event, 20, :response,
-                  identity_provider: idp,
-                  service_provider: sp
+                  selected_idp: idp.entity_id,
+                  initiating_sp: sp.entity_id
     end
 
     let(:value) { anything }
@@ -59,7 +59,7 @@ RSpec.describe IdentityProviderSessionsReport do
   context 'when IdP sessions are not yet completed' do
     before do
       create_list :discovery_service_event, 2,
-                  service_provider: sp
+                  initiating_sp: sp.entity_id
     end
 
     let(:value) { 0.0 }
@@ -72,23 +72,23 @@ RSpec.describe IdentityProviderSessionsReport do
   context 'when IdPs have sessions' do
     before :example do
       create_list :discovery_service_event, 5, :response,
-                  identity_provider: idp,
-                  service_provider: sp,
+                  selected_idp: idp.entity_id,
+                  initiating_sp: sp.entity_id,
                   timestamp: start
 
       create_list :discovery_service_event, 10, :response,
-                  identity_provider: idp,
-                  service_provider: sp,
+                  selected_idp: idp.entity_id,
+                  initiating_sp: sp.entity_id,
                   timestamp: finish - 2.days
 
       create_list :discovery_service_event, 9, :response,
-                  identity_provider: idp,
-                  service_provider: sp,
+                  selected_idp: idp.entity_id,
+                  initiating_sp: sp.entity_id,
                   timestamp: finish
 
       create_list :discovery_service_event, 9, :response,
-                  identity_provider: idp_2,
-                  service_provider: sp,
+                  selected_idp: idp_2.entity_id,
+                  initiating_sp: sp.entity_id,
                   timestamp: finish
     end
 
