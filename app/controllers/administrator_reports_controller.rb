@@ -27,10 +27,24 @@ class AdministratorReportsController < ApplicationController
     @data = JSON.generate(report.generate)
   end
 
+  def federated_sessions_report
+    return if params[:start].blank? || params[:end].blank?
+
+    report = FederatedSessionsReport.new(@start, @end, scaled_steps)
+    @data = JSON.generate(report.generate)
+  end
+
   private
 
   def range
     @start = params[:start] ? Time.zone.parse(params[:start]) : nil
     @end = params[:end] ? Time.zone.parse(params[:end]) : nil
+  end
+
+  def scaled_steps
+    width = (@end - @start) / 365_000
+    return 24 if width > 24
+    return 1 if width < 1
+    width.to_i
   end
 end

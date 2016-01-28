@@ -54,4 +54,9 @@ RSpec.describe AdministratorReportsController, type: :controller do
     let(:params) { { start: Time.now.utc, end: Time.now.utc - 1.month } }
     let(:template) { 'daily-demand' }
   end
+
+  context 'generate Federated Sessions Report' do
+    let(:params) { { start: Time.now.utc, end: Time.now.utc - 1.month } }
+    let(:template) { 'federated-sessions' }
+  end
 end

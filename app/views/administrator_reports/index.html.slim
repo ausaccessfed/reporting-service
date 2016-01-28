@@ -20,3 +20,9 @@ h1 Admin Reports
     p.list-group-item-text
       | Graphs the daily trend of sessions established via AAF's central
         Discovery Service, highlighting which time of day users are most active
+
+  = link_to(admin_reports_federated_sessions_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Federated Sessions Report
+    p.list-group-item-text
+      | Graphs the hourly number of sessions established via AAF's central
+        Discovery Service

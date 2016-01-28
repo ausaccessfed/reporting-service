@@ -74,5 +74,20 @@ RSpec.feature 'Administrator Reports' do
         expect(page).to have_css('svg.daily-demand')
       end
     end
+
+    context 'Federated Sessions Report' do
+      scenario 'viewing Report' do
+        click_link 'Federated Sessions Report'
+
+        fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
+        fill_in 'end', with: Time.now.utc.beginning_of_month
+
+        click_button('Generate')
+
+        expect(current_path)
+          .to eq('/admin/reports/federated_sessions_report')
+        expect(page).to have_css('svg.federated-sessions')
+      end
+    end
   end
 end

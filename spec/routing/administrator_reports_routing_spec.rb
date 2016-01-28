@@ -61,4 +61,18 @@ RSpec.describe AdministratorReportsController, type: :routing do
 
     it_behaves_like 'post request'
   end
+
+  describe 'get on /admin/reports/federated_sessions_report' do
+    let(:action) { '#federated_sessions_report' }
+    let(:path) { '/federated_sessions_report' }
+
+    it_behaves_like 'get request'
+  end
+
+  describe 'post on /admin/reports/federated_sessions_report' do
+    let(:action) { '#federated_sessions_report' }
+    let(:path) { '/federated_sessions_report' }
+
+    it_behaves_like 'post request'
+  end
 end
