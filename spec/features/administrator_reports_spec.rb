@@ -23,5 +23,26 @@ RSpec.feature 'Administrator Reports' do
       expect(current_path).to eq('/admin/reports')
       expect(page).to have_css('.list-group')
     end
+
+    context 'Subscriber Registrations' do
+      given(:identifiers) do
+        ['Organizations', 'Identity Providers', 'Service Providers',
+         'Rapid Connect Services', 'Services']
+      end
+
+      scenario 'viewing Report' do
+        click_link 'Subscriber Registrations Report'
+
+        identifiers.each do |identifier|
+          select(identifier.titleize, from: 'Subscriber Identifiers')
+
+          click_button('Generate')
+
+          expect(current_path)
+            .to eq('/admin/reports/subscriber_registrations_report')
+          expect(page).to have_css('table.subscriber-registrations')
+        end
+      end
+    end
   end
 end
