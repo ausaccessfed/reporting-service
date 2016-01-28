@@ -39,7 +39,7 @@ RSpec.describe AutomatedReport, type: :model do
     end
 
     it 'requires an object type identifier for object reports' do
-      subject.report_class = 'SubscriberRegistrationReport'
+      subject.report_class = 'SubscriberRegistrationsReport'
       types = %w(identity_providers service_providers organizations
                  rapid_connect_services services)
       types.each do |type|

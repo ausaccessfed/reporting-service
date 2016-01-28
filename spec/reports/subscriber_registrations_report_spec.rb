@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SubscriberRegistrationReport do
+RSpec.describe SubscriberRegistrationsReport do
   let(:header) { [%w(Name Registration\ Date)] }
   let(:type) { 'subscriber-registrations' }
 
@@ -9,7 +9,7 @@ RSpec.describe SubscriberRegistrationReport do
   let(:service_provider) { create(:service_provider) }
   let(:rapid_connect_service) { create(:rapid_connect_service) }
 
-  subject { SubscriberRegistrationReport.new(report_type) }
+  subject { SubscriberRegistrationsReport.new(report_type) }
   let(:report) { subject.generate }
 
   shared_examples 'a report which lists federation objects' do

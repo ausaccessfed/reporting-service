@@ -105,7 +105,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
 
     it_behaves_like 'an instantiated report', 'subscriber-registrations' do
       let(:target) { 'organizations' }
-      let(:report_class) { 'SubscriberRegistrationReport' }
+      let(:report_class) { 'SubscriberRegistrationsReport' }
     end
 
     it_behaves_like 'an instantiated report', 'identity-provider-attributes' do
