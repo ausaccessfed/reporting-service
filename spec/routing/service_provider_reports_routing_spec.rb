@@ -17,23 +17,35 @@ RSpec.describe ServiceProviderReportsController do
     it { is_expected.to route_to(action) }
   end
 
-  describe 'get & post service_provider/sessions_report' do
+  describe 'get service_provider/sessions_report' do
     let(:action) { 'service_provider_reports#sessions_report' }
     let(:path) { '/service_provider/sessions_report' }
 
     it_behaves_like 'get request'
+  end
+
+  describe 'post service_provider/sessions_report' do
+    let(:action) { 'service_provider_reports#sessions_report' }
+    let(:path) { '/service_provider/sessions_report' }
+
     it_behaves_like 'post request'
   end
 
-  describe 'get & post service_provider/daily_demand_report' do
+  describe 'get service_provider/daily_demand_report' do
     let(:action) { 'service_provider_reports#daily_demand_report' }
     let(:path) { '/service_provider/daily_demand_report' }
 
     it_behaves_like 'get request'
+  end
+
+  describe 'post service_provider/daily_demand_report' do
+    let(:action) { 'service_provider_reports#daily_demand_report' }
+    let(:path) { '/service_provider/daily_demand_report' }
+
     it_behaves_like 'post request'
   end
 
-  describe 'get & post service_provider/source_identity_providers_report' do
+  describe 'get service_provider/source_identity_providers_report' do
     let(:action) do
       'service_provider_reports#source_identity_providers_report'
     end
@@ -41,6 +53,15 @@ RSpec.describe ServiceProviderReportsController do
     let(:path) { '/service_provider/source_identity_providers_report' }
 
     it_behaves_like 'get request'
+  end
+
+  describe 'get service_provider/source_identity_providers_report' do
+    let(:action) do
+      'service_provider_reports#source_identity_providers_report'
+    end
+
+    let(:path) { '/service_provider/source_identity_providers_report' }
+
     it_behaves_like 'post request'
   end
 end
