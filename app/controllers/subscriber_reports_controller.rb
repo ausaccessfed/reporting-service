@@ -50,7 +50,7 @@ class SubscriberReportsController < ApplicationController
 
   def scaled_steps
     width = (@end - @start) / 365_000
-    return 24 if width > 24
+    return 10 if width > 10
     return 1 if width < 1
     width.to_i
   end

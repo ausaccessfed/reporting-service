@@ -6,6 +6,7 @@ class ServiceCompatibilityReport < TabularReport
   def initialize(entity_id)
     @service_provider = ServiceProvider.find_by(entity_id: entity_id)
     title = "Service Compatibility for #{@service_provider.name}"
+
     super(title)
   end
 

@@ -6,6 +6,7 @@ class SubscriberRegistrationsReport < TabularReport
   def initialize(identifier)
     @identifier = identifier
     title = standard_title('Registered')
+
     super(title)
   end
 
