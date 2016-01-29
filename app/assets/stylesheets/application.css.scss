@@ -103,6 +103,30 @@ svg.report-output {
       fill: $graph-color-dull;
     }
   }
+
+  &.identity-provider-attributes {
+
+    .group1 {
+      fill: $graph-color-vibrant;
+    }
+    .group2 {
+      fill: $graph-color-primary;
+    }
+
+    .count {
+      font: 10px sans-serif;
+      text-anchor: end;
+    }
+
+    .row_header {
+      fill:black;
+      font: 12px sans-serif;
+    }
+
+    .line {
+      stroke:rgb(200,200,200);stroke-width:1;
+    }
+  }
 }
 
 table.report-output {

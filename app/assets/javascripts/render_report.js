@@ -157,6 +157,51 @@ jQuery(function($) {
     });
   };
 
+  var renderBarGraph = function (report, target) {
+    var range = reporting.barRange(report);
+    var sizing = reporting.barSizing(report, target);
+    var scale = reporting.barScale(report, range, sizing);
+    var translate = reporting.translate;
+
+    var svg = d3.select(target)
+      .selectAll('svg')
+        .data([reporting.id]);
+
+    svg.selectAll('svg > *')
+      .remove();
+
+    svg.enter()
+      .append('svg')
+        .attr('id', function (id) { return id; })
+        .attr('class', report.type + ' report-output')
+        .attr('height', sizing.container.height)
+        .attr('width', '100%');
+
+    svg.call(reporting.barAxes(scale, sizing));
+
+    var rect = svg.append('g')
+      .call(translate(sizing.margin.left, sizing.margin.top))
+      .selectAll('rect')
+        .data(report.rows)
+      .enter();
+
+    var barHover = reporting.barHover.call();
+
+    rect.append('rect')
+      .attr('y', function (d) { return scale.y(d[0]) })
+      .attr('width', function (d) { return scale.x(d[1]) })
+      .attr('height', sizing.bar.height)
+      .attr('class', 'group2')
+      .call(reporting.barHoverMouseEvents(barHover, 'Core'));
+
+    rect.append('rect')
+      .attr('y', function (d) { return scale.y(d[0]) + sizing.bar.height })
+      .attr('width', function (d) { return scale.x(d[2]) })
+      .attr('height', sizing.bar.height)
+      .attr('class', 'group1')
+      .call(reporting.barHoverMouseEvents(barHover, 'Optional'));
+  };
+
   var renderers = {
     'federation-growth': renderGraph,
     'federated-sessions': renderGraph,
@@ -166,9 +211,9 @@ jQuery(function($) {
     'identity-provider-daily-demand': renderGraph,
     'service-provider-daily-demand': renderGraph,
     'service-compatibility': renderTable,
-    'identity-provider-attributes': renderTable,
     'identity-provider-destination-services': renderTable,
     'service-provider-source-identity-providers': renderTable,
+    'identity-provider-attributes': renderBarGraph,
     'provided-attribute': renderTable,
     'requested-attribute': renderTable
   };
