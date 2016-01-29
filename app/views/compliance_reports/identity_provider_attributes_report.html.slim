@@ -1,0 +1,10 @@
+= breadcrumbs({ 'Dashboard' => dashboard_path },
+              { 'Compliance Reports' => dashboard_path },
+              'Identity Provider Attributes Report')
+
+h1 Identity Provider Attributes Report
+
+markdown:
+  Shows number of core and optional attributes that are supported for each Identity Provider.
+
+= render(partial: 'shared/report_output', locals: { data: @data })

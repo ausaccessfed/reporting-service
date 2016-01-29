@@ -1,0 +1,111 @@
+require 'rails_helper'
+
+RSpec.describe IdentityProviderDailyDemandReport do
+  around { |spec| Timecop.freeze { spec.run } }
+
+  let(:type) { 'identity-provider-daily-demand' }
+  let(:title) { 'IdP Daily Demand Report for' }
+  let(:units) { '' }
+  let(:labels) { { y: '', sessions: 'demand' } }
+
+  let(:start) { 10.days.ago.beginning_of_day }
+  let(:finish) { Time.zone.now.end_of_day }
+
+  let(:identity_provider_01) { create :identity_provider }
+  let(:identity_provider_02) { create :identity_provider }
+  let(:service_provider) { create :service_provider }
+
+  subject do
+    IdentityProviderDailyDemandReport
+      .new(identity_provider_01.entity_id, start, finish)
+  end
+
+  let(:report) { subject.generate }
+  let(:data) { report[:data] }
+
+  def expect_in_range
+    (0..86_340).step(300).each_with_index do |t, index|
+      expect(data[:sessions][index]).to match_array([t, value])
+    end
+  end
+
+  context 'sessions with response' do
+    before do
+      create_list :discovery_service_event, 5, :response,
+                  identity_provider: identity_provider_01,
+                  service_provider: service_provider
+    end
+
+    let(:value) { anything }
+
+    it 'should include title, units and labels' do
+      output_title = title + ' ' + identity_provider_01.name
+      expect(report).to include(title: output_title,
+                                units: units, labels: labels)
+    end
+
+    it 'should not include range' do
+      expect(report).not_to include(:range)
+    end
+
+    it 'sessions generated within given range' do
+      expect_in_range
+    end
+  end
+
+  context 'when without response' do
+    before do
+      create_list :discovery_service_event, 10,
+                  service_provider: service_provider,
+                  timestamp: 1.day.ago.beginning_of_day
+    end
+
+    let(:value) { 0.00 }
+
+    it 'should not count any sessions' do
+      expect_in_range
+    end
+  end
+
+  context 'events at different times manually' do
+    before :example do
+      [*1..5].each do |n|
+        create :discovery_service_event, :response,
+               identity_provider: identity_provider_01,
+               service_provider: service_provider,
+               timestamp: n.days.ago.beginning_of_day
+
+        create :discovery_service_event, :response,
+               identity_provider: identity_provider_01,
+               service_provider: service_provider,
+               timestamp: n.days.ago.beginning_of_day + 10.minutes
+
+        create :discovery_service_event, :response,
+               identity_provider: identity_provider_01,
+               service_provider: service_provider,
+               timestamp: n.days.ago.end_of_day
+
+        create :discovery_service_event, :response,
+               identity_provider: identity_provider_02,
+               service_provider: service_provider,
+               timestamp: n.days.ago.end_of_day
+      end
+    end
+
+    it 'average at point 0 should be 0.5 for 5 sessions in 10 days' do
+      expect(data[:sessions]).to include([0, 0.45])
+    end
+
+    it 'average should be 0.0 when no sessions available at point 300' do
+      expect(data[:sessions]).to include([300, 0.0])
+    end
+
+    it 'average at point 600 should be 0.5 for 5 sessions in 10 days' do
+      expect(data[:sessions]).to include([600, 0.45])
+    end
+
+    it 'should not include sessions for irrelevant IdP (average must be 0.5)' do
+      expect(data[:sessions]).to include([86_100, 0.45])
+    end
+  end
+end

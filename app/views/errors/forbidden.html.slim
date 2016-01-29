@@ -1,0 +1,11 @@
+= page_header('AAF Reporting Service')
+
+= error_message('Forbidden') do
+  p Oops, you clicked something we didn't expect you to click, and tried to do
+    something you're not allowed to do. Sorry about that, the button shouldn't
+    be there.
+
+  p
+    ' Please report this to
+    a> href="mailto:support@aaf.edu.au" support@aaf.edu.au
+    | and we'll try to make sure you don't see this error again.

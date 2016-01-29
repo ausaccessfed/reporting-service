@@ -1,0 +1,14 @@
+AllCops:
+  TargetRubyVersion: 2.3
+  Exclude:
+    - db/schema.rb
+
+Rails:
+  Enabled: true
+
+Style/Documentation:
+  Enabled: false
+
+Rails/Output:
+  Exclude:
+    - db/seeds.rb

@@ -1,0 +1,113 @@
+/*
+ *= require aaf-lipstick
+ *= require_tree .
+ *= require_self
+ */
+
+$graph-color-dull: #aaaaaa;
+$graph-color-primary: #2a3689;
+$graph-color-vibrant: #f5811d;
+$graph-color-retina-burn: #6aff7f;
+
+.report-output-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media screen and (max-width: 420px) {
+  #report-output {
+    .x.axis text {
+      transform: rotate(-15deg);
+    }
+  }
+}
+
+svg.report-output {
+  .axis {
+    path, line {
+      fill: none;
+      stroke: #cccccc;
+      shape-rendering: crispEdges;
+    }
+
+    text {
+      font-family: sans-serif;
+      font-size: 11px;
+    }
+  }
+
+  .grid {
+    .tick line {
+      fill: none;
+      stroke: rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .legend {
+    .hover-text {
+      font-size: 13px;
+      vertical-align: top;
+      white-space: pre;
+    }
+  }
+
+  .label {
+    font-family: sans-serif;
+    font-size: 12px;
+
+    &.title {
+      font-size: 14px;
+      font-weight: bold;
+    }
+  }
+
+  .hover-bar {
+    fill: none;
+    stroke: fade-out($graph-color-retina-burn, 0.4);
+  }
+
+  .hover-box {
+    fill: none;
+    stroke: none;
+    pointer-events: all;
+    cursor: crosshair;
+  }
+
+  .line path {
+    stroke-width: 2px;
+  }
+
+  &.federation-growth {
+    .organizations {
+      fill: $graph-color-vibrant;
+    }
+
+    .identity_providers {
+      fill: $graph-color-primary;
+    }
+
+    .services {
+      fill: $graph-color-dull;
+    }
+  }
+
+  &.federated-sessions {
+    .sessions {
+      fill: $graph-color-vibrant;
+    }
+  }
+
+  &.daily-demand {
+    .sessions {
+      fill: $graph-color-dull;
+    }
+  }
+}
+
+table.report-output {
+  width: 100%;
+  th, td {
+    padding-right: 1em;
+  }
+}

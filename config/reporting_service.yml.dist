@@ -1,0 +1,15 @@
+---
+mail:
+  from: noreply@example.com
+  port: 1025
+  host: localhost
+environment_string: Development
+ide:
+  host: ide.test.aaf.edu.au
+  cert: config/api-client.crt
+  key: config/api-client.key
+  admin_entitlement: urn:mace:aaf.edu.au:ide:internal:aaf-admin
+  federation_object_entitlement_prefix: urn:mace:aaf.edu.au:ide:internal
+federationregistry:
+  host: manager.test.aaf.edu.au
+  secret: 'This is the shared secret used for authenticating to the export API'

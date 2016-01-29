@@ -1,0 +1,12 @@
+config/rapidconnect.yml
+config/deploy.yml
+config/reporting_service.yml
+config/api-client.*
+spec/examples.txt
+
+coverage
+tmp
+log
+vendor
+.DS_Store
+dump.rdb
