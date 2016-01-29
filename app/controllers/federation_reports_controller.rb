@@ -32,6 +32,6 @@ class FederationReportsController < ApplicationController
 
   def range
     @start = 1.year.ago.utc
-    @end = Time.now.tomorrow.beginning_of_day.utc
+    @end = Time.now.utc
   end
 end
