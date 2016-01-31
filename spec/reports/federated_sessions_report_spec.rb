@@ -34,8 +34,8 @@ RSpec.describe FederatedSessionsReport do
   context 'when events are sessions with response' do
     before do
       create_list :discovery_service_event, 20, :response,
-                  identity_provider: identity_provider,
-                  service_provider: service_provider
+                  selected_idp: identity_provider.entity_id,
+                  initiating_sp: service_provider.entity_id
     end
 
     let(:value) { anything }
@@ -53,7 +53,7 @@ RSpec.describe FederatedSessionsReport do
   context 'when events are not responded' do
     before do
       create_list :discovery_service_event, 20,
-                  service_provider: service_provider,
+                  initiating_sp: service_provider.entity_id,
                   timestamp: 1.day.ago.beginning_of_day
     end
 
@@ -67,18 +67,18 @@ RSpec.describe FederatedSessionsReport do
   context 'when events timestamps are specified manually' do
     before :example do
       create_list :discovery_service_event, 5, :response,
-                  identity_provider: identity_provider,
-                  service_provider: service_provider,
+                  selected_idp: identity_provider.entity_id,
+                  initiating_sp: service_provider.entity_id,
                   timestamp: start
 
       create_list :discovery_service_event, 10, :response,
-                  identity_provider: identity_provider,
-                  service_provider: service_provider,
+                  selected_idp: identity_provider.entity_id,
+                  initiating_sp: service_provider.entity_id,
                   timestamp: 2.days.ago.beginning_of_day
 
       create_list :discovery_service_event, 9, :response,
-                  identity_provider: identity_provider,
-                  service_provider: service_provider,
+                  selected_idp: identity_provider.entity_id,
+                  initiating_sp: service_provider.entity_id,
                   timestamp: finish
     end
 
