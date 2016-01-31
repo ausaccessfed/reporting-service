@@ -44,13 +44,13 @@ class SubscriberReportsController < ApplicationController
   end
 
   def range
-    @start = params[:start] ? convert_time(params[:start]) : nil
-    @end = params[:end] ? convert_time(params[:end], true) : nil
+    @start = params[:start] ? convert_time(params[:start], true) : nil
+    @end = params[:end] ? convert_time(params[:end]) : nil
   end
 
   def convert_time(time, flag = nil)
-    return Time.parse(time).utc if flag
-    Time.parse(time).tomorrow.beginning_of_day.utc
+    return Time.zone.parse(time).beginning_of_day if flag
+    Time.zone.parse(time).end_of_day
   end
 
   def scaled_steps
