@@ -76,8 +76,8 @@ RSpec.feature 'Service Provider Reports' do
                'source_identity_providers_report')
 
       select sp.name, from: 'Service Providers'
-      fill_in 'start', with: 1.year.ago
-      fill_in 'end', with: Time.zone.now
+      fill_in 'start', with: 1.year.ago.utc
+      fill_in 'end', with: Time.now.utc
 
       click_button 'Generate'
 
