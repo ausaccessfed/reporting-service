@@ -1,12 +1,17 @@
+- start_date = @start ? @start : Time.now.utc.beginning_of_month - 1.month
+- end_date = @end ? @end : Time.now.utc.beginning_of_month
+
 = form_tag({}, id: 'report-form') do
   = field_block do
     = label_tag(:start) do
       | from
-    = date_field_tag :start, value = @start ? @start : Time.now.utc.beginning_of_month - 1.month
+
+    = date_field_tag :start, value = start_date
 
     = label_tag(:end) do
       | to
-    = date_field_tag :end, value = @end ? @end : Time.now.utc.beginning_of_month
+
+    = date_field_tag :end, value = end_date
 
   = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
     => icon_tag('ok')
@@ -14,7 +19,10 @@
 
 = validate_form('#report-form', nil) do |v|
   - v.validate_field(:start, required: { message: 'Please pick start date' })
+  - v.validate_field(:start, validRangeLteq: { message: '`from` date must be lesser than or equal to `to` date' })
+
   - v.validate_field(:end, required: { message: 'Please pick end date' })
+  - v.validate_field(:end, validRangeGteq: { message: '`to` date must be greater than or equal to `from` date' })
 
 - if @data
   = render(partial: 'shared/report_output', locals: { data: @data })
