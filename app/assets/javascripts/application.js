@@ -7,15 +7,14 @@
 =======
 
 // TODO
-// This code will be moved to jq_validations.js
 (function () {
   var validRangeLteq = function(value, element){
-    var end_date = $('#report-form #end').val();
+    var end_date = $("#report-form input[name='end']").attr('value');
     return (Date.parse(value)) <= (Date.parse(end_date));
   };
 
   var validRangeGteq = function(value, element){
-    var start_date = $('#report-form #start').val();
+    var start_date = $("#report-form input[name='start']").attr('value');
     return (Date.parse(value)) >= (Date.parse(start_date));
   };
 

@@ -37,13 +37,18 @@ class AdministratorReportsController < ApplicationController
   private
 
   def range
-    @start = params[:start] ? Time.zone.parse(params[:start]) : nil
-    @end = params[:end] ? Time.zone.parse(params[:end]) : nil
+    @start = params[:start] ? convert_time(params[:start], true) : nil
+    @end = params[:end] ? convert_time(params[:end]) : nil
+  end
+
+  def convert_time(time, flag = nil)
+    return Time.zone.parse(time).beginning_of_day if flag
+    Time.zone.parse(time).end_of_day
   end
 
   def scaled_steps
     width = (@end - @start) / 365_000
-    return 24 if width > 24
+    return 10 if width > 10
     return 1 if width < 1
     width.to_i
   end
