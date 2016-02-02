@@ -1,6 +1,6 @@
 jQuery(function($) {
   var timeFormats = {
-    time : d3.time.format('%H:%M'),
+    time : d3.time.format('%Y-%m-%d ~ %H:%M'),
     date : d3.time.format('%Y-%m-%d'),
     dateTime : d3.time.format('%Y-%m-%dT%H:%M:%SZ')
   }
