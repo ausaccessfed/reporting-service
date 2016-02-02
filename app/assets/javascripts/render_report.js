@@ -2,7 +2,8 @@ jQuery(function($) {
   var timeFormats = {
     time : d3.time.format('%H:%M'),
     date : d3.time.format('%Y-%m-%d'),
-    dateTime : d3.time.format('%Y-%m-%dT%H:%M:%SZ')
+    dateTime : d3.time.format('%Y-%m-%dT%H:%M:%SZ'),
+    facncyDateTime : d3.time.format('%Y-%m-%d ~ %H:%M')
   }
 
   var renderGraph = function(report, target) {
@@ -33,7 +34,7 @@ jQuery(function($) {
     var sessionsReportRange = {
       range : report.range,
       timeFormat : timeFormats.dateTime,
-      hoverBoxFormat : timeFormats.dateTime
+      hoverBoxFormat : timeFormats.facncyDateTime
     }
 
     var dailyDemandReportRange = {
