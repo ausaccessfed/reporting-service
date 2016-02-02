@@ -48,7 +48,7 @@ class AdministratorReportsController < ApplicationController
 
   def scaled_steps
     width = (@end - @start) / 365_000
-    return 10 if width > 10
+    return 12 if width > 12
     return 1 if width < 1
     width.to_i
   end
