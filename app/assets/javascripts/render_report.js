@@ -1,6 +1,6 @@
 jQuery(function($) {
   var timeFormats = {
-    time : d3.time.format('%Y-%m-%d ~ %H:%M'),
+    time : d3.time.format('%H:%M'),
     date : d3.time.format('%Y-%m-%d'),
     dateTime : d3.time.format('%Y-%m-%dT%H:%M:%SZ')
   }
@@ -33,7 +33,7 @@ jQuery(function($) {
     var sessionsReportRange = {
       range : report.range,
       timeFormat : timeFormats.dateTime,
-      hoverBoxFormat : timeFormats.time
+      hoverBoxFormat : timeFormats.dateTime
     }
 
     var dailyDemandReportRange = {
