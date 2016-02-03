@@ -17,7 +17,8 @@ markdown:
     - options = @objects_list.map { |sp| [sp.name, sp.entity_id] }.sort_by { |a| a[0].downcase }
     - options.unshift(['(Please select a Service Provider...)', ''])
 
-    = select_tag(:entity_id, options_for_select(options, @entity_id))
+    div.form-group
+      = select_tag(:entity_id, options_for_select(options, @entity_id))
 
   = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
     => icon_tag('ok')
