@@ -9,19 +9,17 @@
       - options = @entities.map { |entity| [entity.name, entity.entity_id] }.sort_by { |a| a[0].downcase }
       - options.unshift(["(Please select one of the the #{entity_type}...)", ''])
 
-      div.form-group
-        = select_tag(:entity_id, options_for_select(options, @entity_id))
+      = select_tag(:entity_id, options_for_select(options, @entity_id))
 
-      div.form-group
-        = label_tag(:start) do
-          | from
 
-        = date_field_tag :start, value = start_date
+    = field_block do
+      = label_tag(:start) do
+        | from
+      = date_field_tag :start, value = start_date
 
-      div.form-group
-        = label_tag(:end) do
+    = field_block do
+      = label_tag(:end) do
           | to
-
       = date_field_tag :end, value = end_date
 
     = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
