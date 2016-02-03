@@ -3,7 +3,8 @@ jQuery(function($) {
     time : d3.time.format('%H:%M'),
     date : d3.time.format('%Y-%m-%d'),
     dateTime : d3.time.format('%Y-%m-%dT%H:%M:%SZ'),
-    facncyDateTime : d3.time.format('%Y-%m-%d ~ %H:%M')
+    facncyDateTime : d3.time.format('%Y-%m-%d ~ %H:%M'),
+    fancyTickFormat : d3.time.format("%H")
   }
 
   var renderGraph = function(report, target) {
@@ -28,19 +29,22 @@ jQuery(function($) {
     var defaultRangeArgs = {
       range : report.range,
       timeFormat : timeFormats.dateTime,
-      hoverBoxFormat : timeFormats.date
+      hoverBoxFormat : timeFormats.date,
+      tickFormat : null
     }
 
     var sessionsReportRange = {
       range : report.range,
       timeFormat : timeFormats.dateTime,
-      hoverBoxFormat : timeFormats.facncyDateTime
+      hoverBoxFormat : timeFormats.facncyDateTime,
+      tickFormat : null
     }
 
     var dailyDemandReportRange = {
       range : dailyRange,
       timeFormat : timeFormats.time,
-      hoverBoxFormat : timeFormats.time
+      hoverBoxFormat : timeFormats.time,
+      tickFormat : timeFormats.fancyTickFormat
     }
 
     var rangeSpecs = {
@@ -55,6 +59,7 @@ jQuery(function($) {
 
     var scaleRange = reporting.range(rangeSpecs[report.type]);
     var hoverboxTimeformat = rangeSpecs[report.type].hoverBoxFormat;
+    var axesTickFormat = rangeSpecs[report.type].tickFormat;
     var range = reporting.range(defaultRangeArgs);
     var scale = reporting.scale(report, scaleRange, sizing);
     var translate = reporting.translate;
@@ -79,7 +84,7 @@ jQuery(function($) {
             .attr('d', d);
         });
 
-        svg.call(reporting.axes(scale, sizing))
+        svg.call(reporting.axes(scale, sizing, axesTickFormat))
           .call(reporting.legend(report, sizing))
           .call(reporting.hoverbox(report, scale, scaleRange, sizing, hoverboxTimeformat))
           .call(reporting.labels(report, range, sizing));
