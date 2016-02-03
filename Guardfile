@@ -8,7 +8,7 @@ end
 
 guard :rspec, cmd: 'bundle exec rspec' do
   watch(%r{^app/(.+)\.rb$}) { |m| "spec/#{m[1]}_spec.rb" }
-  watch(%r{^(lib/.+)\.rb$}) { |m| "spec/#{m[1]}_spec.rb" }
+  watch(%r{^((bin|lib)/.+)\.rb$}) { |m| "spec/#{m[1]}_spec.rb" }
   watch(%r{^app/(.+\.html\.slim)$}) { |m| "spec/#{m[1]}_spec.rb" }
 
   watch(%r{^app/controllers/(.+)_controller\.rb$}) do |m|
