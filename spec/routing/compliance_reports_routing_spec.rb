@@ -17,14 +17,6 @@ RSpec.describe ComplianceReportsController, type: :routing do
     it { is_expected.to route_to("compliance_reports#{action}") }
   end
 
-  describe 'post & get on /service_provider/compatibility_report' do
-    let(:action) { '#service_provider_compatibility_report' }
-    let(:path) { '/service_provider/compatibility_report' }
-
-    it_behaves_like 'post request'
-    it_behaves_like 'get request'
-  end
-
   describe 'get on /identity_provider/attributes_report' do
     let(:action) { '#identity_provider_attributes_report' }
     let(:path) { '/identity_provider/attributes_report' }
@@ -32,19 +24,45 @@ RSpec.describe ComplianceReportsController, type: :routing do
     it_behaves_like 'get request'
   end
 
-  describe 'post & get on /attribute/identity_providers_report' do
+  describe 'get on /service_provider/compatibility_report' do
+    let(:action) { '#service_provider_compatibility_report' }
+    let(:path) { '/service_provider/compatibility_report' }
+
+    it_behaves_like 'get request'
+  end
+
+  describe 'post on /service_provider/compatibility_report' do
+    let(:action) { '#service_provider_compatibility_report' }
+    let(:path) { '/service_provider/compatibility_report' }
+
+    it_behaves_like 'post request'
+  end
+
+  describe 'get on /attribute/identity_providers_report' do
+    let(:action) { '#attribute_identity_providers_report' }
+    let(:path) { '/attribute/identity_providers_report' }
+
+    it_behaves_like 'get request'
+  end
+
+  describe 'post on /attribute/identity_providers_report' do
     let(:action) { '#attribute_identity_providers_report' }
     let(:path) { '/attribute/identity_providers_report' }
 
     it_behaves_like 'post request'
+  end
+
+  describe 'get on /attribute/service_providers_report' do
+    let(:action) { '#attribute_service_providers_report' }
+    let(:path) { '/attribute/service_providers_report' }
+
     it_behaves_like 'get request'
   end
 
-  describe 'post & get on /attribute/service_providers_report' do
+  describe 'post on /attribute/service_providers_report' do
     let(:action) { '#attribute_service_providers_report' }
     let(:path) { '/attribute/service_providers_report' }
 
     it_behaves_like 'post request'
-    it_behaves_like 'get request'
   end
 end

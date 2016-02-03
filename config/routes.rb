@@ -29,6 +29,27 @@ Rails.application.routes.draw do
     match_report('attribute', 'service_providers_report', [:get, :post])
   end
 
+  get '/subscriber_reports' => 'subscriber_reports_dashboard#index',
+      as: 'subscriber_reports'
+
+  scope '/subscriber_reports' do
+    def match_report(prefix, name, http_verbs)
+      match "/#{prefix}/#{name}",
+            to: "#{prefix}_reports##{name}",
+            via: http_verbs, as: :"#{prefix}_#{name}"
+    end
+
+    match_report('identity_provider', 'sessions_report', [:get, :post])
+    match_report('identity_provider', 'daily_demand_report', [:get, :post])
+    match_report('identity_provider',
+                 'destination_services_report', [:get, :post])
+
+    match_report('service_provider', 'sessions_report', [:get, :post])
+    match_report('service_provider', 'daily_demand_report', [:get, :post])
+    match_report('service_provider',
+                 'source_identity_providers_report', [:get, :post])
+  end
+
   namespace :api, defaults: { format: 'json' } do
     v1_constraints = APIConstraints.new(version: 1, default: true)
     scope constraints: v1_constraints do

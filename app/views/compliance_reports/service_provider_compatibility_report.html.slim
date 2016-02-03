@@ -1,6 +1,6 @@
 = breadcrumbs({ 'Dashboard' => dashboard_path },
               { 'Compliance Reports' => dashboard_path },
-              'Service Compatibility Report')
+                'Service Compatibility Report')
 
 h1 Service Compatibility Report
 
@@ -14,7 +14,7 @@ markdown:
     = label_tag(:entity_id) do
       | Service Provider
 
-    - options = @service_providers.map { |sp| [sp.name, sp.entity_id] }.sort_by { |a| a[0].downcase }
+    - options = @objects_list.map { |sp| [sp.name, sp.entity_id] }.sort_by { |a| a[0].downcase }
     - options.unshift(['(Please select a Service Provider...)', ''])
 
     = select_tag(:entity_id, options_for_select(options, @entity_id))

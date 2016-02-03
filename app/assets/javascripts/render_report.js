@@ -2,7 +2,9 @@ jQuery(function($) {
   var timeFormats = {
     time : d3.time.format('%H:%M'),
     date : d3.time.format('%Y-%m-%d'),
-    dateTime : d3.time.format('%Y-%m-%dT%H:%M:%SZ')
+    dateTime : d3.time.format('%Y-%m-%dT%H:%M:%SZ'),
+    facncyDateTime : d3.time.format('%Y-%m-%d ~ %H:%M'),
+    fancyTickFormat : d3.time.format("%H")
   }
 
   var renderGraph = function(report, target) {
@@ -24,29 +26,40 @@ jQuery(function($) {
 
     var dailyRange = { start: "00:00", end: "23:59" };
 
-    var defaultRangeArgs =
-      {
-        range : report.range,
-        timeFormat : timeFormats.dateTime,
-        hoverBoxFormat : timeFormats.date
-      }
+    var defaultRangeArgs = {
+      range : report.range,
+      timeFormat : timeFormats.dateTime,
+      hoverBoxFormat : timeFormats.date,
+      tickFormat : null
+    }
+
+    var sessionsReportRange = {
+      range : report.range,
+      timeFormat : timeFormats.dateTime,
+      hoverBoxFormat : timeFormats.facncyDateTime,
+      tickFormat : null
+    }
+
+    var dailyDemandReportRange = {
+      range : dailyRange,
+      timeFormat : timeFormats.time,
+      hoverBoxFormat : timeFormats.time,
+      tickFormat : timeFormats.fancyTickFormat
+    }
 
     var rangeSpecs = {
       'federation-growth': defaultRangeArgs,
-      'federated-sessions': {
-                              range : report.range,
-                              timeFormat : timeFormats.dateTime,
-                              hoverBoxFormat : timeFormats.time
-                            },
-      'daily-demand': {
-                        range : dailyRange,
-                        timeFormat : timeFormats.time,
-                        hoverBoxFormat : timeFormats.time
-                      },
+      'federated-sessions': sessionsReportRange,
+      'identity-provider-sessions': sessionsReportRange,
+      'service-provider-sessions': sessionsReportRange,
+      'daily-demand': dailyDemandReportRange,
+      'identity-provider-daily-demand': dailyDemandReportRange,
+      'service-provider-daily-demand': dailyDemandReportRange
     };
 
     var scaleRange = reporting.range(rangeSpecs[report.type]);
     var hoverboxTimeformat = rangeSpecs[report.type].hoverBoxFormat;
+    var axesTickFormat = rangeSpecs[report.type].tickFormat;
     var range = reporting.range(defaultRangeArgs);
     var scale = reporting.scale(report, scaleRange, sizing);
     var translate = reporting.translate;
@@ -71,7 +84,7 @@ jQuery(function($) {
             .attr('d', d);
         });
 
-        svg.call(reporting.axes(scale, sizing))
+        svg.call(reporting.axes(scale, sizing, axesTickFormat))
           .call(reporting.legend(report, sizing))
           .call(reporting.hoverbox(report, scale, scaleRange, sizing, hoverboxTimeformat))
           .call(reporting.labels(report, range, sizing));
@@ -99,7 +112,11 @@ jQuery(function($) {
     var kinds = {
       'federation-growth': charts.area,
       'federated-sessions': charts.area,
-      'daily-demand': charts.area
+      'identity-provider-sessions': charts.area,
+      'service-provider-sessions': charts.area,
+      'daily-demand': charts.area,
+      'identity-provider-daily-demand': charts.area,
+      'service-provider-daily-demand': charts.area
     };
 
     kinds[report.type]();
@@ -143,9 +160,15 @@ jQuery(function($) {
   var renderers = {
     'federation-growth': renderGraph,
     'federated-sessions': renderGraph,
+    'identity-provider-sessions': renderGraph,
+    'service-provider-sessions': renderGraph,
     'daily-demand': renderGraph,
+    'identity-provider-daily-demand': renderGraph,
+    'service-provider-daily-demand': renderGraph,
     'service-compatibility': renderTable,
     'identity-provider-attributes': renderTable,
+    'identity-provider-destination-services': renderTable,
+    'service-provider-source-identity-providers': renderTable,
     'provided-attribute': renderTable,
     'requested-attribute': renderTable
   };

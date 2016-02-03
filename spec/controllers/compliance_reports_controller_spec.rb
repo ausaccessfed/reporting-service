@@ -33,13 +33,13 @@ RSpec.describe ComplianceReportsController, type: :controller do
 
     it 'assigns the objects' do
       run_get
-      expect(assigns["#{object_type}s".to_sym]).to include(object)
+      expect(assigns[:objects_list]).to include(object)
     end
 
     it 'excludes inactive objects' do
       activation.update!(deactivated_at: 1.second.ago.utc)
       run_get
-      expect(assigns["#{object_type}s".to_sym]).not_to include(object)
+      expect(assigns[:objects_list]).not_to include(object)
     end
   end
 
@@ -56,7 +56,7 @@ RSpec.describe ComplianceReportsController, type: :controller do
 
     it 'assigns the objects' do
       run_post
-      expect(assigns["#{object_type}s".to_sym]).to include(object)
+      expect(assigns[:objects_list]).to include(object)
     end
 
     it 'assigns the attribute entity_id' do
@@ -102,7 +102,7 @@ RSpec.describe ComplianceReportsController, type: :controller do
 
     it 'assigns the objects' do
       run_post
-      expect(assigns[:saml_attributes]).to include(object)
+      expect(assigns[:objects_list]).to include(object)
     end
 
     it 'assigns the attribute name' do
@@ -138,7 +138,7 @@ RSpec.describe ComplianceReportsController, type: :controller do
 
     it 'assigns the objects' do
       run_get
-      expect(assigns[:saml_attributes]).to match_array(saml_attributes)
+      expect(assigns[:objects_list]).to match_array(saml_attributes)
     end
   end
 

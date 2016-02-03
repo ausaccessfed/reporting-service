@@ -44,8 +44,8 @@ RSpec.describe IdentityProviderDailyDemandReport do
                                 units: units, labels: labels)
     end
 
-    it 'should not include range' do
-      expect(report).not_to include(:range)
+    it 'should include range' do
+      expect(report).to include(:range)
     end
 
     it 'sessions generated within given range' do

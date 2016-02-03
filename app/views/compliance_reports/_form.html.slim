@@ -1,0 +1,19 @@
+= form_tag({}, id: 'report-form') do
+  = field_block do
+    = label_tag(:name) do
+      = "#{object_type}s"
+
+    - options = @objects_list.map { |obj| [obj.name, obj.name] }.sort_by { |a| a[0].downcase }
+    - options.unshift(["(Please select on of the  #{object_type}s...)", ''])
+
+    = select_tag(:name, options_for_select(options, @name))
+
+  = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
+    => icon_tag('ok')
+    | Generate
+
+= validate_form('#report-form', nil) do |v|
+  - v.validate_field(:name, required: { message: "Please select on of the  #{object_type}s" })
+
+- if @data
+  = render(partial: 'shared/report_output', locals: { data: @data })

@@ -6,7 +6,9 @@ Rails.application.configure do
     config.reporting_service.ide = {
       host: 'ide.example.edu',
       cert: 'spec/api.crt',
-      key: 'spec/api.key'
+      key: 'spec/api.key',
+      admin_entitlement: 'urn:mace:aaf.edu.au:ide:internal:aaf-admin',
+      federation_object_entitlement_prefix: 'urn:mace:aaf.edu.au:ide:internal'
     }
 
     config.reporting_service.federationregistry = {

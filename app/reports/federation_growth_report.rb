@@ -8,9 +8,10 @@ class FederationGrowthReport < TimeSeriesReport
          organizations: 'Organizations'
 
   def initialize(start, finish)
-    super('Federation Growth', start: start, end: finish)
     @start = start
     @finish = finish
+
+    super('Federation Growth', start: @start, end: @finish)
   end
 
   private
