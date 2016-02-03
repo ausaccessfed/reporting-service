@@ -40,3 +40,9 @@ h1 Service Provider Reports
     p.list-group-item-text
       | Graphs the number of sessions for a Service which were
         authenticated via each Identity Provider
+
+.link-group
+  = link_to(automated_reports_path, class: "list-group-item list-group-item-success") do
+    h4.list-group-item-heading Automated Reports
+    p.list-group-item-text
+      | Subscribers can request yearly, quarterly or monthly automated reports

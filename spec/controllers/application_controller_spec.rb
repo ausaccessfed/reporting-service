@@ -3,6 +3,7 @@ require 'gumboot/shared_examples/application_controller'
 
 RSpec.describe ApplicationController, type: :controller do
   include_examples 'Application controller'
+
   controller do
     before_action :ensure_authenticated
 

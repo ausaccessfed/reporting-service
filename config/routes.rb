@@ -65,6 +65,9 @@ Rails.application.routes.draw do
     match_report('reports', 'federated_sessions_report', [:get, :post])
   end
 
+  get '/automated_reports' => 'automated_reports#index', via: :get,
+      as: :automated_reports
+
   namespace :api, defaults: { format: 'json' } do
     v1_constraints = APIConstraints.new(version: 1, default: true)
     scope constraints: v1_constraints do
