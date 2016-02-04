@@ -2,22 +2,21 @@ require 'rails_helper'
 
 RSpec.describe AdministratorReportsController, type: :controller do
   let(:user) { create :subject, :authorized, permission: 'admin:*' }
+  let(:range) do
+    {
+      start: Time.now.utc - 1.month,
+      end: Time.now.utc
+    }
+  end
+
   subject { response }
 
   before { session[:subject_id] = user.try(:id) }
 
-  def run_get
-    get action
-  end
-
-  def run_post
-    post action, params
-  end
-
   shared_examples 'an admin report' do
     before do
-      run_get
-      run_post
+      get action
+      post action, params
     end
 
     it 'Assigns report data to template' do
@@ -43,20 +42,32 @@ RSpec.describe AdministratorReportsController, type: :controller do
   context 'generate Subscriber Registrations Report' do
     let(:params) { { identifier: 'organizations' } }
     let(:template) { 'subscriber-registrations' }
+    let(:action) { 'subscriber_registrations_report' }
+
+    it_behaves_like 'an admin report'
   end
 
   context 'generate Federation Growth Report' do
-    let(:params) { { start: Time.now.utc, end: Time.now.utc - 1.month } }
+    let(:params) { range }
     let(:template) { 'federation-growth' }
+    let(:action) { 'federation_growth_report' }
+
+    it_behaves_like 'an admin report'
   end
 
   context 'generate Daily Demand Report' do
-    let(:params) { { start: Time.now.utc, end: Time.now.utc - 1.month } }
+    let(:params) { range }
     let(:template) { 'daily-demand' }
+    let(:action) { 'daily_demand_report' }
+
+    it_behaves_like 'an admin report'
   end
 
   context 'generate Federated Sessions Report' do
-    let(:params) { { start: Time.now.utc, end: Time.now.utc - 1.month } }
+    let(:params) { range }
     let(:template) { 'federated-sessions' }
+    let(:action) { 'federated_sessions_report' }
+
+    it_behaves_like 'an admin report'
   end
 end

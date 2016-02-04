@@ -142,21 +142,35 @@ RSpec.describe ComplianceReportsController, type: :controller do
     end
   end
 
-  describe 'get & post on /attribute/identity_providers_report' do
+  describe 'post on /attribute/identity_providers_report' do
     let(:route_path) { :attribute_identity_providers_report }
     let(:cache_type) { 'provided-attribute' }
     let(:template) { '/attribute_identity_providers_report' }
 
     it_behaves_like 'post request for attribute object'
+  end
+
+  describe 'get on /attribute/identity_providers_report' do
+    let(:route_path) { :attribute_identity_providers_report }
+    let(:cache_type) { 'provided-attribute' }
+    let(:template) { '/attribute_identity_providers_report' }
+
     it_behaves_like 'get request for attribute object'
   end
 
-  describe 'get & post on /attribute/service_providers_report' do
+  describe 'post on /attribute/service_providers_report' do
     let(:route_path) { :attribute_service_providers_report }
     let(:cache_type) { 'requested-attribute' }
     let(:template) { '/attribute_service_providers_report' }
 
     it_behaves_like 'post request for attribute object'
+  end
+
+  describe 'get on /attribute/service_providers_report' do
+    let(:route_path) { :attribute_service_providers_report }
+    let(:cache_type) { 'requested-attribute' }
+    let(:template) { '/attribute_service_providers_report' }
+
     it_behaves_like 'get request for attribute object'
   end
 end
