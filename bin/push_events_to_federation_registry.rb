@@ -123,4 +123,4 @@ class PushEventsToFederationRegistry
   end
 end
 
-PushEventsToFederationRegistry.new.perform if $PROGRAM_NAME == __FILE__
+PushEventsToFederationRegistry.new(*ARGV).perform if $PROGRAM_NAME == __FILE__
