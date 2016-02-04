@@ -1,7 +1,7 @@
 class SubscriberReportsController < ApplicationController
   before_action { permitted_objects(model_object) }
   before_action :requested_entity
-  before_action :range
+  before_action :populate_range
   before_action :access_method
 
   private
@@ -43,14 +43,19 @@ class SubscriberReportsController < ApplicationController
     end
   end
 
-  def range
-    @start = params[:start] ? convert_time(params[:start], true) : nil
-    @end = params[:end] ? convert_time(params[:end]) : nil
+  def populate_range
+    @start = parsed_start_time
+    @end = parsed_end_time
   end
 
-  def convert_time(time, flag = nil)
-    return Time.zone.parse(time).beginning_of_day if flag
-    Time.zone.parse(time).end_of_day
+  def parsed_start_time
+    return nil if params[:start].blank?
+    Time.zone.parse(params[:start]).beginning_of_day
+  end
+
+  def parsed_end_time
+    return nil if params[:end].blank?
+    Time.zone.parse(params[:end]).end_of_day
   end
 
   def scaled_steps

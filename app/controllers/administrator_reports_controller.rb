@@ -1,6 +1,7 @@
 class AdministratorReportsController < ApplicationController
   before_action { check_access! 'admin:reports' }
-  before_action :range, except: [:subscriber_registrations_report]
+  before_action :populate_range,
+                except: [:subscriber_registrations_report, :index]
 
   def index
   end
@@ -36,14 +37,19 @@ class AdministratorReportsController < ApplicationController
 
   private
 
-  def range
-    @start = params[:start] ? convert_time(params[:start], true) : nil
-    @end = params[:end] ? convert_time(params[:end]) : nil
+  def populate_range
+    @start = parsed_start_time
+    @end = parsed_end_time
   end
 
-  def convert_time(time, flag = nil)
-    return Time.zone.parse(time).beginning_of_day if flag
-    Time.zone.parse(time).end_of_day
+  def parsed_start_time
+    return nil if params[:start].blank?
+    Time.zone.parse(params[:start]).beginning_of_day
+  end
+
+  def parsed_end_time
+    return nil if params[:end].blank?
+    Time.zone.parse(params[:end]).end_of_day
   end
 
   def scaled_steps
