@@ -1,15 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'rubygems'
-require 'bundler'
-Bundler.setup
-
-require 'yaml'
+require_relative '../config/environment.rb'
 require 'English'
-require 'mysql2'
-require 'redis'
-require 'implicit-schema'
 
 class PushEventsToFederationRegistry
   def self.squeeze_sql(sql)
