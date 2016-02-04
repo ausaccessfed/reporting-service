@@ -3,3 +3,6 @@ Style/Documentation:
 
 Metrics/MethodLength:
   Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false

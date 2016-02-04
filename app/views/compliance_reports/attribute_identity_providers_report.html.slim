@@ -1,28 +1,10 @@
 = breadcrumbs({ 'Dashboard' => dashboard_path },
               { 'Compliance Reports' => dashboard_path },
-              'Single Attribute Identity Providers Report')
+                'Single Attribute Identity Providers Report')
 
 h1 Single Attribute IdPs Report
 
 markdown:
   Shows Identity Providers which have indicated support for a single attribute.
 
-= form_tag({}, id: 'report-form') do
-  = field_block do
-    = label_tag(:name) do
-      | Attribute
-
-    - options = @saml_attributes.map { |att| [att.name, att.name] }.sort_by { |a| a[0].downcase }
-    - options.unshift(['(Please select an Attribute...)', ''])
-
-    = select_tag(:name, options_for_select(options, @name))
-
-  = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
-    => icon_tag('ok')
-    | Generate
-
-= validate_form('#report-form', nil) do |v|
-  - v.validate_field(:name, required: { message: 'Please select an Attribute' })
-
-- if @data
-  = render(partial: 'shared/report_output', locals: { data: @data })
+= render(partial: 'form', locals: { object_type: 'Attribute' })

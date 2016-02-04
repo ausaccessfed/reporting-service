@@ -1,9 +1,11 @@
 class FederationReportsController < ApplicationController
+  before_action :range
+
   def federation_growth
     public_action
 
     @data = Rails.cache.fetch('public/federation-growth') do
-      report = FederationGrowthReport.new(1.year.ago.utc, Time.now.utc)
+      report = FederationGrowthReport.new(@start, @end)
       JSON.generate(report.generate)
     end
   end
@@ -12,7 +14,7 @@ class FederationReportsController < ApplicationController
     public_action
 
     @data = Rails.cache.fetch('public/federated-sessions') do
-      report = FederatedSessionsReport.new(1.year.ago.utc, Time.now.utc, 10)
+      report = FederatedSessionsReport.new(@start, @end, 10)
       JSON.generate(report.generate)
     end
   end
@@ -21,8 +23,15 @@ class FederationReportsController < ApplicationController
     public_action
 
     @data = Rails.cache.fetch('public/daily-demand') do
-      report = DailyDemandReport.new(1.year.ago.utc, Time.now.utc)
+      report = DailyDemandReport.new(@start, @end)
       JSON.generate(report.generate)
     end
+  end
+
+  private
+
+  def range
+    @start = 1.year.ago.utc.beginning_of_day
+    @end = Time.now.utc.end_of_day
   end
 end

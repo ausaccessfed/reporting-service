@@ -1,0 +1,42 @@
+= breadcrumbs('Subscriber Reports')
+
+h1 Identity Provider Reports
+
+.list-group
+  = link_to(identity_provider_sessions_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Identity Provider Sessions Report
+    p.list-group-item-text
+      | Graphs the hourly number of sessions established for an Identity Provider via AAF's central
+        Discovery Service
+
+  = link_to(identity_provider_daily_demand_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Identity Provider Daily Demand Report
+    p.list-group-item-text
+      | Graphs the daily trend of sessions established for an Identity Provider via AAF's central
+        Discovery Service, highlighting which time of day users are most active
+
+  = link_to(identity_provider_destination_services_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Identity Provider Destination Services Report
+    p.list-group-item-text
+      | Graphs the number of sessions from an Identity Provider going to each Service.
+
+h1 Service Provider Reports
+
+.list-group
+  = link_to(service_provider_sessions_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Service Provider Sessions Report
+    p.list-group-item-text
+      | Graphs the hourly number of sessions initiated with a Service Provider via AAF's central
+        Discovery Service
+
+  = link_to(service_provider_daily_demand_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Service Provider Daily Demand Report
+    p.list-group-item-text
+      | Graphs the daily trend of sessions initiated with a Service Provider via AAF's central
+        Discovery Service, highlighting which time of day services are most requested
+
+  = link_to(service_provider_source_identity_providers_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Service Provider Source Identity Providers Report
+    p.list-group-item-text
+      | Graphs the number of sessions for a Service which were
+        authenticated via each Identity Provider

@@ -92,13 +92,13 @@ svg.report-output {
     }
   }
 
-  &.federated-sessions {
+  &.federated-sessions, &.identity-provider-sessions, &.service-provider-sessions {
     .sessions {
       fill: $graph-color-vibrant;
     }
   }
 
-  &.daily-demand {
+  &.daily-demand, &.identity-provider-daily-demand, &.service-provider-daily-demand {
     .sessions {
       fill: $graph-color-dull;
     }

@@ -32,8 +32,8 @@ RSpec.describe IdentityProviderDailyDemandReport do
   context 'sessions with response' do
     before do
       create_list :discovery_service_event, 5, :response,
-                  identity_provider: identity_provider_01,
-                  service_provider: service_provider
+                  selected_idp: identity_provider_01.entity_id,
+                  initiating_sp: service_provider.entity_id
     end
 
     let(:value) { anything }
@@ -44,8 +44,8 @@ RSpec.describe IdentityProviderDailyDemandReport do
                                 units: units, labels: labels)
     end
 
-    it 'should not include range' do
-      expect(report).not_to include(:range)
+    it 'should include range' do
+      expect(report).to include(:range)
     end
 
     it 'sessions generated within given range' do
@@ -56,7 +56,7 @@ RSpec.describe IdentityProviderDailyDemandReport do
   context 'when without response' do
     before do
       create_list :discovery_service_event, 10,
-                  service_provider: service_provider,
+                  initiating_sp: service_provider.entity_id,
                   timestamp: 1.day.ago.beginning_of_day
     end
 
@@ -71,23 +71,23 @@ RSpec.describe IdentityProviderDailyDemandReport do
     before :example do
       [*1..5].each do |n|
         create :discovery_service_event, :response,
-               identity_provider: identity_provider_01,
-               service_provider: service_provider,
+               selected_idp: identity_provider_01.entity_id,
+               initiating_sp: service_provider.entity_id,
                timestamp: n.days.ago.beginning_of_day
 
         create :discovery_service_event, :response,
-               identity_provider: identity_provider_01,
-               service_provider: service_provider,
+               selected_idp: identity_provider_01.entity_id,
+               initiating_sp: service_provider.entity_id,
                timestamp: n.days.ago.beginning_of_day + 10.minutes
 
         create :discovery_service_event, :response,
-               identity_provider: identity_provider_01,
-               service_provider: service_provider,
+               selected_idp: identity_provider_01.entity_id,
+               initiating_sp: service_provider.entity_id,
                timestamp: n.days.ago.end_of_day
 
         create :discovery_service_event, :response,
-               identity_provider: identity_provider_02,
-               service_provider: service_provider,
+               selected_idp: identity_provider_02.entity_id,
+               initiating_sp: service_provider.entity_id,
                timestamp: n.days.ago.end_of_day
       end
     end

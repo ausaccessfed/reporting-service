@@ -1,0 +1,10 @@
+= breadcrumbs({ 'Subscriber Reports' => subscriber_reports_path },
+              { 'Identity Provider Reports' => subscriber_reports_path },
+                'Sessions Report')
+
+h1 Identity Provider Sessions Report
+
+markdown:
+  Shows the sessions of an IdP within a time range, in number of Sessions
+
+= render(partial: 'form')

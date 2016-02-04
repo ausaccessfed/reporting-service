@@ -1,8 +1,13 @@
 class DiscoveryServiceEvent < ActiveRecord::Base
-  belongs_to :service_provider
-  belongs_to :identity_provider
-
   valhammer
+
+  belongs_to :identity_provider,
+             foreign_key: :selected_idp,
+             primary_key: :entity_id
+
+  belongs_to :service_provider,
+             foreign_key: :initiating_sp,
+             primary_key: :entity_id
 
   scope :within_range, lambda { |start, finish|
     where(arel_table[:timestamp].gteq(start)

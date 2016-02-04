@@ -52,10 +52,10 @@ module TimeSeriesSharedMethods
   end
 
   def idp_sessions
-    sessions identity_provider: @identity_provider
+    sessions selected_idp: @identity_provider.entity_id
   end
 
   def sp_sessions
-    sessions service_provider: @service_provider
+    sessions initiating_sp: @service_provider.entity_id
   end
 end

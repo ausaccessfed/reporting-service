@@ -8,11 +8,11 @@ class FederatedSessionsReport < TimeSeriesReport
 
   def initialize(start, finish, steps)
     title = 'Federated Sessions'
-
-    super(title, start: start, end: finish)
     @start = start
     @finish = finish
     @steps = steps
+
+    super(title, start: @start, end: @finish)
   end
 
   private
