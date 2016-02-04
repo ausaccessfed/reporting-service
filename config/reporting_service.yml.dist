@@ -17,6 +17,6 @@ sqs:
   fake: true
   region: localhost
   endpoint: http://localhost:9324
-  encryption_key: config/encryption_key.pem
+  encryption_key: config/event_encryption_key.pem
   queues:
     discovery: http://localhost:9324/queue/discovery-service-development
