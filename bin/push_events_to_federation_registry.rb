@@ -8,6 +8,8 @@ Bundler.setup
 require 'yaml'
 require 'English'
 require 'mysql2'
+require 'redis'
+require 'implicit-schema'
 
 class PushEventsToFederationRegistry
   def self.squeeze_sql(sql)
