@@ -76,9 +76,26 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
         run
       end
 
-      it 'writes the event to a secondary local queue' do
-        redis = Redis.new
-        expect { run }.to change { redis.llen('wayf_access_record') }.by(1)
+      context 'when the event is a response' do
+        let(:event_attrs) do
+          FactoryGirl.attributes_for(:discovery_service_event, :response)
+        end
+
+        it 'writes the event to a secondary local queue' do
+          redis = Redis.new
+          expect { run }.to change { redis.llen('wayf_access_record') }.by(1)
+        end
+      end
+
+      context 'when the event is a request' do
+        let(:event_attrs) do
+          FactoryGirl.attributes_for(:discovery_service_event, phase: 'request')
+        end
+
+        it 'does not write the event to the secondary queue' do
+          redis = Redis.new
+          expect { run }.not_to change { redis.llen('wayf_access_record') }
+        end
       end
 
       context 'when the discovery service event already exists' do

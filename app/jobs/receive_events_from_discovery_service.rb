@@ -15,10 +15,15 @@ class ReceiveEventsFromDiscoveryService
     jwe = JSON::JWT.decode(message.body, key)
     data = JSON::JWT.decode(jwe.plain_text, key)
     data['events'].each do |event|
-      redis.lpush('wayf_access_record', JSON.generate(event))
+      push_to_fr_queue(event)
       DiscoveryServiceEvent.create_with(event)
                            .find_or_create_by!(event.slice(:unique_id, :phase))
     end
+  end
+
+  def push_to_fr_queue(event)
+    return unless event[:phase] == 'response'
+    redis.lpush('wayf_access_record', JSON.generate(event))
   end
 
   def sqs_client
