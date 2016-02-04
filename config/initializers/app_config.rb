@@ -30,14 +30,18 @@ Rails.application.configure do
 
   sqs_config = config.reporting_service.sqs
   if sqs_config[:fake]
-    Aws::SQS::Client.remove_plugin(Aws::Plugins::SQSQueueUrls)
+    begin
+      Aws::SQS::Client.remove_plugin(Aws::Plugins::SQSQueueUrls)
 
-    sqs_client = Aws::SQS::Client.new(region: sqs_config[:region],
-                                      endpoint: sqs_config[:endpoint])
+      sqs_client = Aws::SQS::Client.new(region: sqs_config[:region],
+                                        endpoint: sqs_config[:endpoint])
 
-    sqs_config[:queues].each do |_, url|
-      queue_name = url.split('/').last
-      sqs_client.create_queue(queue_name: queue_name)
+      sqs_config[:queues].each do |_, url|
+        queue_name = url.split('/').last
+        sqs_client.create_queue(queue_name: queue_name)
+      end
+    rescue
+      :ok
     end
   end
 end
