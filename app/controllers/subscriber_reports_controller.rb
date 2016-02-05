@@ -1,7 +1,7 @@
 class SubscriberReportsController < ApplicationController
   before_action { permitted_objects(model_object) }
   before_action :requested_entity
-  before_action :populate_range
+  before_action :set_range_params
   before_action :access_method
 
   private
@@ -22,8 +22,8 @@ class SubscriberReportsController < ApplicationController
   def generate_report(report_type, steps = nil)
     @entity_id = params[:entity_id]
 
-    return report_type.new(@entity_id, @start, @end, steps) if steps
-    report_type.new(@entity_id, @start, @end)
+    return report_type.new(@entity_id, start, finish, steps) if steps
+    report_type.new(@entity_id, start, finish)
   end
 
   def access_method
@@ -43,25 +43,28 @@ class SubscriberReportsController < ApplicationController
     end
   end
 
-  def populate_range
-    @start = parsed_start_time
-    @end = parsed_end_time
+  def set_range_params
+    @start = params[:start]
+    @end = params[:end]
   end
 
-  def parsed_start_time
+  def start
     return nil if params[:start].blank?
     Time.zone.parse(params[:start]).beginning_of_day
   end
 
-  def parsed_end_time
+  def finish
     return nil if params[:end].blank?
-    Time.zone.parse(params[:end]).end_of_day
+    Time.zone.parse(params[:end]).tomorrow.beginning_of_day
   end
 
   def scaled_steps
-    width = (@end - @start) / 365_000
-    return 10 if width > 10
-    return 1 if width < 1
-    width.to_i
+    range = finish - start
+
+    return 24 if range >= 1.year
+    return 12 if range >= 6.months
+    return 6 if range >= 3.months
+    return 2 if range >= 1.month
+    1
   end
 end

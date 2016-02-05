@@ -1,5 +1,5 @@
 class FederationReportsController < ApplicationController
-  before_action :range
+  before_action :set_range
 
   def federation_growth
     public_action
@@ -30,8 +30,8 @@ class FederationReportsController < ApplicationController
 
   private
 
-  def range
+  def set_range
     @start = 1.year.ago.utc.beginning_of_day
-    @end = Time.now.utc.end_of_day
+    @end = Time.now.utc.tomorrow.beginning_of_day
   end
 end
