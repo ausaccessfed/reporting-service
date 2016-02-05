@@ -29,12 +29,6 @@ html lang='en'
             - if permitted?('admin:reports')
               = nav_item('Admin Reports', '/admin/reports')
 
-            - if permitted?('admin:blah')
-              = nav_item('Blah', '/admin/blah')
-
-            - if permitted?('admin:blah')
-              = nav_item('Blah', '/admin/blah')
-
     section class='content'
       = render(partial: 'layouts/flashes')
       main= yield
