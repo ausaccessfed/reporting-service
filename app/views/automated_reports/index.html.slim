@@ -1,1 +1,48 @@
-= 'it works!'
+= breadcrumbs({ 'Subscriber Reports' => subscriber_reports_path },
+                'Automated Reports')
+
+= page_header('Automated Reports')
+
+/ TODO (table filter)
+= search_form_tag 'enter a keyword'
+
+- reports = ['DailyDemand',
+             'FederatedSessions',
+             'FederationGrowth',
+             'IdentityProviderAttributes',
+             'SubscriberRegistrations',
+             'IdentityProviderDailyDemand',
+             'IdentityProviderDestinationServices',
+             'IdentityProviderSessions',
+             'ProvidedAttribute',
+             'RequestedAttribute',
+             'ServiceCompatibility',
+             'ServiceProviderDailyDemand',
+             'ServiceProviderSessions',
+             'ServiceProviderSourceIdentityProviders'].sort
+
+- intervals = %w(Yearly Quarterly Monthly)
+- interval_colors =  { 'Yearly' => 'warning',
+                        'Quarterly' => 'primary',
+                        'Monthly' => 'info' }
+
+table.table.table-striped
+  thead
+    tr
+      th Report
+      th Interval
+      th Action
+
+  tbody
+    - reports.each_with_index do |report, i|
+      - interval = intervals.sample
+
+      tr
+        td= link_to(report.titleize, '#')
+        td
+          = button_tag('#', class: "btn-sm btn-#{interval_colors[interval]}") do
+            = interval
+        td
+          = button_tag('#', class: "btn-sm btn-danger") do
+            => icon_tag('scissors')
+            = 'Unsubscribe'
