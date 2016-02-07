@@ -15,12 +15,14 @@
     = field_block do
       = label_tag(:start) do
         | from
-      = date_field_tag :start, value = start_date
+
+      = date_field_tag :start, value = start_date, placeholder: 'click here to pick a date'
 
     = field_block do
       = label_tag(:end) do
-          | to
-      = date_field_tag :end, value = end_date
+        | to
+
+      = date_field_tag :end, value = end_date, placeholder: 'click here to pick a date'
 
     = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
       => icon_tag('ok')

@@ -170,7 +170,8 @@ jQuery(function($) {
     'identity-provider-destination-services': renderTable,
     'service-provider-source-identity-providers': renderTable,
     'provided-attribute': renderTable,
-    'requested-attribute': renderTable
+    'requested-attribute': renderTable,
+    'subscriber-registrations': renderTable
   };
 
   $('.report-data').each(function() {
