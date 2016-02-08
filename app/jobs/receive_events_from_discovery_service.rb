@@ -1,15 +1,26 @@
 class ReceiveEventsFromDiscoveryService
   def perform
-    result = sqs_client.receive_message(queue_url: queue_url)
-    result.messages.each do |message|
-      process_message(message)
+    sqs_results.each do |result|
+      result.messages.each do |message|
+        process_message(message)
 
-      sqs_client.delete_message(queue_url: queue_url,
-                                receipt_handle: message.receipt_handle)
+        sqs_client.delete_message(queue_url: queue_url,
+                                  receipt_handle: message.receipt_handle)
+      end
     end
   end
 
   private
+
+  def sqs_results
+    Enumerator.new do |y|
+      loop do
+        result = sqs_client.receive_message(queue_url: queue_url)
+        break if result.messages.empty?
+        y << result
+      end
+    end
+  end
 
   def process_message(message)
     jwe = JSON::JWT.decode(message.body, key)
