@@ -26,6 +26,72 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
         .and_return(client)
     end
 
+    let(:empty_result) do
+      double(Aws::SQS::Types::ReceiveMessageResult, messages: [])
+    end
+
+    def run
+      subject.perform
+    end
+
+    context 'when the queue contains many SQS messages' do
+      let(:events_attrs) do
+        Array.new(5) { FactoryGirl.attributes_for(:discovery_service_event) }
+      end
+
+      let(:events) { events_attrs }
+
+      let(:message_bodies) do
+        events.map do |event|
+          JSON::JWT.new(iss: 'discovery-service', events: [event])
+                   .sign(key, :RS256).encrypt(key).to_s
+        end
+      end
+
+      let(:receipt_handles) { message_bodies.map { SecureRandom.base64 } }
+
+      let(:messages) do
+        message_bodies.zip(receipt_handles).map do |(body, receipt_handle)|
+          double(Aws::SQS::Types::Message,
+                 receipt_handle: receipt_handle, body: body)
+        end
+      end
+
+      let(:receive_message_results) do
+        messages.map do |message|
+          double(Aws::SQS::Types::ReceiveMessageResult, messages: [message])
+        end
+      end
+
+      before do
+        allow(client).to receive(:receive_message)
+          .with(queue_url: sqs_config[:queues][:discovery])
+          .and_return(*receive_message_results, empty_result)
+
+        allow(client).to receive(:delete_message).with(any_args)
+      end
+
+      it 'creates the events' do
+        expect { run }
+          .to change(DiscoveryServiceEvent, :count).by(events.length)
+
+        events_attrs.each do |attrs|
+          expect(DiscoveryServiceEvent.find_by(attrs.slice(:unique_id)))
+            .to have_attributes(attrs)
+        end
+      end
+
+      context 'when an event is not able to be stored' do
+        let(:events) do
+          events_attrs.dup.unshift(timestamp: Time.zone.now)
+        end
+
+        it 'raises an exception' do
+          expect { run }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+    end
+
     context 'when a message is in the queue' do
       let(:event_attrs) do
         FactoryGirl.attributes_for(:discovery_service_event)
@@ -51,14 +117,10 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
         double(Aws::SQS::Types::ReceiveMessageResult, messages: messages)
       end
 
-      def run
-        subject.perform
-      end
-
       before do
         allow(client).to receive(:receive_message)
           .with(queue_url: sqs_config[:queues][:discovery])
-          .and_return(receive_message_result)
+          .and_return(receive_message_result, empty_result)
 
         allow(client).to receive(:delete_message).with(any_args)
       end
