@@ -45,5 +45,10 @@ Rails.application.configure do
     rescue
       :ok
     end
+
+    config.reporting_service.rapidconnect = {
+      host: 'rapid.example.edu',
+      secret: 'fedcba'
+    }
   end
 end
