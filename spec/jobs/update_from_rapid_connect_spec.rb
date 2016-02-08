@@ -14,7 +14,7 @@ RSpec.describe UpdateFromRapidConnect do
       name: Faker::Company.name,
       created_at: created_at.xmlschema,
       rapidconnect: {
-        type: 'research'
+        type: Faker::Lorem.word
       },
       organization: organization.name,
       enabled: enabled
@@ -46,6 +46,18 @@ RSpec.describe UpdateFromRapidConnect do
     expect { run }.to change(Activation, :count).by(1)
     expect(RapidConnectService.last.activations.first)
       .to have_attributes(activated_at: created_at)
+  end
+
+  context 'when the type is missing' do
+    let(:service_list) { [service.merge(rapidconnect: {})] }
+
+    it 'uses the default service type' do
+      expect { run }.to change(RapidConnectService, :count).by(1)
+      expect(RapidConnectService.last)
+        .to have_attributes(identifier: service[:id],
+                            name: service[:name],
+                            service_type: 'research')
+    end
   end
 
   context 'when the service is disabled' do

@@ -14,13 +14,11 @@ class UpdateFromRapidConnect
     'AAF-RAPID-EXPORT service="reporting-service", key="%s"'.freeze
 
   def sync_service(service_data)
-    unless service_data[:enabled]
-    end
-
     org = Organization.find_by_name(service_data[:organization])
+    rapid_data = service_data[:rapidconnect]
 
     attrs = { name: service_data[:name],
-              service_type: service_data[:rapidconnect][:type],
+              service_type: rapid_data.fetch(:type, 'research'),
               organization: org }
 
     RapidConnectService.find_or_initialize_by(identifier: service_data[:id])
