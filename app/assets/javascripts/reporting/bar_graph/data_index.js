@@ -1,4 +1,4 @@
-reporting.barDataIndex = function() {
+reporting.barGraph.dataIndex = function() {
   return {
     idpName: 0,
     core: 1,

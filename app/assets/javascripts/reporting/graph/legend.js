@@ -1,4 +1,4 @@
-reporting.legend = function(report, sizing) {
+reporting.graph.legend = function(report, sizing) {
   return function(selection) {
     var translate = reporting.translate;
     var pos = sizing.legend.position;

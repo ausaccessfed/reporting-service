@@ -1,4 +1,4 @@
-reporting.axes = function(scale, sizing, tickFormat) {
+reporting.graph.axes = function(scale, sizing, tickFormat) {
   return function(selection) {
     var translate = reporting.translate;
     var graph = sizing.graph;

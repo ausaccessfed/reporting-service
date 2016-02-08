@@ -1,4 +1,4 @@
-reporting.barAxes = function(scale, sizing) {
+reporting.barGraph.axes = function(scale, sizing) {
   return function(selection) {
     var translate = reporting.translate;
     var xAxis = d3.svg.axis()

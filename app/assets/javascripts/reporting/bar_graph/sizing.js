@@ -1,4 +1,4 @@
-reporting.barSizing = function(report, target) {
+reporting.barGraph.sizing = function(report, target) {
   var bar = {
     height: 10
   };

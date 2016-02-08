@@ -1,4 +1,4 @@
-reporting.barHover = function (barHover, sizing, barDataIndex, type) {
+reporting.barGraph.hover = function (barHover, sizing, barDataIndex, type) {
   var borderStyle = {
     core: 'border-vibrant',
     optional: 'border-primary'

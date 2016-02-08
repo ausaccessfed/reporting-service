@@ -8,7 +8,7 @@ jQuery(function($) {
   }
 
   var renderGraph = function(report, target) {
-    var sizing = reporting.sizing(report, target);
+    var sizing = reporting.graph.sizing(report, target);
 
     var svg = d3.select(target)
       .selectAll('svg')
@@ -57,11 +57,11 @@ jQuery(function($) {
       'service-provider-daily-demand': dailyDemandReportRange
     };
 
-    var scaleRange = reporting.range(rangeSpecs[report.type]);
+    var scaleRange = reporting.graph.range(rangeSpecs[report.type]);
     var hoverboxTimeformat = rangeSpecs[report.type].hoverBoxFormat;
     var axesTickFormat = rangeSpecs[report.type].tickFormat;
-    var range = reporting.range(defaultRangeArgs);
-    var scale = reporting.scale(report, scaleRange, sizing);
+    var range = reporting.graph.range(defaultRangeArgs);
+    var scale = reporting.graph.scale(report, scaleRange, sizing);
     var translate = reporting.translate;
     var graph = sizing.graph;
     var margin = graph.margin;
@@ -84,10 +84,10 @@ jQuery(function($) {
             .attr('d', d);
         });
 
-        svg.call(reporting.axes(scale, sizing, axesTickFormat))
-          .call(reporting.legend(report, sizing))
-          .call(reporting.hoverbox(report, scale, scaleRange, sizing, hoverboxTimeformat))
-          .call(reporting.labels(report, range, sizing));
+        svg.call(reporting.graph.axes(scale, sizing, axesTickFormat))
+          .call(reporting.graph.legend(report, sizing))
+          .call(reporting.graph.hoverbox(report, scale, scaleRange, sizing, hoverboxTimeformat))
+          .call(reporting.graph.labels(report, range, sizing));
       },
 
       area: function() {
@@ -158,10 +158,10 @@ jQuery(function($) {
   };
 
   var renderBarGraph = function (report, target) {
-    var barDataIndex = reporting.barDataIndex();
-    var range = reporting.barRange(report, barDataIndex);
-    var sizing = reporting.barSizing(report, target);
-    var scale = reporting.barScale(report, range, sizing, barDataIndex);
+    var barDataIndex = reporting.barGraph.dataIndex();
+    var range = reporting.barGraph.range(report, barDataIndex);
+    var sizing = reporting.barGraph.sizing(report, target);
+    var scale = reporting.barGraph.scale(report, range, sizing, barDataIndex);
     var translate = reporting.translate;
 
     var svg = d3.select(target)
@@ -178,7 +178,7 @@ jQuery(function($) {
         .attr('height', sizing.container.height)
         .attr('width', '100%');
 
-    svg.call(reporting.barAxes(scale, sizing));
+    svg.call(reporting.barGraph.axes(scale, sizing));
 
     var rect = svg.append('g')
       .call(translate(sizing.margin.left, sizing.margin.top))
@@ -199,7 +199,7 @@ jQuery(function($) {
       })
       .attr('height', sizing.bar.height)
       .attr('class', 'core-bar')
-      .call(reporting.barHover(barHover, sizing, barDataIndex, 'core'));
+      .call(reporting.barGraph.hover(barHover, sizing, barDataIndex, 'core'));
 
     rect.append('rect')
       .attr('y', function (data) {
@@ -210,7 +210,7 @@ jQuery(function($) {
       })
       .attr('height', sizing.bar.height)
       .attr('class', 'optional-bar')
-      .call(reporting.barHover(barHover, sizing, barDataIndex, 'optional'));
+      .call(reporting.barGraph.hover(barHover, sizing, barDataIndex, 'optional'));
   };
 
   var renderers = {

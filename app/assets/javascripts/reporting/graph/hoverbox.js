@@ -1,4 +1,4 @@
-reporting.hoverbox = function(report, scale, range, sizing, timeformat) {
+reporting.graph.hoverbox = function(report, scale, range, sizing, timeformat) {
   return function(selection) {
     var timeOnly = timeformat;
     var translate = reporting.translate;

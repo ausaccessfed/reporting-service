@@ -1,4 +1,4 @@
-reporting.barScale = function(report, range, sizing, barDataIndex) {
+reporting.barGraph.scale = function(report, range, sizing, barDataIndex) {
   var x = d3.scale.linear()
     .range([0, sizing.graph.width])
     .domain([range.start, range.end]);

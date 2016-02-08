@@ -1,4 +1,4 @@
-reporting.barRange = function (report, barDataIndex) {
+reporting.barGraph.range = function (report, barDataIndex) {
   var maxAttributeCount = d3.max(report.rows, function (attributes) {
     var core = attributes[barDataIndex.core];
     var optional = attributes[barDataIndex.optional];
