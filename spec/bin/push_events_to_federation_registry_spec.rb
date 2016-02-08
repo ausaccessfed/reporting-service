@@ -215,6 +215,40 @@ RSpec.describe PushEventsToFederationRegistry do
         expect { run }.to change { redis.llen('wayf_access_record') }.to(0)
       end
     end
+
+    context 'when the idp entity_id is missing' do
+      let(:event) do
+        attributes_for(:discovery_service_event, :response,
+                       selection_method: selection_method,
+                       initiating_sp: initiating_sp,
+                       selected_idp: nil)
+      end
+
+      it 'skips the record' do
+        expect { run }.not_to change { items.count }
+      end
+
+      it 'dequeues the item' do
+        expect { run }.to change { redis.llen('wayf_access_record') }.to(0)
+      end
+    end
+
+    context 'when the idp entity_id is missing' do
+      let(:event) do
+        attributes_for(:discovery_service_event, :response,
+                       selection_method: selection_method,
+                       initiating_sp: nil,
+                       selected_idp: selected_idp)
+      end
+
+      it 'skips the record' do
+        expect { run }.not_to change { items.count }
+      end
+
+      it 'dequeues the item' do
+        expect { run }.to change { redis.llen('wayf_access_record') }.to(0)
+      end
+    end
   end
 
   context 'when multiple items are pending' do
