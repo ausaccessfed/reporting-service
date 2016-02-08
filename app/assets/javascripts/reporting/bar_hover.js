@@ -11,8 +11,8 @@ reporting.barHover = function (barHover, sizing, barDataIndex, type) {
 
     selection.on('mousemove', function (data) {
       return barHover
-        .style('top', (event.pageY + sizing.hoverPointerOffset.y) + 'px')
-        .style('left', (event.pageX + sizing.hoverPointerOffset.x) + 'px')
+        .style('top', (d3.event.pageY + sizing.hoverPointerOffset.y) + 'px')
+        .style('left', (d3.event.pageX + sizing.hoverPointerOffset.x) + 'px')
         .attr('class', 'bar-hover ' + borderStyle[type])
         .text(type + ': ' + data[barDataIndex[type]] + ' supported');
     });
