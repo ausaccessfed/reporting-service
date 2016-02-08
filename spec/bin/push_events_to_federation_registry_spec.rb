@@ -153,9 +153,8 @@ RSpec.describe PushEventsToFederationRegistry do
       nil
     end
 
-    it 'stores the record in the database' do
-      expect { run }.to change { items.count }.by(1)
-      expect(items.last.except(:id)).to eq(
+    let(:expected_attrs) do
+      {
         version: 0,
         date_created: event[:timestamp],
         ds_host: ds_host,
@@ -166,7 +165,12 @@ RSpec.describe PushEventsToFederationRegistry do
         source: event[:ip],
         sp_endpoint: initiating_sp,
         spid: sp_fr_id
-      )
+      }
+    end
+
+    it 'stores the record in the database' do
+      expect { run }.to change { items.count }.by(1)
+      expect(items.last.except(:id)).to eq(expected_attrs)
     end
 
     it 'dequeues the item' do
@@ -187,13 +191,13 @@ RSpec.describe PushEventsToFederationRegistry do
         client.query('DELETE FROM idpssodescriptor')
       end
 
-      it 'raises an exception' do
-        expect { run }.to raise_error(/No such IdP/)
+      it 'inserts the record with a idpid of -1' do
+        expect { run }.to change { items.count }.by(1)
+        expect(items.last.except(:id)).to eq(expected_attrs.merge(idpid: -1))
       end
 
-      it 'leaves the queue intact' do
-        expect { swallow_exception { run } }
-          .not_to change { redis.llen('wayf_access_record') }
+      it 'dequeues the item' do
+        expect { run }.to change { redis.llen('wayf_access_record') }.to(0)
       end
     end
 
@@ -202,13 +206,13 @@ RSpec.describe PushEventsToFederationRegistry do
         client.query('DELETE FROM spssodescriptor')
       end
 
-      it 'raises an exception' do
-        expect { run }.to raise_error(/No such SP/)
+      it 'inserts the record with a spid of -1' do
+        expect { run }.to change { items.count }.by(1)
+        expect(items.last.except(:id)).to eq(expected_attrs.merge(spid: -1))
       end
 
-      it 'leaves the queue intact' do
-        expect { swallow_exception { run } }
-          .not_to change { redis.llen('wayf_access_record') }
+      it 'dequeues the item' do
+        expect { run }.to change { redis.llen('wayf_access_record') }.to(0)
       end
     end
   end
