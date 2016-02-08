@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 class UpdateFromRapidConnect
   def perform
+    touched = []
+
     rapid_data[:services].each do |service_data|
-      next delete_service(service_data) unless service_data[:enabled]
+      next unless service_data[:enabled]
       service = sync_service(service_data)
       sync_activations(service, service_data)
+      touched << service
     end
+
+    RapidConnectService.where.not(id: touched.map(&:id)).destroy_all
   end
 
   private
@@ -23,10 +28,6 @@ class UpdateFromRapidConnect
 
     RapidConnectService.find_or_initialize_by(identifier: service_data[:id])
                        .tap { |s| s.update!(attrs) }
-  end
-
-  def delete_service(service_data)
-    RapidConnectService.where(identifier: service_data[:id]).destroy_all
   end
 
   def sync_activations(service, service_data)

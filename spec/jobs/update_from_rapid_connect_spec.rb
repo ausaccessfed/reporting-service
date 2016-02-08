@@ -99,6 +99,16 @@ RSpec.describe UpdateFromRapidConnect do
           .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
+
+    context 'when the service is missing from the response' do
+      let(:service_list) { [] }
+
+      it 'deletes the service' do
+        expect { run }.to change(RapidConnectService, :count).by(-1)
+        expect { rapid_connect_service.reload }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
   end
 
   context 'with a specific organization' do
