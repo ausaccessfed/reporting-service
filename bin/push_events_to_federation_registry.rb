@@ -87,7 +87,7 @@ class PushEventsToFederationRegistry
     sql = format(RESOLVE_IDPID_SQL, e(event[:selected_idp]))
     result = mysql_client.query(sql).first
     return result['id'] if result
-    fail("No such IdP found in FR database: #{event[:selected_idp]}\n\n#{sql}")
+    -1
   end
 
   RESOLVE_SPID_SQL = squeeze_sql %(
@@ -102,7 +102,7 @@ class PushEventsToFederationRegistry
     sql = format(RESOLVE_SPID_SQL, e(event[:initiating_sp]))
     result = mysql_client.query(sql).first
     return result['id'] if result
-    fail("No such SP found in FR database: #{event[:initiating_sp]}\n\n#{sql}")
+    -1
   end
 
   def convert_request_type(event)
