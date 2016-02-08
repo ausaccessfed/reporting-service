@@ -158,9 +158,10 @@ jQuery(function($) {
   };
 
   var renderBarGraph = function (report, target) {
-    var range = reporting.barRange(report);
+    var barDataIndex = reporting.barDataIndex();
+    var range = reporting.barRange(report, barDataIndex);
     var sizing = reporting.barSizing(report, target);
-    var scale = reporting.barScale(report, range, sizing);
+    var scale = reporting.barScale(report, range, sizing, barDataIndex);
     var translate = reporting.translate;
 
     var svg = d3.select(target)
@@ -190,19 +191,26 @@ jQuery(function($) {
       .attr('class', 'bar-hover');
 
     rect.append('rect')
-      .attr('y', function (d) { return scale.y(d[0]) })
-      .attr('width', function (d) { return scale.x(d[1]) })
+      .attr('y', function (data) {
+        return scale.y(data[barDataIndex.idpName])
+      })
+      .attr('width', function (data) {
+        return scale.x(data[barDataIndex.core])
+      })
       .attr('height', sizing.bar.height)
       .attr('class', 'core-bar')
-      .call(reporting.barHover(barHover, 'core'));
+      .call(reporting.barHover(barHover, sizing, barDataIndex, 'core'));
 
     rect.append('rect')
-      .attr('y', function (d) { return scale.y(d[0]) + sizing.bar.height })
-      .attr('width', function (d) { return scale.x(d[2]) })
+      .attr('y', function (data) {
+        return scale.y(data[barDataIndex.idpName]) + sizing.bar.height
+      })
+      .attr('width', function (data) {
+        return scale.x(data[barDataIndex.optional])
+      })
       .attr('height', sizing.bar.height)
       .attr('class', 'optional-bar')
-      .call(reporting.barHover(barHover, 'optional'));
-
+      .call(reporting.barHover(barHover, sizing, barDataIndex, 'optional'));
   };
 
   var renderers = {

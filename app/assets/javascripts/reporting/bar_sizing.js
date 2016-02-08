@@ -19,6 +19,11 @@ reporting.barSizing = function(report, target) {
     left: 160
   };
 
+  var hoverPointerOffset = {
+    x: 10,
+    y: 10
+  };
+
   var graph = {
     height: report.rows.length * row.height,
     width: $(target).width() - margin.right - margin.left
@@ -35,6 +40,7 @@ reporting.barSizing = function(report, target) {
     graph: graph,
     bar: bar,
     xAxisLabel: xAxisLabel,
+    hoverPointerOffset: hoverPointerOffset,
     margin: margin
   };
 };

@@ -10,20 +10,19 @@ reporting.barAxes = function(scale, sizing) {
       .orient('left')
       .scale(scale.y);
 
-    var xAxisLabelPosition = sizing.graph.height + sizing.margin.top +
+    var xAxisPosition = sizing.graph.height + sizing.margin.top +
       (sizing.bar.height * 2);
 
     selection.append('g')
       .attr('class', 'axis')
       .attr('width', sizing.graph.width)
       .attr('height', sizing.graph.height)
-      .call(translate(sizing.margin.left,
-        xAxisLabelPosition))
+      .call(translate(sizing.margin.left, xAxisPosition))
       .call(xAxis);
 
     selection.append('text')
       .call(translate(sizing.margin.left + sizing.graph.width / 2,
-        xAxisLabelPosition + sizing.xAxisLabel.marginTop))
+        xAxisPosition + sizing.xAxisLabel.marginTop))
       .attr('class', 'label')
       .attr('text-anchor', 'middle')
       .text('Supported Attributes');
