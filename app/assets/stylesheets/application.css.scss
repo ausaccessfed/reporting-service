@@ -105,26 +105,11 @@ svg.report-output {
   }
 
   &.identity-provider-attributes {
-
-    .group1 {
+    .core-bar {
       fill: $graph-color-vibrant;
     }
-    .group2 {
+    .optional-bar {
       fill: $graph-color-primary;
-    }
-
-    .count {
-      font: 10px sans-serif;
-      text-anchor: end;
-    }
-
-    .row_header {
-      fill:black;
-      font: 12px sans-serif;
-    }
-
-    .line {
-      stroke:rgb(200,200,200);stroke-width:1;
     }
   }
 }
@@ -134,4 +119,22 @@ table.report-output {
   th, td {
     padding-right: 1em;
   }
+}
+
+.bar-hover {
+  border-radius: 5px;
+  position: absolute;
+  border: 2px solid;
+  padding: 5px;
+  z-index: 10;
+  background-color: white;
+  visibility: hidden;
+}
+
+.border-vibrant {
+  border-color: $graph-color-vibrant;
+}
+
+.border-primary {
+  border-color: $graph-color-primary;
 }

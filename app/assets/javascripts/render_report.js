@@ -185,21 +185,23 @@ jQuery(function($) {
         .data(report.rows)
       .enter();
 
-    var barHover = reporting.barHover.call();
+    var barHover = d3.select('body')
+      .append('div')
+      .attr('class', 'bar-hover');
 
     rect.append('rect')
       .attr('y', function (d) { return scale.y(d[0]) })
       .attr('width', function (d) { return scale.x(d[1]) })
       .attr('height', sizing.bar.height)
-      .attr('class', 'group2')
-      .call(reporting.barHoverMouseEvents(barHover, 'Core'));
+      .attr('class', 'core-bar')
+      .call(reporting.barHover(barHover, 'Core', 'border-vibrant'));
 
     rect.append('rect')
       .attr('y', function (d) { return scale.y(d[0]) + sizing.bar.height })
       .attr('width', function (d) { return scale.x(d[2]) })
       .attr('height', sizing.bar.height)
-      .attr('class', 'group1')
-      .call(reporting.barHoverMouseEvents(barHover, 'Optional'));
+      .attr('class', 'optional-bar')
+      .call(reporting.barHover(barHover, 'Optional', 'border-primary'));
   };
 
   var renderers = {
