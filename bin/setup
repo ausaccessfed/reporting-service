@@ -12,7 +12,8 @@ require 'gumboot/strap'
 include Gumboot::Strap
 
 puts "\n== Installing configuration files =="
-link_global_configuration %w(rapidconnect.yml api-client.crt api-client.key)
+link_global_configuration %w(rapidconnect.yml api-client.crt api-client.key
+                             event_encryption_key.pem)
 update_local_configuration %w(reporting_service.yml)
 
 puts "\n== Loading Rails environment =="

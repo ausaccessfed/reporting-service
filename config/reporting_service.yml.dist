@@ -13,3 +13,10 @@ ide:
 federationregistry:
   host: manager.test.aaf.edu.au
   secret: 'This is the shared secret used for authenticating to the export API'
+sqs:
+  fake: true
+  region: localhost
+  endpoint: http://localhost:9324
+  encryption_key: config/event_encryption_key.pem
+  queues:
+    discovery: http://localhost:9324/queue/discovery-service-development
