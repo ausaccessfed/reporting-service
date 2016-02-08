@@ -10,13 +10,23 @@ reporting.barAxes = function(scale, sizing) {
       .orient('left')
       .scale(scale.y);
 
+    var xAxisLabelPosition = sizing.graph.height + sizing.margin.top +
+      (sizing.bar.height * 2);
+
     selection.append('g')
       .attr('class', 'axis')
       .attr('width', sizing.graph.width)
       .attr('height', sizing.graph.height)
       .call(translate(sizing.margin.left,
-        sizing.graph.height + sizing.margin.top + (sizing.bar.height * 2)))
+        xAxisLabelPosition))
       .call(xAxis);
+
+    selection.append('text')
+      .call(translate(sizing.margin.left + sizing.graph.width / 2,
+        xAxisLabelPosition + sizing.xAxisLabel.marginTop))
+      .attr('class', 'label')
+      .attr('text-anchor', 'middle')
+      .text('Supported Attributes');
 
     selection.append('g')
       .attr('class', 'axis')

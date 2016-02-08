@@ -194,14 +194,15 @@ jQuery(function($) {
       .attr('width', function (d) { return scale.x(d[1]) })
       .attr('height', sizing.bar.height)
       .attr('class', 'core-bar')
-      .call(reporting.barHover(barHover, 'Core', 'border-vibrant'));
+      .call(reporting.barHover(barHover, 'core'));
 
     rect.append('rect')
       .attr('y', function (d) { return scale.y(d[0]) + sizing.bar.height })
       .attr('width', function (d) { return scale.x(d[2]) })
       .attr('height', sizing.bar.height)
       .attr('class', 'optional-bar')
-      .call(reporting.barHover(barHover, 'Optional', 'border-primary'));
+      .call(reporting.barHover(barHover, 'optional'));
+
   };
 
   var renderers = {

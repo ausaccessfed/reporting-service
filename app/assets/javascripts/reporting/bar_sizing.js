@@ -7,6 +7,11 @@ reporting.barSizing = function(report, target) {
     height: bar.height * 4
   };
 
+  var xAxisLabel = {
+    marginTop: 40,
+    marginBottom: 20
+  };
+
   var margin = {
     top: 40,
     right: 40,
@@ -20,7 +25,8 @@ reporting.barSizing = function(report, target) {
   };
 
   var container = {
-    height: graph.height + margin.top + margin.bottom,
+    height: graph.height + margin.top + margin.bottom +
+      xAxisLabel.marginTop + xAxisLabel.marginBottom,
     width: $(target).width()
   };
 
@@ -28,6 +34,7 @@ reporting.barSizing = function(report, target) {
     container: container,
     graph: graph,
     bar: bar,
+    xAxisLabel: xAxisLabel,
     margin: margin
   };
 };
