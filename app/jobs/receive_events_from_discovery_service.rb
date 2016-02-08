@@ -25,10 +25,14 @@ class ReceiveEventsFromDiscoveryService
   def process_message(message)
     jwe = JSON::JWT.decode(message.body, key)
     data = JSON::JWT.decode(jwe.plain_text, key)
-    data['events'].each do |event|
-      push_to_fr_queue(event)
-      DiscoveryServiceEvent.create_with(event)
-                           .find_or_create_by!(event.slice(:unique_id, :phase))
+    DiscoveryServiceEvent.transaction do
+      data['events'].each do |event|
+        push_to_fr_queue(event)
+
+        DiscoveryServiceEvent
+          .create_with(event)
+          .find_or_create_by!(event.slice(:unique_id, :phase))
+      end
     end
   end
 
