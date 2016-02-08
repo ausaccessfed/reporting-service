@@ -74,6 +74,21 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
       it 'creates the events' do
         expect { run }
           .to change(DiscoveryServiceEvent, :count).by(events.length)
+
+        events_attrs.each do |attrs|
+          expect(DiscoveryServiceEvent.find_by(attrs.slice(:unique_id)))
+            .to have_attributes(attrs)
+        end
+      end
+
+      context 'when an event is not able to be stored' do
+        let(:events) do
+          events_attrs.dup.unshift(timestamp: Time.zone.now)
+        end
+
+        it 'raises an exception' do
+          expect { run }.to raise_error(ActiveRecord::RecordInvalid)
+        end
       end
     end
 
