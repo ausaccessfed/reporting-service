@@ -58,6 +58,7 @@ class PushEventsToFederationRegistry
   )
 
   def insert_record(event)
+    return if skip?(event)
     sql = format(INSERT_SQL, convert(event))
     mysql_client.query(sql)
   end
@@ -115,6 +116,10 @@ class PushEventsToFederationRegistry
 
   def e(value)
     mysql_client.escape(value)
+  end
+
+  def skip?(event)
+    event[:selected_idp].nil? || event[:initiating_sp].nil?
   end
 end
 
