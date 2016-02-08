@@ -12,7 +12,10 @@ ide:
   federation_object_entitlement_prefix: urn:mace:aaf.edu.au:ide:internal
 federationregistry:
   host: manager.test.aaf.edu.au
-  secret: 'This is the shared secret used for authenticating to the export API'
+  secret: 'This is the shared secret used for authenticating to the FR export API'
+rapidconnect:
+  host: rapid.test.aaf.edu.au
+  secret: 'This is the shared secret used for authenticating to the Rapid export API'
 sqs:
   fake: true
   region: localhost
