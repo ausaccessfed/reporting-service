@@ -16,10 +16,9 @@ RSpec.describe AutomatedReportsController, type: :controller do
            target: idp.entity_id
   end
 
-  let!(:auto_report_sub) do
+  let!(:subscription) do
     create :automated_report_subscription,
-           automated_report: auto_report,
-           subject: user
+           subject_id: user.id
   end
 
   let!(:auto_report_instance) { create :automated_report_instance }
@@ -39,8 +38,8 @@ RSpec.describe AutomatedReportsController, type: :controller do
       expect(response).to render_template('index')
     end
 
-    it 'should list automated reports' do
-      expect(assigns[:reports]).to include('*')
+    it 'should assign subject\'t automated report subscriptions' do
+      expect(assigns[:subscriptions]).to include(subscription)
     end
   end
 end
