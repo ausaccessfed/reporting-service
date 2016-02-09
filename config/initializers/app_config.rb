@@ -16,6 +16,11 @@ Rails.application.configure do
       secret: 'abcdef'
     }
 
+    config.reporting_service.rapidconnect = {
+      host: 'rapid.example.edu',
+      secret: 'fedcba'
+    }
+
     config.reporting_service.sqs = {
       fake: false,
       region: 'dummy',
@@ -45,10 +50,5 @@ Rails.application.configure do
     rescue
       :ok
     end
-
-    config.reporting_service.rapidconnect = {
-      host: 'rapid.example.edu',
-      secret: 'fedcba'
-    }
   end
 end
