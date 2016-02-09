@@ -98,6 +98,12 @@ RSpec.describe UpdateFromRapidConnect do
         expect { rapid_connect_service.reload }
           .to raise_error(ActiveRecord::RecordNotFound)
       end
+
+      it 'deletes the activation' do
+        expect { run }.to change(Activation, :count).by(-1)
+        expect { activation.reload }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
 
     context 'when the service is missing from the response' do
