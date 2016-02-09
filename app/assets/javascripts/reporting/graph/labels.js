@@ -1,4 +1,4 @@
-reporting.labels = function(report, range, sizing) {
+reporting.graph.labels = function(report, range, sizing) {
   return function(selection) {
     var translate = reporting.translate;
     var graph = sizing.graph;

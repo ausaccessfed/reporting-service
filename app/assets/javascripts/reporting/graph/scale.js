@@ -1,4 +1,4 @@
-reporting.scale = function(report, range, sizing) {
+reporting.graph.scale = function(report, range, sizing) {
   var x = d3.time.scale()
     .range([0, sizing.graph.width])
     .domain([range.start, range.end]);
