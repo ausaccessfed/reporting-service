@@ -1,16 +1,18 @@
 # frozen_string_literal: true
 class UpdateFromRapidConnect
   def perform
-    touched = []
+    RapidConnectService.transaction do
+      touched = []
 
-    rapid_data[:services].each do |service_data|
-      next unless service_data[:enabled]
-      service = sync_service(service_data)
-      sync_activations(service, service_data)
-      touched << service
+      rapid_data[:services].each do |service_data|
+        next unless service_data[:enabled]
+        service = sync_service(service_data)
+        sync_activations(service, service_data)
+        touched << service
+      end
+
+      RapidConnectService.where.not(id: touched.map(&:id)).destroy_all
     end
-
-    RapidConnectService.where.not(id: touched.map(&:id)).destroy_all
   end
 
   private
