@@ -36,9 +36,9 @@ class SubscriberReportsController < ApplicationController
   end
 
   def permitted_objects(model)
-    active_sps = model.preload(:organization).active
+    active_objects = model.preload(:organization).active
 
-    @entities = active_sps.select do |sp|
+    @entities = active_objects.select do |sp|
       subject.permits? permission_string(sp)
     end
   end
