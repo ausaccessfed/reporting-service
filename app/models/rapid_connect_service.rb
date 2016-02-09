@@ -3,7 +3,7 @@ class RapidConnectService < ActiveRecord::Base
 
   belongs_to :organization
 
-  has_many :activations, as: :federation_object
+  has_many :activations, as: :federation_object, dependent: :destroy
 
   valhammer
 

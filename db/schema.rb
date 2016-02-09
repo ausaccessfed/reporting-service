@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160128020700) do
+ActiveRecord::Schema.define(version: 20160205050033) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -136,7 +136,7 @@ ActiveRecord::Schema.define(version: 20160128020700) do
     t.string   "service_type",    limit: 255, null: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
-    t.integer  "organization_id", limit: 4,   null: false
+    t.integer  "organization_id", limit: 4
   end
 
   add_index "rapid_connect_services", ["identifier"], name: "index_rapid_connect_services_on_identifier", unique: true, using: :btree
