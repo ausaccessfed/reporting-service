@@ -5,10 +5,9 @@ class AutomatedReportsController < ApplicationController
   def index
   end
 
-  def unsubscribe
-    subscription = @subscriptions.detect do |s|
-      s.identifier == params[:report_id]
-    end
+  def destroy
+    subscription = @subscriptions
+                   .where(identifier: params[:report_id])[0]
 
     subscription.destroy if subscription
 

@@ -6,16 +6,20 @@ RSpec.describe AutomatedReportsController, type: :controller do
 
   let(:user) { create :subject }
 
-  let!(:auto_report) do
+  let(:auto_report) do
     create :automated_report,
            report_class: 'IdentityProviderSessionsReport',
            target: idp.entity_id
   end
 
-  let!(:subscription) do
+  let(:subscription) do
     create :automated_report_subscription,
            automated_report: auto_report,
            subject: user
+  end
+
+  def destroy
+    delete :destroy, report_id: subscription.identifier
   end
 
   before do
@@ -25,10 +29,6 @@ RSpec.describe AutomatedReportsController, type: :controller do
   end
 
   describe 'get on /automated_reports' do
-    before do
-      get :index
-    end
-
     it 'should response with 200' do
       expect(response).to have_http_status(:ok)
     end
@@ -42,16 +42,14 @@ RSpec.describe AutomatedReportsController, type: :controller do
     end
   end
 
-  describe 'post on /automated_reports/unsubscribe' do
-    before do
-      get :unsubscribe, report: subscription.identifier
-    end
+  describe 'post on /automated_reports/destroy' do
+    before { destroy }
 
     it 'should response with redirect (302)' do
       expect(response).to redirect_to('/automated_reports')
     end
 
-    it 'should destroy unsubscribed automated report subscription' do
+    it 'should destroy automated report subscription' do
       expect(assigns[:subscriptions]).not_to include(subscription)
     end
   end

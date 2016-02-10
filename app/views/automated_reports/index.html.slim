@@ -15,18 +15,24 @@ table.table.table-striped
       th Action
 
   tbody
-    - @subscriptions.each do |subscription|
-      - report_type = subscription.automated_report.report_class
-      - report_target = subscription.automated_report.target
-      - name = target_name report_type, report_target
-      - link = "/auotmated_report?report=#{subscription.identifier}"
-      - interval = subscription.automated_report.interval
+    - objects = @subscriptions.map do |s|
+      - { report_type: s.automated_report.report_class,
+          name: target_name(s.automated_report.report_class,
+                            s.automated_report.target),
+          link: "/auotmated_report?report=#{s.identifier}",
+          interval: s.automated_report.interval,
+          report_id: s.identifier }
 
+
+    - sorted_subscriptions = objects.sort_by { |o| o[:name].downcase }
+
+    - sorted_subscriptions.each do |s|
+      - link = s[:link]
       tr
-        td= link_to(report_type.titleize, link)
-        td= link_to(name, link)
-        td= link_to(interval, link)
+        td= link_to(s[:report_type].titleize, link)
+        td= link_to(s[:name], link)
+        td= link_to(s[:interval], link)
 
         td
-          = button_to 'Unsubscribe',{ action: 'unsubscribe', report_id: subscription.identifier },
+          = button_to 'Unsubscribe',{ action: 'destroy', report_id: s[:report_id] },
                        method: :delete, class: 'btn-sm btn-danger'
