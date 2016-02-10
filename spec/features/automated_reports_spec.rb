@@ -70,7 +70,7 @@ RSpec.feature 'automated report' do
     visit '/automated_reports'
 
     within 'table' do
-      first('button', 'Unsubscribe').click
+      first('input', 'Unsubscribe').click
     end
 
     expect(current_path).to eq('/automated_reports')

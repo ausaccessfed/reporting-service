@@ -7,7 +7,7 @@ RSpec.describe AutomatedReportsController, type: :controller do
   end
 
   describe 'route to /automated_reports/unsubscribe' do
-    subject { { post: '/automated_reports' } }
+    subject { { delete: '/automated_reports' } }
     it { is_expected.to route_to 'automated_reports#unsubscribe' }
   end
 end

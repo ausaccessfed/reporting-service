@@ -65,10 +65,12 @@ Rails.application.routes.draw do
                  'source_identity_providers_report', [:get, :post])
   end
 
-  get '/automated_reports' => 'automated_reports#index',
-      as: :automated_reports
-
+  get '/automated_reports' => 'automated_reports#index', as: :automated_reports
   delete '/automated_reports' => 'automated_reports#unsubscribe'
+
+  scope '/automated_report_instances' do
+    match '/:report_id', to: 'automated_report_instances#show', via: :get
+  end
 
   namespace :api, defaults: { format: 'json' } do
     v1_constraints = APIConstraints.new(version: 1, default: true)
