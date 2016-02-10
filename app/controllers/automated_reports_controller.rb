@@ -6,11 +6,14 @@ class AutomatedReportsController < ApplicationController
   end
 
   def unsubscribe
-    subscription = @subscriptions.where(identifier: params[:report])
-    notice = 'successfully unsubscribed' if subscription.first.destroy
+    subscription = @subscriptions.detect do |s|
+      s.identifier == params[:report_id]
+    end
+
+    notice = 'successfully unsubscribed' if subscription.destroy
 
     respond_to do |format|
-      format.html { redirect_to automated_reports_path, notice: notice }
+      format.html { redirect_to automated_reports_path }
     end
   end
 

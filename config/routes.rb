@@ -68,7 +68,7 @@ Rails.application.routes.draw do
   get '/automated_reports' => 'automated_reports#index',
       as: :automated_reports
 
-  post '/automated_reports' => 'automated_reports#unsubscribe'
+  delete '/automated_reports' => 'automated_reports#unsubscribe'
 
   namespace :api, defaults: { format: 'json' } do
     v1_constraints = APIConstraints.new(version: 1, default: true)

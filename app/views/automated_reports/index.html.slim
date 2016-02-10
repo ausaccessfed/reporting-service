@@ -28,7 +28,5 @@ table.table.table-striped
         td= link_to(interval, link)
 
         td
-          = form_tag({action: :unsubscribe, report: subscription.identifier }) do
-            = button_to(type: 'submit', class: "btn-sm btn-danger") do
-              => icon_tag('scissors')
-              = 'Unsubscribe'
+          = button_to 'Unsubscribe',{ action: 'unsubscribe', report_id: subscription.identifier },
+                       method: :delete, class: 'btn-sm btn-danger'
