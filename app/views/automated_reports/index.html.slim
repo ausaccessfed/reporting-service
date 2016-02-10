@@ -3,8 +3,15 @@
 
 = page_header('Automated Reports')
 
-/ TODO (table filter)
-= search_form_tag 'enter a keyword'
+= search_form_tag ''
+
+- objects = @subscriptions.map do |s|
+  - { report_type: s.automated_report.report_class,
+      name: target_name(s.automated_report.report_class,
+                        s.automated_report.target),
+      link: "/auotmated_report?report=#{s.identifier}",
+      interval: s.automated_report.interval,
+      report_id: s.identifier }
 
 table.table.table-striped
   thead
@@ -13,17 +20,7 @@ table.table.table-striped
       th Report Target
       th Interval
       th Action
-
-  tbody
-    - objects = @subscriptions.map do |s|
-      - { report_type: s.automated_report.report_class,
-          name: target_name(s.automated_report.report_class,
-                            s.automated_report.target),
-          link: "/auotmated_report?report=#{s.identifier}",
-          interval: s.automated_report.interval,
-          report_id: s.identifier }
-
-
+  tbody.filtertable
     - sorted_subscriptions = objects.sort_by { |o| o[:name].downcase }
 
     - sorted_subscriptions.each do |s|
