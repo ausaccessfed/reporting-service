@@ -66,9 +66,9 @@ Rails.application.routes.draw do
   end
 
   get '/automated_reports' => 'automated_reports#index', as: :automated_reports
-  delete '/automated_reports' => 'automated_reports#destroy'
 
-  scope '/automated_report_instances' do
+  scope '/automated_reports' do
+    delete '/' => 'automated_reports#destroy'
     match '/:report_id', to: 'automated_report_instances#show', via: :get
   end
 

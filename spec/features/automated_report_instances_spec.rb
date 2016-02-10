@@ -27,11 +27,11 @@ RSpec.feature 'automated report instances' do
 
     visit '/auth/login'
     click_button 'Login'
-    visit "/automated_report_instances/#{subscription.identifier}"
+    visit "/automated_reports/#{subscription.identifier}"
   end
 
   scenario 'viewing automated_report_instances#show' do
     identifier = subscription.identifier
-    expect(current_path).to eq("/automated_report_instances/#{identifier}")
+    expect(current_path).to eq("/automated_reports/#{identifier}")
   end
 end
