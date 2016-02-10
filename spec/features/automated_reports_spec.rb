@@ -25,21 +25,26 @@ RSpec.feature 'automated report' do
            target: saml.name
   end
 
-  background do
-    create :activation, federation_object: idp
-
+  given!(:subscription_1) do
     create :automated_report_subscription,
            automated_report: auto_report_idp,
            subject: user
+  end
 
+  given!(:subscription_2) do
     create :automated_report_subscription,
            automated_report: auto_report_org,
            subject: user
+  end
 
+  given!(:subscription_3) do
     create :automated_report_subscription,
            automated_report: auto_report_saml,
            subject: user
+  end
 
+  background do
+    create :activation, federation_object: idp
     attrs = create(:aaf_attributes, :from_subject, subject: user)
     RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
@@ -59,5 +64,15 @@ RSpec.feature 'automated report' do
     expect(page).to have_text(idp.name)
     expect(page).to have_text('Organizations')
     expect(page).to have_text(saml.name)
+  end
+
+  scenario 'unsubscribe and redirect to index' do
+    visit '/automated_reports'
+
+    within 'table' do
+      first('button', 'Unsubscribe').click
+    end
+
+    expect(current_path).to eq('/automated_reports')
   end
 end

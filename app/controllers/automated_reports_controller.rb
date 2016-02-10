@@ -1,8 +1,17 @@
 class AutomatedReportsController < ApplicationController
-  before_action :set_subscriptions, only: :index
+  before_action :set_subscriptions
+  before_action { public_action }
 
   def index
-    public_action
+  end
+
+  def unsubscribe
+    subscription = @subscriptions.where(identifier: params[:report])
+    notice = 'successfully unsubscribed' if subscription.first.destroy
+
+    respond_to do |format|
+      format.html { redirect_to automated_reports_path, notice: notice }
+    end
   end
 
   private

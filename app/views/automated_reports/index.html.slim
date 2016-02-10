@@ -18,16 +18,17 @@ table.table.table-striped
     - @subscriptions.each do |subscription|
       - report_type = subscription.automated_report.report_class
       - report_target = subscription.automated_report.target
+      - name = target_name report_type, report_target
+      - link = "/auotmated_report?report=#{subscription.identifier}"
+      - interval = subscription.automated_report.interval
 
-      a href = ('#')
-        tr
-          td= subscription.automated_report.report_class.titleize
+      tr
+        td= link_to(report_type.titleize, link)
+        td= link_to(name, link)
+        td= link_to(interval, link)
 
-          td= target_name report_type, report_target
-
-          td= subscription.automated_report.interval
-
-          td
-            = button_tag('#', class: "btn-sm btn-danger") do
+        td
+          = form_tag({action: :unsubscribe, report: subscription.identifier }) do
+            = button_to(type: 'submit', class: "btn-sm btn-danger") do
               => icon_tag('scissors')
               = 'Unsubscribe'
