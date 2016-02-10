@@ -242,8 +242,6 @@ jQuery(function($) {
         renderer(data, target);
       }, 250));
 
-      setTimeout(function() { renderer(data, target); }, 100);
-
       d3.select(window).on('load', function() {
         renderer(data, target);
       });
