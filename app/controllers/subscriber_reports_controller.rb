@@ -1,7 +1,7 @@
 class SubscriberReportsController < ApplicationController
   before_action { permitted_objects(model_object) }
   before_action :requested_entity
-  before_action :range
+  before_action :set_range_params
   before_action :access_method
 
   private
@@ -22,8 +22,8 @@ class SubscriberReportsController < ApplicationController
   def generate_report(report_type, steps = nil)
     @entity_id = params[:entity_id]
 
-    return report_type.new(@entity_id, @start, @end, steps) if steps
-    report_type.new(@entity_id, @start, @end)
+    return report_type.new(@entity_id, start, finish, steps) if steps
+    report_type.new(@entity_id, start, finish)
   end
 
   def access_method
@@ -36,27 +36,35 @@ class SubscriberReportsController < ApplicationController
   end
 
   def permitted_objects(model)
-    active_sps = model.preload(:organization).active
+    active_objects = model.preload(:organization).active
 
-    @entities = active_sps.select do |sp|
+    @entities = active_objects.select do |sp|
       subject.permits? permission_string(sp)
     end
   end
 
-  def range
-    @start = params[:start] ? convert_time(params[:start], true) : nil
-    @end = params[:end] ? convert_time(params[:end]) : nil
+  def set_range_params
+    @start = params[:start]
+    @end = params[:end]
   end
 
-  def convert_time(time, flag = nil)
-    return Time.zone.parse(time).beginning_of_day if flag
-    Time.zone.parse(time).end_of_day
+  def start
+    return nil if params[:start].blank?
+    Time.zone.parse(params[:start]).beginning_of_day
+  end
+
+  def finish
+    return nil if params[:end].blank?
+    Time.zone.parse(params[:end]).tomorrow.beginning_of_day
   end
 
   def scaled_steps
-    width = (@end - @start) / 365_000
-    return 10 if width > 10
-    return 1 if width < 1
-    width.to_i
+    range = finish - start
+
+    return 24 if range >= 1.year
+    return 12 if range >= 6.months
+    return 6 if range >= 3.months
+    return 2 if range >= 1.month
+    1
   end
 end

@@ -50,6 +50,21 @@ Rails.application.routes.draw do
                  'source_identity_providers_report', [:get, :post])
   end
 
+  get '/admin/reports' => 'administrator_reports#index',
+      as: :admin_reports
+
+  scope '/admin' do
+    def match_report(prefix, name, verbs)
+      match "/#{prefix}/#{name}", to: "administrator_reports##{name}",
+                                  via: verbs, as: :"admin_#{prefix}_#{name}"
+    end
+
+    match_report('reports', 'subscriber_registrations_report', [:get, :post])
+    match_report('reports', 'federation_growth_report', [:get, :post])
+    match_report('reports', 'daily_demand_report', [:get, :post])
+    match_report('reports', 'federated_sessions_report', [:get, :post])
+  end
+
   namespace :api, defaults: { format: 'json' } do
     v1_constraints = APIConstraints.new(version: 1, default: true)
     scope constraints: v1_constraints do

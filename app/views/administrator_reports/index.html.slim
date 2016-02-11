@@ -1,0 +1,28 @@
+= breadcrumbs('Admin Reports')
+
+h1 Admin Reports
+
+.list-group
+  = link_to(admin_reports_subscriber_registrations_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Subscriber Registrations Report
+    p.list-group-item-text
+      | Shows the subscriber registration report over the given range, in number of
+        Organisations, Service Providers, Identity Providers and Services
+
+  = link_to(admin_reports_federation_growth_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Federation Growth Report
+    p.list-group-item-text
+      | Shows the federation growth report over the given time range in number of
+        Organisations, Identity Providers and Services
+
+  = link_to(admin_reports_daily_demand_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Daily Demand Report
+    p.list-group-item-text
+      | Graphs the daily trend of sessions established via AAF's central
+        Discovery Service, highlighting which time of day users are most active
+
+  = link_to(admin_reports_federated_sessions_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Federated Sessions Report
+    p.list-group-item-text
+      | Graphs the hourly number of sessions established via AAF's central
+        Discovery Service

@@ -16,6 +16,9 @@ gem 'valhammer'
 gem 'accession'
 gem 'implicit-schema'
 
+gem 'aws-sdk'
+gem 'json-jwt'
+
 gem 'aaf-lipstick', git: 'https://github.com/ausaccessfed/aaf-lipstick',
                     branch: 'private/lipstick-2.0-pre'
 

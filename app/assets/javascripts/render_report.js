@@ -5,10 +5,10 @@ jQuery(function($) {
     dateTime : d3.time.format('%Y-%m-%dT%H:%M:%SZ'),
     facncyDateTime : d3.time.format('%Y-%m-%d ~ %H:%M'),
     fancyTickFormat : d3.time.format("%H")
-  }
+  };
 
   var renderGraph = function(report, target) {
-    var sizing = reporting.sizing(report, target);
+    var sizing = reporting.graph.sizing(report, target);
 
     var svg = d3.select(target)
       .selectAll('svg')
@@ -31,21 +31,21 @@ jQuery(function($) {
       timeFormat : timeFormats.dateTime,
       hoverBoxFormat : timeFormats.date,
       tickFormat : null
-    }
+    };
 
     var sessionsReportRange = {
       range : report.range,
       timeFormat : timeFormats.dateTime,
       hoverBoxFormat : timeFormats.facncyDateTime,
       tickFormat : null
-    }
+    };
 
     var dailyDemandReportRange = {
       range : dailyRange,
       timeFormat : timeFormats.time,
       hoverBoxFormat : timeFormats.time,
       tickFormat : timeFormats.fancyTickFormat
-    }
+    };
 
     var rangeSpecs = {
       'federation-growth': defaultRangeArgs,
@@ -57,11 +57,11 @@ jQuery(function($) {
       'service-provider-daily-demand': dailyDemandReportRange
     };
 
-    var scaleRange = reporting.range(rangeSpecs[report.type]);
+    var scaleRange = reporting.graph.range(rangeSpecs[report.type]);
     var hoverboxTimeformat = rangeSpecs[report.type].hoverBoxFormat;
     var axesTickFormat = rangeSpecs[report.type].tickFormat;
-    var range = reporting.range(defaultRangeArgs);
-    var scale = reporting.scale(report, scaleRange, sizing);
+    var range = reporting.graph.range(defaultRangeArgs);
+    var scale = reporting.graph.scale(report, scaleRange, sizing);
     var translate = reporting.translate;
     var graph = sizing.graph;
     var margin = graph.margin;
@@ -84,10 +84,10 @@ jQuery(function($) {
             .attr('d', d);
         });
 
-        svg.call(reporting.axes(scale, sizing, axesTickFormat))
-          .call(reporting.legend(report, sizing))
-          .call(reporting.hoverbox(report, scale, scaleRange, sizing, hoverboxTimeformat))
-          .call(reporting.labels(report, range, sizing));
+        svg.call(reporting.graph.axes(scale, sizing, axesTickFormat))
+          .call(reporting.graph.legend(report, sizing))
+          .call(reporting.graph.hoverbox(report, scale, scaleRange, sizing, hoverboxTimeformat))
+          .call(reporting.graph.labels(report, range, sizing));
       },
 
       area: function() {
@@ -157,6 +157,62 @@ jQuery(function($) {
     });
   };
 
+  var renderBarGraph = function (report, target) {
+    var barDataIndex = reporting.barGraph.dataIndex();
+    var range = reporting.barGraph.range(report, barDataIndex);
+    var sizing = reporting.barGraph.sizing(report, target);
+    var scale = reporting.barGraph.scale(report, range, sizing, barDataIndex);
+    var translate = reporting.translate;
+
+    var svg = d3.select(target)
+      .selectAll('svg')
+        .data([reporting.id]);
+
+    svg.selectAll('svg > *')
+      .remove();
+
+    svg.enter()
+      .append('svg')
+        .attr('id', function (id) { return id; })
+        .attr('class', report.type + ' report-output')
+        .attr('height', sizing.container.height)
+        .attr('width', '100%');
+
+    svg.call(reporting.barGraph.axes(scale, sizing));
+
+    var rect = svg.append('g')
+      .call(translate(sizing.margin.left, sizing.margin.top))
+      .selectAll('rect')
+        .data(report.rows)
+      .enter();
+
+    var barHover = d3.select('body')
+      .append('div')
+      .attr('class', 'bar-hover');
+
+    rect.append('rect')
+      .attr('y', function (data) {
+        return scale.y(data[barDataIndex.idpName])
+      })
+      .attr('width', function (data) {
+        return scale.x(data[barDataIndex.core])
+      })
+      .attr('height', sizing.bar.height)
+      .attr('class', 'core-bar')
+      .call(reporting.barGraph.hover(barHover, sizing, barDataIndex, 'core'));
+
+    rect.append('rect')
+      .attr('y', function (data) {
+        return scale.y(data[barDataIndex.idpName]) + sizing.bar.height
+      })
+      .attr('width', function (data) {
+        return scale.x(data[barDataIndex.optional])
+      })
+      .attr('height', sizing.bar.height)
+      .attr('class', 'optional-bar')
+      .call(reporting.barGraph.hover(barHover, sizing, barDataIndex, 'optional'));
+  };
+
   var renderers = {
     'federation-growth': renderGraph,
     'federated-sessions': renderGraph,
@@ -166,11 +222,12 @@ jQuery(function($) {
     'identity-provider-daily-demand': renderGraph,
     'service-provider-daily-demand': renderGraph,
     'service-compatibility': renderTable,
-    'identity-provider-attributes': renderTable,
     'identity-provider-destination-services': renderTable,
     'service-provider-source-identity-providers': renderTable,
+    'identity-provider-attributes': renderBarGraph,
     'provided-attribute': renderTable,
-    'requested-attribute': renderTable
+    'requested-attribute': renderTable,
+    'subscriber-registrations': renderTable
   };
 
   $('.report-data').each(function() {
@@ -185,7 +242,9 @@ jQuery(function($) {
         renderer(data, target);
       }, 250));
 
-      setTimeout(function() { renderer(data, target); }, 100);
+      d3.select(window).on('load', function() {
+        renderer(data, target);
+      });
     }
   });
 });

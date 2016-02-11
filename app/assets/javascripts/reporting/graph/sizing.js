@@ -1,4 +1,4 @@
-reporting.sizing = function(report, target) {
+reporting.graph.sizing = function(report, target) {
   var container = {
     height: 400,
     width: $(target).width()
@@ -16,10 +16,10 @@ reporting.sizing = function(report, target) {
 
   var margin = {
     top: 45,
-    right: 150,
+    right: 180,
     bottom: 30,
     left: 50
-  }
+  };
 
   if (container.width < 720) {
     margin.right = 20;

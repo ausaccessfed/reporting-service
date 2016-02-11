@@ -1,4 +1,4 @@
-reporting.legend = function(report, sizing) {
+reporting.graph.legend = function(report, sizing) {
   return function(selection) {
     var translate = reporting.translate;
     var pos = sizing.legend.position;
@@ -11,7 +11,7 @@ reporting.legend = function(report, sizing) {
     report.series.forEach(function(key) {
       g.append('text')
         .call(translate(20, offset))
-        .text(key);
+        .text(report.labels[key]);
 
       g.append('rect')
         .attr('class', key)

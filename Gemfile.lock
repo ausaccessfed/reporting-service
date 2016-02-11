@@ -64,6 +64,12 @@ GEM
     addressable (2.3.8)
     arel (6.0.3)
     ast (2.2.0)
+    aws-sdk (2.2.13)
+      aws-sdk-resources (= 2.2.13)
+    aws-sdk-core (2.2.13)
+      jmespath (~> 1.0)
+    aws-sdk-resources (2.2.13)
+      aws-sdk-core (= 2.2.13)
     bindata (2.1.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
@@ -148,8 +154,9 @@ GEM
     jbuilder (2.3.1)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
+    jmespath (1.1.3)
     json (1.8.3)
-    json-jwt (1.0.3)
+    json-jwt (1.5.2)
       activesupport
       bindata
       multi_json (>= 1.3)
@@ -171,7 +178,7 @@ GEM
     method_source (0.8.2)
     mime-types (2.6.1)
     mini_portile2 (2.0.0)
-    minitest (5.8.0)
+    minitest (5.8.4)
     multi_json (1.11.2)
     mysql2 (0.3.19)
     nenv (0.2.0)
@@ -361,6 +368,7 @@ DEPENDENCIES
   aaf-gumboot!
   aaf-lipstick!
   accession
+  aws-sdk
   brakeman
   byebug
   capybara
@@ -378,6 +386,7 @@ DEPENDENCIES
   guard-unicorn
   implicit-schema
   jbuilder
+  json-jwt
   launchy
   mysql2
   poltergeist

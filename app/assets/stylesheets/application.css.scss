@@ -103,6 +103,15 @@ svg.report-output {
       fill: $graph-color-dull;
     }
   }
+
+  &.identity-provider-attributes {
+    .core-bar {
+      fill: $graph-color-vibrant;
+    }
+    .optional-bar {
+      fill: $graph-color-primary;
+    }
+  }
 }
 
 table.report-output {
@@ -110,4 +119,26 @@ table.report-output {
   th, td {
     padding-right: 1em;
   }
+}
+
+.bar-hover {
+  border-radius: 6px;
+  position: absolute;
+  border: 2px solid;
+  padding: 4px;
+  z-index: 10;
+  font-family: sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  background-color: white;
+  visibility: hidden;
+  text-transform: capitalize;
+}
+
+.border-vibrant {
+  border-color: $graph-color-vibrant;
+}
+
+.border-primary {
+  border-color: $graph-color-primary;
 }
