@@ -9,7 +9,7 @@
   - { report_type: s.automated_report.report_class,
       name: target_name(s.automated_report.report_class,
                         s.automated_report.target),
-      link: "/auotmated_report?report=#{s.identifier}",
+      link: "/auotmated_report?report_id=#{s.identifier}",
       interval: s.automated_report.interval,
       report_id: s.identifier }
 
@@ -25,9 +25,14 @@ table.table.table-striped
     - sorted_subscriptions = objects.sort_by { |o| o[:name].downcase }
     - sorted_subscriptions.each_with_index do |s, i|
       - link = s[:link]
+      - name = truncate(s[:name], length: 60)
+      - hint_attrs = {'data-toggle': 'tooltip', 'data-placement': 'top', title: s[:name] }
+      - tooltip_hint = (s[:name].length > 60) ? hint_attrs : nil
+
       tr
         td= link_to(s[:report_type].titleize, link)
-        td= link_to(s[:name], link)
+        td= link_to(name, link, tooltip_hint)
+
         td= link_to(s[:interval], link)
         td
           .dropdown
