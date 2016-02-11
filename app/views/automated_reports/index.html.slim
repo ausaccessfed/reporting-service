@@ -20,16 +20,23 @@ table.table.table-striped
       th Report Target
       th Interval
       th Action
+
   tbody.filtertable
     - sorted_subscriptions = objects.sort_by { |o| o[:name].downcase }
-
-    - sorted_subscriptions.each do |s|
+    - sorted_subscriptions.each_with_index do |s, i|
       - link = s[:link]
       tr
         td= link_to(s[:report_type].titleize, link)
         td= link_to(s[:name], link)
         td= link_to(s[:interval], link)
-
         td
-          = button_to 'Unsubscribe',{ action: 'destroy', report_id: s[:report_id] },
-                       method: :delete, class: 'btn-sm btn-danger'
+          .dropdown
+            button.btn.btn-danger { aria-expanded="false" id = "dLabel_#{i}"
+                                    aria-haspopup="true" data-toggle="dropdown" }
+              span.glyphicon.glyphicon-scissors aria-hidden="true"
+              | Unsubscribe
+
+            ul.dropdown-menu aria-labelledby="dLabel_#{i}"
+              = button_to 'Confirm Unsubscribe',
+                          { action: 'destroy', report_id: s[:report_id] },
+                            method: :delete, class: 'btn btn-default btn-block btn-delete-confirm'
