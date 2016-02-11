@@ -16,7 +16,7 @@ reporting.graph.sizing = function(report, target) {
 
   var margin = {
     top: 45,
-    right: 150,
+    right: 180,
     bottom: 30,
     left: 50
   };

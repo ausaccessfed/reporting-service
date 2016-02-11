@@ -5,7 +5,7 @@ jQuery(function($) {
     dateTime : d3.time.format('%Y-%m-%dT%H:%M:%SZ'),
     facncyDateTime : d3.time.format('%Y-%m-%d ~ %H:%M'),
     fancyTickFormat : d3.time.format("%H")
-  }
+  };
 
   var renderGraph = function(report, target) {
     var sizing = reporting.graph.sizing(report, target);
@@ -31,21 +31,21 @@ jQuery(function($) {
       timeFormat : timeFormats.dateTime,
       hoverBoxFormat : timeFormats.date,
       tickFormat : null
-    }
+    };
 
     var sessionsReportRange = {
       range : report.range,
       timeFormat : timeFormats.dateTime,
       hoverBoxFormat : timeFormats.facncyDateTime,
       tickFormat : null
-    }
+    };
 
     var dailyDemandReportRange = {
       range : dailyRange,
       timeFormat : timeFormats.time,
       hoverBoxFormat : timeFormats.time,
       tickFormat : timeFormats.fancyTickFormat
-    }
+    };
 
     var rangeSpecs = {
       'federation-growth': defaultRangeArgs,
