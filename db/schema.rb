@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160205050033) do
+ActiveRecord::Schema.define(version: 20160211212151) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20160205050033) do
   end
 
   create_table "discovery_service_events", force: :cascade do |t|
-    t.string   "user_agent",       limit: 255, null: false
+    t.string   "user_agent",       limit: 255
     t.string   "ip",               limit: 255, null: false
     t.string   "group",            limit: 255, null: false
     t.string   "phase",            limit: 255, null: false
