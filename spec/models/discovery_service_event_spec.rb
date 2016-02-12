@@ -11,6 +11,10 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
     it { is_expected.to validate_presence_of(:ip) }
     it { is_expected.to validate_presence_of(:unique_id) }
     it { is_expected.to validate_presence_of(:phase) }
+
+    it 'allows long user_agent values' do
+      expect(subject).to allow_value('.' * 4000).for(:user_agent)
+    end
   end
 
   context 'sessions' do
