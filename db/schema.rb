@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211212151) do
+ActiveRecord::Schema.define(version: 20160212001619) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -74,17 +74,17 @@ ActiveRecord::Schema.define(version: 20160211212151) do
   end
 
   create_table "discovery_service_events", force: :cascade do |t|
-    t.string   "user_agent",       limit: 255
-    t.string   "ip",               limit: 255, null: false
-    t.string   "group",            limit: 255, null: false
-    t.string   "phase",            limit: 255, null: false
-    t.string   "unique_id",        limit: 255, null: false
-    t.datetime "timestamp",                    null: false
+    t.string   "user_agent",       limit: 4096
+    t.string   "ip",               limit: 255,  null: false
+    t.string   "group",            limit: 255,  null: false
+    t.string   "phase",            limit: 255,  null: false
+    t.string   "unique_id",        limit: 255,  null: false
+    t.datetime "timestamp",                     null: false
     t.string   "selection_method", limit: 255
     t.string   "return_url",       limit: 255
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.string   "initiating_sp",    limit: 255, null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "initiating_sp",    limit: 255,  null: false
     t.string   "selected_idp",     limit: 255
   end
 
