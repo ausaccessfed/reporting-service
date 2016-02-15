@@ -7,7 +7,7 @@ class AutomatedReportsController < ApplicationController
 
   def destroy
     subscription = @subscriptions
-                   .where(identifier: params[:report_id])[0]
+                   .where(identifier: params[:identifier])[0]
 
     subscription.destroy if subscription
 

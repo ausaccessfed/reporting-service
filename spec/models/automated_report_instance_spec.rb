@@ -5,6 +5,13 @@ RSpec.describe AutomatedReportInstance, type: :model do
 
   subject { build(:automated_report_instance) }
 
+  it { is_expected.to validate_uniqueness_of(:identifier) }
+
+  it 'requires a valid identifier' do
+    expect(subject).to allow_value('abcdef_-').for(:identifier)
+    expect(subject).not_to allow_value('abcdef_@').for(:identifier)
+  end
+
   describe 'validations' do
     it { is_expected.to validate_presence_of(:automated_report) }
     it { is_expected.to validate_presence_of(:range_start) }

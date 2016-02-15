@@ -52,23 +52,19 @@ RSpec.feature 'automated report' do
 
     visit '/auth/login'
     click_button 'Login'
-    visit '/automated_reports'
+    visit '/subscriber_reports'
+    click_link 'Automated Reports'
   end
 
   scenario 'viewing automated_reports#index' do
     expect(current_path).to eq('/automated_reports')
 
-    visit '/subscriber_reports'
-    click_link 'Automated Reports'
-
-    expect(page).to have_text(idp.name)
+    expect(page).to have_text(idp.name[0..50])
     expect(page).to have_text('Organizations')
-    expect(page).to have_text(saml.name)
+    expect(page).to have_text(saml.name[0..50])
   end
 
   scenario 'unsubscribe and redirect to index' do
-    visit '/automated_reports'
-
     within 'table' do
       first('button', 'Unsubscribe').click
       first('input', 'Confirm Unsubscribe').click

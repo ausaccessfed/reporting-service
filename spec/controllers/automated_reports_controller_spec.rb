@@ -1,9 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe AutomatedReportsController, type: :controller do
-  let(:organization) { create :organization }
   let(:idp) { create :identity_provider }
-
   let(:user) { create :subject }
 
   let(:auto_report) do
@@ -19,7 +17,7 @@ RSpec.describe AutomatedReportsController, type: :controller do
   end
 
   def destroy
-    delete :destroy, report_id: subscription.identifier
+    delete :destroy, identifier: subscription.identifier
   end
 
   before do

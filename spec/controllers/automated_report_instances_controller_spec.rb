@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe AutomatedReportInstancesController, type: :controller do
-  let(:organization) { create :organization }
   let(:idp) { create :identity_provider }
 
   let(:user) { create :subject }
@@ -21,7 +20,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   before do
     session[:subject_id] = user.try(:id)
     create :activation, federation_object: idp
-    get :show, report_id: subscription.identifier
+    get :show, identifier: subscription.identifier
   end
 
   describe 'get on /automated_reports' do

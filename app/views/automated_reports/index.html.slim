@@ -1,7 +1,7 @@
 = breadcrumbs({ 'Subscriber Reports' => subscriber_reports_path },
-                'Automated Reports')
+                'Subscriptions')
 
-= page_header('Automated Reports')
+= page_header('Automated Report Subscriptions')
 
 = search_form_tag ''
 
@@ -9,9 +9,8 @@
   - { report_type: s.automated_report.report_class,
       name: target_name(s.automated_report.report_class,
                         s.automated_report.target),
-      link: "/auotmated_report?report_id=#{s.identifier}",
       interval: s.automated_report.interval,
-      report_id: s.identifier }
+      identifier: s.identifier }
 
 table.table.table-striped
   thead
@@ -24,16 +23,17 @@ table.table.table-striped
   tbody.filtertable
     - sorted_subscriptions = objects.sort_by { |o| o[:name].downcase }
     - sorted_subscriptions.each_with_index do |s, i|
-      - link = s[:link]
       - name = truncate(s[:name], length: 60)
       - hint_attrs = {'data-toggle': 'tooltip', 'data-placement': 'top', title: s[:name] }
       - tooltip_hint = (s[:name].length > 60) ? hint_attrs : nil
 
       tr
-        td= link_to(s[:report_type].titleize, link)
-        td= link_to(name, link, tooltip_hint)
+        td= s[:report_type].titleize
+        td
+          a data-toggle='tooltip' data-placement='top'  title=s[:name]
+            = name
 
-        td= link_to(s[:interval], link)
+        td= s[:interval]
         td
           .dropdown
             button.btn.btn-danger { aria-expanded="false" id = "dLabel_#{i}"
@@ -43,5 +43,5 @@ table.table.table-striped
 
             ul.dropdown-menu aria-labelledby="dLabel_#{i}"
               = button_to 'Confirm Unsubscribe',
-                          { action: 'destroy', report_id: s[:report_id] },
+                          { action: 'destroy', identifier: s[:identifier] },
                             method: :delete, class: 'btn btn-default btn-block btn-delete-confirm'
