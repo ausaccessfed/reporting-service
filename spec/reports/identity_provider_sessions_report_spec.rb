@@ -6,7 +6,7 @@ RSpec.describe IdentityProviderSessionsReport do
   let(:type) { 'identity-provider-sessions' }
   let(:title) { 'Identity Provider Sessions for' }
 
-  let(:labels) { { y: '', sessions: 'Rate/h' } }
+  let(:labels) { { y: 'Sessions / hour (average)', sessions: 'Sessions / h' } }
   let(:units) { '' }
 
   let!(:start) { 10.days.ago.beginning_of_day }

@@ -10,7 +10,7 @@ reporting.graph.axes = function(scale, sizing, tickFormat) {
       .tickFormat(xTickFormat)
       .orient('bottom')
       .ticks(7);
-    
+
     selection.append('g')
       .attr('class', 'x axis')
       .call(translate(margin.left, margin.top + graph.height))
@@ -39,4 +39,4 @@ reporting.graph.axes = function(scale, sizing, tickFormat) {
       .call(translate(graph.margin.left, graph.margin.top))
       .call(yAxis.tickSize(-graph.width, 0, 0).tickFormat(''));
   };
-}
+};

@@ -2,9 +2,9 @@ class FederatedSessionsReport < TimeSeriesReport
   prepend TimeSeriesSharedMethods
 
   report_type 'federated-sessions'
-  y_label ''
+  y_label 'Sessions / hour (average)'
   units ''
-  series sessions: 'Rate/h'
+  series sessions: 'Sessions / h'
 
   def initialize(start, finish, steps)
     title = 'Federated Sessions'

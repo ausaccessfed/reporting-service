@@ -2,9 +2,9 @@ class ServiceProviderSessionsReport < TimeSeriesReport
   prepend TimeSeriesSharedMethods
 
   report_type 'service-provider-sessions'
-  y_label ''
+  y_label 'Sessions / hour (average)'
   units ''
-  series sessions: 'Rate/h'
+  series sessions: 'Sessions / h'
 
   def initialize(entity_id, start, finish, steps)
     @service_provider = ServiceProvider.find_by(entity_id: entity_id)

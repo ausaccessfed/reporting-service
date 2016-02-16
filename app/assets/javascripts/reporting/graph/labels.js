@@ -29,5 +29,14 @@ reporting.graph.labels = function(report, range, sizing) {
       .text(report.labels.y);
 
     y.attr('transform', y.attr('transform') + ', rotate(-90)');
+
+    var x = selection.append('g')
+      .call(translate(margin.left, margin.top + graph.height))
+      .append('text')
+      .call(translate(sizing.graph.width / 2, 50))
+      .attr('class', 'label axis')
+      .attr('text-anchor', 'middle')
+      .text('Time')
+
   };
 };
