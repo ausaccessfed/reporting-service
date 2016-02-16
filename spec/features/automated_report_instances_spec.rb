@@ -4,22 +4,24 @@ RSpec.feature 'automated report instances' do
   include IdentityEnhancementStub
   given(:user) { create :subject }
   given(:organization) { create :organization }
-  given(:idp) { create :identity_provider }
 
   given!(:auto_report) do
     create :automated_report,
-           report_class: 'IdentityProviderSessionsReport',
-           target: idp.entity_id
+           report_class: 'DailyDemandReport'
   end
 
-  given!(:subscription) do
+  given(:subscription) do
     create :automated_report_subscription,
            automated_report: auto_report,
            subject: user
   end
 
+  given!(:auto_report_intance) do
+    create :automated_report_instance,
+           automated_report: auto_report
+  end
+
   background do
-    create :activation, federation_object: idp
     attrs = create(:aaf_attributes, :from_subject, subject: user)
     RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
@@ -27,11 +29,13 @@ RSpec.feature 'automated report instances' do
 
     visit '/auth/login'
     click_button 'Login'
-    visit "/automated_reports/#{subscription.identifier}"
+    visit "/automated_reports/#{auto_report_intance.identifier}"
   end
 
   scenario 'viewing automated_report_instances#show' do
-    identifier = subscription.identifier
+    identifier = auto_report_intance.identifier
+
     expect(current_path).to eq("/automated_reports/#{identifier}")
+    expect(page).to have_css('#output svg.daily-demand')
   end
 end

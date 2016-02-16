@@ -1,26 +1,32 @@
 require 'rails_helper'
 
 RSpec.describe AutomatedReportInstancesController, type: :controller do
-  let(:idp) { create :identity_provider }
-
   let(:user) { create :subject }
 
-  let!(:auto_report) do
-    create :automated_report,
-           report_class: 'IdentityProviderSessionsReport',
-           target: idp.entity_id
+  REPORT_CLASSES_WITH_NIL_TARGET =
+    %w(DailyDemandReport
+       FederatedSessionsReport
+       FederationGrowthReport
+       IdentityProviderAttributesReport).freeze
+
+  REPORT_CLASSES_WITH_NIL_TARGET.each_with_index do |klass, i|
+    let!("instance_#{i}".to_sym) do
+      create :automated_report_instance,
+             automated_report: (create :automated_report,
+                                       report_class: klass)
+    end
   end
 
-  let!(:subscription) do
-    create :automated_report_subscription,
-           automated_report: auto_report,
-           subject: user
+  def get_tamplate_name(type)
+    type.chomp('Report').underscore.tr('_', '-')
+  end
+
+  def run(identifier)
+    get :show, identifier: identifier
   end
 
   before do
     session[:subject_id] = user.try(:id)
-    create :activation, federation_object: idp
-    get :show, identifier: subscription.identifier
   end
 
   describe 'get on /automated_reports' do
@@ -28,8 +34,17 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
       expect(response).to have_http_status(:ok)
     end
 
-    it 'should render the show template' do
-      expect(response).to render_template('show')
+    it 'assigns the report data correctly' do
+      AutomatedReportInstance.all.each do |instance|
+        run(instance.identifier)
+
+        report_class = instance.automated_report.report_class
+        data = JSON.parse(assigns[:data], symbolize_names: true)
+        template = get_tamplate_name(report_class)
+
+        expect(assigns[:data]).to be_a(String)
+        expect(data[:type]).to eq(template)
+      end
     end
   end
 end
