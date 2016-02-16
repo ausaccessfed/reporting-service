@@ -10,9 +10,7 @@ reporting.graph.axes = function(scale, sizing, tickFormat) {
       .tickFormat(xTickFormat)
       .orient('bottom')
       .ticks(7);
-
-    console.log(xTickFormat);
-
+    
     selection.append('g')
       .attr('class', 'x axis')
       .call(translate(margin.left, margin.top + graph.height))
