@@ -1,7 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe AutomatedReportInstancesController, type: :controller do
-  let(:user) { create :subject }
+  let(:organization) { create :organization }
+
+  let(:user) do
+    create :subject, :authorized,
+           permission:
+           "objects:organization:#{organization.identifier}:report"
+  end
 
   REPORT_CLASSES_WITH_NIL_TARGET =
     %w(DailyDemandReport
@@ -44,6 +50,83 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
         expect(assigns[:data]).to be_a(String)
         expect(data[:type]).to eq(template)
+        expect(response).to render_template('automated_report_instances/show')
+      end
+    end
+  end
+
+  describe 'access check on subscriber reports' do
+    let(:idp) { create :identity_provider }
+
+    let(:sp) do
+      create :service_provider,
+             organization: organization
+    end
+
+    let(:auto_report_idp) do
+      create :automated_report,
+             target: idp.entity_id,
+             report_class: 'IdentityProviderSessionsReport'
+    end
+
+    let(:auto_report_sp) do
+      create :automated_report,
+             target: sp.entity_id,
+             report_class: 'ServiceProviderDailyDemandReport'
+    end
+
+    let(:auto_report_admin) do
+      create :automated_report,
+             target: 'organizations',
+             report_class: 'SubscriberRegistrationsReport'
+    end
+
+    let!(:report_instance_idp) do
+      create :automated_report_instance,
+             automated_report: auto_report_idp
+    end
+
+    let!(:report_instance_sp) do
+      create :automated_report_instance,
+             automated_report: auto_report_sp
+    end
+
+    let!(:report_instance_admin) do
+      create :automated_report_instance,
+             automated_report: auto_report_admin
+    end
+
+    context 'user without permission' do
+      it 'should not view the report' do
+        run(report_instance_idp.identifier)
+
+        expect(assigns[:instance]).to be_nil
+      end
+    end
+
+    context 'user with permission' do
+      it 'should view the report' do
+        run(report_instance_sp.identifier)
+
+        expect(assigns[:instance]).to eq(report_instance_sp)
+      end
+    end
+
+    context 'user without admin access' do
+      it 'should not view the report' do
+        run(report_instance_admin.identifier)
+
+        expect(assigns[:instance]).to be_nil
+      end
+    end
+
+    context 'user with admin access' do
+      let(:user) { create :subject, :authorized, permission: 'admin:*' }
+
+      it 'should view the report' do
+        run(report_instance_admin.identifier)
+
+        expect(assigns[:instance]).to eq(report_instance_admin)
       end
     end
   end

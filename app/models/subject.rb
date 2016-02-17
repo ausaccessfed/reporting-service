@@ -3,6 +3,7 @@ class Subject < ActiveRecord::Base
 
   has_many :subject_roles
   has_many :roles, through: :subject_roles
+  has_many :automated_report_subscriptions
 
   valhammer
 

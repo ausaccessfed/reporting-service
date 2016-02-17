@@ -1,4 +1,7 @@
 class AutomatedReport < ActiveRecord::Base
+  has_many :automated_report_instacnes
+  has_many :automated_report_subscriptions
+
   valhammer
 
   validates :interval, inclusion: { in: %w(monthly quarterly yearly) }
