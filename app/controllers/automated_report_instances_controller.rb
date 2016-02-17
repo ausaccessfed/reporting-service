@@ -102,7 +102,8 @@ class AutomatedReportInstancesController < ApplicationController
   end
 
   def set_access_method
-    return check_access!('admin:reports') if needs_admin_access?
+    return check_access!('admin:report') if needs_admin_access?
+    return check_access!('admin:report') if subject.permits?('admin:report')
     return check_access!(permission_string) if needs_subscriber_access?
 
     public_action
