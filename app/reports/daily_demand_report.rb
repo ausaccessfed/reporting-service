@@ -4,7 +4,7 @@ class DailyDemandReport < TimeSeriesReport
   report_type 'daily-demand'
   y_label 'Sessions / hour (average)'
   units ''
-  series sessions: 'Sessions / h'
+  series sessions: 'Sessions'
 
   def initialize(start, finish)
     title = 'Daily Demand'

@@ -6,7 +6,7 @@ RSpec.describe ServiceProviderDailyDemandReport do
   let(:type) { 'service-provider-daily-demand' }
   let(:title) { 'SP Daily Demand Report for' }
   let(:units) { '' }
-  let(:labels) { { y: 'Sessions / hour (average)', sessions: 'Sessions / h' } }
+  let(:labels) { { y: 'Sessions / hour (average)', sessions: 'Sessions' } }
 
   let(:start) { 10.days.ago.beginning_of_day }
   let(:finish) { Time.zone.now.end_of_day }

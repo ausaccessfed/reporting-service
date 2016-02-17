@@ -4,7 +4,7 @@ class ServiceProviderDailyDemandReport < TimeSeriesReport
   report_type 'service-provider-daily-demand'
   y_label 'Sessions / hour (average)'
   units ''
-  series sessions: 'Sessions / h'
+  series sessions: 'Sessions'
 
   def initialize(entity_id, start, finish)
     @service_provider = ServiceProvider.find_by(entity_id: entity_id)

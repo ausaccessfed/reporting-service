@@ -6,7 +6,7 @@ RSpec.describe FederatedSessionsReport do
   let(:type) { 'federated-sessions' }
   let(:title) { 'Federated Sessions' }
   let(:units) { '' }
-  let(:labels) { { y: 'Sessions / hour (average)', sessions: 'Sessions / h' } }
+  let(:labels) { { y: 'Sessions / hour (average)', sessions: 'Sessions' } }
 
   let!(:start) { 10.days.ago.beginning_of_day }
   let!(:finish) { 1.day.ago.end_of_day }

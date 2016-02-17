@@ -4,7 +4,7 @@ class IdentityProviderSessionsReport < TimeSeriesReport
   report_type 'identity-provider-sessions'
   y_label 'Sessions / hour (average)'
   units ''
-  series sessions: 'Sessions / h'
+  series sessions: 'Sessions'
 
   def initialize(entity_id, start, finish, steps)
     @identity_provider = IdentityProvider.find_by(entity_id: entity_id)

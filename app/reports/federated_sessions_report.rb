@@ -4,7 +4,7 @@ class FederatedSessionsReport < TimeSeriesReport
   report_type 'federated-sessions'
   y_label 'Sessions / hour (average)'
   units ''
-  series sessions: 'Sessions / h'
+  series sessions: 'Sessions'
 
   def initialize(start, finish, steps)
     title = 'Federated Sessions'
