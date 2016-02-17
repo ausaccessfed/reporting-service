@@ -6,7 +6,7 @@ RSpec.describe FederationGrowthReport do
   let(:title) { 'Federation Growth' }
   let(:units) { '' }
   let(:labels) do
-    { y: '', organizations: 'Organizations',
+    { y: 'Count', organizations: 'Organizations',
       identity_providers: 'Identity Providers',
       services: 'Services' }
   end

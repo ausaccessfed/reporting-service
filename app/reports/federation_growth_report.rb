@@ -1,6 +1,6 @@
 class FederationGrowthReport < TimeSeriesReport
   report_type 'federation-growth'
-  y_label ''
+  y_label 'Count'
   units ''
 
   series services: 'Services',
