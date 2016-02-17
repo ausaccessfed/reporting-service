@@ -9,20 +9,6 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
            "objects:organization:#{organization.identifier}:report"
   end
 
-  REPORT_CLASSES_WITH_NIL_TARGET =
-    %w(DailyDemandReport
-       FederatedSessionsReport
-       FederationGrowthReport
-       IdentityProviderAttributesReport).freeze
-
-  REPORT_CLASSES_WITH_NIL_TARGET.each_with_index do |klass, i|
-    let!("instance_#{i}".to_sym) do
-      create :automated_report_instance,
-             automated_report: (create :automated_report,
-                                       report_class: klass)
-    end
-  end
-
   def get_tamplate_name(type)
     type.chomp('Report').underscore.tr('_', '-')
   end
@@ -35,24 +21,67 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     session[:subject_id] = user.try(:id)
   end
 
-  describe 'get on /automated_reports' do
-    it 'should response with 200' do
+  shared_examples 'Automated Public Report' do
+    let(:auto_report) do
+      create :automated_report,
+             target: target,
+             report_class: report_class
+    end
+
+    let!(:instance) do
+      create :automated_report_instance,
+             automated_report: auto_report
+    end
+
+    it 'all subjects can view public reports' do
+      run(instance.identifier)
+
+      data = JSON.parse(assigns[:data], symbolize_names: true)
+      template = get_tamplate_name(report_class)
+
       expect(response).to have_http_status(:ok)
+      expect(response).to render_template('automated_report_instances/show')
+      expect(assigns[:data]).to be_a(String)
+      expect(data[:type]).to eq(template)
+      expect(assigns[:instance]).to eq(instance)
     end
+  end
 
-    it 'assigns the report data correctly' do
-      AutomatedReportInstance.all.each do |instance|
-        run(instance.identifier)
+  context 'Automated Federation Report' do
+    let(:target) { nil }
 
-        report_class = instance.automated_report.report_class
-        data = JSON.parse(assigns[:data], symbolize_names: true)
-        template = get_tamplate_name(report_class)
+    report_classes = %w(FederationGrowthReport
+                        FederatedSessionsReport
+                        DailyDemandReport
+                        IdentityProviderAttributesReport)
 
-        expect(assigns[:data]).to be_a(String)
-        expect(data[:type]).to eq(template)
-        expect(response).to render_template('automated_report_instances/show')
-      end
+    report_classes.each do |klass|
+      let(:report_class) { klass }
+
+      it_behaves_like 'Automated Public Report'
     end
+  end
+
+  context 'Automated Federation Attributes Report' do
+    let(:attribute) { create :saml_attribute }
+    let(:target) { attribute.name }
+
+    report_classes = %w(ProvidedAttributeReport
+                        RequestedAttributeReport)
+
+    report_classes.each do |klass|
+      let(:report_class) { klass }
+
+      it_behaves_like 'Automated Public Report'
+    end
+  end
+
+  context 'Automated Federation Compatibility Report' do
+    let(:attribute) { create :service_provider }
+    let(:target) { attribute.entity_id }
+    let(:report_class) { 'ServiceCompatibilityReport' }
+
+    it_behaves_like 'Automated Public Report'
   end
 
   shared_examples 'Automated Subscriber Report' do
@@ -82,6 +111,18 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     let!(:unpermitted_instance) do
       create :automated_report_instance,
              automated_report: unpermitted_auto_report
+    end
+
+    it 'should render the template' do
+      run(instance.identifier)
+
+      data = JSON.parse(assigns[:data], symbolize_names: true)
+      template = get_tamplate_name(report_class)
+
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template('automated_report_instances/show')
+      expect(assigns[:data]).to be_a(String)
+      expect(data[:type]).to eq(template)
     end
 
     context 'subject with no permissions' do
@@ -114,66 +155,60 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   end
 
   context 'Identity Provider Sessions Report' do
-    let(:object_type) { :identity_provider }
-    let(:report_class) { 'IdentityProviderSessionsReport' }
+    report_classes = %w(IdentityProviderSessionsReport
+                        IdentityProviderDailyDemandReport
+                        IdentityProviderDestinationServicesReport)
 
-    it_behaves_like 'Automated Subscriber Report'
-  end
+    report_classes.each do |klass|
+      let(:object_type) { :identity_provider }
+      let(:report_class) { klass }
 
-  context 'Identity Provider Daily Demand Report' do
-    let(:object_type) { :identity_provider }
-    let(:report_class) { 'IdentityProviderDailyDemandReport' }
-
-    it_behaves_like 'Automated Subscriber Report'
-  end
-
-  context 'Identity Provider Destination Services Report' do
-    let(:object_type) { :identity_provider }
-    let(:report_class) { 'IdentityProviderDestinationServicesReport' }
-
-    it_behaves_like 'Automated Subscriber Report'
+      it_behaves_like 'Automated Subscriber Report'
+    end
   end
 
   context 'Service Provider Sessions Report' do
-    let(:object_type) { :service_provider }
-    let(:report_class) { 'ServiceProviderSessionsReport' }
+    report_classes = %w(ServiceProviderSessionsReport
+                        ServiceProviderDailyDemandReport
+                        ServiceProviderSourceIdentityProvidersReport)
 
-    it_behaves_like 'Automated Subscriber Report'
-  end
+    report_classes.each do |klass|
+      let(:object_type) { :service_provider }
+      let(:report_class) { klass }
 
-  context 'Service Provider Daily Demand Report' do
-    let(:object_type) { :service_provider }
-    let(:report_class) { 'ServiceProviderDailyDemandReport' }
-
-    it_behaves_like 'Automated Subscriber Report'
-  end
-
-  context 'Service Provider Source Identity Providers Report' do
-    let(:object_type) { :service_provider }
-    let(:report_class) { 'ServiceProviderSourceIdentityProvidersReport' }
-
-    it_behaves_like 'Automated Subscriber Report'
+      it_behaves_like 'Automated Subscriber Report'
+    end
   end
 
   shared_examples 'Automated Subscriber Registrations Report' do
-    let(:admin_auto_report) do
+    let(:auto_report) do
       create :automated_report,
              target: target,
              report_class: 'SubscriberRegistrationsReport'
     end
 
-    let!(:admin_instance) do
+    let!(:instance) do
       create :automated_report_instance,
-             automated_report: admin_auto_report
+             automated_report: auto_report
     end
 
-    before { run(admin_instance.identifier) }
+    before { run(instance.identifier) }
 
     context 'only subject with admin access level' do
       let(:user) { create :subject, :authorized, permission: 'admin:*' }
 
+      it 'should render the template' do
+        data = JSON.parse(assigns[:data], symbolize_names: true)
+        template = get_tamplate_name('SubscriberRegistrationsReport')
+
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template('automated_report_instances/show')
+        expect(assigns[:data]).to be_a(String)
+        expect(data[:type]).to eq(template)
+      end
+
       it 'can view this report' do
-        expect(assigns[:instance]).to eq(admin_instance)
+        expect(assigns[:instance]).to eq(instance)
       end
     end
 
@@ -184,33 +219,14 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     end
   end
 
-  context 'IdPs Subscriber Registrations Report' do
-    let(:target) { 'identity_providers' }
+  context 'Subscriber Registrations Reports' do
+    targets = %w(identity_providers service_providers
+                 organizations rapid_connect_services services)
 
-    it_behaves_like 'Automated Subscriber Registrations Report'
-  end
+    targets.each do |target|
+      let(:target) { target }
 
-  context 'SPs Subscriber Registrations Report' do
-    let(:target) { 'service_providers' }
-
-    it_behaves_like 'Automated Subscriber Registrations Report'
-  end
-
-  context 'Organizations Subscriber Registrations Report' do
-    let(:target) { 'organizations' }
-
-    it_behaves_like 'Automated Subscriber Registrations Report'
-  end
-
-  context 'Rapid Connect Subscriber Registrations Report' do
-    let(:target) { 'rapid_connect_services' }
-
-    it_behaves_like 'Automated Subscriber Registrations Report'
-  end
-
-  context 'Services Subscriber Registrations Report' do
-    let(:target) { 'services' }
-
-    it_behaves_like 'Automated Subscriber Registrations Report'
+      it_behaves_like 'Automated Subscriber Registrations Report'
+    end
   end
 end
