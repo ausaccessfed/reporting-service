@@ -8,8 +8,8 @@ GIT
 
 GIT
   remote: https://github.com/ausaccessfed/aaf-lipstick
-  revision: 426cae2de9546b50186960f1ef66966e7bf3fa0d
-  branch: private/lipstick-2.0-pre
+  revision: 1b0aaa27760d8ed156471d6423f42e9912f5e47d
+  branch: develop
   specs:
     aaf-lipstick (1.1.0)
       erubis

@@ -20,7 +20,7 @@ gem 'aws-sdk'
 gem 'json-jwt'
 
 gem 'aaf-lipstick', git: 'https://github.com/ausaccessfed/aaf-lipstick',
-                    branch: 'private/lipstick-2.0-pre'
+                    branch: 'develop'
 
 gem 'unicorn', require: false
 gem 'god', require: false
