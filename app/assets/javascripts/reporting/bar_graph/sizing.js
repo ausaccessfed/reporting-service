@@ -16,7 +16,7 @@ reporting.barGraph.sizing = function(report, target) {
     top: 40,
     right: 40,
     bottom: 40,
-    left: 160
+    left: 260
   };
 
   var hoverPointerOffset = {
