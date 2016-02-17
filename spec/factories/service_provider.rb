@@ -9,6 +9,6 @@ FactoryGirl.define do
     end
 
     entity_id { "https://sp.#{domain}/shibboleth" }
-    name { "#{domain} SP" }
+    name { "#{Faker::Company.name} #{Faker::Company.suffix} SP" }
   end
 end
