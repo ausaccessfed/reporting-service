@@ -5,6 +5,10 @@ reporting.barGraph.range = function (report, barDataIndex) {
     return d3.max([optional, core]);
   });
 
+  if (maxAttributeCount % 2 != 0) {
+    maxAttributeCount++;
+  }
+
   return {
     start: 0,
     end: maxAttributeCount
