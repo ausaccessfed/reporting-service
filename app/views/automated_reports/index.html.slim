@@ -24,13 +24,12 @@ table.table.table-striped
     - sorted_subscriptions = objects.sort_by { |o| o[:name].downcase }
     - sorted_subscriptions.each_with_index do |s, i|
       - name = truncate(s[:name], length: 60)
-      - hint_attrs = {'data-toggle': 'tooltip', 'data-placement': 'top', title: s[:name] }
-      - tooltip_hint = (s[:name].length > 60) ? hint_attrs : nil
+      - tooltip = (s[:name].length > 60) ? 'tooltip' : nil
 
       tr
         td= s[:report_type].titleize
         td
-          a data-toggle='tooltip' data-placement='top'  title=s[:name]
+          a data-toggle=tooltip data-placement='top' title=s[:name]
             = name
 
         td= s[:interval]

@@ -7,13 +7,11 @@ class AutomatedReportsController < ApplicationController
 
   def destroy
     subscription = @subscriptions
-                   .where(identifier: params[:identifier])[0]
+                   .find_by(identifier: params[:identifier])
 
     subscription.destroy if subscription
 
-    respond_to do |format|
-      format.html { redirect_to automated_reports_path }
-    end
+    redirect_to automated_reports_path
   end
 
   private

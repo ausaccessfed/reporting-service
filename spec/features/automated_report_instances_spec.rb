@@ -17,13 +17,6 @@ RSpec.feature 'automated report instances' do
       FederatedSessionsReport FederationGrowthReport)
   end
 
-  def show_not_allowed_message
-    message = 'Oops, you clicked something we didn\'t'\
-              ' expect you to click'
-
-    expect(page).to have_selector('p', text: message)
-  end
-
   def get_tamplate_name(type)
     type.chomp('Report').underscore.tr('_', '-')
   end
@@ -157,7 +150,11 @@ RSpec.feature 'automated report instances' do
 
       visit "/automated_reports/#{unknown_instance.identifier}"
       expect(current_path).to eq("/automated_reports/#{unknown_identifier}")
-      show_not_allowed_message
+
+      message = 'Oops, you clicked something we didn\'t'\
+                ' expect you to click'
+
+      expect(page).to have_selector('p', text: message)
     end
   end
 
@@ -240,7 +237,10 @@ RSpec.feature 'automated report instances' do
         visit "/automated_reports/#{instance.identifier}"
         expect(current_path).to eq("/automated_reports/#{instance.identifier}")
 
-        show_not_allowed_message
+        message = 'Oops, you clicked something we didn\'t'\
+                  ' expect you to click'
+
+        expect(page).to have_selector('p', text: message)
       end
     end
 

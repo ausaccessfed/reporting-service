@@ -22,23 +22,6 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     get :show, identifier: identifier
   end
 
-  def test_render(identifier, report_class)
-    run(identifier)
-
-    data = JSON.parse(assigns[:data], symbolize_names: true)
-    template = get_tamplate_name(report_class)
-
-    expect(response).to have_http_status(:ok)
-    expect(response).to render_template('automated_report_instances/show')
-
-    template_expectations(template, data)
-  end
-
-  def template_expectations(template, data)
-    expect(assigns[:data]).to be_a(String)
-    expect(data[:type]).to eq(template)
-  end
-
   before do
     session[:subject_id] = user.try(:id)
   end
@@ -58,8 +41,15 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     end
 
     it 'all subjects can view public reports' do
-      identifier = instance.identifier
-      test_render(identifier, report_class)
+      run(instance.identifier)
+
+      data = JSON.parse(assigns[:data], symbolize_names: true)
+      template = get_tamplate_name(report_class)
+
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template('automated_report_instances/show')
+      expect(assigns[:data]).to be_a(String)
+      expect(data[:type]).to eq(template)
     end
   end
 
@@ -136,8 +126,15 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     end
 
     it 'should render the template' do
-      identifier = instance.identifier
-      test_render(identifier, report_class)
+      run(instance.identifier)
+
+      data = JSON.parse(assigns[:data], symbolize_names: true)
+      template = get_tamplate_name(report_class)
+
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template('automated_report_instances/show')
+      expect(assigns[:data]).to be_a(String)
+      expect(data[:type]).to eq(template)
     end
 
     context 'subject with no permissions' do
@@ -235,8 +232,14 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
       let(:user) { create :subject, :authorized, permission: 'admin:*' }
 
       it 'should render the template' do
-        identifier = instance.identifier
-        test_render(identifier, 'SubscriberRegistrationsReport')
+        run(instance.identifier)
+
+        data = JSON.parse(assigns[:data], symbolize_names: true)
+
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template('automated_report_instances/show')
+        expect(assigns[:data]).to be_a(String)
+        expect(data[:type]).to eq('subscriber-registrations')
       end
 
       it 'can view this report' do
