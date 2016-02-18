@@ -1,2 +1,0 @@
-class CreateAutomatedReportInstances
-end
