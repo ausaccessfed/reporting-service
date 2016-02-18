@@ -89,8 +89,6 @@ class AutomatedReportInstancesController < ApplicationController
   end
 
   def entity
-    return unless needs_subscriber_access?
-
     target = automated_report.target
     entity_model = SUBSCRIBER_REPORTS[automated_report.report_class]
 
