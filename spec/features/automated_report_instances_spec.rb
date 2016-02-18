@@ -4,48 +4,17 @@ RSpec.feature 'automated report instances' do
   include IdentityEnhancementStub
   given(:user) { create :subject }
   given(:organization) { create :organization }
+  given(:attribute) { create :saml_attribute }
+  given(:idp) { create :identity_provider, organization: organization }
+  given(:unknown_idp) { create :identity_provider }
+  given(:sp) { create :service_provider, organization: organization }
+  given(:unknown_sp) { create :service_provider }
 
-  given(:idp) do
-    create :identity_provider,
-           organization: organization
-  end
-
-  given(:sp) do
-    create :service_provider,
-           organization: organization
-  end
-
-  given(:auto_report_idp) do
-    create :automated_report,
-           target: idp.entity_id,
-           report_class: 'IdentityProviderSessionsReport'
-  end
-
-  given(:auto_report_sp) do
-    create :automated_report,
-           target: sp.entity_id,
-           report_class: 'ServiceProviderDailyDemandReport'
-  end
-
-  given(:auto_report_admin) do
-    create :automated_report,
-           target: 'organizations',
-           report_class: 'SubscriberRegistrationsReport'
-  end
-
-  given!(:report_instance_idp) do
-    create :automated_report_instance,
-           automated_report: auto_report_idp
-  end
-
-  given!(:report_instance_sp) do
-    create :automated_report_instance,
-           automated_report: auto_report_sp
-  end
-
-  given!(:report_instance_admin) do
-    create :automated_report_instance,
-           automated_report: auto_report_admin
+  given(:svg_templates) do
+    %(ServiceProviderDailyDemandReport ServiceProviderSessionsReport
+      IdentityProviderDailyDemandReport IdentityProviderSessionsReport
+      IdentityProviderAttributesReport DailyDemandReport
+      FederatedSessionsReport FederationGrowthReport)
   end
 
   def show_not_allowed_message
@@ -55,48 +24,18 @@ RSpec.feature 'automated report instances' do
     expect(page).to have_selector('p', text: message)
   end
 
-  describe 'subject has subscriber permission' do
-    background do
-      attrs = create(:aaf_attributes, :from_subject, subject: user)
-      RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
-
-      identifier = organization.identifier
-      entitlements =
-        "urn:mace:aaf.edu.au:ide:internal:organization:#{identifier}"
-
-      stub_ide(shared_token: user.shared_token, entitlements: [entitlements])
-
-      visit '/auth/login'
-      click_button 'Login'
-    end
-
-    scenario 'viewing automated_report_instances#show' do
-      identifier_idp = report_instance_idp.identifier
-      identifier_sp = report_instance_sp .identifier
-
-      visit "/automated_reports/#{identifier_idp}"
-      expect(current_path).to eq("/automated_reports/#{identifier_idp}")
-      expect(page).to have_css('#output svg.identity-provider-sessions')
-
-      visit "/automated_reports/#{identifier_sp}"
-      expect(current_path).to eq("/automated_reports/#{identifier_sp}")
-      expect(page).to have_css('#output svg.service-provider-daily-demand')
-    end
+  def get_tamplate_name(type)
+    type.chomp('Report').underscore.tr('_', '-')
   end
 
-  describe 'subject has no permissions' do
-    given!(:auto_report) do
+  shared_examples 'Automated Public Report' do
+    given(:auto_report) do
       create :automated_report,
-             report_class: 'DailyDemandReport'
+             target: target,
+             report_class: report_class
     end
 
-    given(:subscription) do
-      create :automated_report_subscription,
-             automated_report: auto_report,
-             subject: user
-    end
-
-    given!(:auto_report_intance) do
+    given!(:instance) do
       create :automated_report_instance,
              automated_report: auto_report
     end
@@ -112,21 +51,227 @@ RSpec.feature 'automated report instances' do
     end
 
     scenario 'viewing automated_report_instances#show' do
-      identifier_idp = report_instance_idp.identifier
-      identifier_sp = report_instance_sp .identifier
-      identifier = auto_report_intance.identifier
+      template = get_tamplate_name report_class
+      prefix = svg_templates.include?(report_class) ? 'svg' : 'table'
 
-      visit "/automated_reports/#{identifier_idp}"
-      expect(current_path).to eq("/automated_reports/#{identifier_idp}")
+      visit "/automated_reports/#{instance.identifier}"
+      expect(current_path).to eq("/automated_reports/#{instance.identifier}")
+      expect(page).to have_css("#output #{prefix}.#{template}")
+    end
+  end
+
+  context 'Federation Growth Report' do
+    given(:report_class) { 'FederationGrowthReport' }
+    given(:target) { nil }
+
+    it_behaves_like 'Automated Public Report'
+  end
+
+  context 'Federated Sessions Report' do
+    given(:report_class) { 'FederatedSessionsReport' }
+    given(:target) { nil }
+
+    it_behaves_like 'Automated Public Report'
+  end
+
+  context 'Daily Demand Report' do
+    given(:report_class) { 'DailyDemandReport' }
+    given(:target) { nil }
+
+    it_behaves_like 'Automated Public Report'
+  end
+
+  context 'Identity Provider Attributes Report' do
+    given(:report_class) { 'IdentityProviderAttributesReport' }
+    given(:target) { nil }
+
+    it_behaves_like 'Automated Public Report'
+  end
+
+  context 'Provided Attribute Report Report' do
+    given(:report_class) { 'ProvidedAttributeReport' }
+    given(:target) { attribute.name }
+
+    it_behaves_like 'Automated Public Report'
+  end
+
+  context 'Requested Attribute Report' do
+    given(:report_class) { 'RequestedAttributeReport' }
+    given(:target) { attribute.name }
+
+    it_behaves_like 'Automated Public Report'
+  end
+
+  context 'Automated Federation Service Compatibility Report' do
+    given(:target) { sp.entity_id }
+    given(:report_class) { 'ServiceCompatibilityReport' }
+
+    it_behaves_like 'Automated Public Report'
+  end
+
+  shared_examples 'Automated Subscriber Report' do
+    given(:auto_report) do
+      create :automated_report,
+             target: object.entity_id,
+             report_class: report_class
+    end
+
+    given!(:instance) do
+      create :automated_report_instance,
+             automated_report: auto_report
+    end
+
+    given!(:unknown_auto_report) do
+      create :automated_report,
+             target: unknown_object.entity_id,
+             report_class: report_class
+    end
+
+    given!(:unknown_instance) do
+      create :automated_report_instance,
+             automated_report: unknown_auto_report
+    end
+
+    background do
+      attrs = create(:aaf_attributes, :from_subject, subject: user)
+      RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
+
+      identifier = organization.identifier
+      entitlements =
+        "urn:mace:aaf.edu.au:ide:internal:organization:#{identifier}"
+
+      stub_ide(shared_token: user.shared_token, entitlements: [entitlements])
+
+      visit '/auth/login'
+      click_button 'Login'
+    end
+
+    scenario 'viewing automated_report_instances#show' do
+      template = get_tamplate_name report_class
+      prefix = svg_templates.include?(report_class) ? 'svg' : 'table'
+      unknown_identifier = unknown_instance.identifier
+
+      visit "/automated_reports/#{instance.identifier}"
+      expect(current_path).to eq("/automated_reports/#{instance.identifier}")
+      expect(page).to have_css("#output #{prefix}.#{template}")
+
+      visit "/automated_reports/#{unknown_instance.identifier}"
+      expect(current_path).to eq("/automated_reports/#{unknown_identifier}")
       show_not_allowed_message
+    end
+  end
 
-      visit "/automated_reports/#{identifier_sp}"
-      expect(current_path).to eq("/automated_reports/#{identifier_sp}")
-      show_not_allowed_message
+  context 'Identity Provider Sessions Report' do
+    given(:report_class) { 'IdentityProviderSessionsReport' }
+    given(:object) { idp }
+    given(:unknown_object) { unknown_idp }
 
-      visit "/automated_reports/#{identifier}"
-      expect(current_path).to eq("/automated_reports/#{identifier}")
-      expect(page).to have_css('#output svg.daily-demand')
+    it_behaves_like 'Automated Subscriber Report'
+  end
+
+  context 'Identity Provider Daily Demand Report' do
+    given(:report_class) { 'IdentityProviderDailyDemandReport' }
+    given(:object) { idp }
+    given(:unknown_object) { unknown_idp }
+
+    it_behaves_like 'Automated Subscriber Report'
+  end
+
+  context 'Identity Provider Destination Services Report' do
+    given(:report_class) { 'IdentityProviderDestinationServicesReport' }
+    given(:object) { idp }
+    given(:unknown_object) { unknown_idp }
+
+    it_behaves_like 'Automated Subscriber Report'
+  end
+
+  context 'Service Provider Source Identity Providers Report' do
+    given(:report_class) { 'ServiceProviderSourceIdentityProvidersReport' }
+    given(:object) { sp }
+    given(:unknown_object) { unknown_sp }
+
+    it_behaves_like 'Automated Subscriber Report'
+  end
+
+  context 'Service Provider Sessions Report' do
+    given(:report_class) { 'ServiceProviderSessionsReport' }
+    given(:object) { sp }
+    given(:unknown_object) { unknown_sp }
+
+    it_behaves_like 'Automated Subscriber Report'
+  end
+
+  context 'Service Provider Daily Demand Report' do
+    given(:report_class) { 'ServiceProviderDailyDemandReport' }
+    given(:object) { sp }
+    given(:unknown_object) { unknown_sp }
+
+    it_behaves_like 'Automated Subscriber Report'
+  end
+
+  shared_examples 'Automated Subscriber Registrations Report' do
+    let(:auto_report) do
+      create :automated_report,
+             target: target,
+             report_class: 'SubscriberRegistrationsReport'
+    end
+
+    let!(:instance) do
+      create :automated_report_instance,
+             automated_report: auto_report
+    end
+
+    describe 'none admin subject' do
+      background do
+        attrs = create(:aaf_attributes, :from_subject, subject: user)
+        RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
+
+        identifier = organization.identifier
+        entitlements =
+          "urn:mace:aaf.edu.au:ide:internal:organization:#{identifier}"
+
+        stub_ide(shared_token: user.shared_token, entitlements: [entitlements])
+
+        visit '/auth/login'
+        click_button 'Login'
+      end
+
+      scenario 'can not view Subscriber Registrations Report' do
+        visit "/automated_reports/#{instance.identifier}"
+        expect(current_path).to eq("/automated_reports/#{instance.identifier}")
+
+        show_not_allowed_message
+      end
+    end
+
+    describe 'admin subject' do
+      background do
+        attrs = create(:aaf_attributes, :from_subject, subject: user)
+        RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
+
+        entitlements = 'urn:mace:aaf.edu.au:ide:internal:aaf-admin'
+        stub_ide(shared_token: user.shared_token, entitlements: [entitlements])
+
+        visit '/auth/login'
+        click_button 'Login'
+      end
+
+      scenario 'can view Subscriber Registrations Report' do
+        visit "/automated_reports/#{instance.identifier}"
+        expect(current_path).to eq("/automated_reports/#{instance.identifier}")
+        expect(page).to have_css('#output table.subscriber-registrations')
+      end
+    end
+  end
+
+  context 'Subscriber Registrations Reports' do
+    targets = %w(identity_providers service_providers
+                 organizations rapid_connect_services services)
+
+    targets.each do |target|
+      given(:target) { target }
+
+      it_behaves_like 'Automated Subscriber Registrations Report'
     end
   end
 end
