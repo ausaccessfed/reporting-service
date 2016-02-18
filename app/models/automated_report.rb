@@ -14,6 +14,15 @@ class AutomatedReport < ActiveRecord::Base
     value && ActiveSupport::StringInquirer.new(value)
   end
 
+  def instance_title
+    klass = TARGET_CLASSES[report_class]
+
+    return 'Whole Federation' if klass.nil?
+    return target.titleize if klass.eql? :object_type
+
+    klass.find_by_identifying_attribute(target).name
+  end
+
   private
 
   TARGET_CLASSES = {

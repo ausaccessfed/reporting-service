@@ -56,6 +56,10 @@ RSpec.describe AutomatedReportInstance, type: :model do
           expect(report.generate[:type]).to eq(kind)
         end
 
+        it 'invokes the target name' do
+          expect(automated_report.instance_title).to eq(instance_title)
+        end
+
         if range
           let(:expected_range) do
             {
@@ -97,76 +101,99 @@ RSpec.describe AutomatedReportInstance, type: :model do
 
     it_behaves_like 'an instantiated report', 'federation-growth',
                     range: true do
+      let(:instance_title) { 'Whole Federation' }
       let(:report_class) { 'FederationGrowthReport' }
     end
 
     it_behaves_like 'an instantiated report', 'daily-demand',
                     range: true do
+      let(:instance_title) { 'Whole Federation' }
       let(:report_class) { 'DailyDemandReport' }
     end
 
     it_behaves_like 'an instantiated report', 'federated-sessions',
                     range: true do
+      let(:instance_title) { 'Whole Federation' }
       let(:report_class) { 'FederatedSessionsReport' }
     end
 
     it_behaves_like 'an instantiated report', 'subscriber-registrations' do
       let(:target) { 'organizations' }
+      let(:instance_title) { 'Organizations' }
       let(:report_class) { 'SubscriberRegistrationsReport' }
     end
 
     it_behaves_like 'an instantiated report', 'identity-provider-attributes' do
+      let(:instance_title) { 'Whole Federation' }
       let(:report_class) { 'IdentityProviderAttributesReport' }
     end
 
     it_behaves_like 'an instantiated report',
                     'identity-provider-daily-demand', range: true do
-      let(:target) { create(:identity_provider).entity_id }
+      let(:instance_target) { create(:identity_provider) }
+      let(:target) { instance_target.entity_id }
+      let(:instance_title) { instance_target.name }
       let(:report_class) { 'IdentityProviderDailyDemandReport' }
     end
 
     it_behaves_like 'an instantiated report',
                     'identity-provider-destination-services' do
-      let(:target) { create(:identity_provider).entity_id }
+      let(:instance_target) { create(:identity_provider) }
+      let(:target) { instance_target.entity_id }
+      let(:instance_title) { instance_target.name }
       let(:report_class) { 'IdentityProviderDestinationServicesReport' }
     end
 
     it_behaves_like 'an instantiated report', 'identity-provider-sessions',
                     range: true do
-      let(:target) { create(:identity_provider).entity_id }
+      let(:instance_target) { create(:identity_provider) }
+      let(:target) { instance_target.entity_id }
+      let(:instance_title) { instance_target.name }
       let(:report_class) { 'IdentityProviderSessionsReport' }
     end
 
     it_behaves_like 'an instantiated report', 'provided-attribute' do
-      let(:target) { create(:saml_attribute).name }
+      let(:instance_target) { create(:saml_attribute) }
+      let(:target) { instance_target.name }
+      let(:instance_title) { instance_target.name }
       let(:report_class) { 'ProvidedAttributeReport' }
     end
 
     it_behaves_like 'an instantiated report', 'requested-attribute' do
-      let(:target) { create(:saml_attribute).name }
+      let(:instance_target) { create(:saml_attribute) }
+      let(:target) { instance_target.name }
+      let(:instance_title) { instance_target.name }
       let(:report_class) { 'RequestedAttributeReport' }
     end
 
     it_behaves_like 'an instantiated report', 'service-compatibility' do
-      let(:target) { create(:service_provider).entity_id }
+      let(:instance_target) { create(:service_provider) }
+      let(:target) { instance_target.entity_id }
+      let(:instance_title) { instance_target.name }
       let(:report_class) { 'ServiceCompatibilityReport' }
     end
 
     it_behaves_like 'an instantiated report', 'service-provider-daily-demand',
                     range: true do
-      let(:target) { create(:service_provider).entity_id }
+      let(:instance_target) { create(:service_provider) }
+      let(:target) { instance_target.entity_id }
+      let(:instance_title) { instance_target.name }
       let(:report_class) { 'ServiceProviderDailyDemandReport' }
     end
 
     it_behaves_like 'an instantiated report', 'service-provider-sessions',
                     range: true do
-      let(:target) { create(:service_provider).entity_id }
+      let(:instance_target) { create(:service_provider) }
+      let(:target) { instance_target.entity_id }
+      let(:instance_title) { instance_target.name }
       let(:report_class) { 'ServiceProviderSessionsReport' }
     end
 
     it_behaves_like 'an instantiated report',
                     'service-provider-source-identity-providers' do
-      let(:target) { create(:service_provider).entity_id }
+      let(:instance_target) { create(:service_provider) }
+      let(:target) { instance_target.entity_id }
+      let(:instance_title) { instance_target.name }
       let(:report_class) { 'ServiceProviderSourceIdentityProvidersReport' }
     end
   end

@@ -7,8 +7,7 @@
 
 - objects = @subscriptions.map do |s|
   - { report_type: s.automated_report.report_class,
-      name: target_name(s.automated_report.report_class,
-                        s.automated_report.target),
+      name: s.automated_report.instance_title,
       interval: s.automated_report.interval,
       identifier: s.identifier }
 
@@ -24,12 +23,11 @@ table.table.table-striped
     - sorted_subscriptions = objects.sort_by { |o| o[:name].downcase }
     - sorted_subscriptions.each_with_index do |s, i|
       - name = truncate(s[:name], length: 60)
-      - tooltip = (s[:name].length > 60) ? 'tooltip' : nil
 
       tr
         td= s[:report_type].titleize
         td
-          a data-toggle=tooltip data-placement='top' title=s[:name]
+          a title=s[:name]
             = name
 
         td= s[:interval]
