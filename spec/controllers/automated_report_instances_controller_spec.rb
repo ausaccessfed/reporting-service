@@ -154,7 +154,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     end
 
     context 'subject with admin access level' do
-      let(:user) { create :subject, :authorized, permission: 'admin:*' }
+      let(:user) { create :subject, :authorized, permission: '*' }
 
       it 'should be able to view all types of reports' do
         run(instance.identifier)
@@ -229,7 +229,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     before { run(instance.identifier) }
 
     context 'only subject with admin access level' do
-      let(:user) { create :subject, :authorized, permission: 'admin:*' }
+      let(:user) { create :subject, :authorized, permission: '*' }
 
       it 'should render the template' do
         run(instance.identifier)
