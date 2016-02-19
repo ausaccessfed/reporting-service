@@ -15,12 +15,7 @@ class AutomatedReport < ActiveRecord::Base
   end
 
   def target_name
-    klass = TARGET_CLASSES[report_class]
-
-    return 'Whole Federation' if klass.nil?
-    return target.titleize if klass.eql? :object_type
-
-    klass.find_by_identifying_attribute(target).name
+    target_must_be_valid_for_report_type
   end
 
   private
@@ -53,15 +48,23 @@ class AutomatedReport < ActiveRecord::Base
     return if report_class.nil?
 
     klass = TARGET_CLASSES[report_class]
+
     return target_must_be_nil if klass.nil?
     return target_must_be_object_type_identifier if klass == :object_type
 
-    return if klass.find_by_identifying_attribute(target)
-    errors.add(:target, 'must be appropriate for the report type')
+    if klass.find_by_identifying_attribute(target)
+      return klass.find_by_identifying_attribute(target).name
+    end
+
+    add_error 'must be appropriate for the report type'
+  end
+
+  def add_error(err)
+    errors.add(:target, err)
   end
 
   def target_must_be_nil
-    return if target.nil?
+    return 'Whole Federation' if target.nil?
     errors.add(:target, 'must be omitted for the report type')
   end
 
@@ -70,7 +73,8 @@ class AutomatedReport < ActiveRecord::Base
        rapid_connect_services services).freeze
 
   def target_must_be_object_type_identifier
-    return if OBJECT_TYPE_IDENTIFIERS.include?(target)
-    errors.add(:target, 'must be an object type identifier')
+    return report_class if OBJECT_TYPE_IDENTIFIERS.include?(target)
+
+    add_error 'must be an object type identifier'
   end
 end
