@@ -45,10 +45,7 @@ class AutomatedReportInstancesController < ApplicationController
   end
 
   def entity
-    target = instance.automated_report.target
-    entity_model = SUBSCRIBER_REPORTS[report_class]
-
-    entity_model.find_by(entity_id: target)
+    instance.automated_report.target_object
   end
 
   def subscriber_permissions
