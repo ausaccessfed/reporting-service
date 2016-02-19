@@ -59,7 +59,7 @@ class AutomatedReportInstancesController < ApplicationController
     return public_action if public_report
     return check_access!(subscriber_permissions) if subscriber_report
 
-    check_access! 'admin:*'
+    check_access! 'admin:report'
   end
 
   private_constant :SUBSCRIBER_REPORTS, :PUBLIC_REPORTS
