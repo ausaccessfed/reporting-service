@@ -9,8 +9,7 @@ class AutomatedReportsController < ApplicationController
     subscription = @subscriptions
                    .find_by(identifier: params[:identifier])
 
-    subscription.destroy if subscription
-
+    destroy_subscription subscription
     redirect_to automated_reports_path
   end
 
@@ -20,5 +19,12 @@ class AutomatedReportsController < ApplicationController
     @subscriptions = AutomatedReportSubscription
                      .where(subject_id: @subject.id)
                      .preload(:automated_report)
+  end
+
+  def destroy_subscription(subscription)
+    return unless subscription
+
+    message = subscription.automated_report.target_name
+    flash[:target_name] = message if subscription.destroy
   end
 end

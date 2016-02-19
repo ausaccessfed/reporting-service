@@ -14,7 +14,7 @@ class AutomatedReport < ActiveRecord::Base
     value && ActiveSupport::StringInquirer.new(value)
   end
 
-  def instance_title
+  def target_name
     klass = TARGET_CLASSES[report_class]
 
     return 'Whole Federation' if klass.nil?

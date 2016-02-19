@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature 'automated report' do
   include IdentityEnhancementStub
   given(:user) { create :subject }
-  given(:organization) { create :organization }
+  given(:user_02) { create :subject }
   given(:idp) { create :identity_provider }
   given(:saml) { create :saml_attribute }
 
@@ -43,33 +43,60 @@ RSpec.feature 'automated report' do
            subject: user
   end
 
-  background do
-    create :activation, federation_object: idp
-    attrs = create(:aaf_attributes, :from_subject, subject: user)
-    RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
+  describe 'when user has subscriptions' do
+    background do
+      attrs = create(:aaf_attributes, :from_subject, subject: user)
+      RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
-    stub_ide(shared_token: user.shared_token)
+      stub_ide(shared_token: user.shared_token)
 
-    visit '/auth/login'
-    click_button 'Login'
-    visit '/subscriber_reports'
-    click_link 'Automated Reports'
-  end
-
-  scenario 'viewing automated_reports#index' do
-    expect(current_path).to eq('/automated_reports')
-
-    expect(page).to have_text(idp.name[0..50])
-    expect(page).to have_text('Organizations')
-    expect(page).to have_text(saml.name[0..50])
-  end
-
-  scenario 'unsubscribe and redirect to index' do
-    within 'table' do
-      first('button', 'Unsubscribe').click
-      first('input', 'Confirm Unsubscribe').click
+      visit '/auth/login'
+      click_button 'Login'
+      visit '/subscriber_reports'
+      click_link 'Automated Reports'
     end
 
-    expect(current_path).to eq('/automated_reports')
+    scenario 'viewing automated_reports#index' do
+      expect(current_path).to eq('/automated_reports')
+
+      expect(page).to have_text(idp.name[0..50])
+      expect(page).to have_text('Organizations')
+      expect(page).to have_text(saml.name[0..50])
+    end
+
+    scenario 'unsubscribe and redirect to index' do
+      within 'table' do
+        first('button', 'Unsubscribe').click
+        first('input', 'Confirm Unsubscribe').click
+      end
+
+      expect(current_path).to eq('/automated_reports')
+
+      message = 'You have unsubscribe from an automated report'
+
+      expect(page).to have_selector('p', text: message)
+    end
+  end
+
+  describe 'when user has no subscriptions yet' do
+    background do
+      attrs = create(:aaf_attributes, :from_subject, subject: user_02)
+      RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
+
+      stub_ide(shared_token: user_02.shared_token)
+
+      visit '/auth/login'
+      click_button 'Login'
+      visit '/subscriber_reports'
+      click_link 'Automated Reports'
+    end
+
+    scenario 'unsubscribe and redirect to index' do
+      expect(current_path).to eq('/automated_reports')
+
+      message = 'Sorry, you have not subscribed to any reports yet.'
+
+      expect(page).to have_selector('p', text: message)
+    end
   end
 end

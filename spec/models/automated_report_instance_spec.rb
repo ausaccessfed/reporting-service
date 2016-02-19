@@ -57,7 +57,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
         end
 
         it 'invokes the target name' do
-          expect(automated_report.instance_title).to eq(instance_title)
+          expect(automated_report.target_name).to eq(target_name)
         end
 
         if range
@@ -101,30 +101,30 @@ RSpec.describe AutomatedReportInstance, type: :model do
 
     it_behaves_like 'an instantiated report', 'federation-growth',
                     range: true do
-      let(:instance_title) { 'Whole Federation' }
+      let(:target_name) { 'Whole Federation' }
       let(:report_class) { 'FederationGrowthReport' }
     end
 
     it_behaves_like 'an instantiated report', 'daily-demand',
                     range: true do
-      let(:instance_title) { 'Whole Federation' }
+      let(:target_name) { 'Whole Federation' }
       let(:report_class) { 'DailyDemandReport' }
     end
 
     it_behaves_like 'an instantiated report', 'federated-sessions',
                     range: true do
-      let(:instance_title) { 'Whole Federation' }
+      let(:target_name) { 'Whole Federation' }
       let(:report_class) { 'FederatedSessionsReport' }
     end
 
     it_behaves_like 'an instantiated report', 'subscriber-registrations' do
       let(:target) { 'organizations' }
-      let(:instance_title) { 'Organizations' }
+      let(:target_name) { 'Organizations' }
       let(:report_class) { 'SubscriberRegistrationsReport' }
     end
 
     it_behaves_like 'an instantiated report', 'identity-provider-attributes' do
-      let(:instance_title) { 'Whole Federation' }
+      let(:target_name) { 'Whole Federation' }
       let(:report_class) { 'IdentityProviderAttributesReport' }
     end
 
@@ -132,7 +132,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
                     'identity-provider-daily-demand', range: true do
       let(:instance_target) { create(:identity_provider) }
       let(:target) { instance_target.entity_id }
-      let(:instance_title) { instance_target.name }
+      let(:target_name) { instance_target.name }
       let(:report_class) { 'IdentityProviderDailyDemandReport' }
     end
 
@@ -140,7 +140,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
                     'identity-provider-destination-services' do
       let(:instance_target) { create(:identity_provider) }
       let(:target) { instance_target.entity_id }
-      let(:instance_title) { instance_target.name }
+      let(:target_name) { instance_target.name }
       let(:report_class) { 'IdentityProviderDestinationServicesReport' }
     end
 
@@ -148,28 +148,28 @@ RSpec.describe AutomatedReportInstance, type: :model do
                     range: true do
       let(:instance_target) { create(:identity_provider) }
       let(:target) { instance_target.entity_id }
-      let(:instance_title) { instance_target.name }
+      let(:target_name) { instance_target.name }
       let(:report_class) { 'IdentityProviderSessionsReport' }
     end
 
     it_behaves_like 'an instantiated report', 'provided-attribute' do
       let(:instance_target) { create(:saml_attribute) }
       let(:target) { instance_target.name }
-      let(:instance_title) { instance_target.name }
+      let(:target_name) { instance_target.name }
       let(:report_class) { 'ProvidedAttributeReport' }
     end
 
     it_behaves_like 'an instantiated report', 'requested-attribute' do
       let(:instance_target) { create(:saml_attribute) }
       let(:target) { instance_target.name }
-      let(:instance_title) { instance_target.name }
+      let(:target_name) { instance_target.name }
       let(:report_class) { 'RequestedAttributeReport' }
     end
 
     it_behaves_like 'an instantiated report', 'service-compatibility' do
       let(:instance_target) { create(:service_provider) }
       let(:target) { instance_target.entity_id }
-      let(:instance_title) { instance_target.name }
+      let(:target_name) { instance_target.name }
       let(:report_class) { 'ServiceCompatibilityReport' }
     end
 
@@ -177,7 +177,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
                     range: true do
       let(:instance_target) { create(:service_provider) }
       let(:target) { instance_target.entity_id }
-      let(:instance_title) { instance_target.name }
+      let(:target_name) { instance_target.name }
       let(:report_class) { 'ServiceProviderDailyDemandReport' }
     end
 
@@ -185,7 +185,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
                     range: true do
       let(:instance_target) { create(:service_provider) }
       let(:target) { instance_target.entity_id }
-      let(:instance_title) { instance_target.name }
+      let(:target_name) { instance_target.name }
       let(:report_class) { 'ServiceProviderSessionsReport' }
     end
 
@@ -193,7 +193,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
                     'service-provider-source-identity-providers' do
       let(:instance_target) { create(:service_provider) }
       let(:target) { instance_target.entity_id }
-      let(:instance_title) { instance_target.name }
+      let(:target_name) { instance_target.name }
       let(:report_class) { 'ServiceProviderSourceIdentityProvidersReport' }
     end
   end
