@@ -36,11 +36,11 @@ class AutomatedReportInstancesController < ApplicationController
     ServiceCompatibilityReport
   ).freeze
 
-  def public_report
+  def public_report?
     PUBLIC_REPORTS.include?(report_class)
   end
 
-  def subscriber_report
+  def subscriber_report?
     SUBSCRIBER_REPORTS.include?(report_class)
   end
 
@@ -56,8 +56,8 @@ class AutomatedReportInstancesController < ApplicationController
   end
 
   def set_access_method
-    return public_action if public_report
-    return check_access!(subscriber_permissions) if subscriber_report
+    return public_action if public_report?
+    return check_access!(subscriber_permissions) if subscriber_report?
 
     check_access! 'admin:report'
   end
