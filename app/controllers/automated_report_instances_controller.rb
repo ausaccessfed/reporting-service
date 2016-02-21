@@ -17,14 +17,14 @@ class AutomatedReportInstancesController < ApplicationController
     instance.automated_report.report_class
   end
 
-  SUBSCRIBER_REPORTS = {
-    'IdentityProviderSessionsReport' => IdentityProvider,
-    'IdentityProviderDailyDemandReport' => IdentityProvider,
-    'IdentityProviderDestinationServicesReport' => IdentityProvider,
-    'ServiceProviderSessionsReport' => ServiceProvider,
-    'ServiceProviderDailyDemandReport' => ServiceProvider,
-    'ServiceProviderSourceIdentityProvidersReport' => ServiceProvider
-  }.freeze
+  SUBSCRIBER_REPORTS = %w(
+    IdentityProviderSessionsReport
+    IdentityProviderDailyDemandReport
+    IdentityProviderDestinationServicesReport
+    ServiceProviderSessionsReport
+    ServiceProviderDailyDemandReport
+    ServiceProviderSourceIdentityProvidersReport
+  ).freeze
 
   PUBLIC_REPORTS = %w(
     DailyDemandReport

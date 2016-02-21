@@ -94,7 +94,9 @@ RSpec.feature 'automated report' do
     scenario 'unsubscribe and redirect to index' do
       expect(current_path).to eq('/automated_reports')
 
-      message = 'Sorry, you have not subscribed to any reports yet.'
+      message = 'You can subscribe to an automated report by '\
+                'clicking on the subscribe button in report page '\
+                'and choose a report interval'
 
       expect(page).to have_selector('p', text: message)
     end

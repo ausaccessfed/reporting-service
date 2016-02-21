@@ -11,8 +11,6 @@
 
 -if @subscriptions.count > 0
 
-  = search_form_tag ''
-
   - objects = @subscriptions.map do |s|
     - { report_type: s.automated_report.report_class,
         name: s.automated_report.target_name,
@@ -53,11 +51,7 @@
                               method: :delete, class: 'btn btn-default btn-block btn-delete-confirm'
 
 -else
-  .alert.alert-danger role="alert"
-    p
-      | Sorry, you have not subscribed to any reports yet.
+  - instruction = 'You can subscribe to an automated report by clicking on the subscribe button '\
+                  'in report page and choose a report interval'
 
-    p
-      | You can contact AAF support at &nbsp;
-      a> href="mailto:support@aaf.edu.au" support@aaf.edu.au
-      | for more information
+  = render(partial: 'shared/quick_instruction', locals: { instruction: instruction })
