@@ -53,7 +53,7 @@ RSpec.feature 'automated report' do
       visit '/auth/login'
       click_button 'Login'
       visit '/subscriber_reports'
-      click_link 'Automated Reports'
+      click_link 'Subscriptions'
     end
 
     scenario 'viewing automated_reports#index' do
@@ -88,7 +88,7 @@ RSpec.feature 'automated report' do
       visit '/auth/login'
       click_button 'Login'
       visit '/subscriber_reports'
-      click_link 'Automated Reports'
+      click_link 'Subscriptions'
     end
 
     scenario 'unsubscribe and redirect to index' do
