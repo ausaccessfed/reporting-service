@@ -1,0 +1,57 @@
+= breadcrumbs({ 'Dashboard' => dashboard_path },
+                'Subscriptions')
+
+= page_header('Automated Report Subscriptions')
+
+-if flash[:target_name]
+  = success_message('Successfully unsubscribed') do
+    p
+      | You have unsubscribe from an automated report for
+      = " `#{flash[:target_name]}`"
+
+-if @subscriptions.count > 0
+
+  - objects = @subscriptions.map do |s|
+    - { report_type: s.automated_report.report_class,
+        name: s.automated_report.target_name,
+        interval: s.automated_report.interval,
+        identifier: s.identifier }
+
+
+  table.table.table-striped
+    thead
+      tr
+        th Report Type
+        th Report Target
+        th Interval
+        th Action
+
+    tbody.filtertable
+      - sorted_subscriptions = objects.sort_by { |o| o[:name].downcase }
+      - sorted_subscriptions.each_with_index do |s, i|
+        - name = truncate(s[:name], length: 60)
+
+        tr
+          td= s[:report_type].titleize
+          td
+            a title=s[:name]
+              = name
+
+          td= s[:interval]
+          td
+            .dropdown
+              button.btn.btn-danger { aria-expanded="false" id = "dLabel_#{i}"
+                                      aria-haspopup="true" data-toggle="dropdown" }
+                span.glyphicon.glyphicon-scissors aria-hidden="true"
+                | Unsubscribe
+
+              ul.dropdown-menu aria-labelledby="dLabel_#{i}"
+                = button_to 'Confirm Unsubscribe',
+                            { action: 'destroy', identifier: s[:identifier] },
+                              method: :delete, class: 'btn btn-default btn-block btn-delete-confirm'
+
+-else
+  - instruction = 'You can subscribe to an automated report by clicking on the subscribe button '\
+                  'in report page and choose a report interval'
+
+  = render(partial: 'shared/quick_instruction', locals: { instruction: instruction })

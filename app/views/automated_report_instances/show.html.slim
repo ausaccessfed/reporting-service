@@ -1,0 +1,12 @@
+= breadcrumbs({ 'Dashboard' => dashboard_path },
+                @instance.automated_report.report_class.titleize.chomp('Report') )
+
+h1
+  = @instance.automated_report.report_class.titleize
+
+p
+ ' This is an automated
+ => @instance.automated_report.interval
+ = @instance.automated_report.report_class.titleize.downcase
+
+= render(partial: 'shared/report_output', locals: { data: @data })

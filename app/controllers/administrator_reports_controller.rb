@@ -1,5 +1,5 @@
 class AdministratorReportsController < ApplicationController
-  before_action { check_access! 'admin:reports' }
+  before_action { check_access! 'admin:report' }
   before_action :set_range_params,
                 except: [:subscriber_registrations_report, :index]
 

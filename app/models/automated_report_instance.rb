@@ -4,6 +4,7 @@ class AutomatedReportInstance < ActiveRecord::Base
   valhammer
 
   validate :time_must_be_utc_midnight
+  validates :identifier, format: /\A[a-zA-Z0-9_-]+\z/
 
   delegate :interval, to: :automated_report
 

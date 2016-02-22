@@ -147,3 +147,9 @@ table.report-output {
 .border-primary {
   border-color: $graph-color-primary;
 }
+
+.btn-delete-confirm {
+  border-radius:0;
+  border-left:0;
+  border-right:0;
+}

@@ -7,13 +7,11 @@ RSpec.feature 'Identity Provider Reports' do
   given(:idp) { create :identity_provider, organization: organization }
   given(:user) { create :subject }
 
-  given(:not_allowed_message) do
-    'Sorry, your organization did not allow you to generate reports'\
-    ' for any Identity Provider'
-  end
-
   def show_not_allowed_message
-    expect(page).to have_selector('p', not_allowed_message)
+    message = 'Sorry, your organization did not allow you to'\
+              ' generate reports for any Identity Provider'
+
+    expect(page).to have_selector('p', text: message)
   end
 
   describe 'subject has permissions' do
