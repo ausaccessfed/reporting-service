@@ -1,9 +1,16 @@
 = breadcrumbs({ 'Dashboard' => dashboard_path },
                 'Federated Sessions Report')
 
+= render(partial: 'shared/flash_message',
+         locals: { flash_header: 'Successfully Subscribed' })
+
+= render(partial: 'shared/subscribe_form',
+         locals: { target: nil, report_class: 'FederatedSessionsReport' })
+
 h1 Federated Sessions Report
 
 p Graphs the hourly number of sessions established via AAF's central
   Discovery Service
 
 = render(partial: 'shared/report_output', locals: { data: @data })
+

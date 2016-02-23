@@ -1,6 +1,13 @@
 = breadcrumbs({ 'Dashboard' => dashboard_path },
                 'Single Attribute Identity Providers Report')
 
+= render(partial: 'shared/flash_message',
+       locals: { flash_header: 'Successfully Subscribed' })
+
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: @name, report_class: 'ProvidedAttributeReport' })
+
 h1 Single Attribute IdPs Report
 
 p Describes support for an attribute among the federation's
