@@ -36,7 +36,7 @@ RSpec.feature 'Service Provider Reports' do
       click_link('Service Provider Sessions Report')
 
       expect(current_path)
-        .to eq('/subscriber_reports/service_provider/sessions_report')
+        .to eq('/subscriber_reports/service_provider_sessions_report')
 
       select sp.name, from: 'Service Providers'
       fill_in 'start', with: 1.year.ago
@@ -45,7 +45,7 @@ RSpec.feature 'Service Provider Reports' do
       click_button 'Generate'
 
       expect(current_path)
-        .to eq('/subscriber_reports/service_provider/sessions_report')
+        .to eq('/subscriber_reports/service_provider_sessions_report')
       expect(page).to have_css('svg.service-provider-sessions')
     end
 
@@ -53,7 +53,7 @@ RSpec.feature 'Service Provider Reports' do
       click_link('Service Provider Daily Demand Report')
 
       expect(current_path)
-        .to eq('/subscriber_reports/service_provider/daily_demand_report')
+        .to eq('/subscriber_reports/service_provider_daily_demand_report')
 
       select sp.name, from: 'Service Providers'
       fill_in 'start', with: 1.year.ago
@@ -61,7 +61,7 @@ RSpec.feature 'Service Provider Reports' do
 
       click_button 'Generate'
 
-      expect(current_path).to eq('/subscriber_reports/service_provider/'\
+      expect(current_path).to eq('/subscriber_reports/service_provider_'\
                                  'daily_demand_report')
       expect(page).to have_css('svg.service-provider-daily-demand')
     end
@@ -70,7 +70,7 @@ RSpec.feature 'Service Provider Reports' do
       click_link('Service Provider Source Identity Providers Report')
 
       expect(current_path)
-        .to eq('/subscriber_reports/service_provider/'\
+        .to eq('/subscriber_reports/service_provider_'\
                'source_identity_providers_report')
 
       select sp.name, from: 'Service Providers'
@@ -80,7 +80,7 @@ RSpec.feature 'Service Provider Reports' do
       click_button 'Generate'
 
       expect(current_path)
-        .to eq('/subscriber_reports/service_provider/'\
+        .to eq('/subscriber_reports/service_provider_'\
                'source_identity_providers_report')
     end
   end
@@ -101,13 +101,13 @@ RSpec.feature 'Service Provider Reports' do
     end
 
     scenario 'viewing the SP Source Identity Providers Report' do
-      visit '/subscriber_reports/service_provider/sessions_report'
+      visit '/subscriber_reports/service_provider_sessions_report'
       show_not_allowed_message
 
-      visit '/subscriber_reports/service_provider/daily_demand_report'
+      visit '/subscriber_reports/service_provider_daily_demand_report'
       show_not_allowed_message
 
-      visit '/subscriber_reports/service_provider/'\
+      visit '/subscriber_reports/service_provider_'\
             'source_identity_providers_report'
       show_not_allowed_message
     end

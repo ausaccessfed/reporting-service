@@ -19,7 +19,7 @@ RSpec.feature 'Federation Reports' do
     expect(current_path).to eq('/dashboard')
 
     click_link('Federation Growth Report')
-    expect(current_path).to eq('/federation_reports/federation_growth')
+    expect(current_path).to eq('/federation_reports/federation_growth_report')
     expect(page).to have_css('svg.federation-growth')
   end
 
@@ -27,7 +27,7 @@ RSpec.feature 'Federation Reports' do
     expect(current_path).to eq('/dashboard')
 
     click_link('Federated Sessions Report')
-    expect(current_path).to eq('/federation_reports/federated_sessions')
+    expect(current_path).to eq('/federation_reports/federated_sessions_report')
     expect(page).to have_css('svg.federated-sessions')
   end
 
@@ -35,7 +35,7 @@ RSpec.feature 'Federation Reports' do
     expect(current_path).to eq('/dashboard')
 
     click_link('Daily Demand Report')
-    expect(current_path).to eq('/federation_reports/daily_demand')
+    expect(current_path).to eq('/federation_reports/daily_demand_report')
     expect(page).to have_css('svg.daily-demand')
   end
 end
