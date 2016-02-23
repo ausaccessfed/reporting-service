@@ -16,11 +16,11 @@ RSpec.feature 'Administrator Reports' do
 
       visit '/auth/login'
       click_button 'Login'
-      visit '/admin/reports'
+      visit '/admin_reports'
     end
 
     scenario 'viewing the Administrator Reports Dashboard' do
-      expect(current_path).to eq('/admin/reports')
+      expect(current_path).to eq('/admin_reports')
       expect(page).to have_css('.list-group')
     end
 
@@ -39,7 +39,7 @@ RSpec.feature 'Administrator Reports' do
           click_button('Generate')
 
           expect(current_path)
-            .to eq('/admin/reports/subscriber_registrations_report')
+            .to eq('/admin_reports/subscriber_registrations_report')
           expect(page).to have_css('table.subscriber-registrations')
         end
       end
@@ -55,7 +55,7 @@ RSpec.feature 'Administrator Reports' do
         click_button('Generate')
 
         expect(current_path)
-          .to eq('/admin/reports/federation_growth_report')
+          .to eq('/admin_reports/federation_growth_report')
         expect(page).to have_css('svg.federation-growth')
       end
     end
@@ -70,7 +70,7 @@ RSpec.feature 'Administrator Reports' do
         click_button('Generate')
 
         expect(current_path)
-          .to eq('/admin/reports/daily_demand_report')
+          .to eq('/admin_reports/daily_demand_report')
         expect(page).to have_css('svg.daily-demand')
       end
     end
@@ -85,7 +85,7 @@ RSpec.feature 'Administrator Reports' do
         click_button('Generate')
 
         expect(current_path)
-          .to eq('/admin/reports/federated_sessions_report')
+          .to eq('/admin_reports/federated_sessions_report')
         expect(page).to have_css('svg.federated-sessions')
       end
     end

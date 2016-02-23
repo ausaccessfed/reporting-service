@@ -29,7 +29,7 @@ html lang='en'
 
           - if permitted?('admin:menu')
             - if permitted?('admin:report')
-              = nav_item('Admin Reports', '/admin/reports')
+              = nav_item('Admin Reports', '/admin_reports')
 
           - if @subject
             = nav_item('Subscriptions', automated_reports_path)
