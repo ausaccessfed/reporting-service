@@ -1,6 +1,14 @@
 = breadcrumbs({ 'Admin Reports' => admin_reports_path },
                 'Subscriber Registrations Report')
 
+= render(partial: 'shared/flash_message',
+       locals: { flash_header: 'Successfully Subscribed' })
+
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: @identifier,
+                     report_class: 'SubscriberRegistrationsReport' })
+
 h1 Subscriber Registrations Report
 
 p Shows the subscriber registration report within a time range, in number of

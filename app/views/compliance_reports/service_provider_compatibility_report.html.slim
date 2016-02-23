@@ -6,10 +6,9 @@
        locals: { flash_header: 'Successfully Subscribed' })
 
 - if @data
-  - report_class = 'ServiceCompatibilityReport'
-  - target = @entity_id
   = render(partial: 'shared/subscribe_form',
-           locals: { target: target, report_class: report_class })
+           locals: { target: @entity_id,
+                     report_class: 'ServiceCompatibilityReport' })
 
 h1 Service Compatibility Report
 

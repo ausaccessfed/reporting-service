@@ -1,6 +1,12 @@
 = breadcrumbs({ 'Admin Reports' => admin_reports_path },
                 'Federation Growth Report')
 
+= render(partial: 'shared/flash_message',
+         locals: { flash_header: 'Successfully Subscribed' })
+
+= render(partial: 'shared/subscribe_form',
+         locals: { target: nil, report_class: 'FederationGrowthReport' })
+
 h1 Federation Growth Report
 
 p Shows the growth of the federation within a time range, in number of

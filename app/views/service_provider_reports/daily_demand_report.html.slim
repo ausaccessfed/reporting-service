@@ -1,6 +1,14 @@
 = breadcrumbs({ 'Subscriber Reports' => subscriber_reports_path },
                 'Daily Demand Report')
 
+= render(partial: 'shared/flash_message',
+       locals: { flash_header: 'Successfully Subscribed' })
+
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: @entity_id,
+                     report_class: 'ServiceProviderDailyDemandReport' })
+
 h1 Service Provider Daily Demand  Report
 
 p Graphs the daily trend of sessions initiated with a Service Provider via
