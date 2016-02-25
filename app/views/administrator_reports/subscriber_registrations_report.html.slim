@@ -15,7 +15,7 @@ p Shows the subscriber registration report within a time range, in number of
       = 'Subscriber Identifiers'
 
     - options = identifiers.map { |i| [i.titleize,  i] }.sort
-    - options.unshift(['(Please select a Subscriber Identifier...)', ''])
+    - options.unshift(['Please select', ''])
 
     = select_tag(:identifier, options_for_select(options, @identifier))
 
@@ -24,7 +24,7 @@ p Shows the subscriber registration report within a time range, in number of
     | Generate
 
 = validate_form('#report-form', nil) do |v|
-  - v.validate_field(:identifier, required: { message: 'Please select a Subscriber Identifier' })
+  - v.validate_field(:identifier, required: { message: 'This field is required' })
 
 - if @data
   = render(partial: 'shared/report_output', locals: { data: @data })

@@ -4,7 +4,7 @@
       = "#{object_type}s"
 
     - options = @objects_list.map { |obj| [obj.name, obj.name] }.sort_by { |a| a[0].downcase }
-    - options.unshift(["(Please select on of the  #{object_type}s...)", ''])
+    - options.unshift(['Please select', ''])
 
     = select_tag(:name, options_for_select(options, @name))
 
@@ -13,7 +13,7 @@
     | Generate
 
 = validate_form('#report-form', nil) do |v|
-  - v.validate_field(:name, required: { message: "Please select on of the  #{object_type}s" })
+  - v.validate_field(:name, required: { message: 'This field is required' })
 
 - if @data
   = render(partial: 'shared/report_output', locals: { data: @data })
