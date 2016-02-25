@@ -21,7 +21,7 @@ RSpec.feature 'Compliance Reports' do
   scenario 'viewing the Service Compatibility Report' do
     click_link 'Service Compatibility Report'
 
-    select sp.name, from: 'Service Provider'
+    select sp.name, from: 'Service Providers'
     click_button 'Generate'
 
     expect(page).to have_css('#output table.service-compatibility')

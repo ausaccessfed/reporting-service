@@ -8,8 +8,8 @@ RSpec.feature 'Service Provider Reports' do
   given(:user) { create :subject }
 
   def show_not_allowed_message
-    message = 'Sorry, your organization did not allow you to'\
-              ' generate reports for any Service Provider'
+    message = 'Sorry, it seems your organization did not allow you to'\
+              ' generate reports for any Service Providers'
 
     expect(page).to have_selector('p', text: message)
   end
@@ -85,7 +85,7 @@ RSpec.feature 'Service Provider Reports' do
     end
   end
 
-  describe 'subject has no permissions' do
+  describe 'Subject without permissions' do
     background do
       create :activation, federation_object: sp
 
@@ -100,7 +100,7 @@ RSpec.feature 'Service Provider Reports' do
       visit '/subscriber_reports'
     end
 
-    scenario 'viewing the SP Source Identity Providers Report' do
+    scenario 'can not view the SP Source Identity Providers Report' do
       visit '/subscriber_reports/service_provider_sessions_report'
       show_not_allowed_message
 

@@ -7,7 +7,7 @@
         = "#{entity_type}s"
 
       - options = @entities.map { |entity| [entity.name, entity.entity_id] }.sort_by { |a| a[0].downcase }
-      - options.unshift(["(Please select one of the the #{entity_type}...)", ''])
+      - options.unshift(["(Please select one of the the #{entity_type}s...)", ''])
 
       = select_tag(:entity_id, options_for_select(options, @entity_id))
 

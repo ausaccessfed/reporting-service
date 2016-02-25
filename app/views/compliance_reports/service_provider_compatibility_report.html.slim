@@ -11,7 +11,7 @@ markdown:
 = form_tag({}, id: 'report-form') do
   = field_block do
     = label_tag(:entity_id) do
-      | Service Provider
+      | Service Providers
 
     - options = @objects_list.map { |sp| [sp.name, sp.entity_id] }.sort_by { |a| a[0].downcase }
     - options.unshift(['(Please select a Service Provider...)', ''])

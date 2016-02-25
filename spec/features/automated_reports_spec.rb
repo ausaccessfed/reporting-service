@@ -64,7 +64,7 @@ RSpec.feature 'automated report' do
       expect(page).to have_text(saml.name[0..50])
     end
 
-    scenario 'unsubscribe and redirect to index' do
+    scenario 'should unsubscribe and redirect to index' do
       within 'table' do
         first('button', 'Unsubscribe').click
         first('input', 'Confirm Unsubscribe').click
@@ -72,7 +72,7 @@ RSpec.feature 'automated report' do
 
       expect(current_path).to eq('/automated_reports')
 
-      message = 'You have unsubscribe from an automated report'
+      message = 'You have unsubscribed from an automated report'
 
       expect(page).to have_selector('p', text: message)
     end
@@ -91,12 +91,12 @@ RSpec.feature 'automated report' do
       click_link 'Subscriptions'
     end
 
-    scenario 'unsubscribe and redirect to index' do
+    scenario 'should unsubscribe and redirect to index' do
       expect(current_path).to eq('/automated_reports')
 
       message = 'You can subscribe to an automated report by '\
-                'clicking on the subscribe button in report page '\
-                'and choose a report interval'
+                'clicking on the `Subscribe` button in report page '\
+                'and choosing a report interval'
 
       expect(page).to have_selector('p', text: message)
     end
