@@ -227,7 +227,8 @@ jQuery(function($) {
     'identity-provider-attributes': renderBarGraph,
     'provided-attribute': renderTable,
     'requested-attribute': renderTable,
-    'subscriber-registrations': renderTable
+    'subscriber-registrations': renderTable,
+    'identity-provider-utilization': renderTable
   };
 
   $('.report-data').each(function() {

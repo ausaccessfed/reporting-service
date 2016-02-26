@@ -75,4 +75,18 @@ RSpec.describe AdministratorReportsController, type: :routing do
 
     it_behaves_like 'post request'
   end
+
+  describe 'get on /admin_reports/identity_provider_utilization_report' do
+    let(:action) { '#identity_provider_utilization_report' }
+    let(:path) { '/identity_provider_utilization_report' }
+
+    it_behaves_like 'get request'
+  end
+
+  describe 'post on /admin_reports/identity_provider_utilization_report' do
+    let(:action) { '#identity_provider_utilization_report' }
+    let(:path) { '/identity_provider_utilization_report' }
+
+    it_behaves_like 'post request'
+  end
 end

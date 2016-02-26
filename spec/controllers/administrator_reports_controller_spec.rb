@@ -70,4 +70,20 @@ RSpec.describe AdministratorReportsController, type: :controller do
 
     it_behaves_like 'an admin report'
   end
+
+  context 'generate Identity Provider Utilization Report' do
+    let(:params) { range }
+    let(:template) { 'identity-provider-utilization' }
+    let(:action) { 'identity_provider_utilization_report' }
+
+    it_behaves_like 'an admin report'
+  end
+
+  context 'generate Service Provider Utilization Report' do
+    let(:params) { range }
+    let(:template) { 'service-provider-utilization' }
+    let(:action) { 'service_provider_utilization_report' }
+
+    it_behaves_like 'an admin report'
+  end
 end

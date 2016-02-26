@@ -1,5 +1,5 @@
 class IdentityProviderSessionsReport < TimeSeriesReport
-  prepend TimeSeriesSharedMethods
+  prepend ReportsSharedMethods
 
   report_type 'identity-provider-sessions'
   y_label 'Sessions / hour (average)'

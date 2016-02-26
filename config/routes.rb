@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     match_report('federation_growth_report', [:get, :post])
     match_report('daily_demand_report', [:get, :post])
     match_report('federated_sessions_report', [:get, :post])
+    match_report('identity_provider_utilization_report', [:get, :post])
   end
 
   get '/subscriber_reports' => 'subscriber_reports_dashboard#index',

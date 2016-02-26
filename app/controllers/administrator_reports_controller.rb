@@ -35,6 +35,13 @@ class AdministratorReportsController < ApplicationController
     @data = JSON.generate(report.generate)
   end
 
+  def identity_provider_utilization_report
+    return if params[:start].blank? || params[:end].blank?
+
+    report = IdentityProviderUtilizationReport.new(start, finish)
+    @data = JSON.generate(report.generate)
+  end
+
   private
 
   def set_range_params

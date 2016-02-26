@@ -89,5 +89,20 @@ RSpec.feature 'Administrator Reports' do
         expect(page).to have_css('svg.federated-sessions')
       end
     end
+
+    context 'Identity Provider Utilization Report' do
+      scenario 'viewing Report' do
+        click_link 'Identity Provider Utilization Report'
+
+        fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
+        fill_in 'end', with: Time.now.utc.beginning_of_month
+
+        click_button('Generate')
+
+        expect(current_path)
+          .to eq('/admin_reports/identity_provider_utilization_report')
+        expect(page).to have_css('table.identity-provider-utilization')
+      end
+    end
   end
 end

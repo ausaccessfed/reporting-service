@@ -26,3 +26,8 @@ h1 Admin Reports
     p.list-group-item-text
       | Graphs the hourly number of sessions established via AAF's central
         Discovery Service
+
+  = link_to(admin_identity_provider_utilization_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Identity Provider Utilization Report
+    p.list-group-item-text
+      | Shows the total number of sessions for each identity provider during the given date range
