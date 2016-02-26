@@ -1,6 +1,6 @@
 require 'rails_helper'
-require 'features/nil_class_subscription_shared_examples.rb'
-require 'features/with_target_subscription_shared_examples.rb'
+require 'features/subscription_shared_examples.rb'
+require 'features/subscription_with_nil_target_shared_examples.rb'
 
 RSpec.feature 'Compliance Reports' do
   include IdentityEnhancementStub
