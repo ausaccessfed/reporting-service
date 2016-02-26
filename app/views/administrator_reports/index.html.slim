@@ -31,3 +31,8 @@ h1 Admin Reports
     h4.list-group-item-heading Identity Provider Utilization Report
     p.list-group-item-text
       | Shows the total number of sessions for each identity provider during the given date range
+
+  = link_to(admin_service_provider_utilization_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Service Provider Utilization Report
+    p.list-group-item-text
+      | Shows the total number of sessions for each service provider during the given date range
