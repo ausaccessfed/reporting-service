@@ -1,5 +1,5 @@
 class ServiceProviderDailyDemandReport < TimeSeriesReport
-  prepend TimeSeriesSharedMethods
+  prepend ReportsSharedMethods
 
   report_type 'service-provider-daily-demand'
   y_label 'Sessions / hour (average)'

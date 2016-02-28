@@ -1,5 +1,5 @@
 class FederatedSessionsReport < TimeSeriesReport
-  prepend TimeSeriesSharedMethods
+  prepend ReportsSharedMethods
 
   report_type 'federated-sessions'
   y_label 'Sessions / hour (average)'

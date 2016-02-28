@@ -1,5 +1,5 @@
 class IdentityProviderDestinationServicesReport < TabularReport
-  prepend TimeSeriesSharedMethods
+  prepend ReportsSharedMethods
 
   report_type 'identity-provider-destination-services'
   header ['SP Name', 'Total']

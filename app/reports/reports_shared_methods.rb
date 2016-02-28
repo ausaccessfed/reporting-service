@@ -1,4 +1,4 @@
-module TimeSeriesSharedMethods
+module ReportsSharedMethods
   private
 
   def output_data(range, report, step_width, divider, decimal_places = 1)
@@ -57,5 +57,14 @@ module TimeSeriesSharedMethods
 
   def sp_sessions
     sessions initiating_sp: @service_provider.entity_id
+  end
+
+  def utilization_sessions(target)
+    output = sessions
+             .preload(target)
+             .group_by(&target)
+             .map { |obj, val| [obj.name, val.count.to_s] }
+
+    output.sort_by { |r| r[0] }
   end
 end
