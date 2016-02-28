@@ -29,23 +29,6 @@ class AutomatedReportsController < AutomatedReports
 
   private
 
-  def detect_subscription
-    @subscriptions.detect do |s|
-      s.automated_report.interval == interval &&
-        s.automated_report.report_class == report_class &&
-        s.automated_report.target == target
-    end
-  end
-
-  def subscribe_to_report
-    return unless detect_subscription.blank?
-
-    AutomatedReportSubscription
-      .create(subject: subject,
-              automated_report_id: automated_report.id,
-              identifier: SecureRandom.urlsafe_base64)
-  end
-
   def automated_report
     report = AutomatedReport.find_by(interval: interval,
                                      target: target,
@@ -58,10 +41,27 @@ class AutomatedReportsController < AutomatedReports
                            report_class: report_class)
   end
 
+  def subscribe_to_report
+    return unless detect_subscription.blank?
+
+    AutomatedReportSubscription
+      .create(subject: subject,
+              automated_report_id: automated_report.id,
+              identifier: SecureRandom.urlsafe_base64)
+  end
+
   def set_subscriptions
     @subscriptions = AutomatedReportSubscription
                      .where(subject_id: @subject.id)
                      .preload(:automated_report)
+  end
+
+  def detect_subscription
+    @subscriptions.detect do |s|
+      s.automated_report.interval == interval &&
+        s.automated_report.report_class == report_class &&
+        s.automated_report.target == target
+    end
   end
 
   def destroy_subscription(subscription)
@@ -83,19 +83,8 @@ class AutomatedReportsController < AutomatedReports
     params[:report_class]
   end
 
-  SUBSCRIBER_REPORTS = {
-    'IdentityProviderSessionsReport' => IdentityProvider,
-    'IdentityProviderDailyDemandReport' => IdentityProvider,
-    'IdentityProviderDestinationServicesReport' => IdentityProvider,
-    'ServiceProviderSessionsReport' => ServiceProvider,
-    'ServiceProviderDailyDemandReport' => ServiceProvider,
-    'ServiceProviderSourceIdentityProvidersReport' => ServiceProvider
-  }.freeze
-
   def entity
     SUBSCRIBER_REPORTS[report_class]
       .find_by_identifying_attribute(target)
   end
-
-  private_constant :SUBSCRIBER_REPORTS
 end
