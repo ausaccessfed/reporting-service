@@ -27,12 +27,6 @@ module ReportsSharedMethods
     output_data 0..86_340, report, 5.minutes, days_count, 2
   end
 
-  def utilization_report(target)
-    sessions.preload(target)
-            .group_by(&target)
-            .map { |obj, val| [obj.name, val.count.to_s] }
-  end
-
   def range
     (0..(@finish - @start).to_i)
   end
@@ -61,8 +55,16 @@ module ReportsSharedMethods
     sessions selected_idp: @identity_provider.entity_id
   end
 
-  def sp_sessions(sp = nil)
-    sp ||= @service_provider
-    sessions initiating_sp: sp.entity_id
+  def sp_sessions
+    sessions initiating_sp: @service_provider.entity_id
+  end
+
+  def utilization_sessions(target)
+    output = sessions
+             .preload(target)
+             .group_by(&target)
+             .map { |obj, val| [obj.name, val.count.to_s] }
+
+    output.sort_by { |r| r[0] }
   end
 end

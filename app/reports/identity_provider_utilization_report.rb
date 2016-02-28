@@ -15,7 +15,6 @@ class IdentityProviderUtilizationReport < TabularReport
   end
 
   def rows
-    report = utilization_report(:identity_provider)
-    report.sort_by { |r| r[0] }
+    utilization_sessions(:identity_provider)
   end
 end

@@ -15,7 +15,6 @@ class ServiceProviderUtilizationReport < TabularReport
   end
 
   def rows
-    report = utilization_report(:service_provider)
-    report.sort_by { |r| r[0] }
+    utilization_sessions(:service_provider)
   end
 end
