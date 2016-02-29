@@ -28,6 +28,7 @@ RSpec.describe AutomatedReport, type: :model do
       targetless_reports = %w(
         DailyDemandReport FederatedSessionsReport FederationGrowthReport
         IdentityProviderAttributesReport
+        IdentityProviderUtilizationReport ServiceProviderUtilizationReport
       )
       targetless_reports.each do |klass|
         subject.report_class = klass
