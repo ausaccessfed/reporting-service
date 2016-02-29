@@ -19,7 +19,6 @@ class AutomatedReport < ActiveRecord::Base
 
     return 'Identity Providers' if type == 'IdentityProviderUtilizationReport'
     return 'Service Providers' if type == 'ServiceProviderUtilizationReport'
-    return 'Whole Federation' if klass.nil?
     return 'Federation' if klass.nil?
     return target.titleize if klass.eql? :object_type
 
