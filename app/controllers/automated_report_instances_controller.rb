@@ -17,7 +17,7 @@ class AutomatedReportInstancesController < AutomatedReports
     instance.automated_report.report_class
   end
 
-  def entity
-    instance.automated_report.target_object
+  def automated_report
+    instance.automated_report
   end
 end

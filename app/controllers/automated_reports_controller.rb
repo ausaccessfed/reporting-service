@@ -82,9 +82,4 @@ class AutomatedReportsController < AutomatedReports
   def report_class
     params[:report_class]
   end
-
-  def entity
-    SUBSCRIBER_REPORTS[report_class]
-      .find_by_identifying_attribute(target)
-  end
 end

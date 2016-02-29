@@ -1,6 +1,10 @@
 class AutomatedReports < ApplicationController
   private
 
+  def entity
+    automated_report.target_object
+  end
+
   SUBSCRIBER_REPORTS = {
     'IdentityProviderSessionsReport' => IdentityProvider,
     'IdentityProviderDailyDemandReport' => IdentityProvider,
