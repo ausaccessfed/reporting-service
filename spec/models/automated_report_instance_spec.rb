@@ -101,19 +101,19 @@ RSpec.describe AutomatedReportInstance, type: :model do
 
     it_behaves_like 'an instantiated report', 'federation-growth',
                     range: true do
-      let(:target_name) { 'Whole Federation' }
+      let(:target_name) { 'Federation' }
       let(:report_class) { 'FederationGrowthReport' }
     end
 
     it_behaves_like 'an instantiated report', 'daily-demand',
                     range: true do
-      let(:target_name) { 'Whole Federation' }
+      let(:target_name) { 'Federation' }
       let(:report_class) { 'DailyDemandReport' }
     end
 
     it_behaves_like 'an instantiated report', 'federated-sessions',
                     range: true do
-      let(:target_name) { 'Whole Federation' }
+      let(:target_name) { 'Federation' }
       let(:report_class) { 'FederatedSessionsReport' }
     end
 
@@ -124,7 +124,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
     end
 
     it_behaves_like 'an instantiated report', 'identity-provider-attributes' do
-      let(:target_name) { 'Whole Federation' }
+      let(:target_name) { 'Federation' }
       let(:report_class) { 'IdentityProviderAttributesReport' }
     end
 
