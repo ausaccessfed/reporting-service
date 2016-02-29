@@ -45,6 +45,7 @@ class AutomatedReportInstance < ActiveRecord::Base
     IdentityProviderSessionsReport
     ServiceProviderDailyDemandReport ServiceProviderSessionsReport
     ServiceProviderSourceIdentityProvidersReport
+    IdentityProviderUtilizationReport ServiceProviderUtilizationReport
   ).freeze
 
   def needs_range?

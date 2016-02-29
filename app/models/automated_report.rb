@@ -15,6 +15,10 @@ class AutomatedReport < ActiveRecord::Base
   end
 
   def target_name
+    type = report_class
+
+    return 'Identity Providers' if type == 'IdentityProviderUtilizationReport'
+    return 'Service Providers' if type == 'ServiceProviderUtilizationReport'
     return 'Whole Federation' if klass.nil?
     return target.titleize if klass.eql? :object_type
 
@@ -32,6 +36,8 @@ class AutomatedReport < ActiveRecord::Base
     'FederatedSessionsReport' => nil,
     'FederationGrowthReport' => nil,
     'IdentityProviderAttributesReport' => nil,
+    'IdentityProviderUtilizationReport' => nil,
+    'ServiceProviderUtilizationReport' => nil,
     'SubscriberRegistrationsReport' => :object_type,
     'IdentityProviderDailyDemandReport' => IdentityProvider,
     'IdentityProviderDestinationServicesReport' => IdentityProvider,

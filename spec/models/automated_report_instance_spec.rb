@@ -196,5 +196,17 @@ RSpec.describe AutomatedReportInstance, type: :model do
       let(:target_name) { instance_target.name }
       let(:report_class) { 'ServiceProviderSourceIdentityProvidersReport' }
     end
+
+    it_behaves_like 'an instantiated report',
+                    'identity-provider-utilization' do
+      let(:target_name) { 'Identity Providers' }
+      let(:report_class) { 'IdentityProviderUtilizationReport' }
+    end
+
+    it_behaves_like 'an instantiated report',
+                    'service-provider-utilization' do
+      let(:target_name) { 'Service Providers' }
+      let(:report_class) { 'ServiceProviderUtilizationReport' }
+    end
   end
 end
