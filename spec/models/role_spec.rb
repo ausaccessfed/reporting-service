@@ -5,10 +5,11 @@ RSpec.describe Role, type: :model do
   include_examples 'Roles'
 
   let(:admin) { 'a:b:c:admin' }
+  let(:admin_reporting) { 'a:b:c:reporting' }
   let(:prefix) { 'a:b:c' }
 
   let(:config) do
-    { admin_entitlements: [admin],
+    { admin_entitlements: [admin, admin_reporting],
       federation_object_entitlement_prefix: prefix }
   end
 
@@ -73,6 +74,26 @@ RSpec.describe Role, type: :model do
       subject { create(:role, entitlement: admin) }
 
       it 'creates a superuser permission' do
+        expect { run }.to change { permission_values }.to contain_exactly('*')
+      end
+
+      it 'removes non-superuser permissions' do
+        subject.permissions.create!(value: 'unnecessary')
+        subject.reload
+
+        expect { run }.to change { permission_values }.to contain_exactly('*')
+      end
+
+      it 'creates no duplicate permissions' do
+        run
+        expect { run }.not_to change(Permission, :count)
+      end
+    end
+
+    context 'for an admin with reporting entitlement' do
+      subject { create(:role, entitlement: admin_reporting) }
+
+      it 'creates a admin reporting permission' do
         expect { run }.to change { permission_values }.to contain_exactly('*')
       end
 
