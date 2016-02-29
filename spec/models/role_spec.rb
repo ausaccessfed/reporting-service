@@ -8,7 +8,8 @@ RSpec.describe Role, type: :model do
   let(:prefix) { 'a:b:c' }
 
   let(:config) do
-    { admin_entitlement: admin, federation_object_entitlement_prefix: prefix }
+    { admin_entitlements: [admin],
+      federation_object_entitlement_prefix: prefix }
   end
 
   before do
