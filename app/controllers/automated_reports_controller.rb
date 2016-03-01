@@ -29,8 +29,7 @@ class AutomatedReportsController < AutomatedReports
   end
 
   def subscriptions
-    AutomatedReportSubscription.where(subject: @subject)
-                               .preload(:automated_report)
+    @subject.automated_report_subscriptions.preload(:automated_report)
   end
 
   def create_subscription
@@ -41,8 +40,8 @@ class AutomatedReportsController < AutomatedReports
       return
     end
 
-    subscriptions.create(identifier: SecureRandom.urlsafe_base64,
-                         automated_report: automated_report)
+    subscriptions.create!(identifier: SecureRandom.urlsafe_base64,
+                          automated_report: automated_report)
   end
 
   def interval
@@ -58,8 +57,6 @@ class AutomatedReportsController < AutomatedReports
   end
 
   def automated_report_params
-    { interval: params[:interval],
-      target: params[:target],
-      report_class: params[:report_class] }
+    params.permit(:interval, :target, :report_class)
   end
 end
