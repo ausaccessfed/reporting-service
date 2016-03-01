@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'controllers/subscriber_reports_controller'
 
 RSpec.describe IdentityProviderReportsController, type: :controller do
   let(:prefix) { 'identity' }
