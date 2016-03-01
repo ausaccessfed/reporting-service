@@ -140,20 +140,15 @@ table.report-output {
   text-transform: capitalize;
 }
 
-.border-vibrant {
-  border-color: $graph-color-vibrant;
-}
-
 .border-primary {
   border-color: $graph-color-primary;
 }
 
-.btn-delete-confirm {
-  border-radius:0;
-  border-left:0;
-  border-right:0;
+.border-vibrant {
+  border-color: $graph-color-vibrant;
 }
 
-.btn-action-confirm {
+.btn-delete-confirm, .btn-action-confirm {
+  border-radius:0;
   border:0;
 }
