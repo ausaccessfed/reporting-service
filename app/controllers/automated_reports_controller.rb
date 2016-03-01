@@ -44,14 +44,6 @@ class AutomatedReportsController < AutomatedReports
                           automated_report: automated_report)
   end
 
-  def interval
-    params[:interval]
-  end
-
-  def target
-    params[:target]
-  end
-
   def report_class
     params[:report_class]
   end
