@@ -3,35 +3,63 @@ class AutomatedReportsController < AutomatedReports
   before_action :set_access_method, only: :subscribe
 
   def index
-    @subscriptions = subject_subscriptions
+    @subscriptions = subscriptions
   end
 
   def subscribe
+    success_message = 'You have successfully subscribed to this report'
+    flash[:notice] = success_message if create_subscription
+
     redirect_to :back
   end
 
   def destroy
-    target_name = subscription.automated_report.target_name
-    flash[:target_name] = target_name if subscription.destroy
+    object = subscriptions.find_by(identifier: params[:identifier])
+    name = object.automated_report.target_name
+
+    flash[:target_name] = name if object.destroy
 
     redirect_to automated_reports_path
   end
 
   private
 
-  def subject_subscriptions
-    AutomatedReportSubscription
-      .where(subject: @subject)
-      .preload(:automated_report)
+  def automated_report
+    AutomatedReport.find_or_create_by!(automated_report_params)
   end
 
-  def subscription
-    subject_subscriptions
-      .find_by(identifier: params[:identifier])
+  def subscriptions
+    AutomatedReportSubscription.where(subject: @subject)
+                               .preload(:automated_report)
+  end
+
+  def create_subscription
+    object = subscriptions.find_by(automated_report: automated_report)
+
+    unless object.blank?
+      flash[:notice] = 'You have already subscribed to this report'
+      return
+    end
+
+    subscriptions.create(identifier: SecureRandom.urlsafe_base64,
+                         automated_report: automated_report)
+  end
+
+  def interval
+    params[:interval]
+  end
+
+  def target
+    params[:target]
+  end
+
+  def report_class
+    params[:report_class]
   end
 
   def automated_report_params
-    params.require(:automated_report)
-      .permit(:interval, :target, :report_class)
+    { interval: params[:interval],
+      target: params[:target],
+      report_class: params[:report_class] }
   end
 end
