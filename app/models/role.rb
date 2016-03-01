@@ -15,13 +15,19 @@ class Role < ActiveRecord::Base
   end
 
   def update_permissions
-    return update_admin_permissions if entitlement == config[:admin_entitlement]
+    return update_admin_permissions if admin_entitlements?
     return update_object_permissions if entitlement_suffix
 
     permissions.destroy_all
   end
 
   private
+
+  def admin_entitlements?
+    return unless config[:admin_entitlements]
+
+    config[:admin_entitlements].include? entitlement
+  end
 
   def update_admin_permissions
     ensure_permission_values('*')
