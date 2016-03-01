@@ -4,7 +4,7 @@
 = form_tag({}, id: 'report-form') do
     = field_block do
       = label_tag(:entity_id) do
-        = "#{entity_type}s"
+        = "#{entity_type.titleize}s"
 
       - options = @entities.map { |entity| [entity.name, entity.entity_id] }.sort_by { |a| a[0].downcase }
       - options.unshift(['Please select', ''])

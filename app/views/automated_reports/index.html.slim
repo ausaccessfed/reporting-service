@@ -52,6 +52,8 @@
 
 -else
   - instruction = 'You can subscribe to an automated report by clicking on the `Subscribe` button '\
-                  'in report page and choosing a report interval'
+                  'in report page and choosing a report interval'\
+                  '<br>If you couldn\'t find the Subscribe button on report page you may need '\
+                  'to generate a report first'
 
   = render(partial: 'shared/quick_instruction', locals: { instruction: instruction })
