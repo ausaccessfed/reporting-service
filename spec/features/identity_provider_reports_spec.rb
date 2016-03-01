@@ -8,13 +8,13 @@ RSpec.feature 'Identity Provider Reports' do
   given(:user) { create :subject }
 
   def show_not_allowed_message
-    message = 'Sorry, your organization did not allow you to'\
-              ' generate reports for any Identity Provider'
+    message = 'Sorry, it seems your organization did not allow you to'\
+              ' generate reports for any Identity Providers'
 
     expect(page).to have_selector('p', text: message)
   end
 
-  describe 'subject has permissions' do
+  describe 'subject with permissions' do
     background do
       create :activation, federation_object: idp
 
@@ -85,7 +85,7 @@ RSpec.feature 'Identity Provider Reports' do
     end
   end
 
-  describe 'subject has no permissions' do
+  describe 'Subject without permissions' do
     background do
       create :activation, federation_object: idp
 
@@ -100,7 +100,7 @@ RSpec.feature 'Identity Provider Reports' do
       visit '/subscriber_reports'
     end
 
-    scenario 'viewing the IdP Destination Services Report' do
+    scenario 'can not view the IdP Destination Services Report' do
       visit '/subscriber_reports/identity_provider_sessions_report'
       show_not_allowed_message
 

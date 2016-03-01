@@ -4,9 +4,16 @@
 h1
   = @instance.automated_report.report_class.titleize
 
+- interval = @instance.automated_report.interval
+- inretval_phrase = {'monthly' => 'every month',
+                     'quarterly' => 'January, April, July and October',
+                     'yearly' => 'January'}.freeze
+
 p
  ' This is an automated
- => @instance.automated_report.interval
- = @instance.automated_report.report_class.titleize.downcase
+ b
+  => interval
+ ' report generated on the first of
+ = inretval_phrase[interval]
 
 = render(partial: 'shared/report_output', locals: { data: @data })

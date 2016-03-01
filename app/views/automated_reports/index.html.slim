@@ -6,7 +6,7 @@
 -if flash[:target_name]
   = success_message('Successfully unsubscribed') do
     p
-      | You have unsubscribe from an automated report for
+      | You have unsubscribed from an automated report for
       = " `#{flash[:target_name]}`"
 
 -if @subscriptions.count > 0
@@ -51,7 +51,7 @@
                               method: :delete, class: 'btn btn-default btn-block btn-delete-confirm'
 
 -else
-  - instruction = 'You can subscribe to an automated report by clicking on the subscribe button '\
-                  'in report page and choose a report interval'
+  - instruction = 'You can subscribe to an automated report by clicking on the `Subscribe` button '\
+                  'in report page and choosing a report interval'
 
   = render(partial: 'shared/quick_instruction', locals: { instruction: instruction })

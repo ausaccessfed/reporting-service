@@ -1,10 +1,9 @@
 = breadcrumbs({ 'Dashboard' => dashboard_path },
-              { 'Public Reports' => dashboard_path },
                 'Federated Sessions Report')
 
 h1 Federated Sessions Report
 
-p Shows the sessions of the federation over the last 12 months, in number of
-  Sessions
+p Graphs the hourly number of sessions established via AAF's central
+  Discovery Service
 
 = render(partial: 'shared/report_output', locals: { data: @data })

@@ -1,9 +1,9 @@
 = breadcrumbs({ 'Dashboard' => dashboard_path },
-              { 'Public Reports' => dashboard_path },
                 'Daily Demand Report')
 
 h1 Daily Demand Report
 
-p Shows daily demand report for the federation over the last 12 months, in number of Sessions
+p Graphs the daily trend of sessions established via AAF's central
+  Discovery Service, highlighting which time of day users are most active
 
 = render(partial: 'shared/report_output', locals: { data: @data })

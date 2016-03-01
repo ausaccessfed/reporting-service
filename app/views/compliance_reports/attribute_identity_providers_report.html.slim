@@ -1,10 +1,9 @@
 = breadcrumbs({ 'Dashboard' => dashboard_path },
-              { 'Compliance Reports' => dashboard_path },
                 'Single Attribute Identity Providers Report')
 
 h1 Single Attribute IdPs Report
 
-markdown:
-  Shows Identity Providers which have indicated support for a single attribute.
+p Describes support for an attribute among the federation's
+  Identity Providers
 
 = render(partial: 'form', locals: { object_type: 'Attribute' })
