@@ -14,7 +14,7 @@ class AutomatedReportsController < AutomatedReports
       flash[:notice] = 'You have successfully subscribed to this report'
     end
 
-    redirect_to params[:request_path]
+    redirect_to URI.parse(params[:back_path]).path
   end
 
   def destroy

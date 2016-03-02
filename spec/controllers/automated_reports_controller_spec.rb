@@ -14,7 +14,7 @@ RSpec.describe AutomatedReportsController, type: :controller do
     post :subscribe,
          report_class: report_class,
          interval: interval,
-         request_path: request.env['HTTP_REFERER']
+         back_path: request.env['HTTP_REFERER']
   end
 
   before do
