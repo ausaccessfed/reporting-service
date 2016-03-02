@@ -55,14 +55,14 @@ RSpec.feature 'Administrator Reports' do
             click_button('Generate')
             expect(page).to have_css('table.subscriber-registrations')
             click_button('Subscribe')
-            click_button(interval)
+            click_link(interval)
             expect(page).to have_selector('p', text: message_01)
 
             select(identifier.titleize, from: 'Subscriber Identifiers')
             click_button('Generate')
             expect(page).to have_css('table.subscriber-registrations')
             click_button('Subscribe')
-            click_button(interval)
+            click_link(interval)
             expect(page).to have_selector('p', text: message_02)
 
             expect(current_path)

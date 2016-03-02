@@ -8,12 +8,9 @@
     span.caret
 
   ul.dropdown-menu
-    - btn_class = 'btn btn-default btn-block btn-action-confirm'
     li
       = link_to 'Monthly', action_url.merge(interval: 'monthly'), method: :post
-
     li
       = link_to 'Quarterly', action_url.merge(interval: 'quarterly'), method: :post
-
     li
       = link_to 'Yearly', action_url.merge(interval: 'yearly'), method: :post
