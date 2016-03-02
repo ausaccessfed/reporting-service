@@ -207,13 +207,13 @@ RSpec.feature 'automated report instances' do
   end
 
   shared_examples 'Automated Subscriber Registrations Report' do
-    let(:auto_report) do
+    given(:auto_report) do
       create :automated_report,
              target: target,
              report_class: 'SubscriberRegistrationsReport'
     end
 
-    let!(:instance) do
+    given!(:instance) do
       create :automated_report_instance,
              automated_report: auto_report
     end
