@@ -1,3 +1,7 @@
+- parameters = { action: :subscribe, controller: :automated_reports,
+                 target: target, report_class: report_class,
+                 request_path: url_for }
+
 .btn-group
   button.btn-lg.btn-warning { aria-expanded="false" aria-haspopup="true"
                               data-toggle="dropdown" type="button" }
@@ -6,14 +10,11 @@
   ul.dropdown-menu
     - btn_class = 'btn btn-default btn-block btn-action-confirm'
     li
-      = button_to 'Monthly', { action: :subscribe, controller: :automated_reports,
-                               interval: 'monthly', target: target, report_class: report_class },
-                               class: btn_class, id: 'interval-monthly'
+      = button_to 'Monthly', parameters.merge(interval: 'monthly'),
+                             class: btn_class, id: 'interval-monthly'
     li
-      = button_to 'Quarterly', { action: :subscribe, controller: :automated_reports,
-                                 interval: 'quarterly', target: target, report_class: report_class },
-                                 class: btn_class, id: 'interval-quarterly'
+      = button_to 'Quarterly', parameters.merge(interval: 'quarterly'),
+                               class: btn_class, id: 'interval-quarterly'
     li
-      = button_to 'Yearly',  { action: :subscribe,  controller: :automated_reports,
-                                interval: 'yearly', target: target, report_class: report_class },
-                                class: btn_class, id: 'interval-yearly'
+      = button_to 'Yearly', parameters.merge(interval: 'monthly'),
+                            class: btn_class, id: 'interval-yearly'
