@@ -7,8 +7,12 @@ class AutomatedReportsController < AutomatedReports
   end
 
   def subscribe
-    success_message = 'You have successfully subscribed to this report'
-    flash[:notice] = success_message if create_subscription
+    if subscription_exists?
+      flash[:notice] = 'You have already subscribed to this report'
+    else
+      create_subscription
+      flash[:notice] = 'You have successfully subscribed to this report'
+    end
 
     redirect_to :back
   end
@@ -33,15 +37,12 @@ class AutomatedReportsController < AutomatedReports
   end
 
   def create_subscription
-    object = subscriptions.find_by(automated_report: automated_report)
-
-    unless object.blank?
-      flash[:notice] = 'You have already subscribed to this report'
-      return
-    end
-
     subscriptions.create!(identifier: SecureRandom.urlsafe_base64,
                           automated_report: automated_report)
+  end
+
+  def subscription_exists?
+    subscriptions.find_by(automated_report: automated_report)
   end
 
   def report_class
