@@ -6,12 +6,12 @@ class AutomatedReports < ApplicationController
   end
 
   SUBSCRIBER_REPORTS = %w(
-    'IdentityProviderSessionsReport',
-    'IdentityProviderDailyDemandReport',
-    'IdentityProviderDestinationServicesReport',
-    'ServiceProviderSessionsReport',
-    'ServiceProviderDailyDemandReport',
-    'ServiceProviderSourceIdentityProvidersReport'
+    IdentityProviderSessionsReport
+    IdentityProviderDailyDemandReport
+    IdentityProviderDestinationServicesReport
+    ServiceProviderSessionsReport
+    ServiceProviderDailyDemandReport
+    ServiceProviderSourceIdentityProvidersReport
   ).freeze
 
   PUBLIC_REPORTS = %w(
