@@ -5,14 +5,14 @@ class AutomatedReports < ApplicationController
     automated_report.target_object
   end
 
-  SUBSCRIBER_REPORTS = {
-    'IdentityProviderSessionsReport' => IdentityProvider,
-    'IdentityProviderDailyDemandReport' => IdentityProvider,
-    'IdentityProviderDestinationServicesReport' => IdentityProvider,
-    'ServiceProviderSessionsReport' => ServiceProvider,
-    'ServiceProviderDailyDemandReport' => ServiceProvider,
-    'ServiceProviderSourceIdentityProvidersReport' => ServiceProvider
-  }.freeze
+  SUBSCRIBER_REPORTS = %w(
+    'IdentityProviderSessionsReport',
+    'IdentityProviderDailyDemandReport',
+    'IdentityProviderDestinationServicesReport',
+    'ServiceProviderSessionsReport',
+    'ServiceProviderDailyDemandReport',
+    'ServiceProviderSourceIdentityProvidersReport'
+  ).freeze
 
   PUBLIC_REPORTS = %w(
     DailyDemandReport
@@ -29,7 +29,7 @@ class AutomatedReports < ApplicationController
   end
 
   def subscriber_report?
-    SUBSCRIBER_REPORTS.keys.include?(report_class)
+    SUBSCRIBER_REPORTS.include?(report_class)
   end
 
   def subscriber_permissions
