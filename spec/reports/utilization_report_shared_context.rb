@@ -30,6 +30,9 @@ RSpec.shared_context 'Utilization Report' do
                   timestamp: start
 
       create_list :discovery_service_event, 5, :response,
+                  timestamp: start
+
+      create_list :discovery_service_event, 5, :response,
                   target => obj_02.entity_id,
                   timestamp: start + 4.days
 

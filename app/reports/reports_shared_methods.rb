@@ -63,6 +63,7 @@ module ReportsSharedMethods
     output = sessions
              .preload(target)
              .group_by(&target)
+             .select { |obj| obj }
              .map { |obj, val| [obj.name, val.count.to_s] }
 
     output.sort_by { |r| r[0] }
