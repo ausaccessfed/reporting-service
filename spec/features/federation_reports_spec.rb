@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'features/subscription_with_nil_target_shared_examples.rb'
 
 RSpec.feature 'Federation Reports' do
   include IdentityEnhancementStub

@@ -1,6 +1,4 @@
-require 'rails_helper'
-
-RSpec.shared_context 'Subscribing to an automated report with target' do
+RSpec.shared_examples 'Subscribing to an automated report with target' do
   %w(monthly quarterly yearly).each do |interval|
     given!("auto_report_#{interval}".to_sym) do
       create :automated_report,
