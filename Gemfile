@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-
 gem 'rails', '4.2.3'
 gem 'mysql2'
 gem 'sass-rails', '~> 5.0'
@@ -24,6 +23,10 @@ gem 'aaf-lipstick', git: 'https://github.com/ausaccessfed/aaf-lipstick',
 
 gem 'unicorn', require: false
 gem 'god', require: false
+
+source 'https://rails-assets.org' do
+  gem 'rails-assets-rails--jquery-ujs'
+end
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-bootstrap', '~> 3.3'

@@ -34,7 +34,7 @@ RSpec.shared_examples 'Subscribing to an automated report with target' do
         select(object.name, from: list)
         click_button('Generate')
         click_button('Subscribe')
-        click_button(interval)
+        click_link(interval)
 
         expect(current_path).to eq("/#{controller}/#{path}")
         expect(page).to have_selector('p', text: message)
@@ -53,7 +53,7 @@ RSpec.shared_examples 'Subscribing to an automated report with target' do
         select(object.name, from: list)
         click_button('Generate')
         click_button('Subscribe')
-        click_button(interval)
+        click_link(interval)
 
         expect(current_path).to eq("/#{controller}/#{path}")
         expect(page).to have_selector('p', text: message)

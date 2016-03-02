@@ -32,7 +32,7 @@ RSpec.shared_examples 'Subscribing to a nil class report' do
 
       %w(Monthly Quarterly Yearly).each do |interval|
         click_button('Subscribe')
-        click_button(interval)
+        click_link(interval)
         expect(current_path).to eq("/#{controller}/#{path}")
         expect(page).to have_selector('p', text: message)
       end
@@ -49,7 +49,7 @@ RSpec.shared_examples 'Subscribing to a nil class report' do
 
       %w(Monthly Quarterly Yearly).each do |interval|
         click_button('Subscribe')
-        click_button(interval)
+        click_link(interval)
         expect(current_path).to eq("/#{controller}/#{path}")
         expect(page).to have_selector('p', text: message)
       end
