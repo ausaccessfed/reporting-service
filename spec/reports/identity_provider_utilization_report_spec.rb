@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'reports/utilization_report_shared_context'
 
 RSpec.describe IdentityProviderUtilizationReport do
   let(:type) { 'identity-provider-utilization' }

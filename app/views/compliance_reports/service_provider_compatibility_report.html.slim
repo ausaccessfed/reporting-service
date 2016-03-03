@@ -1,6 +1,15 @@
 = breadcrumbs({ 'Dashboard' => dashboard_path },
                 'Service Compatibility Report')
 
+
+= render(partial: 'shared/flash_message',
+       locals: { flash_header: 'Successfully Subscribed' })
+
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: @entity_id,
+                     report_class: 'ServiceCompatibilityReport' })
+
 h1 Service Compatibility Report
 
 p Highlights Identity Providers' ability to meet the attribute

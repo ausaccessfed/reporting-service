@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.shared_context 'Utilization Report' do
   around { |spec| Timecop.freeze { spec.run } }
 

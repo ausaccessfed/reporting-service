@@ -72,6 +72,7 @@ Rails.application.routes.draw do
 
   scope '/automated_reports' do
     get '/' => 'automated_reports#index', as: :automated_reports
+    post '/' => 'automated_reports#subscribe'
     delete '/:identifier' => 'automated_reports#destroy'
 
     match '/:identifier', to: 'automated_report_instances#show', via: :get

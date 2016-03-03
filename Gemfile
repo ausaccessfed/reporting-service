@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-
 gem 'rails', '4.2.3'
 gem 'mysql2'
 gem 'sass-rails', '~> 5.0'
@@ -31,6 +30,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-jquery-validate'
   gem 'rails-assets-pickadate', '3.5.6'
   gem 'rails-assets-d3', '~> 3.5'
+  gem 'rails-assets-rails--jquery-ujs'
 end
 
 group :development, :test do

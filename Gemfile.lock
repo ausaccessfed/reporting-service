@@ -221,6 +221,8 @@ GEM
       rails-assets-jquery (>= 1.7.2)
     rails-assets-pickadate (3.5.6)
       rails-assets-jquery (>= 1.7)
+    rails-assets-rails--jquery-ujs (1.2.0)
+      rails-assets-jquery (> 1.8)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
     rails-dom-testing (1.0.7)
@@ -397,6 +399,7 @@ DEPENDENCIES
   rails-assets-jquery (~> 1.11)!
   rails-assets-jquery-validate!
   rails-assets-pickadate (= 3.5.6)!
+  rails-assets-rails--jquery-ujs!
   rapid-rack
   redis
   redis-rails

@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'reports/utilization_report_shared_context'
 
 RSpec.describe ServiceProviderUtilizationReport do
   let(:type) { 'service-provider-utilization' }

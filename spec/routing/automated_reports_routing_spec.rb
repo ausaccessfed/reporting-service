@@ -12,4 +12,10 @@ RSpec.describe AutomatedReportsController, type: :controller do
 
     it { is_expected.to route_to 'automated_reports#destroy', param }
   end
+
+  describe 'route to /automated_reports/subscribe' do
+    subject { { post: '/automated_reports' } }
+
+    it { is_expected.to route_to 'automated_reports#subscribe' }
+  end
 end

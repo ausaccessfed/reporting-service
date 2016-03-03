@@ -1,4 +1,4 @@
-class ServiceProviderReportsController < SubscriberReportsController
+class ServiceProviderReportsController < SubscriberReports
   def sessions_report
     report_type = ServiceProviderSessionsReport
     @data = output(report_type, scaled_steps) unless params[:entity_id].blank?

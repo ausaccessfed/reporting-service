@@ -1,6 +1,13 @@
 = breadcrumbs({ 'Dashboard' => dashboard_path },
                 'Single Attribute Service Providers Report')
 
+= render(partial: 'shared/flash_message',
+       locals: { flash_header: 'Successfully Subscribed' })
+
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: @name, report_class: 'RequestedAttributeReport' })
+
 h1 Single Attribute SPs Report
 
 p Describes Service Providers' requests for a specific attribute, and

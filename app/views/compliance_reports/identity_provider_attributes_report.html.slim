@@ -1,6 +1,12 @@
 = breadcrumbs({ 'Dashboard' => dashboard_path },
                 'Identity Provider Attributes Report')
 
+= render(partial: 'shared/flash_message',
+         locals: { flash_header: 'Successfully Subscribed' })
+
+= render(partial: 'shared/subscribe_form',
+         locals: { target: nil, report_class: 'IdentityProviderAttributesReport' })
+
 h1 Identity Provider Attributes Report
 
 p Graphs the number of attributes which are supported by each Identity

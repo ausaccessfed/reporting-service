@@ -1,6 +1,4 @@
-require 'rails_helper'
-
-RSpec.shared_context 'a Subscriber Report' do
+RSpec.shared_examples 'a Subscriber Report' do
   def run_get
     get report_path
   end
