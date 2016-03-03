@@ -17,8 +17,6 @@ class IdentityProviderDestinationServicesReport < TabularReport
   private
 
   def rows
-    idp_sessions.preload(:service_provider)
-                .group_by(&:service_provider)
-                .map { |sp, val| [sp.name, val.count.to_s] }
+    tabular_sessions(:service_provider)
   end
 end
