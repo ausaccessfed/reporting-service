@@ -253,15 +253,15 @@ RSpec.describe PushEventsToFederationRegistry do
 
   context 'when multiple items are pending' do
     let!(:idps) do
-      Array.new(10) do
-        "https://idp.#{Faker::Internet.domain_name}/idp/shibboleth"
+      Array.new(10) do |i|
+        "https://idp#{i}.#{Faker::Internet.domain_name}/idp/shibboleth"
           .tap { |entity_id| create_fr_idp(entity_id) }
       end
     end
 
     let!(:sps) do
-      Array.new(10) do
-        "https://sp.#{Faker::Internet.domain_name}/shibboleth"
+      Array.new(10) do |i|
+        "https://sp#{i}.#{Faker::Internet.domain_name}/shibboleth"
           .tap { |entity_id| create_fr_sp(entity_id) }
       end
     end
