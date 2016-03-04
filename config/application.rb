@@ -9,6 +9,8 @@ require 'action_controller/railtie'
 require 'action_view/railtie'
 require 'sprockets/railtie'
 
+require 'torba/rails'
+
 Bundler.require(*Rails.groups)
 
 module ReportingService
