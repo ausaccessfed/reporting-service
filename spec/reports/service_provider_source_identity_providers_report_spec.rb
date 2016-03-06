@@ -69,7 +69,7 @@ RSpec.describe ServiceProviderSourceIdentityProvidersReport do
       expect(report[:rows]).not_to include([idp_name_03, anything])
     end
 
-    it 'report should not include sessions from relevant entities' do
+    it 'report should not include sessions from irrelevant entities' do
       idp_name_04 = idp_04.name
       expect(report[:rows]).not_to include([idp_name_04, anything])
     end
