@@ -2,11 +2,10 @@ require 'rails_helper'
 
 RSpec.describe AdministratorReportsController, type: :controller do
   let(:user) { create :subject, :authorized, permission: 'admin:*' }
+
   let(:range) do
-    {
-      start: Time.now.utc - 1.month,
-      end: Time.now.utc
-    }
+    { start: Time.now.utc - 1.month,
+      end: Time.now.utc }
   end
 
   subject { response }
@@ -69,6 +68,13 @@ RSpec.describe AdministratorReportsController, type: :controller do
     let(:action) { 'federated_sessions_report' }
 
     it_behaves_like 'an admin report'
+  end
+
+  context 'steps should scale correctly' do
+    let(:params) { {} }
+    let(:path) { :federated_sessions_report }
+
+    it_behaves_like 'report with scalable steps'
   end
 
   context 'generate Identity Provider Utilization Report' do
