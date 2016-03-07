@@ -3,7 +3,13 @@ require 'rails_helper'
 RSpec.describe CreateAutomatedReportInstances do
   around { |spec| Timecop.freeze { spec.run } }
 
-  let(:start_time) { Time.zone.parse('2016-01-04') }
+  (1..12).each do |time|
+    t = format('%02d', time.to_s)
+
+    let("time_#{t}".to_sym) do
+      Time.zone.parse("2016-#{t}-01")
+    end
+  end
 
   let(:user) { create :subject }
 
@@ -21,15 +27,92 @@ RSpec.describe CreateAutomatedReportInstances do
     create :automated_report_subscription,
            automated_report: auto_report_monthly,
            subject: user
+
+    create :automated_report_subscription,
+           automated_report: auto_report_quarterly,
+           subject: user
+
+    create :automated_report_subscription,
+           automated_report: auto_report_yearly,
+           subject: user
   end
 
   subject { CreateAutomatedReportInstances.new }
 
   context 'perform' do
-    it 'includes automated reports with subscribers only' do
-      expect { subject.perform }
-        .to change { AutomatedReportInstance.count }
-        .from(0).to(1)
+    it 'includes automated reports with
+        correct interval and with subscribers only' do
+      Timecop.travel(time_01) do
+        expect { subject.perform }
+          .to change { AutomatedReportInstance.count }
+          .from(0).to(3)
+      end
+
+      Timecop.travel(time_02) do
+        expect { subject.perform }
+          .to change { AutomatedReportInstance.count }
+          .from(3).to(4)
+      end
+
+      Timecop.travel(time_03) do
+        expect { subject.perform }
+          .to change { AutomatedReportInstance.count }
+          .from(4).to(5)
+      end
+
+      Timecop.travel(time_04) do
+        expect { subject.perform }
+          .to change { AutomatedReportInstance.count }
+          .from(5).to(7)
+      end
+
+      Timecop.travel(time_05) do
+        expect { subject.perform }
+          .to change { AutomatedReportInstance.count }
+          .from(7).to(8)
+      end
+
+      Timecop.travel(time_06) do
+        expect { subject.perform }
+          .to change { AutomatedReportInstance.count }
+          .from(8).to(9)
+      end
+
+      Timecop.travel(time_07) do
+        expect { subject.perform }
+          .to change { AutomatedReportInstance.count }
+          .from(9).to(11)
+      end
+
+      Timecop.travel(time_08) do
+        expect { subject.perform }
+          .to change { AutomatedReportInstance.count }
+          .from(11).to(12)
+      end
+
+      Timecop.travel(time_09) do
+        expect { subject.perform }
+          .to change { AutomatedReportInstance.count }
+          .from(12).to(13)
+      end
+
+      Timecop.travel(time_10) do
+        expect { subject.perform }
+          .to change { AutomatedReportInstance.count }
+          .from(13).to(15)
+      end
+
+      Timecop.travel(time_11) do
+        expect { subject.perform }
+          .to change { AutomatedReportInstance.count }
+          .from(15).to(16)
+      end
+
+      Timecop.travel(time_12) do
+        expect { subject.perform }
+          .to change { AutomatedReportInstance.count }
+          .from(16).to(17)
+      end
     end
   end
 end
