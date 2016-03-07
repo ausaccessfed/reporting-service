@@ -67,10 +67,20 @@ RSpec.describe CreateAutomatedReportInstances do
           .from(0).to(3)
       end
 
+      Timecop.travel(time_01 + 5.minutes) do
+        expect { subject.perform }
+          .not_to change { AutomatedReportInstance.count }
+      end
+
       Timecop.travel(time_02) do
         expect { subject.perform }
           .to change { AutomatedReportInstance.count }
           .from(3).to(4)
+      end
+
+      Timecop.travel(time_02 + 10.minutes) do
+        expect { subject.perform }
+          .not_to change { AutomatedReportInstance.count }
       end
 
       Timecop.travel(time_03) do
@@ -79,10 +89,20 @@ RSpec.describe CreateAutomatedReportInstances do
           .from(4).to(5)
       end
 
+      Timecop.travel(time_03 + 20.minutes) do
+        expect { subject.perform }
+          .not_to change { AutomatedReportInstance.count }
+      end
+
       Timecop.travel(time_04) do
         expect { subject.perform }
           .to change { AutomatedReportInstance.count }
           .from(5).to(7)
+      end
+
+      Timecop.travel(time_04 + 1.hour) do
+        expect { subject.perform }
+          .not_to change { AutomatedReportInstance.count }
       end
 
       Timecop.travel(time_05) do
@@ -91,16 +111,30 @@ RSpec.describe CreateAutomatedReportInstances do
           .from(7).to(8)
       end
 
+      Timecop.travel(time_05 + 2.hours) do
+        expect { subject.perform }
+          .not_to change { AutomatedReportInstance.count }
+      end
+
       Timecop.travel(time_06) do
         expect { subject.perform }
           .to change { AutomatedReportInstance.count }
           .from(8).to(9)
       end
 
+      Timecop.travel(time_06 + 3.hours) do
+        expect { subject.perform }
+          .not_to change { AutomatedReportInstance.count }
+      end
+
       Timecop.travel(time_07) do
         expect { subject.perform }
           .to change { AutomatedReportInstance.count }
           .from(9).to(11)
+      end
+      Timecop.travel(time_07 + 4.hours) do
+        expect { subject.perform }
+          .not_to change { AutomatedReportInstance.count }
       end
 
       Timecop.travel(time_08) do
@@ -109,10 +143,20 @@ RSpec.describe CreateAutomatedReportInstances do
           .from(11).to(12)
       end
 
+      Timecop.travel(time_08 + 5.minutes) do
+        expect { subject.perform }
+          .not_to change { AutomatedReportInstance.count }
+      end
+
       Timecop.travel(time_09) do
         expect { subject.perform }
           .to change { AutomatedReportInstance.count }
           .from(12).to(13)
+      end
+
+      Timecop.travel(time_09 + 10.minutes) do
+        expect { subject.perform }
+          .not_to change { AutomatedReportInstance.count }
       end
 
       Timecop.travel(time_10) do
@@ -121,16 +165,31 @@ RSpec.describe CreateAutomatedReportInstances do
           .from(13).to(15)
       end
 
+      Timecop.travel(time_10 + 20.minutes) do
+        expect { subject.perform }
+          .not_to change { AutomatedReportInstance.count }
+      end
+
       Timecop.travel(time_11) do
         expect { subject.perform }
           .to change { AutomatedReportInstance.count }
           .from(15).to(16)
       end
 
-      Timecop.travel(time_12) do
+      Timecop.travel(time_11 + 1.hour) do
+        expect { subject.perform }
+          .not_to change { AutomatedReportInstance.count }
+      end
+
+      Timecop.travel(time_12 + 10.hours) do
         expect { subject.perform }
           .to change { AutomatedReportInstance.count }
           .from(16).to(17)
+      end
+
+      Timecop.travel(time_12 + 11.hours + 59.minutes) do
+        expect { subject.perform }
+          .not_to change { AutomatedReportInstance.count }
       end
     end
   end
