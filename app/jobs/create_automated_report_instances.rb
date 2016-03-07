@@ -18,10 +18,7 @@ class CreateAutomatedReportInstances
   end
 
   def automated_reports
-    AutomatedReport
-      .preload(:automated_report_subscriptions)
-      .preload(:automated_report_instances)
-      .select { |r| !r.automated_report_subscriptions.blank? }
+    AutomatedReport.preload(:automated_report_instances)
   end
 
   def due_reports
@@ -72,6 +69,7 @@ class CreateAutomatedReportInstances
       'yearly' => 12
     }.freeze
 
-    (time - intervals[interval].months).beginning_of_month
+    start_time = time - intervals[interval].months
+    start_time.beginning_of_month
   end
 end

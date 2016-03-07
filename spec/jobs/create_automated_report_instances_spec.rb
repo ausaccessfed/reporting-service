@@ -63,8 +63,7 @@ RSpec.describe CreateAutomatedReportInstances do
         correct interval and with subscribers only' do
       Timecop.travel(time_01) do
         expect { subject.perform }
-          .to change { AutomatedReportInstance.count }
-          .from(0).to(3)
+          .to change(AutomatedReportInstance, :count).by(3)
       end
 
       Timecop.travel(time_01 + 5.minutes) do
@@ -74,8 +73,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
       Timecop.travel(time_02) do
         expect { subject.perform }
-          .to change { AutomatedReportInstance.count }
-          .from(3).to(4)
+          .to change(AutomatedReportInstance, :count).by(1)
       end
 
       Timecop.travel(time_02 + 10.minutes) do
@@ -85,8 +83,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
       Timecop.travel(time_03) do
         expect { subject.perform }
-          .to change { AutomatedReportInstance.count }
-          .from(4).to(5)
+          .to change(AutomatedReportInstance, :count).by(1)
       end
 
       Timecop.travel(time_03 + 20.minutes) do
@@ -96,8 +93,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
       Timecop.travel(time_04) do
         expect { subject.perform }
-          .to change { AutomatedReportInstance.count }
-          .from(5).to(7)
+          .to change(AutomatedReportInstance, :count).by(2)
       end
 
       Timecop.travel(time_04 + 1.hour) do
@@ -107,8 +103,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
       Timecop.travel(time_05) do
         expect { subject.perform }
-          .to change { AutomatedReportInstance.count }
-          .from(7).to(8)
+          .to change(AutomatedReportInstance, :count).by(1)
       end
 
       Timecop.travel(time_05 + 2.hours) do
@@ -118,8 +113,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
       Timecop.travel(time_06) do
         expect { subject.perform }
-          .to change { AutomatedReportInstance.count }
-          .from(8).to(9)
+          .to change(AutomatedReportInstance, :count).by(1)
       end
 
       Timecop.travel(time_06 + 3.hours) do
@@ -129,8 +123,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
       Timecop.travel(time_07) do
         expect { subject.perform }
-          .to change { AutomatedReportInstance.count }
-          .from(9).to(11)
+          .to change(AutomatedReportInstance, :count).by(2)
       end
       Timecop.travel(time_07 + 4.hours) do
         expect { subject.perform }
@@ -139,8 +132,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
       Timecop.travel(time_08) do
         expect { subject.perform }
-          .to change { AutomatedReportInstance.count }
-          .from(11).to(12)
+          .to change(AutomatedReportInstance, :count).by(1)
       end
 
       Timecop.travel(time_08 + 5.minutes) do
@@ -150,8 +142,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
       Timecop.travel(time_09) do
         expect { subject.perform }
-          .to change { AutomatedReportInstance.count }
-          .from(12).to(13)
+          .to change(AutomatedReportInstance, :count).by(1)
       end
 
       Timecop.travel(time_09 + 10.minutes) do
@@ -161,8 +152,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
       Timecop.travel(time_10) do
         expect { subject.perform }
-          .to change { AutomatedReportInstance.count }
-          .from(13).to(15)
+          .to change(AutomatedReportInstance, :count).by(2)
       end
 
       Timecop.travel(time_10 + 20.minutes) do
@@ -172,8 +162,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
       Timecop.travel(time_11) do
         expect { subject.perform }
-          .to change { AutomatedReportInstance.count }
-          .from(15).to(16)
+          .to change(AutomatedReportInstance, :count).by(1)
       end
 
       Timecop.travel(time_11 + 1.hour) do
@@ -183,8 +172,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
       Timecop.travel(time_12 + 10.hours) do
         expect { subject.perform }
-          .to change { AutomatedReportInstance.count }
-          .from(16).to(17)
+          .to change(AutomatedReportInstance, :count).by(1)
       end
 
       Timecop.travel(time_12 + 11.hours + 59.minutes) do
