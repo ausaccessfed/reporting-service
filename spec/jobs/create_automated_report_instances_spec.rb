@@ -13,9 +13,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
   let(:user) { create :subject }
 
-  INTERVALS = %w(monthly quarterly yearly).freeze
-
-  INTERVALS.each do |i|
+  %w(monthly quarterly yearly).each do |i|
     let!("auto_report_#{i}".to_sym) do
       create :automated_report,
              interval: i,
@@ -38,6 +36,27 @@ RSpec.describe CreateAutomatedReportInstances do
   end
 
   subject { CreateAutomatedReportInstances.new }
+
+  context 'include range_start' do
+    it 'for monthly interval should be from last month' do
+      start_m = (time_01 - 1.month).beginning_of_month
+      start_q = (time_01 - 3.months).beginning_of_month
+      start_y = (time_01 - 12.months).beginning_of_month
+      instance_array = [['monthly', start_m],
+                        ['quarterly', start_q],
+                        ['yearly', start_y]]
+
+      Timecop.travel(time_01) do
+        subject.perform
+
+        instances = AutomatedReportInstance.all.map do |i|
+          [i.automated_report.interval, i.range_start]
+        end
+
+        expect(instances).to match_array(instance_array)
+      end
+    end
+  end
 
   context 'perform' do
     it 'includes automated reports with

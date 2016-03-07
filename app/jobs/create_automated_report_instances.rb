@@ -8,15 +8,18 @@ class CreateAutomatedReportInstances
   def automated_reports
     AutomatedReport
       .preload(:automated_report_subscriptions)
+      .preload(:automated_report_instances)
       .select { |r| !r.automated_report_subscriptions.blank? }
   end
 
   def create_instances
     due_reports.each do |report|
+      start = range_start(report.interval)
+
       AutomatedReportInstance
         .create!(automated_report: report,
                  identifier: SecureRandom.urlsafe_base64,
-                 range_start: current.beginning_of_month)
+                 range_start: start)
     end
   end
 
@@ -33,18 +36,28 @@ class CreateAutomatedReportInstances
   end
 
   def quarterly
-    return unless [1, 4, 7, 10].include?(current.month)
+    return unless [1, 4, 7, 10].include?(time.month)
 
     reports_with_intervals['quarterly']
   end
 
   def yearly
-    return unless current.month == 1
+    return unless time.month == 1
 
     reports_with_intervals['yearly']
   end
 
-  def current
+  def time
     Time.zone.now
+  end
+
+  def range_start(interval)
+    intervals = {
+      'monthly' => 1,
+      'quarterly' => 3,
+      'yearly' => 12
+    }.freeze
+
+    (time - intervals[interval].months).beginning_of_month
   end
 end
