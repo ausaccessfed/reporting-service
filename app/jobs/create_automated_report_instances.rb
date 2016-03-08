@@ -8,13 +8,18 @@ class CreateAutomatedReportInstances
   def create_instances
     select_reports.each do |report|
       start = range_start(report.interval)
-      identifier = SecureRandom.urlsafe_base64
+
+      next if instance_exists?(start, report)
 
       AutomatedReportInstance
-        .create_with(identifier: identifier)
-        .find_or_create_by!(range_start: start,
-                            automated_report: report)
+        .create!(automated_report: report, range_start: start,
+                 identifier: SecureRandom.urlsafe_base64)
     end
+  end
+
+  def instance_exists?(start, report)
+    AutomatedReportInstance.find_by(range_start: start,
+                                    automated_report: report)
   end
 
   def select_reports
