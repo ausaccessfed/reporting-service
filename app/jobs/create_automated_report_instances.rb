@@ -6,27 +6,14 @@ class CreateAutomatedReportInstances
   private
 
   def create_instances
-    due_reports.each do |report|
+    select_reports.each do |report|
       start = range_start(report.interval)
       identifier = SecureRandom.urlsafe_base64
 
       AutomatedReportInstance
-        .create!(automated_report: report,
-                 identifier: identifier,
-                 range_start: start)
-    end
-  end
-
-  def automated_reports
-    AutomatedReport.preload(:automated_report_instances)
-  end
-
-  def due_reports
-    select_reports.select do |report|
-      interval = report.interval
-      instances = instances_range_starts(report)
-
-      !instances.include? range_start(interval)
+        .create_with(identifier: identifier)
+        .find_or_create_by!(range_start: start,
+                            automated_report: report)
     end
   end
 
@@ -34,12 +21,8 @@ class CreateAutomatedReportInstances
     [monthly, quarterly, yearly].compact.reduce(&:+)
   end
 
-  def instances_range_starts(report)
-    report.automated_report_instances.pluck(:range_start)
-  end
-
   def reports_with_intervals
-    automated_reports.group_by(&:interval)
+    AutomatedReport.all.group_by(&:interval)
   end
 
   def monthly

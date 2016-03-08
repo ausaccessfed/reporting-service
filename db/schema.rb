@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160215221601) do
+ActiveRecord::Schema.define(version: 20160308032205) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 20160215221601) do
 
   add_index "automated_report_instances", ["automated_report_id"], name: "fk_rails_40d5ad7e3d", using: :btree
   add_index "automated_report_instances", ["identifier"], name: "index_automated_report_instances_on_identifier", unique: true, using: :btree
+  add_index "automated_report_instances", ["range_start", "automated_report_id"], name: "automated_report_instances_start_report", unique: true, using: :btree
 
   create_table "automated_report_subscriptions", force: :cascade do |t|
     t.integer  "automated_report_id", limit: 4,   null: false
