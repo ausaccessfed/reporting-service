@@ -2,6 +2,8 @@ class CreateAutomatedReportInstances
   def perform
     create_instances
 
+    return if @generated_reports.blank?
+
     @generated_reports.each do |report|
       subs = report.automated_report_subscriptions
       send_email(subs)
@@ -40,7 +42,10 @@ class CreateAutomatedReportInstances
   end
 
   def reports_with_intervals
-    AutomatedReport.all.group_by(&:interval)
+    AutomatedReport
+      .preload(:automated_report_subscriptions)
+      .select { |r| !r.automated_report_subscriptions.blank? }
+      .group_by(&:interval)
   end
 
   def monthly
