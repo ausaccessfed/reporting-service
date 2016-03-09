@@ -15,6 +15,6 @@ class IdentityProviderUtilizationReport < TabularReport
   end
 
   def rows
-    utilization_sessions(:identity_provider)
+    tabular_sessions(:identity_provider)
   end
 end

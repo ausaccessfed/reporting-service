@@ -59,8 +59,8 @@ module ReportsSharedMethods
     sessions initiating_sp: @service_provider.entity_id
   end
 
-  def utilization_sessions(target)
-    output = sessions
+  def tabular_sessions(target, session_objects = sessions)
+    output = session_objects
              .preload(target)
              .group_by(&target)
              .select { |obj| obj }

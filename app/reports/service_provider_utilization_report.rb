@@ -15,6 +15,6 @@ class ServiceProviderUtilizationReport < TabularReport
   end
 
   def rows
-    utilization_sessions(:service_provider)
+    tabular_sessions(:service_provider)
   end
 end
