@@ -1,6 +1,8 @@
+# frozen_string_literal: true
 class CreateAutomatedReportInstances
-  def initialize(opts)
-    @base_url = URI.parse(opts[:base_url])
+  def initialize
+    @base_url = Rails.application.config
+                     .reporting_service[:base_url]
   end
 
   def perform
@@ -87,28 +89,42 @@ class CreateAutomatedReportInstances
     start_time.beginning_of_month
   end
 
-  def send_email(subscriptions, _instance)
+  def send_email(subscriptions, instance)
     subscriptions.each do |subscription|
       Mail.deliver(to: subscription.subject.mail,
                    from: Rails.application.config
                               .reporting_service.mail[:from],
                    subject: 'AAF Reporting Service - New Report Generated',
-                   body: 'email_message',
+                   body: email_message(instance).to_s,
                    content_type: 'text/html; charset=UTF-8')
     end
   end
 
   def email_message(instance)
     Lipstick::EmailMessage.new(title: 'AAF Reporting Service',
+                               image_url: image_url('email_banner.png'),
                                content: email_body(instance))
   end
 
   def email_body(instance)
-    { url: report_url(instance) }
+    opts = { report_url: report_url(instance) }
+
+    format(EMAIL_BODY, opts)
   end
 
   def report_url(instance)
-    path = "/automated_report_instances/#{instance.identifier}"
-    (@base_url + path).to_s
+    identifier = instance.identifier
+    path = '/automated_report_instances/'
+
+    @base_url + path + identifier
   end
+
+  def image_url(image)
+    (@base_url + ActionController::Base.helpers.image_path(image)).to_s
+  end
+
+  FILE = 'app/views/layouts/email_template.html.slim'.freeze
+  EMAIL_BODY = File.read(Rails.root.join(FILE)).freeze
+
+  private_constant :EMAIL_BODY, :FILE
 end

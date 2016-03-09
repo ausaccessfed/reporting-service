@@ -30,7 +30,10 @@ Rails.application.configure do
       queues: {
         discovery: 'https://dummy.sqs.example.edu/queue/discovery-service-test'
       }
+
     }
+
+    config.reporting_service.base_url = 'example.com'
 
     Aws::SQS::Client.remove_plugin(Aws::Plugins::SQSQueueUrls)
     Aws.config.update(stub_responses: true)

@@ -17,10 +17,6 @@ RSpec.describe CreateAutomatedReportInstances do
   let(:user_02) { create :subject }
   let(:idp) { create :identity_provider }
 
-  let(:opts) do
-    { base_url: 'https://test.example.com' }
-  end
-
   %w(monthly quarterly yearly).each do |i|
     let!("auto_report_#{i}_01".to_sym) do
       create :automated_report,
@@ -62,7 +58,7 @@ RSpec.describe CreateAutomatedReportInstances do
            subject: user_02
   end
 
-  subject { CreateAutomatedReportInstances.new(opts) }
+  subject { CreateAutomatedReportInstances.new }
 
   context 'include range_start' do
     it 'for monthly interval should be from last month' do
@@ -88,7 +84,7 @@ RSpec.describe CreateAutomatedReportInstances do
   end
 
   context 'send email' do
-    it 'shoudl send email with subject' do
+    it 'should send email with subject' do
       email_subject = 'AAF Reporting Service - New Report Generated'
 
       Timecop.travel(time_01) do
@@ -96,8 +92,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
         [user_01, user_02].each do |subscriber|
           expect(nil).to have_sent_email
-            .to(subscriber.mail)
-            .matching_subject(email_subject)
+            .to(subscriber.mail).matching_subject(email_subject)
         end
       end
     end

@@ -21,4 +21,6 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   config.active_record.dump_schema_after_migration = false
+
+  config.reporting_service.base_url = 'https://reporting.aaf.edu.au'
 end
