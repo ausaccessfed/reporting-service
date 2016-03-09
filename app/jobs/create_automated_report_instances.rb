@@ -1,23 +1,36 @@
 class CreateAutomatedReportInstances
   def perform
     create_instances
+
+    @generated_reports.each do |report|
+      subs = report.automated_report_subscriptions
+      send_email(subs)
+    end
   end
 
   private
 
   def create_instances
+    @generated_reports = []
+
     select_reports.each do |report|
       start = range_start(report.interval)
 
-      next if instance_exists?(start, report)
+      next if instance_exists?(report, start)
 
-      AutomatedReportInstance
-        .create!(automated_report: report, range_start: start,
-                 identifier: SecureRandom.urlsafe_base64)
+      each_insatnce_create(report, start)
+      @generated_reports += [report]
     end
   end
 
-  def instance_exists?(start, report)
+  def each_insatnce_create(report, start)
+    AutomatedReportInstance
+      .create!(identifier: SecureRandom.urlsafe_base64,
+               automated_report: report,
+               range_start: start)
+  end
+
+  def instance_exists?(report, start)
     AutomatedReportInstance.find_by(range_start: start,
                                     automated_report: report)
   end
@@ -59,5 +72,16 @@ class CreateAutomatedReportInstances
 
     start_time = time - intervals[interval].months
     start_time.beginning_of_month
+  end
+
+  def send_email(subscriptions)
+    subscriptions.each do |subscription|
+      Mail.deliver(to: subscription.subject.mail,
+                   from: Rails.application.config
+                              .reporting_service.mail[:from],
+                   subject: 'AAF Reporting Service - New Report Generated',
+                   body: 'TODO',
+                   content_type: 'text/html; charset=UTF-8')
+    end
   end
 end

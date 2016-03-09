@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe CreateAutomatedReportInstances do
+  include Mail::Matchers
+
   around { |spec| Timecop.freeze { spec.run } }
 
   (1..12).each do |time|
@@ -14,6 +16,11 @@ RSpec.describe CreateAutomatedReportInstances do
   let(:user_01) { create :subject }
   let(:user_02) { create :subject }
   let(:idp) { create :identity_provider }
+  let(:idp_02) { create :identity_provider }
+
+  let(:opts) do
+    { base_url: 'https://test.example.com' }
+  end
 
   %w(monthly quarterly yearly).each do |i|
     let!("auto_report_#{i}_01".to_sym) do
@@ -31,10 +38,6 @@ RSpec.describe CreateAutomatedReportInstances do
   end
 
   before do
-    create :automated_report_subscription,
-           automated_report: auto_report_monthly_01,
-           subject: user_01
-
     create :automated_report_subscription,
            automated_report: auto_report_monthly_01,
            subject: user_01
@@ -81,6 +84,15 @@ RSpec.describe CreateAutomatedReportInstances do
 
         expect(instances)
           .to match_array(instance_array + instance_array)
+      end
+    end
+  end
+
+  context 'send email' do
+    it 'shoudl send email with subject' do
+      Timecop.travel(time_01) do
+        expect(subject.perform).to have_sent_email.to(user_01.mail)
+          .matching_subject('AAF Reporting Service - New Report Generated')
       end
     end
   end
