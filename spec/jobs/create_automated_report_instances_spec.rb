@@ -62,7 +62,7 @@ RSpec.describe CreateAutomatedReportInstances do
            subject: user_02
   end
 
-  subject { CreateAutomatedReportInstances.new }
+  subject { CreateAutomatedReportInstances.new(opts) }
 
   context 'include range_start' do
     it 'for monthly interval should be from last month' do

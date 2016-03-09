@@ -1,31 +1,39 @@
 class CreateAutomatedReportInstances
+  def initialize(opts)
+    @base_url = URI.parse(opts[:base_url])
+  end
+
   def perform
     create_instances
 
-    return if @generated_reports.blank?
+    return if @instances.blank?
 
-    @generated_reports.each do |report|
-      subs = report.automated_report_subscriptions
-      send_email(subs)
+    @instances.each do |instance|
+      subs = instance.automated_report
+                     .automated_report_subscriptions
+
+      send_email(subs, instance)
     end
   end
 
   private
 
   def create_instances
-    @generated_reports = []
+    @instances = []
+
+    return if select_reports.blank?
 
     select_reports.each do |report|
       start = range_start(report.interval)
 
       next if instance_exists?(report, start)
 
-      each_insatnce_create(report, start)
-      @generated_reports += [report]
+      instance = create_instance_with(report, start)
+      @instances += [instance]
     end
   end
 
-  def each_insatnce_create(report, start)
+  def create_instance_with(report, start)
     AutomatedReportInstance
       .create!(identifier: SecureRandom.urlsafe_base64,
                automated_report: report,
@@ -79,14 +87,28 @@ class CreateAutomatedReportInstances
     start_time.beginning_of_month
   end
 
-  def send_email(subscriptions)
+  def send_email(subscriptions, _instance)
     subscriptions.each do |subscription|
       Mail.deliver(to: subscription.subject.mail,
                    from: Rails.application.config
                               .reporting_service.mail[:from],
                    subject: 'AAF Reporting Service - New Report Generated',
-                   body: 'TODO',
+                   body: 'email_message',
                    content_type: 'text/html; charset=UTF-8')
     end
+  end
+
+  def email_message(instance)
+    Lipstick::EmailMessage.new(title: 'AAF Reporting Service',
+                               content: email_body(instance))
+  end
+
+  def email_body(instance)
+    { url: report_url(instance) }
+  end
+
+  def report_url(instance)
+    path = "/automated_report_instances/#{instance.identifier}"
+    (@base_url + path).to_s
   end
 end
