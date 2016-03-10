@@ -3,7 +3,6 @@ class CreateAutomatedReportInstances
   include Rails.application.routes.url_helpers
 
   def initialize
-    @instances = []
     @base_url = Rails.application.config
                      .reporting_service
                      .url_options[:base_url]
