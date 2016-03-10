@@ -35,9 +35,8 @@ class CreateAutomatedReportInstances
   end
 
   def perform_create(report, start)
-    identifier = SecureRandom.urlsafe_base64
     AutomatedReportInstance
-      .create!(identifier: identifier,
+      .create!(identifier: SecureRandom.urlsafe_base64,
                automated_report: report,
                range_start: start)
   end
