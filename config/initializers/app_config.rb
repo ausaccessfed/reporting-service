@@ -7,6 +7,9 @@ Rails.application.configure do
   if Rails.env.development?
     config.reporting_service
           .url_options = { base_url: 'http://localhost:8080' }
+
+    mail_config = config.reporting_service.mail
+    Mail.defaults { delivery_method :smtp, mail_config }
   end
 
   if Rails.env.test?

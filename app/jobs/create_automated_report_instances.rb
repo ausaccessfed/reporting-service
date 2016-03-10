@@ -25,6 +25,7 @@ class CreateAutomatedReportInstances
     AutomatedReportInstance.transaction do
       select_reports.each do |report|
         start = range_start(report.interval)
+
         next if instance_exists?(report, start)
 
         instances += [perform_create(report, start)]
