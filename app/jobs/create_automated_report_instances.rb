@@ -11,10 +11,11 @@ class CreateAutomatedReportInstances
     return if @instances.blank?
 
     @instances.each do |instance|
-      subs = instance.automated_report
-                     .automated_report_subscriptions
+      report_class = instance[:report].report_class
+      subs = instance[:report].automated_report_subscriptions
+      identifier = instance[:identifier]
 
-      send_email(subs, instance)
+      send_email(subs, identifier, report_class)
     end
   end
 
@@ -30,14 +31,16 @@ class CreateAutomatedReportInstances
 
       next if instance_exists?(report, start)
 
-      instance = create_instance_with(report, start)
-      @instances += [instance]
+      identifier = SecureRandom.urlsafe_base64
+      create_instance_with(report, start, identifier)
+
+      @instances += [{ identifier: identifier, report: report }]
     end
   end
 
-  def create_instance_with(report, start)
+  def create_instance_with(report, start, identifier)
     AutomatedReportInstance
-      .create!(identifier: SecureRandom.urlsafe_base64,
+      .create!(identifier: identifier,
                automated_report: report,
                range_start: start)
   end
@@ -89,34 +92,31 @@ class CreateAutomatedReportInstances
     start_time.beginning_of_month
   end
 
-  def send_email(subscriptions, instance)
+  def send_email(subscriptions, identifier, report_class)
     subscriptions.each do |subscription|
       Mail.deliver(to: subscription.subject.mail,
                    from: Rails.application.config
                               .reporting_service.mail[:from],
                    subject: 'AAF Reporting Service - New Report Generated',
-                   body: email_message(instance).render,
+                   body: email_message(identifier, report_class).render,
                    content_type: 'text/html; charset=UTF-8')
     end
   end
 
-  def email_message(instance)
+  def email_message(identifier, report_class)
     Lipstick::EmailMessage.new(title: 'AAF Reporting Service',
                                image_url: image_url('email_banner.png'),
-                               content: email_body(instance))
+                               content: email_body(identifier, report_class))
   end
 
-  def email_body(instance)
-    opts = { report_url: report_url(instance),
-             report_class: instance.automated_report
-                                   .report_class
-                                   .titleize }
+  def email_body(identifier, report_class)
+    opts = { report_url: report_url(identifier),
+             report_class: report_class.titleize }
 
     format(EMAIL_BODY, opts)
   end
 
-  def report_url(instance)
-    identifier = instance.identifier
+  def report_url(identifier)
     path = '/automated_reports/'
 
     @base_url + path + identifier
