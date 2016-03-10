@@ -2,12 +2,12 @@
 class CreateAutomatedReportInstances
   def initialize
     @base_url = Rails.application.config
-                     .reporting_service[:base_url]
+                     .reporting_service
+                     .url_options[:base_url]
   end
 
   def perform
     create_instances
-
     return if @instances.blank?
 
     @instances.each do |instance|
@@ -95,7 +95,7 @@ class CreateAutomatedReportInstances
                    from: Rails.application.config
                               .reporting_service.mail[:from],
                    subject: 'AAF Reporting Service - New Report Generated',
-                   body: email_message(instance).to_s,
+                   body: email_message(instance).render,
                    content_type: 'text/html; charset=UTF-8')
     end
   end
