@@ -107,14 +107,17 @@ class CreateAutomatedReportInstances
   end
 
   def email_body(instance)
-    opts = { report_url: report_url(instance) }
+    opts = { report_url: report_url(instance),
+             report_class: instance.automated_report
+                                   .report_class
+                                   .titleize }
 
     format(EMAIL_BODY, opts)
   end
 
   def report_url(instance)
     identifier = instance.identifier
-    path = '/automated_report_instances/'
+    path = '/automated_reports/'
 
     @base_url + path + identifier
   end
@@ -123,7 +126,7 @@ class CreateAutomatedReportInstances
     (@base_url + ActionController::Base.helpers.image_path(image)).to_s
   end
 
-  FILE = 'app/views/layouts/email_template.html.slim'.freeze
+  FILE = 'app/views/layouts/email_template.html.erb'.freeze
   EMAIL_BODY = File.read(Rails.root.join(FILE)).freeze
 
   private_constant :EMAIL_BODY, :FILE
