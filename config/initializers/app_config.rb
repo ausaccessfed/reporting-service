@@ -2,11 +2,6 @@ Rails.application.configure do
   app_config = YAML.load(Rails.root.join('config/reporting_service.yml').read)
   config.reporting_service = OpenStruct.new(app_config.deep_symbolize_keys)
 
-  if Rails.env.production?
-    config.reporting_service
-          .url_options = { base_url: 'https://reporting.aaf.edu.au' }
-  end
-
   if Rails.env.development?
     config.reporting_service
           .url_options = { base_url: 'http://localhost:8080' }

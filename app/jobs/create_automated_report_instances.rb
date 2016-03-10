@@ -3,6 +3,7 @@ class CreateAutomatedReportInstances
   include Rails.application.routes.url_helpers
 
   def initialize
+    @instances = []
     @base_url = Rails.application.config
                      .reporting_service
                      .url_options[:base_url]
@@ -10,6 +11,12 @@ class CreateAutomatedReportInstances
 
   def perform
     create_instances
+
+    @instances.each do |instance|
+      report = instance.automated_report
+
+      send_email(report, instance.identifier)
+    end
   end
 
   private
@@ -28,12 +35,12 @@ class CreateAutomatedReportInstances
     identifier = SecureRandom.urlsafe_base64
 
     AutomatedReportInstance.transaction do
-      AutomatedReportInstance
-        .create!(identifier: identifier,
-                 automated_report: report,
-                 range_start: start)
+      instance = AutomatedReportInstance
+                 .create!(identifier: identifier,
+                          automated_report: report,
+                          range_start: start)
 
-      send_email(report, identifier)
+      @instances += [instance]
     end
   end
 
