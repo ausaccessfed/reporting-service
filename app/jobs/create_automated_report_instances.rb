@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class CreateAutomatedReportInstances
+  include Rails.application.routes.url_helpers
+
   def initialize
     @base_url = Rails.application.config
                      .reporting_service
@@ -8,40 +10,31 @@ class CreateAutomatedReportInstances
 
   def perform
     create_instances
-    return if @instances.blank?
-
-    @instances.each do |instance|
-      report_class = instance[:report].report_class
-      subs = instance[:report].automated_report_subscriptions
-      instance = instance[:instance]
-
-      send_email(subs, instance, report_class)
-    end
   end
 
   private
 
   def create_instances
-    @instances = []
-
-    return if select_reports.blank?
-
     select_reports.each do |report|
       start = range_start(report.interval)
 
       next if instance_exists?(report, start)
 
-      instance = create_instance_with(report, start)
-
-      @instances += [{ instance: instance, report: report }]
+      perform_create(report, start)
     end
   end
 
-  def create_instance_with(report, start)
-    AutomatedReportInstance
-      .create!(identifier: SecureRandom.urlsafe_base64,
-               automated_report: report,
-               range_start: start)
+  def perform_create(report, start)
+    identifier = SecureRandom.urlsafe_base64
+
+    AutomatedReportInstance.transaction do
+      AutomatedReportInstance
+        .create!(identifier: identifier,
+                 automated_report: report,
+                 range_start: start)
+
+      send_email(report, identifier)
+    end
   end
 
   def instance_exists?(report, start)
@@ -50,7 +43,7 @@ class CreateAutomatedReportInstances
   end
 
   def select_reports
-    [monthly, quarterly, yearly].compact.reduce(&:+)
+    [monthly, quarterly, yearly].compact.reduce([], &:+)
   end
 
   def reports_with_intervals
@@ -91,41 +84,41 @@ class CreateAutomatedReportInstances
     start_time.beginning_of_month
   end
 
-  def send_email(subscriptions, instance, report_class)
+  def send_email(report, identifier)
+    subscriptions = report.automated_report_subscriptions
+    report_class = report.report_class
+
     subscriptions.each do |subscription|
       Mail.deliver(to: subscription.subject.mail,
                    from: Rails.application.config
                               .reporting_service.mail[:from],
                    subject: 'AAF Reporting Service - New Report Generated',
-                   body: email_message(instance, report_class).render,
+                   body: email_message(identifier, report_class).render,
                    content_type: 'text/html; charset=UTF-8')
     end
   end
 
-  def email_message(instance, report_class)
+  def email_message(identifier, report_class)
     Lipstick::EmailMessage.new(title: 'AAF Reporting Service',
                                image_url: image_url('email_banner.png'),
-                               content: email_body(instance, report_class))
+                               content: email_body(identifier, report_class))
   end
 
-  def email_body(instance, report_class)
-    opts = { report_url: report_url(instance),
+  def email_body(identifier, report_class)
+    path = automated_reports_url host: @base_url
+    url = path + '/' + identifier
+
+    opts = { report_url: url,
              report_class: report_class.titleize }
 
     format(EMAIL_BODY, opts)
-  end
-
-  def report_url(instance)
-    path = '/automated_reports/'
-
-    @base_url + path + instance.identifier
   end
 
   def image_url(image)
     (@base_url + ActionController::Base.helpers.image_path(image)).to_s
   end
 
-  FILE = 'app/views/layouts/email_template.html.erb'.freeze
+  FILE = 'app/views/layouts/email_template.html.md'.freeze
   EMAIL_BODY = File.read(Rails.root.join(FILE)).freeze
 
   private_constant :EMAIL_BODY, :FILE
