@@ -24,3 +24,5 @@ sqs:
   encryption_key: config/event_encryption_key.pem
   queues:
     discovery: http://localhost:9324/queue/discovery-service-development
+url_options:
+  base_url: 'https://reporting.aaf.edu.au'
