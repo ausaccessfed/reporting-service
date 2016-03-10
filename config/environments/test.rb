@@ -18,6 +18,4 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
 
   config.rapid_rack.test_mode = true
-
-  config.action_mailer.delivery_method = :test
 end
