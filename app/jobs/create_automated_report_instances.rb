@@ -10,9 +10,7 @@ class CreateAutomatedReportInstances
   end
 
   def perform
-    create_instances
-
-    @instances.each do |instance|
+    report_instances.each do |instance|
       report = instance.automated_report
 
       send_email(report, instance.identifier)
@@ -21,27 +19,27 @@ class CreateAutomatedReportInstances
 
   private
 
-  def create_instances
-    select_reports.each do |report|
-      start = range_start(report.interval)
+  def report_instances
+    instances = []
 
-      next if instance_exists?(report, start)
+    AutomatedReportInstance.transaction do
+      select_reports.each do |report|
+        start = range_start(report.interval)
+        next if instance_exists?(report, start)
 
-      perform_create(report, start)
+        instances += [perform_create(report, start)]
+      end
     end
+
+    instances
   end
 
   def perform_create(report, start)
     identifier = SecureRandom.urlsafe_base64
-
-    AutomatedReportInstance.transaction do
-      instance = AutomatedReportInstance
-                 .create!(identifier: identifier,
-                          automated_report: report,
-                          range_start: start)
-
-      @instances += [instance]
-    end
+    AutomatedReportInstance
+      .create!(identifier: identifier,
+               automated_report: report,
+               range_start: start)
   end
 
   def instance_exists?(report, start)

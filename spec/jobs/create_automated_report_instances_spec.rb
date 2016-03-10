@@ -99,125 +99,52 @@ RSpec.describe CreateAutomatedReportInstances do
   end
 
   context 'perform' do
-    it 'includes automated reports with
-        correct interval and with subscribers only' do
+    it 'creates monthly, quarterly and yearly instances
+        at beginning of each year' do
       Timecop.travel(time_01) do
         expect { subject.perform }
           .to change(AutomatedReportInstance, :count).by(6)
       end
 
-      Timecop.travel(time_01 + 5.minutes) do
-        expect { subject.perform }
-          .not_to change { AutomatedReportInstance.count }
+      5.times do |i|
+        Timecop.travel(time_01 + i.hours) do
+          expect { subject.perform }
+            .not_to change { AutomatedReportInstance.count }
+        end
       end
+    end
 
-      Timecop.travel(time_02) do
-        expect { subject.perform }
-          .to change(AutomatedReportInstance, :count).by(2)
-      end
+    it 'creates monthly and quarterly instances on
+        April, July and October' do
+      [time_04, time_07, time_10].each do |time|
+        time_pass = [50, 10, 30].sample.minutes
 
-      Timecop.travel(time_02 + 10.minutes) do
-        expect { subject.perform }
-          .not_to change { AutomatedReportInstance.count }
-      end
+        Timecop.travel(time) do
+          expect { subject.perform }
+            .to change(AutomatedReportInstance, :count).by(4)
+        end
 
-      Timecop.travel(time_03) do
-        expect { subject.perform }
-          .to change(AutomatedReportInstance, :count).by(2)
+        Timecop.travel(time + time_pass) do
+          expect { subject.perform }
+            .not_to change { AutomatedReportInstance.count }
+        end
       end
+    end
 
-      Timecop.travel(time_03 + 20.minutes) do
-        expect { subject.perform }
-          .not_to change { AutomatedReportInstance.count }
-      end
+    it 'creates only monthly instances' do
+      [time_02, time_03, time_05,
+       time_06, time_08, time_09, time_11, time_12].each do |time|
+        time_pass = [*1..12].sample.hours
 
-      Timecop.travel(time_04) do
-        expect { subject.perform }
-          .to change(AutomatedReportInstance, :count).by(4)
-      end
+        Timecop.travel(time) do
+          expect { subject.perform }
+            .to change(AutomatedReportInstance, :count).by(2)
+        end
 
-      Timecop.travel(time_04 + 1.hour) do
-        expect { subject.perform }
-          .not_to change { AutomatedReportInstance.count }
-      end
-
-      Timecop.travel(time_05) do
-        expect { subject.perform }
-          .to change(AutomatedReportInstance, :count).by(2)
-      end
-
-      Timecop.travel(time_05 + 2.hours) do
-        expect { subject.perform }
-          .not_to change { AutomatedReportInstance.count }
-      end
-
-      Timecop.travel(time_06) do
-        expect { subject.perform }
-          .to change(AutomatedReportInstance, :count).by(2)
-      end
-
-      Timecop.travel(time_06 + 3.hours) do
-        expect { subject.perform }
-          .not_to change { AutomatedReportInstance.count }
-      end
-
-      Timecop.travel(time_07) do
-        expect { subject.perform }
-          .to change(AutomatedReportInstance, :count).by(4)
-      end
-      Timecop.travel(time_07 + 4.hours) do
-        expect { subject.perform }
-          .not_to change { AutomatedReportInstance.count }
-      end
-
-      Timecop.travel(time_08) do
-        expect { subject.perform }
-          .to change(AutomatedReportInstance, :count).by(2)
-      end
-
-      Timecop.travel(time_08 + 5.minutes) do
-        expect { subject.perform }
-          .not_to change { AutomatedReportInstance.count }
-      end
-
-      Timecop.travel(time_09) do
-        expect { subject.perform }
-          .to change(AutomatedReportInstance, :count).by(2)
-      end
-
-      Timecop.travel(time_09 + 10.minutes) do
-        expect { subject.perform }
-          .not_to change { AutomatedReportInstance.count }
-      end
-
-      Timecop.travel(time_10) do
-        expect { subject.perform }
-          .to change(AutomatedReportInstance, :count).by(4)
-      end
-
-      Timecop.travel(time_10 + 20.minutes) do
-        expect { subject.perform }
-          .not_to change { AutomatedReportInstance.count }
-      end
-
-      Timecop.travel(time_11) do
-        expect { subject.perform }
-          .to change(AutomatedReportInstance, :count).by(2)
-      end
-
-      Timecop.travel(time_11 + 1.hour) do
-        expect { subject.perform }
-          .not_to change { AutomatedReportInstance.count }
-      end
-
-      Timecop.travel(time_12 + 10.hours) do
-        expect { subject.perform }
-          .to change(AutomatedReportInstance, :count).by(2)
-      end
-
-      Timecop.travel(time_12 + 11.hours + 59.minutes) do
-        expect { subject.perform }
-          .not_to change { AutomatedReportInstance.count }
+        Timecop.travel(time + time_pass) do
+          expect { subject.perform }
+            .not_to change { AutomatedReportInstance.count }
+        end
       end
     end
   end
