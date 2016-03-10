@@ -32,3 +32,5 @@ module ReportingService
                          { expire_in: 1.day }
   end
 end
+
+Rails.application.assets.register_engine('.aafimg', Lipstick::Images::Processor)
