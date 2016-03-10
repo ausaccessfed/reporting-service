@@ -66,5 +66,4 @@ group :development, :test do
   gem 'guard-brakeman', require: false
   gem 'guard-unicorn', require: false
   gem 'terminal-notifier-guard', require: false
-  gem 'mailcatcher'
 end

@@ -1,3 +1,5 @@
+require 'mail'
+
 Rails.application.configure do
   app_config = YAML.load(Rails.root.join('config/reporting_service.yml').read)
   config.reporting_service = OpenStruct.new(app_config.deep_symbolize_keys)
@@ -5,9 +7,6 @@ Rails.application.configure do
   if Rails.env.development?
     config.reporting_service
           .url_options = { base_url: 'http://localhost:8080' }
-
-    mail_config = config.reporting_service.mail
-    Mail.defaults { delivery_method :smtp, mail_config }
   end
 
   if Rails.env.test?
