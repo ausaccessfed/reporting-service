@@ -14,24 +14,26 @@ RSpec.describe AutomatedReportInstance, type: :model do
 
   describe 'validations' do
     it { is_expected.to validate_presence_of(:automated_report) }
-    it { is_expected.to validate_presence_of(:range_start) }
+    it { is_expected.to validate_presence_of(:range_end) }
 
     it 'requires a UTC timestamp with time set to 00:00:00' do
-      time = Time.zone.parse('2015-01-01T00:00:00Z')
-      expect(subject).to allow_value(time).for(:range_start)
+      time = Time.zone.parse('2016-01-01T00:00:00Z')
+      expect(subject).to allow_value(time).for(:range_end)
 
       zone = Time.find_zone('Australia/Brisbane')
 
-      time = zone.parse('2015-01-01T00:00:00+10:00')
-      expect(subject).not_to allow_value(time).for(:range_start)
+      time = zone.parse('2016-01-01T00:00:00+10:00')
+      expect(subject).not_to allow_value(time).for(:range_end)
 
       # Time zone conversation happens implicitly
-      time = zone.parse('2015-01-01T10:00:00+10:00')
-      expect(subject).to allow_value(time).for(:range_start)
+      time = zone.parse('2016-01-01T10:00:00+10:00')
+      expect(subject).to allow_value(time).for(:range_end)
     end
   end
 
   describe '#materialize' do
+    let(:range_end) { Time.zone.now.beginning_of_month }
+
     let(:automated_report) do
       create(:automated_report,
              report_class: report_class, target: target, interval: interval)
@@ -40,7 +42,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
     subject do
       create(:automated_report_instance,
              automated_report: automated_report,
-             range_start: range_start)
+             range_end: range_end)
     end
 
     let(:report) { subject.materialize }
@@ -64,7 +66,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
           let(:expected_range) do
             {
               start: range_start.xmlschema,
-              end: Time.now.utc.beginning_of_month.xmlschema
+              end: Time.zone.now.beginning_of_month.xmlschema
             }
           end
 

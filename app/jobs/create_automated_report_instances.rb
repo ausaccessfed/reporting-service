@@ -19,23 +19,21 @@ class CreateAutomatedReportInstances
   def report_instances
     AutomatedReportInstance.transaction do
       select_reports.flat_map do |report|
-        start = range_start(report.interval)
+        next if instance_exists?(report, range_end)
 
-        next if instance_exists?(report, start)
-
-        perform_create(report, start)
+        perform_create(report, range_end)
       end
     end
   end
 
-  def perform_create(report, start)
+  def perform_create(report, finish)
     AutomatedReportInstance
       .create!(identifier: SecureRandom.urlsafe_base64,
-               automated_report: report, range_start: start)
+               automated_report: report, range_end: finish)
   end
 
-  def instance_exists?(report, start)
-    AutomatedReportInstance.find_by(range_start: start,
+  def instance_exists?(report, finish)
+    AutomatedReportInstance.find_by(range_end: finish,
                                     automated_report: report)
   end
 
@@ -70,8 +68,8 @@ class CreateAutomatedReportInstances
     Time.zone.now
   end
 
-  def range_start(interval)
-    time.beginning_of_month - INTERVALS[interval].months
+  def range_end
+    time.beginning_of_month
   end
 
   INTERVALS = { 'monthly' => 1, 'quarterly' => 3, 'yearly' => 12 }.freeze
