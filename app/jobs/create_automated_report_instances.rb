@@ -9,9 +9,8 @@ class CreateAutomatedReportInstances
   end
 
   def perform
-    report_instances.each do |instance|
+    report_instances.compact.each do |instance|
       report = instance.automated_report
-
       send_email(report, instance.identifier)
     end
   end
@@ -19,19 +18,15 @@ class CreateAutomatedReportInstances
   private
 
   def report_instances
-    instances = []
-
     AutomatedReportInstance.transaction do
-      select_reports.each do |report|
+      select_reports.flat_map do |report|
         start = range_start(report.interval)
 
         next if instance_exists?(report, start)
 
-        instances += [perform_create(report, start)]
+        perform_create(report, start)
       end
     end
-
-    instances
   end
 
   def perform_create(report, start)
