@@ -97,8 +97,7 @@ class CreateAutomatedReportInstances
   end
 
   def email_body(identifier, report_class)
-    path = automated_reports_url host: @base_url
-    url = path + '/' + identifier
+    url = automated_report_url host: @base_url, identifier: identifier
 
     opts = { report_url: url, report_class: report_class.titleize }
 

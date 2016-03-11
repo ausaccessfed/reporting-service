@@ -50,7 +50,7 @@ Rails.application.routes.draw do
   end
 
   get '/subscriber_reports' => 'subscriber_reports_dashboard#index',
-      as: 'subscriber_reports'
+      as: :subscriber_reports
 
   scope '/subscriber_reports' do
     def match_report(prefix, name, http_verbs)
@@ -70,12 +70,13 @@ Rails.application.routes.draw do
                  'source_identity_providers_report', [:get, :post])
   end
 
+  get 'automated_report/:identifier',
+      to: 'automated_report_instances#show', as: :automated_report
+
   scope '/automated_reports' do
     get '/' => 'automated_reports#index', as: :automated_reports
     post '/' => 'automated_reports#subscribe'
     delete '/:identifier' => 'automated_reports#destroy'
-
-    match '/:identifier', to: 'automated_report_instances#show', via: :get
   end
 
   namespace :api, defaults: { format: 'json' } do

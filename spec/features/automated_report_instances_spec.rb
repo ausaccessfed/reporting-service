@@ -47,8 +47,8 @@ RSpec.feature 'automated report instances' do
       template = get_tamplate_name report_class
       prefix = svg_templates.include?(report_class) ? 'svg' : 'table'
 
-      visit "/automated_reports/#{instance.identifier}"
-      expect(current_path).to eq("/automated_reports/#{instance.identifier}")
+      visit "/automated_report/#{instance.identifier}"
+      expect(current_path).to eq("/automated_report/#{instance.identifier}")
       expect(page).to have_css("#output #{prefix}.#{template}")
     end
   end
@@ -144,12 +144,12 @@ RSpec.feature 'automated report instances' do
       prefix = svg_templates.include?(report_class) ? 'svg' : 'table'
       unknown_identifier = unknown_instance.identifier
 
-      visit "/automated_reports/#{instance.identifier}"
-      expect(current_path).to eq("/automated_reports/#{instance.identifier}")
+      visit "/automated_report/#{instance.identifier}"
+      expect(current_path).to eq("/automated_report/#{instance.identifier}")
       expect(page).to have_css("#output #{prefix}.#{template}")
 
-      visit "/automated_reports/#{unknown_instance.identifier}"
-      expect(current_path).to eq("/automated_reports/#{unknown_identifier}")
+      visit "/automated_report/#{unknown_instance.identifier}"
+      expect(current_path).to eq("/automated_report/#{unknown_identifier}")
 
       message = 'Oops, you clicked something we didn\'t'\
                 ' expect you to click'
@@ -234,8 +234,8 @@ RSpec.feature 'automated report instances' do
       end
 
       scenario 'can not view Subscriber Registrations Report' do
-        visit "/automated_reports/#{instance.identifier}"
-        expect(current_path).to eq("/automated_reports/#{instance.identifier}")
+        visit "/automated_report/#{instance.identifier}"
+        expect(current_path).to eq("/automated_report/#{instance.identifier}")
 
         message = 'Oops, you clicked something we didn\'t'\
                   ' expect you to click'
@@ -257,8 +257,8 @@ RSpec.feature 'automated report instances' do
       end
 
       scenario 'can view Subscriber Registrations Report' do
-        visit "/automated_reports/#{instance.identifier}"
-        expect(current_path).to eq("/automated_reports/#{instance.identifier}")
+        visit "/automated_report/#{instance.identifier}"
+        expect(current_path).to eq("/automated_report/#{instance.identifier}")
         expect(page).to have_css('#output table.subscriber-registrations')
       end
     end
