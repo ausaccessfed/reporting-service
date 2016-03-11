@@ -4,8 +4,7 @@ class CreateAutomatedReportInstances
 
   def initialize
     @base_url = Rails.application.config
-                     .reporting_service
-                     .url_options[:base_url]
+                     .reporting_service.url_options[:base_url]
   end
 
   def perform
@@ -32,8 +31,7 @@ class CreateAutomatedReportInstances
   def perform_create(report, start)
     AutomatedReportInstance
       .create!(identifier: SecureRandom.urlsafe_base64,
-               automated_report: report,
-               range_start: start)
+               automated_report: report, range_start: start)
   end
 
   def instance_exists?(report, start)
@@ -73,15 +71,10 @@ class CreateAutomatedReportInstances
   end
 
   def range_start(interval)
-    intervals = {
-      'monthly' => 1,
-      'quarterly' => 3,
-      'yearly' => 12
-    }.freeze
-
-    start_time = time - intervals[interval].months
-    start_time.beginning_of_month
+    time.beginning_of_month - INTERVALS[interval].months
   end
+
+  INTERVALS = { 'monthly' => 1, 'quarterly' => 3, 'yearly' => 12 }.freeze
 
   def send_email(report, identifier)
     subscriptions = report.automated_report_subscriptions
@@ -107,8 +100,7 @@ class CreateAutomatedReportInstances
     path = automated_reports_url host: @base_url
     url = path + '/' + identifier
 
-    opts = { report_url: url,
-             report_class: report_class.titleize }
+    opts = { report_url: url, report_class: report_class.titleize }
 
     format(EMAIL_BODY, opts)
   end
@@ -120,5 +112,5 @@ class CreateAutomatedReportInstances
   FILE = 'app/views/layouts/email_template.html.md'.freeze
   EMAIL_BODY = File.read(Rails.root.join(FILE)).freeze
 
-  private_constant :EMAIL_BODY, :FILE
+  private_constant :EMAIL_BODY, :FILE, :INTERVALS
 end

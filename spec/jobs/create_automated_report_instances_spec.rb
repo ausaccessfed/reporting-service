@@ -5,11 +5,10 @@ RSpec.describe CreateAutomatedReportInstances do
 
   around { |spec| Timecop.freeze { spec.run } }
 
-  (1..12).each do |time|
-    t = format('%02d', time.to_s)
-
-    let("time_#{t}".to_sym) do
-      Time.zone.parse("2016-#{t}-01")
+  %w(january february march april may june july august
+     september october november december).each do |month|
+    let(month.to_sym) do
+      Time.zone.parse("2016-#{month}-01")
     end
   end
 
@@ -62,15 +61,15 @@ RSpec.describe CreateAutomatedReportInstances do
 
   context 'include range_start' do
     it 'for monthly interval should be from last month' do
-      start_m = (time_01 - 1.month).beginning_of_month
-      start_q = (time_01 - 3.months).beginning_of_month
-      start_y = (time_01 - 12.months).beginning_of_month
+      start_m = (january - 1.month).beginning_of_month
+      start_q = (january - 3.months).beginning_of_month
+      start_y = (january - 12.months).beginning_of_month
 
       instance_array = [['monthly', start_m],
                         ['quarterly', start_q],
                         ['yearly', start_y]]
 
-      Timecop.travel(time_01) do
+      Timecop.travel(january) do
         subject.perform
 
         instances = AutomatedReportInstance.all.map do |i|
@@ -87,7 +86,7 @@ RSpec.describe CreateAutomatedReportInstances do
     it 'should send email with subject' do
       email_subject = 'AAF Reporting Service - New Report Generated'
 
-      Timecop.travel(time_01) do
+      Timecop.travel(january) do
         subject.perform
 
         [user_01, user_02].each do |subscriber|
@@ -101,13 +100,13 @@ RSpec.describe CreateAutomatedReportInstances do
   context 'perform' do
     it 'creates monthly, quarterly and yearly instances
         at beginning of each year' do
-      Timecop.travel(time_01) do
+      Timecop.travel(january) do
         expect { subject.perform }
           .to change(AutomatedReportInstance, :count).by(6)
       end
 
       5.times do |i|
-        Timecop.travel(time_01 + i.hours) do
+        Timecop.travel(january + i.hours) do
           expect { subject.perform }
             .not_to change { AutomatedReportInstance.count }
         end
@@ -116,7 +115,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
     it 'creates monthly and quarterly instances on
         April, July and October' do
-      [time_04, time_07, time_10].each do |time|
+      [april, july, october].each do |time|
         time_pass = [50, 10, 30].sample.minutes
 
         Timecop.travel(time) do
@@ -132,9 +131,9 @@ RSpec.describe CreateAutomatedReportInstances do
     end
 
     it 'creates only monthly instances' do
-      [time_02, time_03, time_05,
-       time_06, time_08, time_09, time_11, time_12].each do |time|
-        time_pass = [*1..12].sample.hours
+      [february, march, may, june, august,
+       september, november, december].each do |time|
+        time_pass = [*1..28].sample.days
 
         Timecop.travel(time) do
           expect { subject.perform }
