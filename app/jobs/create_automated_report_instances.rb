@@ -4,8 +4,7 @@ class CreateAutomatedReportInstances
 
   def initialize
     @base_url = Rails.application.config
-                     .reporting_service
-                     .url_options[:base_url]
+                     .reporting_service.url_options[:base_url]
   end
 
   def perform
@@ -18,27 +17,31 @@ class CreateAutomatedReportInstances
   private
 
   def report_instances
+    instances = []
+
     AutomatedReportInstance.transaction do
-      select_reports.flat_map do |report|
+      select_reports.each do |report|
         start = range_start(report.interval)
 
-        next if instance_exists?(report, start)
+        next if instance_exists?(instances, start, report)
 
-        perform_create(report, start)
+        instances += [perform_create(report, start)]
       end
     end
+
+    instances
   end
 
   def perform_create(report, start)
     AutomatedReportInstance
       .create!(identifier: SecureRandom.urlsafe_base64,
-               automated_report: report,
-               range_start: start)
+               automated_report: report, range_start: start)
   end
 
-  def instance_exists?(report, start)
-    AutomatedReportInstance.find_by(range_start: start,
-                                    automated_report: report)
+  def instance_exists?(instances, start, report)
+    instances.detect do |i|
+      (i.range_start == start) && (i.automated_report == report)
+    end
   end
 
   def select_reports
@@ -47,39 +50,46 @@ class CreateAutomatedReportInstances
 
   def reports_with_intervals
     AutomatedReport
+      .preload(:automated_report_instances)
       .preload(:automated_report_subscriptions)
       .select { |r| !r.automated_report_subscriptions.blank? }
       .group_by(&:interval)
   end
 
+  def filter_reports(reports, interval)
+    reports.select do |report|
+      !report.automated_report_instances
+             .detect { |ins| ins.range_start == range_start(interval) }
+    end
+  end
+
   def monthly
-    reports_with_intervals['monthly']
+    reports = reports_with_intervals['monthly']
+    filter_reports(reports, 'monthly')
   end
 
   def quarterly
     return unless [1, 4, 7, 10].include?(time.month)
 
-    reports_with_intervals['quarterly']
+    reports = reports_with_intervals['quarterly']
+    filter_reports(reports, 'quarterly')
   end
 
   def yearly
     return unless time.month == 1
 
-    reports_with_intervals['yearly']
+    reports = reports_with_intervals['yearly']
+    filter_reports(reports, 'yearly')
   end
 
   def time
     Time.zone.now
   end
 
-  def range_start(interval)
-    intervals = {
-      'monthly' => 1,
-      'quarterly' => 3,
-      'yearly' => 12
-    }.freeze
+  INTERVALS = { 'monthly' => 1, 'quarterly' => 3, 'yearly' => 12 }.freeze
 
-    start_time = time - intervals[interval].months
+  def range_start(interval)
+    start_time = time - INTERVALS[interval].months
     start_time.beginning_of_month
   end
 
@@ -107,8 +117,7 @@ class CreateAutomatedReportInstances
     path = automated_reports_url host: @base_url
     url = path + '/' + identifier
 
-    opts = { report_url: url,
-             report_class: report_class.titleize }
+    opts = { report_url: url, report_class: report_class.titleize }
 
     format(EMAIL_BODY, opts)
   end
@@ -120,5 +129,5 @@ class CreateAutomatedReportInstances
   FILE = 'app/views/layouts/email_template.html.md'.freeze
   EMAIL_BODY = File.read(Rails.root.join(FILE)).freeze
 
-  private_constant :EMAIL_BODY, :FILE
+  private_constant :EMAIL_BODY, :FILE, :INTERVALS
 end
