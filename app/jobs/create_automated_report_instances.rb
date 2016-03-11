@@ -53,23 +53,19 @@ class CreateAutomatedReportInstances
   end
 
   def quarterly
-    return unless [1, 4, 7, 10].include?(time.month)
+    return unless [1, 4, 7, 10].include?(range_end.month)
 
     reports_with_intervals['quarterly']
   end
 
   def yearly
-    return unless time.month == 1
+    return unless range_end.month == 1
 
     reports_with_intervals['yearly']
   end
 
-  def time
-    Time.zone.now
-  end
-
   def range_end
-    time.beginning_of_month
+    Time.zone.now.beginning_of_month
   end
 
   INTERVALS = { 'monthly' => 1, 'quarterly' => 3, 'yearly' => 12 }.freeze
