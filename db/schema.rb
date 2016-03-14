@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160311024240) do
+ActiveRecord::Schema.define(version: 20160311045352) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -69,11 +69,12 @@ ActiveRecord::Schema.define(version: 20160311024240) do
   add_index "automated_report_subscriptions", ["subject_id"], name: "fk_rails_59e1f019b3", using: :btree
 
   create_table "automated_reports", force: :cascade do |t|
-    t.string   "report_class", limit: 255, null: false
-    t.string   "interval",     limit: 255, null: false
-    t.string   "target",       limit: 255
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.string   "report_class",        limit: 255, null: false
+    t.string   "interval",            limit: 255, null: false
+    t.string   "target",              limit: 255
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.datetime "instances_timestamp"
   end
 
   create_table "discovery_service_events", force: :cascade do |t|

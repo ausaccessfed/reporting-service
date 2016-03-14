@@ -19,22 +19,21 @@ class CreateAutomatedReportInstances
   def report_instances
     AutomatedReportInstance.transaction do
       select_reports.flat_map do |report|
-        next if instance_exists?(report, range_end)
-
-        perform_create(report, range_end)
+        perform_create(report)
       end
     end
   end
 
-  def perform_create(report, finish)
-    AutomatedReportInstance
-      .create!(identifier: SecureRandom.urlsafe_base64,
-               automated_report: report, range_end: finish)
-  end
+  def perform_create(report)
+    return if report.instances_timestamp == range_end
 
-  def instance_exists?(report, finish)
-    AutomatedReportInstance.find_by(range_end: finish,
-                                    automated_report: report)
+    AutomatedReport.transaction do
+      report.update!(instances_timestamp: range_end)
+
+      AutomatedReportInstance
+        .create!(identifier: SecureRandom.urlsafe_base64,
+                 automated_report: report, range_end: range_end)
+    end
   end
 
   def select_reports
