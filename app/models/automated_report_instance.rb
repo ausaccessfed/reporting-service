@@ -16,10 +16,10 @@ class AutomatedReportInstance < ActiveRecord::Base
   private
 
   def time_must_be_utc_midnight
-    t = range_start
+    t = range_end
     return if t.nil? || [t.gmt_offset, t.hour, t.min, t.sec].all?(&:zero?)
 
-    errors.add(:range_start, 'must be midnight, UTC')
+    errors.add(:range_end, 'must be midnight, UTC')
   end
 
   def report_range
@@ -29,7 +29,7 @@ class AutomatedReportInstance < ActiveRecord::Base
     n = 3 if interval.quarterly?
     n = 12 if interval.yearly?
 
-    range_end = n.months.since(range_start)
+    range_start = range_end - n.months
     [range_start, range_end]
   end
 

@@ -59,21 +59,37 @@ RSpec.describe CreateAutomatedReportInstances do
 
   subject { CreateAutomatedReportInstances.new }
 
-  context 'include range_start' do
-    it 'for monthly interval should be from last month' do
-      start_m = (january - 1.month).beginning_of_month
-      start_q = (january - 3.months).beginning_of_month
-      start_y = (january - 12.months).beginning_of_month
+  context 'update :instances_timestamp' do
+    it 'should be equal to begging of correct month' do
+      [january, february, march, april, may, june, july, august,
+       september, october, november, december].each do |month|
+        Timecop.travel(month) do
+          subject.perform
 
-      instance_array = [['monthly', start_m],
-                        ['quarterly', start_q],
-                        ['yearly', start_y]]
+          instance = AutomatedReportInstance
+                     .find_by(range_end: month.beginning_of_month)
+
+          timestamp = instance.automated_report.instances_timestamp
+
+          expect(timestamp).to eql(month)
+        end
+      end
+    end
+  end
+
+  context 'include range_end' do
+    it 'for monthly interval should be from last month' do
+      range_end = january.beginning_of_month
+
+      instance_array = [['monthly', range_end],
+                        ['quarterly', range_end],
+                        ['yearly', range_end]]
 
       Timecop.travel(january) do
         subject.perform
 
         instances = AutomatedReportInstance.all.map do |i|
-          [i.automated_report.interval, i.range_start]
+          [i.automated_report.interval, i.range_end]
         end
 
         expect(instances)

@@ -19,24 +19,17 @@ class CreateAutomatedReportInstances
   def report_instances
     AutomatedReportInstance.transaction do
       select_reports.flat_map do |report|
-        start = range_start(report.interval)
-
-        next if instance_exists?(report, start)
-
-        perform_create(report, start)
+        perform_create(report)
       end
     end
   end
 
-  def perform_create(report, start)
+  def perform_create(report)
+    report.update!(instances_timestamp: range_end)
+
     AutomatedReportInstance
       .create!(identifier: SecureRandom.urlsafe_base64,
-               automated_report: report, range_start: start)
-  end
-
-  def instance_exists?(report, start)
-    AutomatedReportInstance.find_by(range_start: start,
-                                    automated_report: report)
+               automated_report: report, range_end: range_end)
   end
 
   def select_reports
@@ -44,10 +37,14 @@ class CreateAutomatedReportInstances
   end
 
   def reports_with_intervals
-    AutomatedReport
-      .preload(:automated_report_subscriptions)
-      .select { |r| !r.automated_report_subscriptions.blank? }
-      .group_by(&:interval)
+    reports = AutomatedReport.preload(:automated_report_subscriptions)
+
+    reports = reports.select do |r|
+      (r.instances_timestamp.blank? || r.instances_timestamp < range_end) &&
+        !r.automated_report_subscriptions.blank?
+    end
+
+    reports.group_by(&:interval)
   end
 
   def monthly
@@ -55,23 +52,19 @@ class CreateAutomatedReportInstances
   end
 
   def quarterly
-    return unless [1, 4, 7, 10].include?(time.month)
+    return unless [1, 4, 7, 10].include?(range_end.month)
 
     reports_with_intervals['quarterly']
   end
 
   def yearly
-    return unless time.month == 1
+    return unless range_end.month == 1
 
     reports_with_intervals['yearly']
   end
 
-  def time
-    Time.zone.now
-  end
-
-  def range_start(interval)
-    time.beginning_of_month - INTERVALS[interval].months
+  def range_end
+    Time.zone.now.beginning_of_month
   end
 
   INTERVALS = { 'monthly' => 1, 'quarterly' => 3, 'yearly' => 12 }.freeze
