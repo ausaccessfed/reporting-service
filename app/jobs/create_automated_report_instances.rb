@@ -25,13 +25,11 @@ class CreateAutomatedReportInstances
   end
 
   def perform_create(report)
-    AutomatedReport.transaction do
-      report.update!(instances_timestamp: range_end)
+    report.update!(instances_timestamp: range_end)
 
-      AutomatedReportInstance
-        .create!(identifier: SecureRandom.urlsafe_base64,
-                 automated_report: report, range_end: range_end)
-    end
+    AutomatedReportInstance
+      .create!(identifier: SecureRandom.urlsafe_base64,
+               automated_report: report, range_end: range_end)
   end
 
   def select_reports
