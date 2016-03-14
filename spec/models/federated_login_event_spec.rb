@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe FederatedLoginEvent, type: :model do
-  around { |spec| Timecop.freeze { spec.run } }
-
   describe 'validations' do
     let(:ticket_string) do
       'F-TICKS/AAF/1.0'\
