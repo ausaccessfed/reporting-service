@@ -21,7 +21,7 @@ class FederatedLoginEvent < ActiveRecord::Base
       asserting_party: entries['AP'],
       result: entries['RESULT'],
       hashed_principal_name: entries['PN'],
-      timestamp: Time.current
+      timestamp: Time.zone.at(entries['TS'].to_i)
     }
   end
 end
