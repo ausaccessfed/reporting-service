@@ -105,7 +105,7 @@ ActiveRecord::Schema.define(version: 20160314020610) do
     t.datetime "updated_at",                        null: false
   end
 
-  add_index "federated_login_events", ["hashed_principal_name"], name: "index_federated_login_events_on_hashed_principal_name", unique: true, using: :btree
+  add_index "federated_login_events", ["hashed_principal_name"], name: "index_federated_login_events_on_hashed_principal_name", using: :btree
 
   create_table "identity_provider_saml_attributes", force: :cascade do |t|
     t.integer  "identity_provider_id", limit: 4, null: false

@@ -22,7 +22,7 @@ class FederatedLoginEvent < ActiveRecord::Base
       relying_party: entries['RP'],
       asserting_party: entries['AP'],
       result: entries['RESULT'],
-      hashed_principal_name: SecureRandom.urlsafe_base64,
+      hashed_principal_name: entries['PN'],
       timestamp: Time.current
     }
   end
