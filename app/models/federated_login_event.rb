@@ -3,7 +3,7 @@ class FederatedLoginEvent < ActiveRecord::Base
 
   def generate_record(ticket_string)
     entries = fields(ticket_string)
-    FederatedLoginEvent.create! attributes(entries)
+    update! attributes(entries)
   end
 
   private
