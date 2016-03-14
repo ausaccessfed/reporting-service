@@ -9,12 +9,10 @@ class FederatedLoginEvent < ActiveRecord::Base
   private
 
   def fields(ticket_string)
-    attributes = ticket_string.split('#').map do |s|
+    ticket_string.split('#').each_with_object({}) do |s, hash|
       k, v = s.split('=')
-      { k => v }
+      hash[k] = v
     end
-
-    attributes.reduce(&:merge)
   end
 
   def attributes(entries)
