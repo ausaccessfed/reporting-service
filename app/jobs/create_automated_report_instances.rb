@@ -25,8 +25,6 @@ class CreateAutomatedReportInstances
   end
 
   def perform_create(report)
-    return if report.instances_timestamp == range_end
-
     AutomatedReport.transaction do
       report.update!(instances_timestamp: range_end)
 
@@ -41,10 +39,14 @@ class CreateAutomatedReportInstances
   end
 
   def reports_with_intervals
-    AutomatedReport
-      .preload(:automated_report_subscriptions)
-      .select { |r| !r.automated_report_subscriptions.blank? }
-      .group_by(&:interval)
+    reports = AutomatedReport.preload(:automated_report_subscriptions)
+
+    reports = reports.select do |r|
+      (r.instances_timestamp.blank? || r.instances_timestamp < range_end) &&
+        !r.automated_report_subscriptions.blank?
+    end
+
+    reports.group_by(&:interval)
   end
 
   def monthly
