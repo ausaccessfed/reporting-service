@@ -79,12 +79,12 @@ RSpec.describe FederatedLoginEvent, type: :model do
       it 'when #TS is missing it should fail with message' do
         msg = /Timestamp can't be blank/
 
-        str = ticket.gsub '#TS=1457558279', '#TS=1457ddd'
-        expect { subject.generate_record(str) }
+        str_01 = ticket.gsub '#TS=1457558279', '#TS=1457ddd'
+        expect { subject.generate_record(str_01) }
           .to raise_error(ActiveRecord::RecordInvalid, msg)
 
-        str = ticket.remove '#TS'
-        expect { subject.generate_record(str) }
+        str_02 = ticket.remove '#TS'
+        expect { subject.generate_record(str_02) }
           .to raise_error(ActiveRecord::RecordInvalid, msg)
       end
     end
