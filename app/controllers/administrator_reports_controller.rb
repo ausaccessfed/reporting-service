@@ -1,5 +1,5 @@
 class AdministratorReportsController < ApplicationController
-  before_action { check_access! 'admin:reports' }
+  before_action { check_access! 'admin:report' }
   before_action :set_range_params,
                 except: [:subscriber_registrations_report, :index]
 
@@ -32,6 +32,20 @@ class AdministratorReportsController < ApplicationController
     return if params[:start].blank? || params[:end].blank?
 
     report = FederatedSessionsReport.new(start, finish, scaled_steps)
+    @data = JSON.generate(report.generate)
+  end
+
+  def identity_provider_utilization_report
+    return if params[:start].blank? || params[:end].blank?
+
+    report = IdentityProviderUtilizationReport.new(start, finish)
+    @data = JSON.generate(report.generate)
+  end
+
+  def service_provider_utilization_report
+    return if params[:start].blank? || params[:end].blank?
+
+    report = ServiceProviderUtilizationReport.new(start, finish)
     @data = JSON.generate(report.generate)
   end
 

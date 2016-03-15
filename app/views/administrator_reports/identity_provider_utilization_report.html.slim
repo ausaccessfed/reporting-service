@@ -1,0 +1,15 @@
+= breadcrumbs({ 'Admin Reports' => admin_reports_path },
+                'Identity Provider Utilization Report')
+
+= render(partial: 'shared/flash_message',
+         locals: { flash_header: 'Successfully Subscribed' })
+
+= render(partial: 'shared/subscribe_form',
+         locals: { target: nil,
+                   report_class: 'IdentityProviderUtilizationReport' })
+
+h1 Identity Provider Utilization Report
+
+p Shows the total number of sessions for each identity provider during the given date range
+
+= render(partial: 'form')

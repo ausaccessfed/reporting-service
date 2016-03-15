@@ -1,5 +1,6 @@
-//= require 'aaf-lipstick'
-//= require 'd3'
-//= require 'reporting'
-//= require 'render_report'
+//= require aaf-lipstick.js
+//= require jquery-ujs/rails.js
+//= require d3/d3.js
+//= require reporting.js
+//= require render_report.js
 //= require jq_validations.js

@@ -1,6 +1,11 @@
 = breadcrumbs({ 'Dashboard' => dashboard_path },
-              { 'Public Reports' => dashboard_path },
-              'Federation Growth Report')
+                'Federation Growth Report')
+
+= render(partial: 'shared/flash_message',
+         locals: { flash_header: 'Successfully Subscribed' })
+
+= render(partial: 'shared/subscribe_form',
+         locals: { target: nil, report_class: 'FederationGrowthReport' })
 
 h1 Federation Growth Report
 

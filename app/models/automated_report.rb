@@ -1,4 +1,7 @@
 class AutomatedReport < ActiveRecord::Base
+  has_many :automated_report_instances
+  has_many :automated_report_subscriptions
+
   valhammer
 
   validates :interval, inclusion: { in: %w(monthly quarterly yearly) }
@@ -11,6 +14,21 @@ class AutomatedReport < ActiveRecord::Base
     value && ActiveSupport::StringInquirer.new(value)
   end
 
+  def target_name
+    type = report_class
+
+    return 'Identity Providers' if type == 'IdentityProviderUtilizationReport'
+    return 'Service Providers' if type == 'ServiceProviderUtilizationReport'
+    return 'Federation' if klass.nil?
+    return target.titleize if klass.eql? :object_type
+
+    target_object.name
+  end
+
+  def target_object
+    klass.find_by_identifying_attribute(target)
+  end
+
   private
 
   TARGET_CLASSES = {
@@ -18,6 +36,8 @@ class AutomatedReport < ActiveRecord::Base
     'FederatedSessionsReport' => nil,
     'FederationGrowthReport' => nil,
     'IdentityProviderAttributesReport' => nil,
+    'IdentityProviderUtilizationReport' => nil,
+    'ServiceProviderUtilizationReport' => nil,
     'SubscriberRegistrationsReport' => :object_type,
     'IdentityProviderDailyDemandReport' => IdentityProvider,
     'IdentityProviderDestinationServicesReport' => IdentityProvider,
@@ -32,6 +52,10 @@ class AutomatedReport < ActiveRecord::Base
 
   private_constant :TARGET_CLASSES
 
+  def klass
+    TARGET_CLASSES[report_class]
+  end
+
   def report_class_must_be_known
     return if TARGET_CLASSES.key?(report_class)
     errors.add(:report_class, 'must be of known type')
@@ -39,12 +63,10 @@ class AutomatedReport < ActiveRecord::Base
 
   def target_must_be_valid_for_report_type
     return if report_class.nil?
-
-    klass = TARGET_CLASSES[report_class]
     return target_must_be_nil if klass.nil?
     return target_must_be_object_type_identifier if klass == :object_type
-
     return if klass.find_by_identifying_attribute(target)
+
     errors.add(:target, 'must be appropriate for the report type')
   end
 

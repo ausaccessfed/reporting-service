@@ -1,5 +1,5 @@
 class ServiceProviderSourceIdentityProvidersReport < TabularReport
-  prepend TimeSeriesSharedMethods
+  prepend ReportsSharedMethods
 
   report_type 'service-provider-source-identity-providers'
   header ['IdP Name', 'Total']
@@ -17,8 +17,6 @@ class ServiceProviderSourceIdentityProvidersReport < TabularReport
   private
 
   def rows
-    sp_sessions.preload(:identity_provider)
-               .group_by(&:identity_provider)
-               .map { |idp, val| [idp.name, val.count.to_s] }
+    tabular_sessions(:identity_provider, sp_sessions)
   end
 end

@@ -49,10 +49,12 @@ ActiveRecord::Base.transaction do
   [*idps, *sps, *rapid_services, *orgs].each do |object|
     next if rand > 0.9
 
-    create(:activation, :deactivated, :old, federation_object: object)
-    next if rand > 0.7
-
-    create(:activation, federation_object: object)
+    old_activation = create(:activation,
+                            :deactivated,
+                            federation_object: object)
+    create(:activation,
+           federation_object: object,
+           activated_at: rand(old_activation.deactivated_at..Time.now.utc))
   end
 
   core_attributes = create_list(:saml_attribute, 20, :core_attribute)

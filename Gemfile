@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-
 gem 'rails', '4.2.3'
 gem 'mysql2'
 gem 'sass-rails', '~> 5.0'
@@ -20,18 +19,11 @@ gem 'aws-sdk'
 gem 'json-jwt'
 
 gem 'aaf-lipstick', git: 'https://github.com/ausaccessfed/aaf-lipstick',
-                    branch: 'private/lipstick-2.0-pre'
+                    branch: 'develop'
+gem 'torba'
 
 gem 'unicorn', require: false
 gem 'god', require: false
-
-source 'https://rails-assets.org' do
-  gem 'rails-assets-bootstrap', '~> 3.3'
-  gem 'rails-assets-jquery', '~> 1.11'
-  gem 'rails-assets-jquery-validate'
-  gem 'rails-assets-pickadate', '3.5.6'
-  gem 'rails-assets-d3', '~> 3.5'
-end
 
 group :development, :test do
   gem 'rspec-rails'

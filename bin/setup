@@ -5,6 +5,7 @@ Dir.chdir File.expand_path('..', File.dirname(__FILE__))
 puts '== Installing dependencies =='
 system 'gem install bundler --conservative'
 system 'bundle check || bundle install'
+system 'bundle exec torba pack'
 
 require 'bundler/setup'
 require 'gumboot/strap'

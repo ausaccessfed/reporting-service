@@ -12,6 +12,7 @@ reporting.graph.scale = function(report, range, sizing) {
 
   var domain = d3.extent(yExtents);
   if (domain[0] > 0) domain[0] = 0;
+  if (domain[domain.length - 1] == 0) domain[1] = 1;
 
   var y = d3.scale.linear()
     .range([0, sizing.graph.height])

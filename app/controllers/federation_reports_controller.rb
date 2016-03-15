@@ -1,7 +1,7 @@
 class FederationReportsController < ApplicationController
   before_action :set_range
 
-  def federation_growth
+  def federation_growth_report
     public_action
 
     @data = Rails.cache.fetch('public/federation-growth') do
@@ -10,7 +10,7 @@ class FederationReportsController < ApplicationController
     end
   end
 
-  def federated_sessions
+  def federated_sessions_report
     public_action
 
     @data = Rails.cache.fetch('public/federated-sessions') do
@@ -19,7 +19,7 @@ class FederationReportsController < ApplicationController
     end
   end
 
-  def daily_demand
+  def daily_demand_report
     public_action
 
     @data = Rails.cache.fetch('public/daily-demand') do

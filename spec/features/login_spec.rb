@@ -23,11 +23,11 @@ RSpec.feature 'Login Process' do
   end
 
   scenario 'viewing a protected path directly' do
-    visit '/federation_reports/federation_growth'
+    visit '/federation_reports/federation_growth_report'
 
     expect(current_path).to eq('/auth/login')
     click_button 'Login'
 
-    expect(current_path).to eq('/federation_reports/federation_growth')
+    expect(current_path).to eq('/federation_reports/federation_growth_report')
   end
 end

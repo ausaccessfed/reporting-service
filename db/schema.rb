@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160212001619) do
+ActiveRecord::Schema.define(version: 20160311045352) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -45,13 +45,16 @@ ActiveRecord::Schema.define(version: 20160212001619) do
   add_index "api_subjects", ["x509_cn"], name: "index_api_subjects_on_x509_cn", unique: true, using: :btree
 
   create_table "automated_report_instances", force: :cascade do |t|
-    t.integer  "automated_report_id", limit: 4, null: false
-    t.datetime "range_start",                   null: false
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.integer  "automated_report_id", limit: 4,   null: false
+    t.datetime "range_end",                       null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "identifier",          limit: 255, null: false
   end
 
   add_index "automated_report_instances", ["automated_report_id"], name: "fk_rails_40d5ad7e3d", using: :btree
+  add_index "automated_report_instances", ["identifier"], name: "index_automated_report_instances_on_identifier", unique: true, using: :btree
+  add_index "automated_report_instances", ["range_end", "automated_report_id"], name: "automated_report_instances_start_report", unique: true, using: :btree
 
   create_table "automated_report_subscriptions", force: :cascade do |t|
     t.integer  "automated_report_id", limit: 4,   null: false
@@ -66,11 +69,12 @@ ActiveRecord::Schema.define(version: 20160212001619) do
   add_index "automated_report_subscriptions", ["subject_id"], name: "fk_rails_59e1f019b3", using: :btree
 
   create_table "automated_reports", force: :cascade do |t|
-    t.string   "report_class", limit: 255, null: false
-    t.string   "interval",     limit: 255, null: false
-    t.string   "target",       limit: 255
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.string   "report_class",        limit: 255, null: false
+    t.string   "interval",            limit: 255, null: false
+    t.string   "target",              limit: 255
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.datetime "instances_timestamp"
   end
 
   create_table "discovery_service_events", force: :cascade do |t|

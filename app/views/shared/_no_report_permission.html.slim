@@ -1,7 +1,12 @@
 .alert.alert-danger role="alert"
   p
-    | Sorry, your organization did not allow you to generate reports for any &nbsp;
-    = entity_type
+    ' Sorry, it seems there are no
+    => "#{entity_type}s"
+    ' available! or your organization did not allow you to generate reports for any
+    = "#{entity_type}s"
+
+  hr.thin
+
   p
     | Please contact your organization to solve this issue
   p

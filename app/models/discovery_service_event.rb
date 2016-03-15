@@ -14,5 +14,5 @@ class DiscoveryServiceEvent < ActiveRecord::Base
       .and(arel_table[:timestamp].lteq(finish)))
   }
 
-  scope :sessions, -> { where(arel_table[:phase].eq('response')) }
+  scope :sessions, -> { where(phase: 'response') }
 end

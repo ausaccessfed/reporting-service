@@ -5,9 +5,11 @@ require 'active_model/railtie'
 # require "active_job/railtie"
 require 'active_record/railtie'
 require 'action_controller/railtie'
-# require "action_mailer/railtie"
+# require 'action_mailer/railtie'
 require 'action_view/railtie'
 require 'sprockets/railtie'
+
+require 'torba/rails'
 
 Bundler.require(*Rails.groups)
 
@@ -32,3 +34,5 @@ module ReportingService
                          { expire_in: 1.day }
   end
 end
+
+Rails.application.assets.register_engine('.aafimg', Lipstick::Images::Processor)

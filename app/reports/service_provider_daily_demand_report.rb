@@ -1,10 +1,10 @@
 class ServiceProviderDailyDemandReport < TimeSeriesReport
-  prepend TimeSeriesSharedMethods
+  prepend ReportsSharedMethods
 
   report_type 'service-provider-daily-demand'
-  y_label ''
+  y_label 'Sessions / hour (average)'
   units ''
-  series sessions: 'demand'
+  series sessions: 'Sessions'
 
   def initialize(entity_id, start, finish)
     @service_provider = ServiceProvider.find_by(entity_id: entity_id)

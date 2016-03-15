@@ -1,11 +1,18 @@
 = breadcrumbs({ 'Subscriber Reports' => subscriber_reports_path },
-              { 'Service Provider Reports' => subscriber_reports_path },
                 'Source Identity Provider Report')
+
+= render(partial: 'shared/flash_message',
+       locals: { flash_header: 'Successfully Subscribed' })
+
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: @entity_id,
+                     report_class: 'ServiceProviderSourceIdentityProvidersReport' })
 
 h1 Service Provider Destination Services Report
 
-markdown:
-  Shows the source SPs requested a service within a time range, in number of Requests
+p Graphs the number of sessions for a Service which were
+  authenticated via each Identity Provider
 
 = render(partial: 'form')
 

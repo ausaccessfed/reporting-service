@@ -1,10 +1,18 @@
 = breadcrumbs({ 'Subscriber Reports' => subscriber_reports_path },
-              { 'Service Provider Reports' => subscriber_reports_path },
                 'Daily Demand Report')
+
+= render(partial: 'shared/flash_message',
+       locals: { flash_header: 'Successfully Subscribed' })
+
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: @entity_id,
+                     report_class: 'ServiceProviderDailyDemandReport' })
 
 h1 Service Provider Daily Demand  Report
 
-markdown:
-  Shows the daily demand of an IdP within a time range, in number of Sessions
+p Graphs the daily trend of sessions initiated with a Service Provider via
+  AAF's central Discovery Service, highlighting which time of day services
+  are most requested
 
 = render(partial: 'form')

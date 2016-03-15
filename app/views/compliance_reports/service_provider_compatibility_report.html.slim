@@ -1,21 +1,27 @@
 = breadcrumbs({ 'Dashboard' => dashboard_path },
-              { 'Compliance Reports' => dashboard_path },
                 'Service Compatibility Report')
+
+
+= render(partial: 'shared/flash_message',
+       locals: { flash_header: 'Successfully Subscribed' })
+
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: @entity_id,
+                     report_class: 'ServiceCompatibilityReport' })
 
 h1 Service Compatibility Report
 
-markdown:
-  An Identity Provider is considered compatible with a Service Provider if
-  it supports all attributes which the Service Provider has indicated are
-  **required**.
+p Highlights Identity Providers' ability to meet the attribute
+  requirements of a federated service
 
 = form_tag({}, id: 'report-form') do
   = field_block do
     = label_tag(:entity_id) do
-      | Service Provider
+      | Service Providers
 
     - options = @objects_list.map { |sp| [sp.name, sp.entity_id] }.sort_by { |a| a[0].downcase }
-    - options.unshift(['(Please select a Service Provider...)', ''])
+    - options.unshift(['Please select', ''])
 
     = select_tag(:entity_id, options_for_select(options, @entity_id))
 
@@ -24,7 +30,7 @@ markdown:
     | Generate
 
 = validate_form('#report-form', nil) do |v|
-  - v.validate_field(:entity_id, required: { message: 'Please select a Service Provider' })
+  - v.validate_field(:entity_id, required: { message: 'This field is required' })
 
 - if @data
   = render(partial: 'shared/report_output', locals: { data: @data })

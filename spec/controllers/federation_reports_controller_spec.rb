@@ -45,7 +45,7 @@ RSpec.describe FederationReportsController, type: :controller do
 
   context 'get :federation_growth' do
     let(:report_class) { FederationGrowthReport }
-    let(:route_value) { 'federation_growth' }
+    let(:route_value) { 'federation_growth_report' }
     let(:cach_template) { 'federation-growth' }
 
     it_behaves_like 'a federation report controller'
@@ -53,7 +53,7 @@ RSpec.describe FederationReportsController, type: :controller do
 
   context 'get :federated_sessions' do
     let(:report_class) { FederatedSessionsReport }
-    let(:route_value) { 'federated_sessions' }
+    let(:route_value) { 'federated_sessions_report' }
     let(:cach_template) { 'federated-sessions' }
 
     it_behaves_like 'a federation report controller'
@@ -61,7 +61,7 @@ RSpec.describe FederationReportsController, type: :controller do
 
   context 'get :daily_demand' do
     let(:report_class) { DailyDemandReport }
-    let(:route_value) { 'daily_demand' }
+    let(:route_value) { 'daily_demand_report' }
     let(:cach_template) { 'daily-demand' }
 
     it_behaves_like 'a federation report controller'

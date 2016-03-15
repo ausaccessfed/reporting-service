@@ -7,20 +7,23 @@ Rails.application.routes.draw do
   root to: 'welcome#index'
 
   scope '/federation_reports' do
-    get 'federation_growth' => 'federation_reports#federation_growth',
+    get 'federation_growth_report' =>
+        'federation_reports#federation_growth_report',
         as: :public_federation_growth_report
 
-    get 'federated_sessions' => 'federation_reports#federated_sessions',
+    get 'federated_sessions_report' =>
+        'federation_reports#federated_sessions_report',
         as: :public_federated_sessions_report
 
-    get 'daily_demand' => 'federation_reports#daily_demand',
+    get 'daily_demand_report' =>
+        'federation_reports#daily_demand_report',
         as: :public_daily_demand_report
   end
 
   scope '/compliance_reports' do
-    def match_report(prefix, name, verbs)
-      match "/#{prefix}/#{name}", to: "compliance_reports##{prefix}_#{name}",
-                                  via: verbs, as: :"#{prefix}_#{name}"
+    def match_report(prefix, name, http_verbs)
+      match "/#{prefix}_#{name}", to: "compliance_reports##{prefix}_#{name}",
+                                  via: http_verbs, as: :"#{prefix}_#{name}"
     end
 
     match_report('service_provider', 'compatibility_report', [:get, :post])
@@ -29,12 +32,29 @@ Rails.application.routes.draw do
     match_report('attribute', 'service_providers_report', [:get, :post])
   end
 
+  get '/admin_reports' => 'administrator_reports#index',
+      as: :admin_reports
+
+  scope '/admin_reports' do
+    def match_report(name, http_verbs)
+      match "/#{name}", to: "administrator_reports##{name}",
+                        via: http_verbs, as: :"admin_#{name}"
+    end
+
+    match_report('subscriber_registrations_report', [:get, :post])
+    match_report('federation_growth_report', [:get, :post])
+    match_report('daily_demand_report', [:get, :post])
+    match_report('federated_sessions_report', [:get, :post])
+    match_report('identity_provider_utilization_report', [:get, :post])
+    match_report('service_provider_utilization_report', [:get, :post])
+  end
+
   get '/subscriber_reports' => 'subscriber_reports_dashboard#index',
-      as: 'subscriber_reports'
+      as: :subscriber_reports
 
   scope '/subscriber_reports' do
     def match_report(prefix, name, http_verbs)
-      match "/#{prefix}/#{name}",
+      match "/#{prefix}_#{name}",
             to: "#{prefix}_reports##{name}",
             via: http_verbs, as: :"#{prefix}_#{name}"
     end
@@ -50,19 +70,13 @@ Rails.application.routes.draw do
                  'source_identity_providers_report', [:get, :post])
   end
 
-  get '/admin/reports' => 'administrator_reports#index',
-      as: :admin_reports
+  get 'automated_report/:identifier',
+      to: 'automated_report_instances#show', as: :automated_report
 
-  scope '/admin' do
-    def match_report(prefix, name, verbs)
-      match "/#{prefix}/#{name}", to: "administrator_reports##{name}",
-                                  via: verbs, as: :"admin_#{prefix}_#{name}"
-    end
-
-    match_report('reports', 'subscriber_registrations_report', [:get, :post])
-    match_report('reports', 'federation_growth_report', [:get, :post])
-    match_report('reports', 'daily_demand_report', [:get, :post])
-    match_report('reports', 'federated_sessions_report', [:get, :post])
+  scope '/automated_reports' do
+    get '/' => 'automated_reports#index', as: :automated_reports
+    post '/' => 'automated_reports#subscribe'
+    delete '/:identifier' => 'automated_reports#destroy'
   end
 
   namespace :api, defaults: { format: 'json' } do

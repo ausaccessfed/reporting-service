@@ -1,10 +1,15 @@
 = breadcrumbs({ 'Dashboard' => dashboard_path },
-              { 'Compliance Reports' => dashboard_path },
-              'Identity Provider Attributes Report')
+                'Identity Provider Attributes Report')
+
+= render(partial: 'shared/flash_message',
+         locals: { flash_header: 'Successfully Subscribed' })
+
+= render(partial: 'shared/subscribe_form',
+         locals: { target: nil, report_class: 'IdentityProviderAttributesReport' })
 
 h1 Identity Provider Attributes Report
 
-markdown:
-  Shows number of core and optional attributes that are supported for each Identity Provider.
+p Graphs the number of attributes which are supported by each Identity
+  Provider in the federation
 
 = render(partial: 'shared/report_output', locals: { data: @data })

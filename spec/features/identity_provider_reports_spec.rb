@@ -7,16 +7,7 @@ RSpec.feature 'Identity Provider Reports' do
   given(:idp) { create :identity_provider, organization: organization }
   given(:user) { create :subject }
 
-  given(:not_allowed_message) do
-    'Sorry, your organization did not allow you to generate reports'\
-    ' for any Identity Provider'
-  end
-
-  def show_not_allowed_message
-    expect(page).to have_selector('p', not_allowed_message)
-  end
-
-  describe 'subject has permissions' do
+  describe 'subject with permissions' do
     background do
       create :activation, federation_object: idp
 
@@ -38,7 +29,7 @@ RSpec.feature 'Identity Provider Reports' do
       click_link('Identity Provider Sessions Report')
 
       expect(current_path)
-        .to eq('/subscriber_reports/identity_provider/sessions_report')
+        .to eq('/subscriber_reports/identity_provider_sessions_report')
 
       select idp.name, from: 'Identity Providers'
       fill_in 'start', with: 1.year.ago
@@ -47,7 +38,7 @@ RSpec.feature 'Identity Provider Reports' do
       click_button 'Generate'
 
       expect(current_path)
-        .to eq('/subscriber_reports/identity_provider/sessions_report')
+        .to eq('/subscriber_reports/identity_provider_sessions_report')
       expect(page).to have_css('svg.identity-provider-sessions')
     end
 
@@ -55,7 +46,7 @@ RSpec.feature 'Identity Provider Reports' do
       click_link('Identity Provider Daily Demand Report')
 
       expect(current_path)
-        .to eq('/subscriber_reports/identity_provider/daily_demand_report')
+        .to eq('/subscriber_reports/identity_provider_daily_demand_report')
 
       select idp.name, from: 'Identity Providers'
       fill_in 'start', with: 1.year.ago
@@ -63,7 +54,7 @@ RSpec.feature 'Identity Provider Reports' do
 
       click_button 'Generate'
 
-      expect(current_path).to eq('/subscriber_reports/identity_provider/'\
+      expect(current_path).to eq('/subscriber_reports/identity_provider_'\
                                  'daily_demand_report')
       expect(page).to have_css('svg.identity-provider-daily-demand')
     end
@@ -72,7 +63,7 @@ RSpec.feature 'Identity Provider Reports' do
       click_link('Identity Provider Destination Services Report')
 
       expect(current_path)
-        .to eq('/subscriber_reports/identity_provider/'\
+        .to eq('/subscriber_reports/identity_provider_'\
                'destination_services_report')
 
       select idp.name, from: 'Identity Providers'
@@ -82,12 +73,12 @@ RSpec.feature 'Identity Provider Reports' do
       click_button 'Generate'
 
       expect(current_path)
-        .to eq('/subscriber_reports/identity_provider/'\
+        .to eq('/subscriber_reports/identity_provider_'\
                'destination_services_report')
     end
   end
 
-  describe 'subject has no permissions' do
+  describe 'Subject without permissions' do
     background do
       create :activation, federation_object: idp
 
@@ -102,15 +93,19 @@ RSpec.feature 'Identity Provider Reports' do
       visit '/subscriber_reports'
     end
 
-    scenario 'viewing the IdP Destination Services Report' do
-      visit '/subscriber_reports/identity_provider/sessions_report'
-      show_not_allowed_message
+    scenario 'can not view the IdP Destination Services Report' do
+      message = 'Sorry, it seems there are no identity providers available! '\
+                'or your organization did not allow you to generate '\
+                'reports for any identity providers'
 
-      visit '/subscriber_reports/identity_provider/daily_demand_report'
-      show_not_allowed_message
+      visit '/subscriber_reports/identity_provider_sessions_report'
+      expect(page).to have_selector('p', text: message)
 
-      visit '/subscriber_reports/identity_provider/destination_services_report'
-      show_not_allowed_message
+      visit '/subscriber_reports/identity_provider_daily_demand_report'
+      expect(page).to have_selector('p', text: message)
+
+      visit '/subscriber_reports/identity_provider_destination_services_report'
+      expect(page).to have_selector('p', text: message)
     end
   end
 end

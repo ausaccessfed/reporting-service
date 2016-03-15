@@ -1,4 +1,4 @@
-class SubscriberReportsController < ApplicationController
+class SubscriberReports < ApplicationController
   before_action { permitted_objects(model_object) }
   before_action :requested_entity
   before_action :set_range_params

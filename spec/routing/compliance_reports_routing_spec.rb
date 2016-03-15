@@ -17,51 +17,51 @@ RSpec.describe ComplianceReportsController, type: :routing do
     it { is_expected.to route_to("compliance_reports#{action}") }
   end
 
-  describe 'get on /identity_provider/attributes_report' do
+  describe 'get on /identity_provider_attributes_report' do
     let(:action) { '#identity_provider_attributes_report' }
-    let(:path) { '/identity_provider/attributes_report' }
+    let(:path) { '/identity_provider_attributes_report' }
 
     it_behaves_like 'get request'
   end
 
-  describe 'get on /service_provider/compatibility_report' do
+  describe 'get on /service_provider_compatibility_report' do
     let(:action) { '#service_provider_compatibility_report' }
-    let(:path) { '/service_provider/compatibility_report' }
+    let(:path) { '/service_provider_compatibility_report' }
 
     it_behaves_like 'get request'
   end
 
-  describe 'post on /service_provider/compatibility_report' do
+  describe 'post on /service_provider_compatibility_report' do
     let(:action) { '#service_provider_compatibility_report' }
-    let(:path) { '/service_provider/compatibility_report' }
+    let(:path) { '/service_provider_compatibility_report' }
 
     it_behaves_like 'post request'
   end
 
-  describe 'get on /attribute/identity_providers_report' do
+  describe 'get on /attribute_identity_providers_report' do
     let(:action) { '#attribute_identity_providers_report' }
-    let(:path) { '/attribute/identity_providers_report' }
+    let(:path) { '/attribute_identity_providers_report' }
 
     it_behaves_like 'get request'
   end
 
-  describe 'post on /attribute/identity_providers_report' do
+  describe 'post on /attribute_identity_providers_report' do
     let(:action) { '#attribute_identity_providers_report' }
-    let(:path) { '/attribute/identity_providers_report' }
+    let(:path) { '/attribute_identity_providers_report' }
 
     it_behaves_like 'post request'
   end
 
-  describe 'get on /attribute/service_providers_report' do
+  describe 'get on /attribute_service_providers_report' do
     let(:action) { '#attribute_service_providers_report' }
-    let(:path) { '/attribute/service_providers_report' }
+    let(:path) { '/attribute_service_providers_report' }
 
     it_behaves_like 'get request'
   end
 
-  describe 'post on /attribute/service_providers_report' do
+  describe 'post on /attribute_service_providers_report' do
     let(:action) { '#attribute_service_providers_report' }
-    let(:path) { '/attribute/service_providers_report' }
+    let(:path) { '/attribute_service_providers_report' }
 
     it_behaves_like 'post request'
   end

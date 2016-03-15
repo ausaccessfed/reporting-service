@@ -60,6 +60,11 @@ svg.report-output {
       font-size: 14px;
       font-weight: bold;
     }
+
+    &.axis {
+      font-size: 13px;
+      font-weight: 600;
+    }
   }
 
   .hover-bar {
@@ -135,10 +140,10 @@ table.report-output {
   text-transform: capitalize;
 }
 
-.border-vibrant {
-  border-color: $graph-color-vibrant;
-}
-
 .border-primary {
   border-color: $graph-color-primary;
+}
+
+.border-vibrant {
+  border-color: $graph-color-vibrant;
 }

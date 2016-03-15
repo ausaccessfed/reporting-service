@@ -1,0 +1,16 @@
+- action_url = { action: :subscribe, controller: :automated_reports,
+                 target: target, report_class: report_class }
+
+.dropdown
+  button.btn.btn-lg.btn-default { aria-expanded="false" aria-haspopup="true"
+                                  data-toggle="dropdown" type="button" }
+    ' Subscribe
+    span.caret
+
+  ul.dropdown-menu
+    li
+      = link_to 'Monthly', action_url.merge(interval: 'monthly'), method: :post
+    li
+      = link_to 'Quarterly', action_url.merge(interval: 'quarterly'), method: :post
+    li
+      = link_to 'Yearly', action_url.merge(interval: 'yearly'), method: :post
