@@ -27,11 +27,10 @@ html lang='en'
           - if @subject
             = nav_item('Subscriber Reports', subscriber_reports_path)
 
-          - if permitted?('admin:menu')
-            - if permitted?('admin:report')
-              = nav_item('Admin Reports', '/admin_reports')
+            - if permitted?('admin:menu')
+              - if permitted?('admin:report')
+                = nav_item('Admin Reports', '/admin_reports')
 
-          - if @subject
             = nav_item('Subscriptions', automated_reports_path)
 
     section class='content'
