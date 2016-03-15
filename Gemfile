@@ -20,18 +20,10 @@ gem 'json-jwt'
 
 gem 'aaf-lipstick', git: 'https://github.com/ausaccessfed/aaf-lipstick',
                     branch: 'develop'
+gem 'torba'
 
 gem 'unicorn', require: false
 gem 'god', require: false
-
-source 'https://rails-assets.org' do
-  gem 'rails-assets-bootstrap', '~> 3.3'
-  gem 'rails-assets-jquery', '~> 1.11'
-  gem 'rails-assets-jquery-validate'
-  gem 'rails-assets-pickadate', '3.5.6'
-  gem 'rails-assets-d3', '~> 3.5'
-  gem 'rails-assets-rails--jquery-ujs'
-end
 
 group :development, :test do
   gem 'rspec-rails'
