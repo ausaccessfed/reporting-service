@@ -95,6 +95,18 @@ ActiveRecord::Schema.define(version: 20160314235901) do
   add_index "discovery_service_events", ["phase", "unique_id"], name: "index_discovery_service_events_on_phase_and_unique_id", unique: true, using: :btree
   add_index "discovery_service_events", ["timestamp"], name: "index_discovery_service_events_on_timestamp", using: :btree
 
+  create_table "federated_login_events", force: :cascade do |t|
+    t.string   "relying_party",         limit: 255, null: false
+    t.string   "asserting_party",       limit: 255, null: false
+    t.string   "result",                limit: 255, null: false
+    t.string   "hashed_principal_name", limit: 255, null: false
+    t.datetime "timestamp",                         null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "federated_login_events", ["hashed_principal_name"], name: "index_federated_login_events_on_hashed_principal_name", using: :btree
+
   create_table "identity_provider_saml_attributes", force: :cascade do |t|
     t.integer  "identity_provider_id", limit: 4, null: false
     t.integer  "saml_attribute_id",    limit: 4, null: false
