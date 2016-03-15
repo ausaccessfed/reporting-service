@@ -1,21 +1,21 @@
 class FederatedLoginEvent < ActiveRecord::Base
   valhammer
 
-  def generate_record(ticket_string)
-    entries = fields(ticket_string)
-    update! attributes(entries)
+  def generate_record(ticket)
+    entries = fields(ticket)
+    update! login_event_hash(entries)
   end
 
   private
 
-  def fields(ticket_string)
-    ticket_string.split('#').each_with_object({}) do |s, hash|
+  def fields(str)
+    str.split('#').each_with_object({}) do |s, hash|
       k, v = s.split('=')
       hash[k] = v
     end
   end
 
-  def attributes(entries)
+  def login_event_hash(entries)
     {
       relying_party: entries['RP'],
       asserting_party: entries['AP'],
