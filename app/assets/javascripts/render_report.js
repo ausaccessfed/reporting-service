@@ -131,7 +131,7 @@ jQuery(function($) {
     table.enter()
       .append('table')
       .attr('id', function(id) { return id; })
-      .attr('class', report.type + ' report-output');
+      .attr('class', report.type + ' report-output table table-hover');
 
     var appendRow = function(parent, row, tag) {
       var tr = parent.append('tr');
