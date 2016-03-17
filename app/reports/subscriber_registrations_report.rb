@@ -16,9 +16,9 @@ class SubscriberRegistrationsReport < TabularReport
     objects = select_activated_subscribers.sort_by { |o| o.name.downcase }
 
     objects.map do |o|
-      rego_date = o.activations.map(&:activated_at).min
+      registration_date = o.activations.map(&:activated_at).min
 
-      [o.name, rego_date.to_s]
+      [o.name, registration_date.to_s]
     end
   end
 
