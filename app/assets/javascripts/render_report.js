@@ -140,8 +140,6 @@ jQuery(function($) {
       });
     };
 
-    var hasDate;
-    var dateColumn;
     var prettyDateFormat = d3.time.format('%d/%m/%Y');
 
     var thead = table.append('thead');
@@ -149,22 +147,12 @@ jQuery(function($) {
     var tfoot = table.append('tfoot');
 
     report.header.forEach(function(row) {
-      dateColumn = 0;
-      hasDate = false;
-      row.forEach(function(str) {
-        if(str.indexOf('Date') !== -1){
-          hasDate = true;
-          dateColumn++;
-        }
-      });
-
       appendRow(thead, row, 'th');
     });
 
     report.rows.forEach(function(row) {
-      if(hasDate == true){
-        row[dateColumn] =
-          prettyDateFormat(new Date (row[dateColumn]));
+      if(report.type === 'subscriber-registrations'){
+        row[1] = prettyDateFormat(new Date (row[1]));
       }
 
       appendRow(tbody, row, 'td');
