@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   after_action :ensure_access_checked
 
   def subject
-    subject = session[:subject_id] && Subject.find_by_id(session[:subject_id])
+    subject = session[:subject_id] && Subject.find_by(id: session[:subject_id])
     return nil unless subject.try(:functioning?)
     @subject = subject
   end
@@ -23,19 +23,19 @@ class ApplicationController < ActionController::Base
     return force_authentication unless session[:subject_id]
 
     @subject = Subject.find_by(id: session[:subject_id])
-    fail(Unauthorized, 'Subject invalid') unless @subject
-    fail(Unauthorized, 'Subject not functional') unless @subject.functioning?
+    raise(Unauthorized, 'Subject invalid') unless @subject
+    raise(Unauthorized, 'Subject not functional') unless @subject.functioning?
   end
 
   def ensure_access_checked
     return if @access_checked
 
     method = "#{self.class.name}##{params[:action]}"
-    fail("No access control performed by #{method}")
+    raise("No access control performed by #{method}")
   end
 
   def check_access!(action)
-    fail(Forbidden) unless subject.permits?(action)
+    raise(Forbidden) unless subject.permits?(action)
     @access_checked = true
   end
 
@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
   end
 
   def force_authentication
-    session[:request_url] = request.url if request.get?
+    session[:return_url] = request.url if request.get?
 
     redirect_to('/auth/login')
   end
