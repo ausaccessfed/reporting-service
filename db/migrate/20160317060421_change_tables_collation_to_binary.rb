@@ -1,12 +1,15 @@
 class ChangeTablesCollationToBinary < ActiveRecord::Migration
   TABLES = %w(activations api_subject_roles api_subjects
-              automated_report_instances automated_report_subscriptions
-              automated_reports discovery_service_events
-              federated_login_events identity_provider_saml_attributes
-              identity_providers incoming_f_ticks_events
-              organizations rapid_connect_services roles saml_attributes
+              automated_report_instances
+              automated_report_subscriptions automated_reports
+              discovery_service_events federated_login_events
+              identity_provider_saml_attributes identity_providers
+              incoming_f_ticks_events organizations
+              permissions rapid_connect_services roles
+              saml_attributes schema_migrations
               service_provider_saml_attributes service_providers
-              subject_roles subjects).freeze
+              subject_roles subjects
+              ).freeze
 
   def change
     TABLES.each do |table|
