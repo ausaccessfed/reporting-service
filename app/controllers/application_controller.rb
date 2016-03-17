@@ -23,19 +23,19 @@ class ApplicationController < ActionController::Base
     return force_authentication unless session[:subject_id]
 
     @subject = Subject.find_by(id: session[:subject_id])
-    raise(Unauthorized, 'Subject invalid') unless @subject
-    raise(Unauthorized, 'Subject not functional') unless @subject.functioning?
+    fail(Unauthorized, 'Subject invalid') unless @subject
+    fail(Unauthorized, 'Subject not functional') unless @subject.functioning?
   end
 
   def ensure_access_checked
     return if @access_checked
 
     method = "#{self.class.name}##{params[:action]}"
-    raise("No access control performed by #{method}")
+    fail("No access control performed by #{method}")
   end
 
   def check_access!(action)
-    raise(Forbidden) unless subject.permits?(action)
+    fail(Forbidden) unless subject.permits?(action)
     @access_checked = true
   end
 
