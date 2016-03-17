@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160314235901) do
+ActiveRecord::Schema.define(version: 20160317054325) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
