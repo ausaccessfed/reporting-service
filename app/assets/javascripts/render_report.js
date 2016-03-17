@@ -140,15 +140,33 @@ jQuery(function($) {
       });
     };
 
+    var hasDate;
+    var dateColumn;
+    var prettyDateFormat = d3.time.format('%-d %b %Y');
+
     var thead = table.append('thead');
     var tbody = table.append('tbody');
     var tfoot = table.append('tfoot');
 
     report.header.forEach(function(row) {
+      dateColumn = 0;
+      hasDate = false;
+      row.forEach(function(str) {
+        if(str.indexOf('Date') !== -1){
+          hasDate = true;
+          dateColumn++;
+        }
+      });
+
       appendRow(thead, row, 'th');
     });
 
     report.rows.forEach(function(row) {
+      if(hasDate == true){
+        row[dateColumn] =
+          prettyDateFormat(new Date (row[dateColumn]));
+      }
+
       appendRow(tbody, row, 'td');
     });
 
