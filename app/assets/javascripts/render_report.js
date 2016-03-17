@@ -142,7 +142,7 @@ jQuery(function($) {
 
     var hasDate;
     var dateColumn;
-    var prettyDateFormat = d3.time.format('%-d %b %Y');
+    var prettyDateFormat = d3.time.format('%d/%m/%Y');
 
     var thead = table.append('thead');
     var tbody = table.append('tbody');
