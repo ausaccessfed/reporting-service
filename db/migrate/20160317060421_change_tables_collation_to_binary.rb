@@ -6,9 +6,8 @@ class ChangeTablesCollationToBinary < ActiveRecord::Migration
               identity_provider_saml_attributes identity_providers
               incoming_f_ticks_events organizations
               permissions rapid_connect_services roles
-              saml_attributes schema_migrations
-              service_provider_saml_attributes service_providers
-              subject_roles subjects
+              saml_attributes service_provider_saml_attributes
+              service_providers subject_roles subjects
               ).freeze
 
   def change

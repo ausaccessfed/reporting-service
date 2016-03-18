@@ -4,7 +4,7 @@ default: &default
   collation: utf8_bin
   username: reporting_app
   password: password
-  host: 127.0.0.1
+  host: localhost
   pool: 5
   timeout: 5000
 
