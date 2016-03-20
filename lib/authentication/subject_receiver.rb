@@ -22,8 +22,8 @@ module Authentication
     end
 
     def finish(env)
-      url = env['rack.session']['request_url'].to_s
-      env['rack.session'].delete('request_url')
+      url = env['rack.session']['return_url'].to_s
+      env['rack.session'].delete('return_url')
 
       return redirect_to(url) unless url.blank?
       super
