@@ -1,33 +1,36 @@
 require 'rails_helper'
 
 RSpec.describe ProcessIncomingFTicksEvents do
-  let!(:incoming_f_tick_event) { create :incoming_f_ticks_event }
-
-  let!(:invalid_incoming_f_tick_event) do
-    create :incoming_f_ticks_event, data: 'bad value'
-  end
-
   subject { ProcessIncomingFTicksEvents.new }
 
   def run
     subject.perform
   end
 
+  before do
+    create_list :incoming_f_ticks_event, 10
+    create_list :incoming_f_ticks_event, 10, data: 'invalid data'
+  end
+
   context 'Process IncomingFTicksEvents' do
     it 'should create an instance of FederatedLoginEvent'\
        'and delete IncomingFTicksEvent' do
-      expect { run }.to change(FederatedLoginEvent, :count).by(1)
-        .and change(IncomingFTicksEvent, :count).by(-1)
+      expect { run }.to change(FederatedLoginEvent, :count).by(10)
+        .and change(IncomingFTicksEvent, :count).by(-10)
     end
 
-    it 'should set discarded value to true if data is invalid' do
+    it 'should set :discarded to true and keep the record if data is invalid' do
       run
+      invalid_events = IncomingFTicksEvent
+                       .where(data: 'invalid data', discarded: true)
 
-      expect(IncomingFTicksEvent.all).not_to include(incoming_f_tick_event)
-      expect(IncomingFTicksEvent.all).to include(invalid_incoming_f_tick_event)
+      expect(IncomingFTicksEvent.all).to match_array(invalid_events)
+    end
 
-      invalid_incoming = IncomingFTicksEvent.find(invalid_incoming_f_tick_event)
-      expect(invalid_incoming.discarded).to eq true
+    it 'should not find any' do
+      run
+      events = IncomingFTicksEvent.where(discarded: nil)
+      expect(events.count).to eq(0)
     end
   end
 end
