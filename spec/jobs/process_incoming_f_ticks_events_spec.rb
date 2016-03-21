@@ -21,6 +21,13 @@ RSpec.describe ProcessIncomingFTicksEvents do
     end
 
     it 'should set discarded value to true if data is invalid' do
+      run
+
+      expect(IncomingFTicksEvent.all).not_to include(incoming_f_tick_event)
+      expect(IncomingFTicksEvent.all).to include(invalid_incoming_f_tick_event)
+
+      invalid_incoming = IncomingFTicksEvent.find(invalid_incoming_f_tick_event)
+      expect(invalid_incoming.discarded).to eq true
     end
   end
 end
