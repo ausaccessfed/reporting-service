@@ -1,6 +1,6 @@
 class ProcessIncomingFTicksEvents
   def perform
-    incoming_events.find_in_batches(batch_size: 100) do |event_group|
+    incoming_events.find_in_batches(batch_size: 1000) do |event_group|
       create_instances(event_group)
     end
   end
