@@ -3,6 +3,7 @@ class FederatedLoginEvent < ActiveRecord::Base
 
   def create_instance(data)
     data = fields(data)
+    return unless login_event_hash(data)
     update! login_event_hash(data)
   end
 
@@ -19,10 +20,12 @@ class FederatedLoginEvent < ActiveRecord::Base
     timestamp = nil
     timestamp = Time.zone.at(data['TS'].to_i) if data['TS'] =~ /^\d+$/
 
-    { relying_party: data['RP'],
-      asserting_party: data['AP'],
-      result: data['RESULT'],
-      hashed_principal_name: data['PN'],
-      timestamp: timestamp }
+    attrs = { relying_party: data['RP'],
+              asserting_party: data['AP'],
+              result: data['RESULT'],
+              hashed_principal_name: data['PN'],
+              timestamp: timestamp }
+
+    return attrs unless attrs.values.include? nil
   end
 end

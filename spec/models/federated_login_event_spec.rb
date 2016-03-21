@@ -24,68 +24,50 @@ RSpec.describe FederatedLoginEvent, type: :model do
     context 'fields' do
       before { subject.create_instance(data) }
 
-      let(:record) { FederatedLoginEvent.first }
+      let(:event) { FederatedLoginEvent.first }
 
       it 'should find :relying_party in :data_string' do
-        expect(record.relying_party)
+        expect(event.relying_party)
           .to eq('https://sp.example.edu/shibboleth')
       end
 
       it 'should find :asserting_party in :data_string' do
-        expect(record.asserting_party)
+        expect(event.asserting_party)
           .to eq('https://idp.example.edu/idp/shibboleth')
       end
 
       it 'should find :hashed_principal_name in :data_string' do
         pn = '72d2cce1bcda092e028ebf2a37a6001dcd6b444181fa2981100d12589b061942'
-        expect(record.hashed_principal_name).to eq(pn)
+        expect(event.hashed_principal_name).to eq(pn)
       end
 
       it 'should find and convert :timestamp in :data_string' do
         ts = 'Wed, 09 Mar 2016 21:17:59 UTC +00:00'
-        expect(record.timestamp).to eq(ts)
+        expect(event.timestamp).to eq(ts)
       end
 
       it 'should find :result in :data_string' do
-        expect(record.result).to eq('OK')
+        expect(event.result).to eq('OK')
       end
     end
 
     context ':create_instance' do
-      it 'when #RP is missing it should fail with message' do
-        str = data.remove '#RP'
-        msg = /Relying party can't be blank/
-
-        expect { subject.create_instance(str) }
-          .to raise_error(ActiveRecord::RecordInvalid, msg)
+      def run(str)
+        subject.create_instance(str)
       end
 
-      it 'when #AP is missing it should fail with message' do
-        str = data.remove '#AP'
-        msg = /Asserting party can't be blank/
+      %w(#RP #AP #RESULT #TS).each do |field|
+        it 'should return nil when data is invalid' do
+          str = data.remove field
 
-        expect { subject.create_instance(str) }
-          .to raise_error(ActiveRecord::RecordInvalid, msg)
-      end
-
-      it 'when #RESULT is missing it should fail with message' do
-        str = data.remove '#RESULT'
-        msg = /Result can't be blank/
-
-        expect { subject.create_instance(str) }
-          .to raise_error(ActiveRecord::RecordInvalid, msg)
+          expect(run(str)).to eq nil
+        end
       end
 
       it 'when #TS is missing it should fail with message' do
-        msg = /Timestamp can't be blank/
+        str = data.gsub '#TS=1457558279', '#TS=1457ddd'
 
-        str_01 = data.gsub '#TS=1457558279', '#TS=1457ddd'
-        expect { subject.create_instance(str_01) }
-          .to raise_error(ActiveRecord::RecordInvalid, msg)
-
-        str_02 = data.remove '#TS'
-        expect { subject.create_instance(str_02) }
-          .to raise_error(ActiveRecord::RecordInvalid, msg)
+        expect(run(str)).to eq nil
       end
     end
   end
