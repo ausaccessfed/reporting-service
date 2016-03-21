@@ -1,23 +1,16 @@
 class ProcessIncomingFTicksEvents
   def perform
-    incoming_events.find_in_batches(batch_size: 1000) do |event_group|
-      create_instances(event_group)
+    FederatedLoginEvent.transaction do
+      IncomingFTicksEvent.find_each do |event|
+        create_instances(event) unless event.discarded.eql? true
+      end
     end
   end
 
   private
 
-  def create_instances(event_group)
-    FederatedLoginEvent.transaction do
-      event_group.each do |event|
-        subject = FederatedLoginEvent.new
-
-        subject.create_instance(event) || event.update!(discarded: true)
-      end
-    end
-  end
-
-  def incoming_events
-    IncomingFTicksEvent.where.not(discarded: true)
+  def create_instances(event)
+    subject = FederatedLoginEvent.new
+    subject.create_instance(event) || event.update!(discarded: true)
   end
 end

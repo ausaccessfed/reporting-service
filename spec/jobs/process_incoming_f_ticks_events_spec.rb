@@ -29,8 +29,8 @@ RSpec.describe ProcessIncomingFTicksEvents do
 
     it 'should not find any' do
       run
-      events = IncomingFTicksEvent.where(discarded: nil)
-      expect(events.count).to eq(0)
+      events = IncomingFTicksEvent.where(discarded: true)
+      expect(events.count).to eq(10)
     end
   end
 end
