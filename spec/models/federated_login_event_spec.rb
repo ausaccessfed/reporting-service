@@ -11,6 +11,8 @@ RSpec.describe FederatedLoginEvent, type: :model do
       '#RESULT=OK#'
     end
 
+    let!(:incoming_event) { create :incoming_f_ticks_event, data: data }
+
     subject { FederatedLoginEvent.new }
 
     context 'validations' do
@@ -22,7 +24,7 @@ RSpec.describe FederatedLoginEvent, type: :model do
     end
 
     context 'fields' do
-      before { subject.create_instance(data) }
+      before { subject.create_instance(incoming_event) }
 
       let(:event) { FederatedLoginEvent.first }
 
@@ -52,22 +54,22 @@ RSpec.describe FederatedLoginEvent, type: :model do
     end
 
     context ':create_instance' do
-      def run(str)
-        subject.create_instance(str)
+      def run
+        subject.create_instance incoming_event
       end
 
       %w(#RP #AP #RESULT #TS).each do |field|
         it 'should return nil when data is invalid' do
-          str = data.remove field
+          incoming_event.data.remove! field
 
-          expect(run(str)).to eq nil
+          expect(run).to eq nil
         end
       end
 
       it 'when #TS is missing it should fail with message' do
-        str = data.gsub '#TS=1457558279', '#TS=1457ddd'
+        incoming_event.data.gsub! '#TS=1457558279', '#TS=1457ddd'
 
-        expect(run(str)).to eq nil
+        expect(run).to eq nil
       end
     end
   end
