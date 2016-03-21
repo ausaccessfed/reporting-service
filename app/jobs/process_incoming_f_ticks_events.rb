@@ -1,19 +1,18 @@
 class ProcessIncomingFTicksEvents
   def perform
-    generate_instances
+    create_instances
   end
 
   private
 
-  def generate_instances
+  def create_instances
     FederatedLoginEvent.transaction do
-      incoming_f_ticks_events.each do |incoming|
+      incoming_f_ticks_events.each do |event|
         subject = FederatedLoginEvent.new
-        incoming.destroy! if subject.create_instance(incoming.data)
+
+        subject.create_instance(event) || event.update!(discarded: true)
       end
     end
-
-    incoming_f_ticks_events.each { |event| event.update! discarded: true }
   end
 
   def incoming_f_ticks_events

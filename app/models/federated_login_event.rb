@@ -1,10 +1,13 @@
 class FederatedLoginEvent < ActiveRecord::Base
   valhammer
 
-  def create_instance(data)
-    data = fields(data)
+  def create_instance(event)
+    data = fields(event.data)
+
     return unless login_event_hash(data)
+
     update! login_event_hash(data)
+    event.destroy!
   end
 
   private
