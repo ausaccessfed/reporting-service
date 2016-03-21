@@ -9,6 +9,7 @@ RSpec.describe ProcessIncomingFTicksEvents do
 
   before do
     create_list :incoming_f_ticks_event, 10
+    create_list :incoming_f_ticks_event, 10, discarded: true
     create_list :incoming_f_ticks_event, 10, data: 'invalid data'
   end
 
@@ -21,16 +22,14 @@ RSpec.describe ProcessIncomingFTicksEvents do
 
     it 'should set :discarded to true and keep the record if data is invalid' do
       run
-      invalid_events = IncomingFTicksEvent
-                       .where(data: 'invalid data', discarded: true)
-
+      invalid_events = IncomingFTicksEvent.where(discarded: true)
       expect(IncomingFTicksEvent.all).to match_array(invalid_events)
     end
 
     it 'should not find any' do
       run
       events = IncomingFTicksEvent.where(discarded: true)
-      expect(events.count).to eq(10)
+      expect(events.count).to eq(20)
     end
   end
 end

@@ -1,7 +1,7 @@
 class ProcessIncomingFTicksEvents
   def perform
     FederatedLoginEvent.transaction do
-      IncomingFTicksEvent.find_each do |event|
+      incoming_events.find_each do |event|
         create_instances(event)
       end
     end
