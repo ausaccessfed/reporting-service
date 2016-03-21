@@ -1,7 +1,7 @@
 class FederatedLoginEvent < ActiveRecord::Base
   valhammer
 
-  def generate_record(ticket)
+  def create_instance(ticket)
     entries = fields(ticket)
     update! login_event_hash(entries)
   end

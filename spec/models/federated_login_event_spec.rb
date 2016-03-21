@@ -22,7 +22,7 @@ RSpec.describe FederatedLoginEvent, type: :model do
     end
 
     context 'fields' do
-      before { subject.generate_record(ticket) }
+      before { subject.create_instance(ticket) }
 
       let(:record) { FederatedLoginEvent.first }
 
@@ -51,12 +51,12 @@ RSpec.describe FederatedLoginEvent, type: :model do
       end
     end
 
-    context ':generate_record' do
+    context ':create_instance' do
       it 'when #RP is missing it should fail with message' do
         str = ticket.remove '#RP'
         msg = /Relying party can't be blank/
 
-        expect { subject.generate_record(str) }
+        expect { subject.create_instance(str) }
           .to raise_error(ActiveRecord::RecordInvalid, msg)
       end
 
@@ -64,7 +64,7 @@ RSpec.describe FederatedLoginEvent, type: :model do
         str = ticket.remove '#AP'
         msg = /Asserting party can't be blank/
 
-        expect { subject.generate_record(str) }
+        expect { subject.create_instance(str) }
           .to raise_error(ActiveRecord::RecordInvalid, msg)
       end
 
@@ -72,7 +72,7 @@ RSpec.describe FederatedLoginEvent, type: :model do
         str = ticket.remove '#RESULT'
         msg = /Result can't be blank/
 
-        expect { subject.generate_record(str) }
+        expect { subject.create_instance(str) }
           .to raise_error(ActiveRecord::RecordInvalid, msg)
       end
 
@@ -80,11 +80,11 @@ RSpec.describe FederatedLoginEvent, type: :model do
         msg = /Timestamp can't be blank/
 
         str_01 = ticket.gsub '#TS=1457558279', '#TS=1457ddd'
-        expect { subject.generate_record(str_01) }
+        expect { subject.create_instance(str_01) }
           .to raise_error(ActiveRecord::RecordInvalid, msg)
 
         str_02 = ticket.remove '#TS'
-        expect { subject.generate_record(str_02) }
+        expect { subject.create_instance(str_02) }
           .to raise_error(ActiveRecord::RecordInvalid, msg)
       end
     end

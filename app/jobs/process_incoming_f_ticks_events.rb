@@ -10,7 +10,7 @@ class ProcessIncomingFTicksEvents
       data = incoming_event.data
       subject = FederatedLoginEvent.new
 
-      subject.generate_record(data)
+      subject.create_instance(data)
     end
   end
 
