@@ -15,6 +15,7 @@ class ProcessIncomingFTicksEvents
   end
 
   def incoming_events
-    IncomingFTicksEvent.where.not(discarded: true)
+    IncomingFTicksEvent
+      .where('discarded != ? AND created_at <= ?', true, Time.zone.now)
   end
 end

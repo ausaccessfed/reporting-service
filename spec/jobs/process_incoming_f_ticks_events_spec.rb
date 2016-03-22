@@ -1,7 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe ProcessIncomingFTicksEvents do
+  around { |spec| Timecop.freeze { spec.run } }
+
   subject { ProcessIncomingFTicksEvents.new }
+
+  let(:now) { Time.zone.now.beginning_of_day }
 
   def run
     subject.perform
@@ -20,16 +24,26 @@ RSpec.describe ProcessIncomingFTicksEvents do
         .and change(IncomingFTicksEvent, :count).by(-10)
     end
 
-    it 'should set :discarded to true and keep the record if data is invalid' do
-      run
-      invalid_events = IncomingFTicksEvent.where(discarded: true)
-      expect(IncomingFTicksEvent.all).to match_array(invalid_events)
-    end
+    context 'when there are incoming after or during #perform' do
+      around(:example) do |example|
+        Timecop.travel(now + 1) do
+          create_list :incoming_f_ticks_event, 2
+        end
 
-    it 'should not find any' do
-      run
-      events = IncomingFTicksEvent.where(discarded: true)
-      expect(events.count).to eq(20)
+        Timecop.travel(now) do
+          example.run
+        end
+
+        Timecop.travel(now + 1) do
+          create_list :incoming_f_ticks_event, 2
+        end
+      end
+
+      it 'Should perform against events came before running the job only' do
+        run
+        invalid_events = IncomingFTicksEvent.where(discarded: true)
+        expect(invalid_events.count).to eq 20
+      end
     end
   end
 end
