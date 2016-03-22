@@ -131,7 +131,7 @@ jQuery(function($) {
     table.enter()
       .append('table')
       .attr('id', function(id) { return id; })
-      .attr('class', report.type + ' report-output');
+      .attr('class', report.type + ' report-output table table-hover');
 
     var appendRow = function(parent, row, tag) {
       var tr = parent.append('tr');
@@ -139,6 +139,8 @@ jQuery(function($) {
         tr.append(tag).text(field);
       });
     };
+
+    var prettyDateFormat = d3.time.format('%d/%m/%Y');
 
     var thead = table.append('thead');
     var tbody = table.append('tbody');
@@ -149,6 +151,10 @@ jQuery(function($) {
     });
 
     report.rows.forEach(function(row) {
+      if(report.type === 'subscriber-registrations'){
+        row[1] = prettyDateFormat(new Date (row[1]));
+      }
+
       appendRow(tbody, row, 'td');
     });
 
