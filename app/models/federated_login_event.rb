@@ -3,11 +3,8 @@ class FederatedLoginEvent < ActiveRecord::Base
 
   def create_instance(event)
     data = fields(event.data)
-
     return unless login_event_hash(data)
-
     update! login_event_hash(data)
-    event.destroy!
   end
 
   private
