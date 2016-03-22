@@ -59,17 +59,17 @@ RSpec.describe FederatedLoginEvent, type: :model do
       end
 
       %w(#RP #AP #RESULT #TS).each do |field|
-        it 'should return nil when data is invalid' do
+        it 'should return false when data is invalid' do
           incoming_event.data.remove! field
 
-          expect(run).to eq nil
+          expect(run).to eq false
         end
       end
 
       it 'when #TS is missing it should fail with message' do
         incoming_event.data.gsub! '#TS=1457558279', '#TS=1457ddd'
 
-        expect(run).to eq nil
+        expect(run).to eq false
       end
     end
   end
