@@ -92,7 +92,7 @@ RSpec.describe Authentication::SubjectReceiver do
 
     context '#finish' do
       context 'when request url is available' do
-        let(:session) { { 'request_url' => 'url' } }
+        let(:session) { { 'return_url' => 'url' } }
         let(:env) { { 'rack.session' => session } }
 
         def run
@@ -105,7 +105,7 @@ RSpec.describe Authentication::SubjectReceiver do
       end
 
       context 'when request url is blank' do
-        let(:session) { { 'request_url' => '' } }
+        let(:session) { { 'return_url' => '' } }
         let(:env) { { 'rack.session' => session } }
 
         def run

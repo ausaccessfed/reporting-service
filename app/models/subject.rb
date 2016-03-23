@@ -8,7 +8,7 @@ class Subject < ActiveRecord::Base
   valhammer
 
   def permissions
-    roles.flat_map { |r| r.permissions.map(&:value) }
+    roles.flat_map { |role| role.permissions.map(&:value) }
   end
 
   def functioning?

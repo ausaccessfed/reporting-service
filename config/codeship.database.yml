@@ -1,0 +1,20 @@
+development:
+  adapter: mysql2
+  host: localhost
+  encoding: utf8
+  collation: utf8_bin
+  pool: 10
+  username: <%= ENV['MYSQL_USER'] %>
+  password: <%= ENV['MYSQL_PASSWORD'] %>
+  database: development<%= ENV['TEST_ENV_NUMBER'] %>
+  socket: /var/run/mysqld/mysqld.sock
+test:
+  adapter: mysql2
+  host: localhost
+  encoding: utf8
+  collation: utf8_bin
+  pool: 10
+  username: <%= ENV['MYSQL_USER'] %>
+  password: <%= ENV['MYSQL_PASSWORD'] %>
+  database: test<%= ENV['TEST_ENV_NUMBER'] %>
+  socket: /var/run/mysqld/mysqld.sock

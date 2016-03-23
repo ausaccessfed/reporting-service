@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160311045352) do
+ActiveRecord::Schema.define(version: 20160317060421) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -95,6 +95,18 @@ ActiveRecord::Schema.define(version: 20160311045352) do
   add_index "discovery_service_events", ["phase", "unique_id"], name: "index_discovery_service_events_on_phase_and_unique_id", unique: true, using: :btree
   add_index "discovery_service_events", ["timestamp"], name: "index_discovery_service_events_on_timestamp", using: :btree
 
+  create_table "federated_login_events", force: :cascade do |t|
+    t.string   "relying_party",         limit: 255, null: false
+    t.string   "asserting_party",       limit: 255, null: false
+    t.string   "result",                limit: 255, null: false
+    t.string   "hashed_principal_name", limit: 255, null: false
+    t.datetime "timestamp",                         null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "federated_login_events", ["hashed_principal_name"], name: "index_federated_login_events_on_hashed_principal_name", using: :btree
+
   create_table "identity_provider_saml_attributes", force: :cascade do |t|
     t.integer  "identity_provider_id", limit: 4, null: false
     t.integer  "saml_attribute_id",    limit: 4, null: false
@@ -115,6 +127,17 @@ ActiveRecord::Schema.define(version: 20160311045352) do
 
   add_index "identity_providers", ["entity_id"], name: "index_identity_providers_on_entity_id", unique: true, using: :btree
   add_index "identity_providers", ["organization_id"], name: "fk_rails_7a44c5f546", using: :btree
+
+  create_table "incoming_f_ticks_events", force: :cascade do |t|
+    t.string   "data",       limit: 4096,                 null: false
+    t.string   "ip",         limit: 255,                  null: false
+    t.boolean  "discarded",               default: false, null: false
+    t.datetime "timestamp",                               null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
+  add_index "incoming_f_ticks_events", ["discarded"], name: "index_incoming_f_ticks_events_on_discarded", using: :btree
 
   create_table "organizations", force: :cascade do |t|
     t.string   "identifier", limit: 255, null: false
