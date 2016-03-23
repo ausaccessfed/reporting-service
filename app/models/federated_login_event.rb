@@ -1,28 +1,28 @@
 class FederatedLoginEvent < ActiveRecord::Base
   valhammer
 
-  def generate_record(ticket)
-    entries = fields(ticket)
-    update! login_event_hash(entries)
+  def create_instance(event)
+    data = fields(event.data)
+    update login_event_hash(data)
   end
 
   private
 
-  def fields(str)
-    str.split('#').each_with_object({}) do |s, hash|
+  def fields(data)
+    data.split('#').each_with_object({}) do |s, hash|
       k, v = s.split('=')
       hash[k] = v
     end
   end
 
-  def login_event_hash(entries)
+  def login_event_hash(data)
     timestamp = nil
-    timestamp = Time.zone.at(entries['TS'].to_i) if entries['TS'] =~ /^\d+$/
+    timestamp = Time.zone.at(data['TS'].to_i) if data['TS'] =~ /^\d+$/
 
-    { relying_party: entries['RP'],
-      asserting_party: entries['AP'],
-      result: entries['RESULT'],
-      hashed_principal_name: entries['PN'],
+    { relying_party: data['RP'],
+      asserting_party: data['AP'],
+      result: data['RESULT'],
+      hashed_principal_name: data['PN'],
       timestamp: timestamp }
   end
 end
