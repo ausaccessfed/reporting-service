@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160317060421) do
+ActiveRecord::Schema.define(version: 20160330231532) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -25,8 +25,8 @@ ActiveRecord::Schema.define(version: 20160317060421) do
   create_table "api_subject_roles", force: :cascade do |t|
     t.integer  "api_subject_id", limit: 4, null: false
     t.integer  "role_id",        limit: 4, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   add_index "api_subject_roles", ["api_subject_id", "role_id"], name: "index_api_subject_roles_on_api_subject_id_and_role_id", unique: true, using: :btree
@@ -38,8 +38,8 @@ ActiveRecord::Schema.define(version: 20160317060421) do
     t.string   "contact_mail", limit: 255,                null: false
     t.string   "description",  limit: 255,                null: false
     t.boolean  "enabled",                  default: true, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
   end
 
   add_index "api_subjects", ["x509_cn"], name: "index_api_subjects_on_x509_cn", unique: true, using: :btree
@@ -151,8 +151,8 @@ ActiveRecord::Schema.define(version: 20160317060421) do
   create_table "permissions", force: :cascade do |t|
     t.integer  "role_id",    limit: 4,   null: false
     t.string   "value",      limit: 255, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   add_index "permissions", ["role_id", "value"], name: "index_permissions_on_role_id_and_value", unique: true, using: :btree
@@ -172,8 +172,8 @@ ActiveRecord::Schema.define(version: 20160317060421) do
   create_table "roles", force: :cascade do |t|
     t.string   "name",        limit: 255, null: false
     t.string   "entitlement", limit: 255, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   add_index "roles", ["entitlement"], name: "index_roles_on_entitlement", unique: true, using: :btree
@@ -213,8 +213,8 @@ ActiveRecord::Schema.define(version: 20160317060421) do
   create_table "subject_roles", force: :cascade do |t|
     t.integer  "subject_id", limit: 4, null: false
     t.integer  "role_id",    limit: 4, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
   add_index "subject_roles", ["role_id"], name: "fk_rails_775c958b0f", using: :btree
@@ -227,8 +227,8 @@ ActiveRecord::Schema.define(version: 20160317060421) do
     t.string   "mail",         limit: 255,                null: false
     t.boolean  "enabled",                  default: true, null: false
     t.boolean  "complete",                 default: true, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
   end
 
   add_index "subjects", ["shared_token"], name: "index_subjects_on_shared_token", unique: true, using: :btree
