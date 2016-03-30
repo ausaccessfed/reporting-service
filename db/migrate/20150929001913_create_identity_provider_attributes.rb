@@ -2,6 +2,7 @@ class CreateIdentityProviderAttributes < ActiveRecord::Migration
   def change
     create_table :identity_provider_attributes do |t|
       t.belongs_to :identity_provider, :attribute, null: false
+
       t.timestamps null: false
 
       t.foreign_key :identity_providers

@@ -4,7 +4,7 @@ class CreateSubjectRoles < ActiveRecord::Migration
       t.belongs_to :subject, null: false
       t.belongs_to :role, null: false
 
-      t.timestamps
+      t.timestamps null: false
 
       t.foreign_key :subjects
       t.foreign_key :roles

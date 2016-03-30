@@ -4,7 +4,7 @@ class CreateAPISubjectRoles < ActiveRecord::Migration
       t.belongs_to :api_subject, null: false
       t.belongs_to :role, null: false
 
-      t.timestamps
+      t.timestamps null: false
 
       t.foreign_key :api_subjects
       t.foreign_key :roles
