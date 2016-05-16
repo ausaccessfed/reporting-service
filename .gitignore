@@ -1,0 +1,13 @@
+config/rapidconnect.yml
+config/deploy.yml
+config/reporting_service.yml
+config/api-client.*
+config/event_encryption_key.pem
+spec/examples.txt
+
+coverage
+tmp
+log
+vendor
+.DS_Store
+dump.rdb

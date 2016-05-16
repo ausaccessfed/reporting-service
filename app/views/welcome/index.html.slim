@@ -1,0 +1,10 @@
+.jumbotron
+  .container
+    h2 Welcome to AAF Reporting Service
+    p Here, federation users and subscribers can view reports about the
+      federation. Subscribers can see detailed reports relating to their
+      services. Log in to start viewing reports.
+    p.text-center
+      = button_link_to(dashboard_path, class: 'btn-lg btn-primary') do
+        => icon_tag('log-in')
+        | Log In

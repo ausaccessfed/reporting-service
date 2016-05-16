@@ -1,0 +1,38 @@
+= breadcrumbs({ 'Admin Reports' => admin_reports_path },
+                'Subscriber Registrations Report')
+
+= render(partial: 'shared/flash_message',
+       locals: { flash_header: 'Successfully Subscribed' })
+
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: @identifier,
+                     report_class: 'SubscriberRegistrationsReport' })
+
+h1 Subscriber Registrations Report
+
+p Shows the subscriber registration report within a time range, in number of
+  Organisations, Service Providers, Identity Providers and Services
+
+- identifiers = ['organizations', 'identity_providers',
+                 'service_providers', 'rapid_connect_services', 'services']
+
+= form_tag({}, id: 'report-form') do
+  = field_block do
+    = label_tag(:identifier) do
+      = 'Subscriber Identifiers'
+
+    - options = identifiers.map { |i| [i.titleize,  i] }.sort
+    - options.unshift(['Please select', ''])
+
+    = select_tag(:identifier, options_for_select(options, @identifier))
+
+  = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
+    => icon_tag('ok')
+    | Generate
+
+= validate_form('#report-form', nil) do |v|
+  - v.validate_field(:identifier, required: { message: 'This field is required' })
+
+- if @data
+  = render(partial: 'shared/report_output', locals: { data: @data })

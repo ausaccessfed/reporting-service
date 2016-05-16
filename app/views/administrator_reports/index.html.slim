@@ -1,0 +1,38 @@
+= breadcrumbs('Admin Reports')
+
+h1 Admin Reports
+
+.list-group
+  = link_to(admin_subscriber_registrations_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Subscriber Registrations Report
+    p.list-group-item-text
+      | Shows the subscriber registration report within a time range, in number of
+        Organisations, Service Providers, Identity Providers and Services
+
+  = link_to(admin_federation_growth_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Federation Growth Report
+    p.list-group-item-text
+      | Shows the federation growth report within a time range in number of
+        Organisations, Identity Providers and Services
+
+  = link_to(admin_daily_demand_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Daily Demand Report
+    p.list-group-item-text
+      | Graphs the daily trend of sessions established via AAF's central
+        Discovery Service, highlighting which time of day users are most active
+
+  = link_to(admin_federated_sessions_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Federated Sessions Report
+    p.list-group-item-text
+      | Graphs the hourly number of sessions established via AAF's central
+        Discovery Service
+
+  = link_to(admin_identity_provider_utilization_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Identity Provider Utilization Report
+    p.list-group-item-text
+      | Shows the total number of sessions for each identity provider during the given date range
+
+  = link_to(admin_service_provider_utilization_report_path, class: 'list-group-item') do
+    h4.list-group-item-heading Service Provider Utilization Report
+    p.list-group-item-text
+      | Shows the total number of sessions for each service provider during the given date range

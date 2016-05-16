@@ -1,0 +1,17 @@
+= breadcrumbs({ 'Subscriber Reports' => subscriber_reports_path },
+                'Daily Demand Report')
+
+= render(partial: 'shared/flash_message',
+       locals: { flash_header: 'Successfully Subscribed' })
+
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: @entity_id,
+                     report_class: 'IdentityProviderDailyDemandReport' })
+
+h1 Identity Provider Daily Demand  Report
+
+p Graphs the daily trend of sessions established for an Identity Provider via AAF's central
+  Discovery Service, highlighting which time of day users are most active
+
+= render(partial: 'form')

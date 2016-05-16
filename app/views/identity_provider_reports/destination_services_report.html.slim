@@ -1,0 +1,16 @@
+= breadcrumbs({ 'Subscriber Reports' => subscriber_reports_path },
+                'Destination Services Report')
+
+= render(partial: 'shared/flash_message',
+       locals: { flash_header: 'Successfully Subscribed' })
+
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: @entity_id,
+                     report_class: 'IdentityProviderDestinationServicesReport' })
+
+h1 Identity Provider Destination Services Report
+
+p Graphs the number of sessions from an Identity Provider going to each Service.
+
+= render(partial: 'form')

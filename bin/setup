@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+Dir.chdir File.expand_path('..', File.dirname(__FILE__))
+
+puts '== Installing dependencies =='
+system 'gem install bundler --conservative'
+system 'bundle check || bundle install'
+system 'bundle exec torba pack'
+
+require 'bundler/setup'
+require 'gumboot/strap'
+
+include Gumboot::Strap
+
+puts "\n== Installing configuration files =="
+link_global_configuration %w(rapidconnect.yml api-client.crt api-client.key
+                             event_encryption_key.pem)
+update_local_configuration %w(reporting_service.yml)
+
+puts "\n== Loading Rails environment =="
+require_relative '../config/environment'
+
+ensure_activerecord_databases(%w(test development))
+maintain_activerecord_schema
+clean_logs
+clean_tempfiles

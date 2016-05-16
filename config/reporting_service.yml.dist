@@ -1,0 +1,28 @@
+---
+mail:
+  from: noreply@example.com
+  port: 1025
+  host: localhost
+environment_string: Development
+ide:
+  host: ide.test.aaf.edu.au
+  cert: config/api-client.crt
+  key: config/api-client.key
+  admin_entitlements:
+    - urn:mace:aaf.edu.au:ide:internal:aaf-admin
+    - urn:mace:aaf.edu.au:ide:internal:aaf-reporting
+federationregistry:
+  host: manager.test.aaf.edu.au
+  secret: 'This is the shared secret used for authenticating to the FR export API'
+rapidconnect:
+  host: rapid.test.aaf.edu.au
+  secret: 'This is the shared secret used for authenticating to the Rapid export API'
+sqs:
+  fake: true
+  region: localhost
+  endpoint: http://localhost:9324
+  encryption_key: config/event_encryption_key.pem
+  queues:
+    discovery: http://localhost:9324/queue/discovery-service-development
+url_options:
+  base_url: 'http://localhost:8080'

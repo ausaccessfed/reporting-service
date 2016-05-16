@@ -1,0 +1,36 @@
+= breadcrumbs({ 'Dashboard' => dashboard_path },
+                'Service Compatibility Report')
+
+
+= render(partial: 'shared/flash_message',
+       locals: { flash_header: 'Successfully Subscribed' })
+
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: @entity_id,
+                     report_class: 'ServiceCompatibilityReport' })
+
+h1 Service Compatibility Report
+
+p Highlights Identity Providers' ability to meet the attribute
+  requirements of a federated service
+
+= form_tag({}, id: 'report-form') do
+  = field_block do
+    = label_tag(:entity_id) do
+      | Service Providers
+
+    - options = @objects_list.map { |sp| [sp.name, sp.entity_id] }.sort_by { |a| a[0].downcase }
+    - options.unshift(['Please select', ''])
+
+    = select_tag(:entity_id, options_for_select(options, @entity_id))
+
+  = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
+    => icon_tag('ok')
+    | Generate
+
+= validate_form('#report-form', nil) do |v|
+  - v.validate_field(:entity_id, required: { message: 'This field is required' })
+
+- if @data
+  = render(partial: 'shared/report_output', locals: { data: @data })

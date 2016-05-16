@@ -1,0 +1,38 @@
+- start_date = @start ? @start : Time.now.utc.beginning_of_month - 1.month
+- end_date = @end ? @end : Time.now.utc.beginning_of_month
+
+= form_tag({}, id: 'report-form') do
+    = field_block do
+      = label_tag(:entity_id) do
+        = "#{entity_type.titleize}s"
+
+      - options = @entities.map { |entity| [entity.name, entity.entity_id] }.sort_by { |a| a[0].downcase }
+      - options.unshift(['Please select', ''])
+
+      = select_tag(:entity_id, options_for_select(options, @entity_id))
+
+
+    = field_block do
+      = label_tag(:start) do
+        | from
+
+      = date_field_tag :start, value = start_date, placeholder: 'click here to pick a date'
+
+    = field_block do
+      = label_tag(:end) do
+        | to
+
+      = date_field_tag :end, value = end_date, placeholder: 'click here to pick a date'
+
+    = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
+      => icon_tag('ok')
+      | Generate
+
+= validate_form('#report-form', nil) do |v|
+  - v.validate_field(:entity_id, required: { message: 'This field is required' })
+
+  - v.validate_field(:start, required: { message: 'Please pick start date' })
+  - v.validate_field(:start, validRangeLteq: { message: '`from` date must be lesser than or equal to `to` date' })
+
+  - v.validate_field(:end, required: { message: 'Please pick end date' })
+  - v.validate_field(:end, validRangeGteq: { message: '`to` date must be greater than or equal to `from` date' })

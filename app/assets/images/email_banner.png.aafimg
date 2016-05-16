@@ -1,0 +1,4 @@
+config = Rails.application.config
+
+email_banner(title: 'AAF Reporting Service',
+             environment: config.reporting_service.environment_string)

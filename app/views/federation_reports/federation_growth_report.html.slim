@@ -1,0 +1,16 @@
+= breadcrumbs({ 'Dashboard' => dashboard_path },
+                'Federation Growth Report')
+
+= render(partial: 'shared/flash_message',
+         locals: { flash_header: 'Successfully Subscribed' })
+
+= render(partial: 'shared/subscribe_form',
+         locals: { target: nil, report_class: 'FederationGrowthReport' })
+
+h1 Federation Growth Report
+
+p Shows the growth of the federation over the last 12 months, in number of
+  Organisations, Service Providers, Identity Providers and Rapid Connect
+  Services
+
+= render(partial: 'shared/report_output', locals: { data: @data })

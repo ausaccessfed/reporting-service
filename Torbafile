@@ -1,0 +1,10 @@
+npm package: 'bootstrap', version: '3.3.6',
+    import: %w(dist/css/bootstrap.css dist/js/bootstrap.js dist/fonts/*)
+npm package: 'jquery', version: '2.2.1', import: %w(dist/jquery.js)
+npm package: 'jquery-validation', version: '1.15.0',
+    import: %w(dist/jquery.validate.js)
+npm package: 'pickadate', version: '3.5.6',
+    import: %w(lib/picker.js lib/picker.date.js
+               lib/themes/classic.css lib/themes/classic.date.css)
+npm package: 'd3', version: '3.5.6', import: %w(d3.js)
+npm package: 'jquery-ujs', version: '1.2.0', import: %w(src/rails.js)
