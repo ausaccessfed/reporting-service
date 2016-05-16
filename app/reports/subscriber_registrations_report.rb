@@ -18,7 +18,7 @@ class SubscriberRegistrationsReport < TabularReport
     objects.map do |o|
       registration_date = o.activations.map(&:activated_at).min
 
-      [o.name, registration_date.to_s]
+      [o.name, registration_date.xmlschema]
     end
   end
 
