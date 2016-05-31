@@ -2,9 +2,9 @@
 source 'https://rubygems.org'
 gem 'rails', '~> 4.2.5'
 gem 'mysql2'
-gem 'sass-rails', '~> 5.0'
-gem 'uglifier'
-gem 'therubyracer'
+gem 'sass-rails', require: false
+gem 'uglifier', require: false
+gem 'therubyracer', require: false
 gem 'jbuilder'
 gem 'slim'
 
@@ -48,7 +48,7 @@ group :development, :test do
   gem 'poltergeist', require: false
   gem 'launchy', require: false
 
-  gem 'brakeman', require: false
+  gem 'brakeman', '~> 2.6', require: false
   gem 'simplecov', require: false
 
   gem 'guard', require: false
