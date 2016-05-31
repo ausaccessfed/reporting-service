@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :discovery_service_event do
     user_agent { 'Mozilla/5.0' }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 unless ENV['AAF_DEV'].to_i == 1
   $stderr.puts <<-EOF
 

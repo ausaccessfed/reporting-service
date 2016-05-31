@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :api_subject do
     x509_cn { SecureRandom.urlsafe_base64 }

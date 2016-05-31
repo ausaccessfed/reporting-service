@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ProcessIncomingFTicksEvents
   def perform
     FederatedLoginEvent.transaction do

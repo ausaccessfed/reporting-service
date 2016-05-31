@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Base class for all time series reports.
 class TimeSeriesReport
   prepend TimeSeriesReport::Lint

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module QueryFederationRegistry
   def fr_objects(sym, path)
     @fr_objects ||= {}

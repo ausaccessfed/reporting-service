@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :saml_attribute do
     name { Faker::Lorem.sentence.camelize }

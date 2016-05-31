@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ReceiveEventsFromDiscoveryService
   def perform
     sqs_results.each do |result|

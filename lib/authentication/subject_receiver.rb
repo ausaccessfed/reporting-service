@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Authentication
   class SubjectReceiver
     include RapidRack::DefaultReceiver
