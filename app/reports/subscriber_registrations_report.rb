@@ -29,7 +29,7 @@ class SubscriberRegistrationsReport < TabularReport
                 'service_providers' => [ServiceProvider],
                 'rapid_connect_services' => [RapidConnectService],
                 'services' => [ServiceProvider, RapidConnectService] }
-    fail('Identifier is not valid!') unless objects.key?(@identifier)
+    raise('Identifier is not valid!') unless objects.key?(@identifier)
 
     objects[@identifier].flat_map(&:active)
   end

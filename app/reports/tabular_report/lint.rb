@@ -57,7 +57,7 @@ class TabularReport
     end
 
     def fail_with(message)
-      fail("Invalid tabular data: #{message}")
+      raise("Invalid tabular data: #{message}")
     end
   end
 end

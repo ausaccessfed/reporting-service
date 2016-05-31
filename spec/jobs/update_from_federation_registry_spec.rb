@@ -107,7 +107,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
       stub_request(:get, "#{base_url}/export/#{endpoint}")
         .with(headers: { 'Authorization' => /AAF-FR-EXPORT .+/ })
         .to_return(status: 200, body: body)
-        .then.to_return { fail('endpoint should only be called once') }
+        .then.to_return { raise('endpoint should only be called once') }
     end
   end
 
