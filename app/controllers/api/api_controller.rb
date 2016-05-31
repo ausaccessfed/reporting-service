@@ -21,25 +21,25 @@ module API
 
     def ensure_authenticated
       @subject = APISubject.find_by(x509_cn: x509_cn)
-      fail(Unauthorized, 'Subject invalid') unless @subject
-      fail(Unauthorized, 'Subject not functional') unless @subject.functioning?
+      raise(Unauthorized, 'Subject invalid') unless @subject
+      raise(Unauthorized, 'Subject not functional') unless @subject.functioning?
     end
 
     def ensure_access_checked
       return if @access_checked
 
       method = "#{self.class.name}##{params[:action]}"
-      fail("No access control performed by #{method}")
+      raise("No access control performed by #{method}")
     end
 
     def x509_cn
-      fail(Unauthorized, 'Subject DN') if x509_dn.nil?
+      raise(Unauthorized, 'Subject DN') if x509_dn.nil?
 
       x509_dn_parsed = OpenSSL::X509::Name.parse(x509_dn)
       x509_dn_hash =
         Hash[x509_dn_parsed.to_a.map { |components| components[0..1] }]
 
-      x509_dn_hash['CN'] || fail(Unauthorized, 'Subject CN invalid')
+      x509_dn_hash['CN'] || raise(Unauthorized, 'Subject CN invalid')
 
     rescue OpenSSL::X509::NameError
       raise(Unauthorized, 'Subject DN invalid')
@@ -51,7 +51,7 @@ module API
     end
 
     def check_access!(action)
-      fail(Forbidden) unless @subject.permits?(action)
+      raise(Forbidden) unless @subject.permits?(action)
       @access_checked = true
     end
 
