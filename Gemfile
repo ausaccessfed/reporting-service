@@ -43,7 +43,6 @@ group :development, :test do
 
   gem 'pry', require: false
   gem 'byebug'
-  gem 'web-console'
 
   gem 'capybara', require: false
   gem 'poltergeist', require: false
