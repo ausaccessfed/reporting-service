@@ -1,5 +1,6 @@
+# frozen_string_literal: true
 source 'https://rubygems.org'
-gem 'rails', '4.2.3'
+gem 'rails', '~> 4.2.5'
 gem 'mysql2'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier'
@@ -17,10 +18,10 @@ gem 'implicit-schema'
 
 gem 'aws-sdk'
 gem 'json-jwt'
+gem 'torba-rails'
 
 gem 'aaf-lipstick', git: 'https://github.com/ausaccessfed/aaf-lipstick',
                     branch: 'develop'
-gem 'torba'
 
 gem 'unicorn', require: false
 gem 'god', require: false
