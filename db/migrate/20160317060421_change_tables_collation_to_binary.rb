@@ -7,8 +7,7 @@ class ChangeTablesCollationToBinary < ActiveRecord::Migration
               incoming_f_ticks_events organizations
               permissions rapid_connect_services roles
               saml_attributes service_provider_saml_attributes
-              service_providers subject_roles subjects
-              ).freeze
+              service_providers subject_roles subjects).freeze
 
   def change
     TABLES.each do |table|
