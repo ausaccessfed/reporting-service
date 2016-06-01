@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 load Rails.root.join('bin/push_events_to_federation_registry.rb').to_s

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class IdentityProviderAttributesReport < TabularReport
   report_type 'identity-provider-attributes'
   header ['Name', 'Core Attributes', 'Optional Attributes']

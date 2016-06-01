@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ProvidedAttributeReport < TabularReport
   report_type 'provided-attribute'
   header %w(Name Supported)

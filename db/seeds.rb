@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 unless ENV['AAF_DEV'].to_i == 1
   $stderr.puts <<-EOF
 
@@ -8,7 +9,7 @@ unless ENV['AAF_DEV'].to_i == 1
   attempting to seed your database.
 
   EOF
-  fail('Not proceeding, missing AAF_DEV=1 environment variable')
+  raise('Not proceeding, missing AAF_DEV=1 environment variable')
 end
 
 include FactoryGirl::Syntax::Methods

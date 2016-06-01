@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AutomatedReport < ActiveRecord::Base
   has_many :automated_report_instances
   has_many :automated_report_subscriptions
