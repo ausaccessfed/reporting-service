@@ -11,10 +11,9 @@ RSpec.describe Organization, type: :model do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_uniqueness_of(:identifier) }
 
-    it 'only permits the urlsafe base64 alphabet for `identifier`' do
-      expect(subject).to allow_value('abcdefg').for(:identifier)
-      expect(subject).to allow_value('abcdefg-_').for(:identifier)
-      expect(subject).not_to allow_value('abcdefg-@').for(:identifier)
+    context '#identifier' do
+      let(:field) { :identifier }
+      it_behaves_like 'a field accepting the urlsafe base64 alphabet'
     end
 
     it_behaves_like 'a federation object'
