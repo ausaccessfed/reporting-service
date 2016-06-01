@@ -11,8 +11,7 @@ FactoryGirl.define do
     end
 
     timestamp do
-      Faker::Time.between(10.days.ago.beginning_of_day,
-                          1.day.ago.beginning_of_day)
+      Faker::Time.between(10.days.ago, Time.zone.today, :day)
     end
 
     trait :response do

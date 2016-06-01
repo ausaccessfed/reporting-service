@@ -7,7 +7,7 @@ RSpec.describe UpdateFromRapidConnect do
   around { |spec| Timecop.freeze { spec.run } }
 
   let!(:organization) { create(:organization) }
-  let(:created_at) { Faker::Time.between(1.year.ago.utc, Time.now.utc) }
+  let(:created_at) { Faker::Time.between(10.days.ago, Time.zone.today, :day) }
   let(:enabled) { true }
   let(:service) do
     {
