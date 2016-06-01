@@ -92,7 +92,6 @@ GEM
       safe_yaml (~> 1.0.0)
     database_cleaner (1.5.3)
     diff-lcs (1.2.5)
-    distribution (0.7.3)
     docile (1.1.5)
     erubis (2.7.0)
     execjs (2.7.0)
@@ -364,7 +363,6 @@ DEPENDENCIES
   byebug
   capybara
   database_cleaner
-  distribution
   factory_girl_rails
   faker
   fakeredis

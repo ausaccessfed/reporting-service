@@ -36,8 +36,6 @@ group :development, :test do
   gem 'fakeredis'
   gem 'webmock', require: false
 
-  gem 'distribution' # TODO: Remove this when not needed anymore.
-
   gem 'aaf-gumboot', git: 'https://github.com/ausaccessfed/aaf-gumboot',
                      branch: 'develop'
 
