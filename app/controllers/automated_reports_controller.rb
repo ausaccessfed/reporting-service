@@ -4,7 +4,7 @@ class AutomatedReportsController < AutomatedReports
   before_action :set_access_method, only: :subscribe
 
   def index
-    @subscriptions = subscriptions
+    @subscriptions = subscriptions.preload(:automated_report)
   end
 
   def subscribe
@@ -34,7 +34,7 @@ class AutomatedReportsController < AutomatedReports
   end
 
   def subscriptions
-    @subject.automated_report_subscriptions.preload(:automated_report)
+    @subject.automated_report_subscriptions
   end
 
   def create_subscription
