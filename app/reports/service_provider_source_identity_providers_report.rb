@@ -18,6 +18,6 @@ class ServiceProviderSourceIdentityProvidersReport < TabularReport
   private
 
   def rows
-    tabular_sessions(:identity_provider, sp_sessions)
+    tabular_sessions(IdentityProvider, sp_sessions)
   end
 end
