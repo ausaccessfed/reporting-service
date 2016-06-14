@@ -63,7 +63,9 @@ module ReportsSharedMethods
   def tabular_sessions(target, session_objects = sessions)
     sql = tabular_sessions_query(target, session_objects)
 
-    target.connection.execute(sql).map { |a| a.map(&:to_s) }
+    target.connection.execute(sql)
+          .map { |a| a.map(&:to_s) }
+          .sort_by { |a| a[0].downcase }
   end
 
   TARGET_OPTS = {
