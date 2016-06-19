@@ -13,8 +13,8 @@ class PushEventsToFederationRegistry
     @hostname = hostname
   end
 
-  PENDING_QUEUE = 'wayf_access_record:pending'.freeze
-  QUEUE = 'wayf_access_record'.freeze
+  PENDING_QUEUE = 'wayf_access_record:pending'
+  QUEUE = 'wayf_access_record'
 
   def perform
     loop do

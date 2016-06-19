@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class TimeSeriesReport
   module Lint
     include GenericLint
@@ -79,7 +80,7 @@ class TimeSeriesReport
     end
 
     def fail_with(message)
-      fail("Invalid time series data: #{message}")
+      raise("Invalid time series data: #{message}")
     end
 
     def time_range(output)

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.shared_examples 'Subscribing to a nil class report' do
   %w(monthly quarterly yearly).each do |interval|
     given!("auto_report_#{interval}".to_sym) do

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SubscriberReports < ApplicationController
   before_action { permitted_objects(model_object) }
   before_action :requested_entity

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FederationReportsController < ApplicationController
   before_action :set_range
 

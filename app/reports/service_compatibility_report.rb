@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ServiceCompatibilityReport < TabularReport
   report_type 'service-compatibility'
   header %w(Name Required Optional Compatible)

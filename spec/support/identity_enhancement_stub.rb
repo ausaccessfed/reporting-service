@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module IdentityEnhancementStub
   def stub_ide(shared_token:, entitlements: [], **)
     host = Rails.application.config.reporting_service.ide[:host]

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AdministratorReportsController < ApplicationController
   before_action { check_access! 'admin:report' }
   before_action :set_range_params,

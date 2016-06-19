@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ReportsSharedMethods
   private
 
@@ -60,12 +61,31 @@ module ReportsSharedMethods
   end
 
   def tabular_sessions(target, session_objects = sessions)
-    output = session_objects
-             .preload(target)
-             .group_by(&target)
-             .select { |obj| obj }
-             .map { |obj, val| [obj.name, val.count.to_s] }
+    sql = tabular_sessions_query(target, session_objects)
 
-    output.sort_by { |r| r[0] }
+    target.connection.execute(sql)
+          .map { |a| a.map(&:to_s) }
+          .sort_by { |a| a[0].downcase }
+  end
+
+  TARGET_OPTS = {
+    IdentityProvider => {
+      assoc: :identity_provider,
+      foreign_key: :selected_idp
+    }.freeze,
+    ServiceProvider => {
+      assoc: :service_provider,
+      foreign_key: :initiating_sp
+    }.freeze
+  }.freeze
+
+  def tabular_sessions_query(target, session_objects)
+    opts = TARGET_OPTS[target]
+
+    session_objects
+      .joins(opts[:assoc])
+      .group(opts[:foreign_key])
+      .select(target.arel_table[:name], 'count(*)')
+      .to_sql
   end
 end

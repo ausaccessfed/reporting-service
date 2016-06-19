@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SAMLAttribute < ActiveRecord::Base
   has_many :service_provider_saml_attributes
   has_many :service_providers,

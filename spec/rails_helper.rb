@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 
@@ -33,5 +34,12 @@ RSpec.configure do |config|
     ensure
       WebMock.disable_net_connect!
     end
+  end
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
   end
 end

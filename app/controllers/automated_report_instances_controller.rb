@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AutomatedReportInstancesController < AutomatedReports
   before_action :set_access_method
 
