@@ -32,4 +32,6 @@ module ReportingService
   end
 end
 
-Rails.application.assets.register_engine('.aafimg', Lipstick::Images::Processor)
+Rails.application.config.assets.configure do |env|
+  env.register_engine('.aafimg', Lipstick::Images::Processor)
+end
