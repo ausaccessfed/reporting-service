@@ -24,8 +24,8 @@ RSpec.describe TimeSeriesReport do
   end
 
   let(:title) { Faker::Lorem.sentence }
-  let(:start) { 1.week.ago.utc.beginning_of_day }
-  let(:finish) { Time.now.utc.beginning_of_day }
+  let(:start) { 1.week.ago.beginning_of_day }
+  let(:finish) { Time.zone.now.beginning_of_day }
   let(:report) { klass.new(title, start, finish, report_data) }
 
   let(:report_data) do

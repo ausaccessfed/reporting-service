@@ -33,8 +33,8 @@ RSpec.describe TimeSeriesReport::Lint do
       units: 'Hz',
       title: 'A graph!',
       range: {
-        start: 1.week.ago.utc.xmlschema,
-        end: Time.now.utc.xmlschema
+        start: 1.week.ago.xmlschema,
+        end: Time.zone.now.xmlschema
       },
       data: {
         series_a: [[0, 1], [30, 2], [60, 3]],
@@ -165,7 +165,8 @@ RSpec.describe TimeSeriesReport::Lint do
 
   context 'when the start time is a Time object' do
     let(:output) do
-      valid_output.merge(range: valid_output[:range].merge(start: Time.now.utc))
+      valid_output.merge(range: valid_output[:range]
+                  .merge(start: Time.zone.now))
     end
 
     fails_with 'start of time range is invalid'
