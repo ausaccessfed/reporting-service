@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe ReportZone do
-  prepend ReportZone
+RSpec.describe 'ReportTimeZone' do
+  prepend ReportTimeZone
 
   let(:time) { Faker::Number.number(4).to_i.days.ago.beginning_of_day }
 

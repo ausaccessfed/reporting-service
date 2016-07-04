@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module ReportZone
+module ReportTimeZone
   def convert_time_zone(time)
     time.in_time_zone(zone)
   end
