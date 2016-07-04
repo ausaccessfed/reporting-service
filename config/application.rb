@@ -15,6 +15,7 @@ module ReportingService
     config.autoload_paths += [
       File.join(config.root, 'lib'),
       File.join(config.root, 'app', 'reports'),
+      File.join(config.root, 'app', 'reports', 'concerns'),
       File.join(config.root, 'app', 'jobs', 'concerns')
     ]
 
