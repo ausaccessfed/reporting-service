@@ -10,8 +10,7 @@ class ServiceProviderDailyDemandReport < TimeSeriesReport
   def initialize(entity_id, start, finish)
     @service_provider = ServiceProvider.find_by(entity_id: entity_id)
     title = "SP Daily Demand Report for #{@service_provider.name}"
-    @start = start
-    @finish = finish
+    create_time_instance_variables(start: start, finish: finish)
 
     super(title, start: @start, end: @finish)
   end
