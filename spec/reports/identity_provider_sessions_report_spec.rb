@@ -10,10 +10,15 @@ RSpec.describe IdentityProviderSessionsReport do
   let(:labels) { { y: 'Sessions / hour (average)', sessions: 'Sessions' } }
   let(:units) { '' }
 
-  let!(:start) { 10.days.ago.beginning_of_day }
-  let!(:finish) { 1.day.ago.end_of_day }
+  let!(:zone) { Faker::Address.time_zone }
+  let(:start) { 10.days.ago.beginning_of_day }
+  let(:finish) { 1.day.ago.end_of_day }
 
-  let!(:range) { { start: start.xmlschema, end: finish.xmlschema } }
+  let(:range) do
+    { start: start.in_time_zone(zone).xmlschema,
+      end: finish.in_time_zone(zone).xmlschema }
+  end
+
   let(:steps) { 5 }
 
   let(:scope_range) do
@@ -35,6 +40,12 @@ RSpec.describe IdentityProviderSessionsReport do
     [*scope_range].each_with_index do |t, index|
       expect(data[:sessions][index]).to match_array([t, value])
     end
+  end
+
+  before do
+    allow(Rails.application)
+      .to receive_message_chain(:config, :reporting_service, :time_zone)
+      .and_return(zone)
   end
 
   context 'when events are sessions with response' do
