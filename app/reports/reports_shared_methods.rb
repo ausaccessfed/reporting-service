@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 module ReportsSharedMethods
+  prepend ReportTimeZone
+
   private
 
   def output_data(range, report, step_width, divider, decimal_places = 1)
