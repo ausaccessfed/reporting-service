@@ -34,6 +34,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
 
   describe '#materialize' do
     let(:range_end) { Time.zone.now.beginning_of_month }
+    let!(:zone) { Faker::Address.time_zone }
 
     let(:automated_report) do
       create(:automated_report,
@@ -48,6 +49,12 @@ RSpec.describe AutomatedReportInstance, type: :model do
 
     let(:report) { subject.materialize }
     let(:target) { nil }
+
+    before do
+      allow(Rails.application)
+        .to receive_message_chain(:config, :reporting_service, :time_zone)
+        .and_return(zone)
+    end
 
     shared_examples 'an instantiated report' do |kind, range: false|
       context "a #{kind} report" do
@@ -66,8 +73,8 @@ RSpec.describe AutomatedReportInstance, type: :model do
         if range
           let(:expected_range) do
             {
-              start: range_start.xmlschema,
-              end: Time.zone.now.beginning_of_month.xmlschema
+              start: range_start.in_time_zone(zone).xmlschema,
+              end: Time.zone.now.beginning_of_month.in_time_zone(zone).xmlschema
             }
           end
 
