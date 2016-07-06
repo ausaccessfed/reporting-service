@@ -17,8 +17,8 @@ RSpec.describe FederationGrowthReport do
   let(:finish) { start + 11.days }
 
   let(:range) do
-    { start: start.in_time_zone(zone).xmlschema,
-      end: finish.in_time_zone(zone).xmlschema }
+    { start: start.in_time_zone(zone).strftime('%FT%H:%M:%S%z'),
+      end: finish.in_time_zone(zone).strftime('%FT%H:%M:%S%z') }
   end
 
   let(:range_count) { (0..(finish - start).to_i).step(1.day).count }

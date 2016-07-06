@@ -73,8 +73,9 @@ RSpec.describe AutomatedReportInstance, type: :model do
         if range
           let(:expected_range) do
             {
-              start: range_start.in_time_zone(zone).xmlschema,
-              end: Time.zone.now.beginning_of_month.in_time_zone(zone).xmlschema
+              start: range_start.in_time_zone(zone).strftime('%FT%H:%M:%S%z'),
+              end: Time.zone.now.beginning_of_month
+                       .in_time_zone(zone).strftime('%FT%H:%M:%S%z')
             }
           end
 

@@ -14,8 +14,8 @@ RSpec.describe IdentityProviderDailyDemandReport do
   let(:finish) { Time.zone.now.end_of_day }
 
   let(:range) do
-    { start: start.in_time_zone(zone).xmlschema,
-      end: finish.in_time_zone(zone).xmlschema }
+    { start: start.in_time_zone(zone).strftime('%FT%H:%M:%S%z'),
+      end: finish.in_time_zone(zone).strftime('%FT%H:%M:%S%z') }
   end
 
   let(:identity_provider_01) { create :identity_provider }

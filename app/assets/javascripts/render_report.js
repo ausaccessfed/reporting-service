@@ -2,7 +2,7 @@ jQuery(function($) {
   var timeFormats = {
     time : d3.time.format('%H:%M'),
     date : d3.time.format('%Y-%m-%d'),
-    dateTime : d3.time.format('%Y-%m-%dT%H:%M:%SZ'),
+    dateTime : d3.time.format('%Y-%m-%dT%H:%M:%S%Z'),
     facncyDateTime : d3.time.format('%Y-%m-%d ~ %H:%M'),
     fancyTickFormat : d3.time.format("%H")
   };

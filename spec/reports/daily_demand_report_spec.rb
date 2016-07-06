@@ -16,8 +16,8 @@ RSpec.describe DailyDemandReport do
   let(:days_count) { ((finish - start).to_i / 86_400).to_i }
 
   let(:range) do
-    { start: start.in_time_zone(zone).xmlschema,
-      end: finish.in_time_zone(zone).xmlschema }
+    { start: start.in_time_zone(zone).strftime('%FT%H:%M:%S%z'),
+      end: finish.in_time_zone(zone).strftime('%FT%H:%M:%S%z') }
   end
 
   let(:identity_provider) { create :identity_provider }

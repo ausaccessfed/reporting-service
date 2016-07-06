@@ -15,8 +15,8 @@ RSpec.describe ServiceProviderSessionsReport do
   let(:finish) { 1.day.ago.end_of_day }
 
   let(:range) do
-    { start: start.in_time_zone(zone).xmlschema,
-      end: finish.in_time_zone(zone).xmlschema }
+    { start: start.in_time_zone(zone).strftime('%FT%H:%M:%S%z'),
+      end: finish.in_time_zone(zone).strftime('%FT%H:%M:%S%z') }
   end
 
   let(:steps) { 5 }

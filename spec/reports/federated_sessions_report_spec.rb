@@ -16,8 +16,8 @@ RSpec.describe FederatedSessionsReport do
   let(:steps) { 5 }
 
   let(:range) do
-    { start: start.in_time_zone(zone).xmlschema,
-      end: finish.in_time_zone(zone).xmlschema }
+    { start: start.in_time_zone(zone).strftime('%FT%H:%M:%S%z'),
+      end: finish.in_time_zone(zone).strftime('%FT%H:%M:%S%z') }
   end
 
   let(:scope_range) do
