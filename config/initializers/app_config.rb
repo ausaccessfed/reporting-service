@@ -36,7 +36,6 @@ Rails.application.configure do
     }
 
     config.reporting_service.url_options = { base_url: 'example.com' }
-    config.reporting_service.time_zone = 'Australia/Brisbane'
 
     Aws::SQS::Client.remove_plugin(Aws::Plugins::SQSQueueUrls)
     Aws.config.update(stub_responses: true)

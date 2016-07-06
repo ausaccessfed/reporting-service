@@ -8,11 +8,15 @@ RSpec.describe 'ReportTimeZone' do
   let(:finish) { Faker::Number.number(1).to_i.days.ago.beginning_of_day }
 
   describe '#convert_time_zone' do
+    let!(:zone) { Faker::Address.time_zone }
+
     subject { convert_time_zone(start) }
+
+    before { Rails.application.config.reporting_service.time_zone = zone }
 
     context 'when user defined time_zone does not exist' do
       it 'should set the report time_zone invoked from config' do
-        expect(subject.zone).to eq('AEST')
+        expect(subject.time_zone.name).to eq(zone)
       end
     end
   end
