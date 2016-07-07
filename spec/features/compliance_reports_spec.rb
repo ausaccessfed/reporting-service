@@ -5,12 +5,16 @@ RSpec.feature 'Compliance Reports' do
   include IdentityEnhancementStub
 
   given(:user) { create(:subject) }
-  given!(:sp) { create(:service_provider) }
-  given!(:activation) { create(:activation, federation_object: sp) }
-  given!(:attribute) { create(:saml_attribute) }
+  given(:sp) { create :service_provider }
+  given(:idp) { create :identity_provider }
   given(:controller) { 'compliance_reports' }
 
   background do
+    create_list :service_provider_saml_attribute, 5, service_provider: sp
+    create_list :identity_provider_saml_attribute, 5, identity_provider: idp
+    create(:activation, federation_object: sp)
+    create(:activation, federation_object: idp)
+
     attrs = create(:aaf_attributes, :from_subject, subject: user)
     RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
@@ -38,7 +42,7 @@ RSpec.feature 'Compliance Reports' do
   scenario 'viewing the Single Attribute Report – Identity Providers Report' do
     click_link 'Single Attribute Report – Identity Providers'
 
-    select attribute.name, from: 'Attribute'
+    select idp.saml_attributes.sample.name, from: 'Attribute'
     click_button 'Generate'
     expect(page).to have_css('#output table.provided-attribute')
   end
@@ -46,7 +50,7 @@ RSpec.feature 'Compliance Reports' do
   scenario 'viewing the Single Attribute Report – Service Providers Report' do
     click_link 'Single Attribute Report – Service Providers'
 
-    select attribute.name, from: 'Attribute'
+    select sp.saml_attributes.sample.name, from: 'Attribute'
     click_button 'Generate'
     expect(page).to have_css('#output table.requested-attribute')
   end
@@ -61,8 +65,8 @@ RSpec.feature 'Compliance Reports' do
   end
 
   context 'Single Attributes Service Provider Report' do
-    given(:target) { attribute.name }
-    given(:object) { attribute }
+    given(:object) { sp.saml_attributes.sample }
+    given(:target) { object.name }
     given(:list) { 'Attributes' }
     given(:button) { 'Single Attribute Report – Service Providers' }
     given(:report_class) { 'RequestedAttributeReport' }
@@ -72,8 +76,8 @@ RSpec.feature 'Compliance Reports' do
   end
 
   context 'Single Attributes Service Provider Report' do
-    given(:target) { attribute.name }
-    given(:object) { attribute }
+    given(:object) { sp.saml_attributes.sample }
+    given(:target) { object.name }
     given(:list) { 'Attributes' }
     given(:button) { 'Single Attribute Report – Identity Providers' }
     given(:report_class) { 'ProvidedAttributeReport' }
