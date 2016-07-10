@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class FederationGrowthReport < TimeSeriesReport
-  prepend ReportTimeZone
+  include ReportTimeZone
 
   report_type 'federation-growth'
   y_label 'Count'

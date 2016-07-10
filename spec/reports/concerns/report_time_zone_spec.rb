@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe 'ReportTimeZone' do
-  prepend ReportTimeZone
+  include ReportTimeZone
 
   let(:start) { Faker::Number.number(4).to_i.days.ago.beginning_of_day }
   let(:finish) { Faker::Number.number(1).to_i.days.ago.beginning_of_day }
