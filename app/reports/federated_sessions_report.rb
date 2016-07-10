@@ -9,7 +9,7 @@ class FederatedSessionsReport < TimeSeriesReport
 
   def initialize(start, finish, steps)
     title = 'Federated Sessions'
-    create_time_instance_variables(start: start, finish: finish)
+    create_time_instance_variables(start, finish)
     @steps = steps
 
     super(title, start: @start, end: @finish)

@@ -10,7 +10,7 @@ class IdentityProviderDailyDemandReport < TimeSeriesReport
   def initialize(entity_id, start, finish)
     @identity_provider = IdentityProvider.find_by(entity_id: entity_id)
     title = "IdP Daily Demand Report for #{@identity_provider.name}"
-    create_time_instance_variables(start: start, finish: finish)
+    create_time_instance_variables(start, finish)
 
     super(title, start: @start, end: @finish)
   end

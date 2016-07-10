@@ -23,7 +23,7 @@ RSpec.describe 'ReportTimeZone' do
 
   describe '#set_time_instance_variables' do
     def run
-      create_time_instance_variables(start: start, finish: finish)
+      create_time_instance_variables(start, finish)
     end
 
     it 'should define instance variable based on key/value pairs' do

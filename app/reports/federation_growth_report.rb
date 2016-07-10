@@ -11,7 +11,7 @@ class FederationGrowthReport < TimeSeriesReport
          organizations: 'Organizations'
 
   def initialize(start, finish)
-    create_time_instance_variables(start: start, finish: finish)
+    create_time_instance_variables(start, finish)
 
     super('Federation Growth', start: @start, end: @finish)
   end

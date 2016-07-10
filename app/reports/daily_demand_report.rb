@@ -9,7 +9,7 @@ class DailyDemandReport < TimeSeriesReport
 
   def initialize(start, finish)
     title = 'Daily Demand'
-    create_time_instance_variables(start: start, finish: finish)
+    create_time_instance_variables(start, finish)
 
     super(title, start: @start, end: @finish)
   end
