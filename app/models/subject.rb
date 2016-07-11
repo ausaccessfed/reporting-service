@@ -4,17 +4,12 @@ class Subject < ActiveRecord::Base
 
   has_many :subject_roles
   has_many :roles, through: :subject_roles
-
-  has_many :permissions_alias, through: :roles,
-                               class_name: 'Permission',
-                               source: :permissions
-
   has_many :automated_report_subscriptions
 
   valhammer
 
   def permissions
-    permissions_alias.map(&:value)
+    roles.joins(:permissions).pluck('permissions.value')
   end
 
   def functioning?
