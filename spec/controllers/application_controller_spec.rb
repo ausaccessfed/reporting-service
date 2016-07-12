@@ -43,4 +43,34 @@ RSpec.describe ApplicationController, type: :controller do
       expect(uri.fragment).to be_blank
     end
   end
+
+  context 'use time zone around filter' do
+    let(:user) { create :subject, :authorized }
+    let!(:zone) { Faker::Address.time_zone }
+
+    before { session[:subject_id] = user.try(:id) }
+
+    class SomeReportsController < ApplicationController; end
+
+    controller SomeReportsController do
+      before_action :ensure_authenticated
+
+      def report_action
+        public_action
+
+        @text = Time.zone.name
+        render nothing: true
+      end
+    end
+
+    before { Rails.application.config.reporting_service.time_zone = zone }
+
+    specify 'inside action scope' do
+      routes.draw { get 'report_action' => 'some_reports#report_action' }
+
+      get :report_action
+      expect(assigns[:text]).to eq(zone)
+      expect(Time.zone.name).to eq('UTC')
+    end
+  end
 end
