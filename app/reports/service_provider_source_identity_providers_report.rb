@@ -9,7 +9,8 @@ class ServiceProviderSourceIdentityProvidersReport < TabularReport
   def initialize(entity_id, start, finish)
     @service_provider = ServiceProvider.find_by(entity_id: entity_id)
     title = "SP Source Identity Providers Report for #{@service_provider.name}"
-    create_time_instance_variables(start, finish)
+    @start = start
+    @finish = finish
 
     super(title)
   end

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class FederationGrowthReport < TimeSeriesReport
-  include ReportTimeZone
-
   report_type 'federation-growth'
   y_label 'Count'
   units ''
@@ -11,7 +9,8 @@ class FederationGrowthReport < TimeSeriesReport
          organizations: 'Organizations'
 
   def initialize(start, finish)
-    create_time_instance_variables(start, finish)
+    @start = start
+    @finish = finish
 
     super('Federation Growth', start: @start, end: @finish)
   end

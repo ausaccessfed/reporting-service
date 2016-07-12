@@ -54,13 +54,15 @@ RSpec.describe FederationGrowthReport do
   end
 
   before do
-    allow(Rails.application)
-      .to receive_message_chain(:config, :reporting_service, :time_zone)
-      .and_return(zone)
+    Rails.application.config.reporting_service.time_zone = zone
 
     [organization, identity_provider,
      rapid_connect_service, service_provider]
       .each { |o| create(:activation, federation_object: o) }
+  end
+
+  around(:each) do |example|
+    Time.use_zone(zone, &example)
   end
 
   subject { FederationGrowthReport.new(start, finish) }

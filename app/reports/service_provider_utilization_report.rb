@@ -9,7 +9,8 @@ class ServiceProviderUtilizationReport < TabularReport
 
   def initialize(start, finish)
     title = 'Service Provider Utilization Report'
-    create_time_instance_variables(start, finish)
+    @start = start
+    @finish = finish
 
     super(title)
   end

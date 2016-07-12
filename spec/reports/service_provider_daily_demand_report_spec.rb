@@ -37,9 +37,11 @@ RSpec.describe ServiceProviderDailyDemandReport do
   end
 
   before do
-    allow(Rails.application)
-      .to receive_message_chain(:config, :reporting_service, :time_zone)
-      .and_return(zone)
+    Rails.application.config.reporting_service.time_zone = zone
+  end
+
+  around(:each) do |example|
+    Time.use_zone(zone, &example)
   end
 
   context 'sessions with response' do
