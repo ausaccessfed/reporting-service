@@ -63,14 +63,16 @@ RSpec.describe ApplicationController, type: :controller do
       end
     end
 
-    before { Rails.application.config.reporting_service.time_zone = zone }
-
-    specify 'inside action scope' do
+    before do
+      Rails.application.config.reporting_service.time_zone = zone
       routes.draw { get 'report_action' => 'some_reports#report_action' }
-
       get :report_action
+    end
+
+    # timezone within actions
+    specify 'inside action scope' do
       expect(assigns[:text]).to eq(zone)
-      expect(Time.zone.name).to eq('UTC')
+      expect(Time.zone.name).not_to eq(zone)
     end
   end
 end
