@@ -12,13 +12,12 @@ RSpec.describe FederationGrowthReport do
       services: 'Services' }
   end
 
-  let!(:zone) { Faker::Address.time_zone }
   let(:start) { Time.zone.now.beginning_of_day }
   let(:finish) { start + 11.days }
 
   let(:range) do
-    { start: start.in_time_zone(zone).strftime('%FT%H:%M:%S%z'),
-      end: finish.in_time_zone(zone).strftime('%FT%H:%M:%S%z') }
+    { start: start.strftime('%FT%H:%M:%S%z'),
+      end: finish.strftime('%FT%H:%M:%S%z') }
   end
 
   let(:range_count) { (0..(finish - start).to_i).step(1.day).count }
@@ -54,15 +53,9 @@ RSpec.describe FederationGrowthReport do
   end
 
   before do
-    Rails.application.config.reporting_service.time_zone = zone
-
     [organization, identity_provider,
      rapid_connect_service, service_provider]
       .each { |o| create(:activation, federation_object: o) }
-  end
-
-  around(:each) do |example|
-    Time.use_zone(zone, &example)
   end
 
   subject { FederationGrowthReport.new(start, finish) }

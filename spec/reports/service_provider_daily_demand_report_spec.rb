@@ -9,13 +9,12 @@ RSpec.describe ServiceProviderDailyDemandReport do
   let(:units) { '' }
   let(:labels) { { y: 'Sessions / hour (average)', sessions: 'Sessions' } }
 
-  let!(:zone) { Faker::Address.time_zone }
   let(:start) { 10.days.ago.beginning_of_day }
   let(:finish) { Time.zone.now.end_of_day }
 
   let(:range) do
-    { start: start.in_time_zone(zone).strftime('%FT%H:%M:%S%z'),
-      end: finish.in_time_zone(zone).strftime('%FT%H:%M:%S%z') }
+    { start: start.strftime('%FT%H:%M:%S%z'),
+      end: finish.strftime('%FT%H:%M:%S%z') }
   end
 
   let(:identity_provider) { create :identity_provider }
@@ -34,14 +33,6 @@ RSpec.describe ServiceProviderDailyDemandReport do
     (0..86_340).step(300).each_with_index do |t, index|
       expect(data[:sessions][index]).to match_array([t, value])
     end
-  end
-
-  before do
-    Rails.application.config.reporting_service.time_zone = zone
-  end
-
-  around(:each) do |example|
-    Time.use_zone(zone, &example)
   end
 
   context 'sessions with response' do
