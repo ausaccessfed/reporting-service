@@ -33,6 +33,6 @@ class FederationReportsController < ApplicationController
 
   def set_range
     @start = 1.year.ago.beginning_of_day
-    @end = Time.zone.now.tomorrow.beginning_of_day
+    @end = Time.zone.tomorrow.beginning_of_day
   end
 end
