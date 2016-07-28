@@ -48,8 +48,6 @@ RSpec.describe ApplicationController, type: :controller do
     let(:user) { create :subject, :authorized }
     let!(:zone) { Faker::Address.time_zone }
 
-    before { session[:subject_id] = user.try(:id) }
-
     class SomeReportsController < ApplicationController; end
 
     controller SomeReportsController do
@@ -64,6 +62,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
 
     before do
+      session[:subject_id] = user.try(:id)
       Rails.application.config.reporting_service.time_zone = zone
       routes.draw { get 'report_action' => 'some_reports#report_action' }
       get :report_action
