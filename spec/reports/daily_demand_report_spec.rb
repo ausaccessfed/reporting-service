@@ -9,10 +9,15 @@ RSpec.describe DailyDemandReport do
   let(:units) { '' }
   let(:labels) { { y: 'Sessions / hour (average)', sessions: 'Sessions' } }
 
-  let!(:start) { 10.days.ago.beginning_of_day }
-  let!(:finish) { Time.zone.now.end_of_day }
+  let(:start) { 10.days.ago.beginning_of_day }
+  let(:finish) { Time.zone.now.end_of_day }
 
-  let!(:days_count) { ((finish - start).to_i / 86_400).to_i }
+  let(:days_count) { ((finish - start).to_i / 86_400).to_i }
+
+  let(:range) do
+    { start: start.strftime('%FT%H:%M:%S%z'),
+      end: finish.strftime('%FT%H:%M:%S%z') }
+  end
 
   let(:identity_provider) { create :identity_provider }
   let(:service_provider) { create :service_provider }
@@ -38,11 +43,8 @@ RSpec.describe DailyDemandReport do
     let(:value) { anything }
 
     it 'should include title, units and labels' do
-      expect(report).to include(title: title, units: units, labels: labels)
-    end
-
-    it 'should not include range' do
-      expect(report).to include(:range)
+      expect(report).to include(title: title, units: units,
+                                labels: labels, range: range)
     end
 
     it 'sessions are response types generated within given range' do

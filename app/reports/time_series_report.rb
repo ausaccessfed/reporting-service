@@ -39,7 +39,7 @@ class TimeSeriesReport
   end
 
   def generate
-    range = @range.try(:transform_values, &:xmlschema)
+    range = @range.try(:transform_values) { |t| t.strftime('%FT%H:%M:%S%z') }
 
     self.class.options.merge(title: @title, data: data, range: range).compact
   end

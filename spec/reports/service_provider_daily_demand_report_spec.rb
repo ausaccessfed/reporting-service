@@ -12,6 +12,11 @@ RSpec.describe ServiceProviderDailyDemandReport do
   let(:start) { 10.days.ago.beginning_of_day }
   let(:finish) { Time.zone.now.end_of_day }
 
+  let(:range) do
+    { start: start.strftime('%FT%H:%M:%S%z'),
+      end: finish.strftime('%FT%H:%M:%S%z') }
+  end
+
   let(:identity_provider) { create :identity_provider }
   let(:service_provider_01) { create :service_provider }
   let(:service_provider_02) { create :service_provider }
@@ -42,11 +47,7 @@ RSpec.describe ServiceProviderDailyDemandReport do
     it 'should include title, units and labels' do
       output_title = title + ' ' + service_provider_01.name
       expect(report).to include(title: output_title,
-                                units: units, labels: labels)
-    end
-
-    it 'should include range' do
-      expect(report).to include(:range)
+                                units: units, labels: labels, range: range)
     end
 
     it 'sessions generated within given range' do

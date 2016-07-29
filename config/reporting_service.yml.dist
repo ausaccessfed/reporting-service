@@ -26,3 +26,4 @@ sqs:
     discovery: http://localhost:9324/queue/discovery-service-development
 url_options:
   base_url: 'http://localhost:8080'
+time_zone: Australia/Brisbane

@@ -14,9 +14,15 @@ RSpec.describe FederationGrowthReport do
 
   let(:start) { Time.zone.now.beginning_of_day }
   let(:finish) { start + 11.days }
-  let!(:range) { { start: start.xmlschema, end: finish.xmlschema } }
-  let(:scope_range) { (0..(finish - start).to_i).step(1.day) }
+
+  let(:range) do
+    { start: start.strftime('%FT%H:%M:%S%z'),
+      end: finish.strftime('%FT%H:%M:%S%z') }
+  end
+
   let(:range_count) { (0..(finish - start).to_i).step(1.day).count }
+  let(:scope_range) { (0..(finish - start).to_i).step(1.day) }
+
   let(:type_count) do
     { organizations: 1, identity_providers: 1, services: 2 }
   end
@@ -46,7 +52,7 @@ RSpec.describe FederationGrowthReport do
     let("#{type}_02") { create type }
   end
 
-  before :example do
+  before do
     [organization, identity_provider,
      rapid_connect_service, service_provider]
       .each { |o| create(:activation, federation_object: o) }

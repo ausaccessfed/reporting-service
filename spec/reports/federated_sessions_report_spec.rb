@@ -9,11 +9,16 @@ RSpec.describe FederatedSessionsReport do
   let(:units) { '' }
   let(:labels) { { y: 'Sessions / hour (average)', sessions: 'Sessions' } }
 
-  let!(:start) { 10.days.ago.beginning_of_day }
-  let!(:finish) { 1.day.ago.end_of_day }
+  let(:start) { 10.days.ago.beginning_of_day }
+  let(:finish) { 1.day.ago.end_of_day }
 
   let(:steps) { 5 }
-  let!(:range) { { start: start.xmlschema, end: finish.xmlschema } }
+
+  let(:range) do
+    { start: start.strftime('%FT%H:%M:%S%z'),
+      end: finish.strftime('%FT%H:%M:%S%z') }
+  end
+
   let(:scope_range) do
     (0..(finish - start).to_i).step(steps.hours.to_i)
   end
