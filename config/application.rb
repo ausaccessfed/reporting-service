@@ -32,4 +32,6 @@ module ReportingService
   end
 end
 
-Sprockets.register_engine '.aafimg', Lipstick::Images::Processor
+args = ['.aafimg', Lipstick::Images::Processor]
+args << { silence_deprecation: true } if Sprockets::VERSION.start_with?('3')
+Sprockets.register_engine(*args)
