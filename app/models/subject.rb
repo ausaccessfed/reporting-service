@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Subject < ActiveRecord::Base
   include Accession::Principal
 
@@ -8,7 +9,7 @@ class Subject < ActiveRecord::Base
   valhammer
 
   def permissions
-    roles.flat_map { |role| role.permissions.map(&:value) }
+    roles.joins(:permissions).pluck('permissions.value')
   end
 
   def functioning?

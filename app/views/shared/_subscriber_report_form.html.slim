@@ -1,5 +1,5 @@
-- start_date = @start ? @start : Time.now.utc.beginning_of_month - 1.month
-- end_date = @end ? @end : Time.now.utc.beginning_of_month
+- start_date = @start ? @start : Time.zone.now.beginning_of_month - 1.month
+- end_date = @end ? @end : Time.zone.now.beginning_of_month
 
 = form_tag({}, id: 'report-form') do
     = field_block do

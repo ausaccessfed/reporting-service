@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe AutomatedReportInstance, type: :model do
@@ -65,8 +66,8 @@ RSpec.describe AutomatedReportInstance, type: :model do
         if range
           let(:expected_range) do
             {
-              start: range_start.xmlschema,
-              end: Time.zone.now.beginning_of_month.xmlschema
+              start: range_start.strftime('%FT%H:%M:%S%z'),
+              end: Time.zone.now.beginning_of_month.strftime('%FT%H:%M:%S%z')
             }
           end
 

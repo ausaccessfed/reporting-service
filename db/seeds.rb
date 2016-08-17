@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 unless ENV['AAF_DEV'].to_i == 1
   $stderr.puts <<-EOF
 
@@ -8,7 +9,7 @@ unless ENV['AAF_DEV'].to_i == 1
   attempting to seed your database.
 
   EOF
-  fail('Not proceeding, missing AAF_DEV=1 environment variable')
+  raise('Not proceeding, missing AAF_DEV=1 environment variable')
 end
 
 include FactoryGirl::Syntax::Methods
@@ -81,22 +82,69 @@ ActiveRecord::Base.transaction do
     end
   end
 
-  start = 1.month.ago.utc.to_i
+  puts
+
+  start = 3.months.ago.utc.to_i
   finish = Time.now.utc.to_i
-  time = start
 
-  while time < finish
-    attrs = { service_provider: sps.sample, timestamp: Time.zone.at(time) }
+  events = Enumerator.new do |y|
+    time = start
 
-    create(:discovery_service_event, attrs.slice(:service_provider, :timestamp))
+    while time < finish
+      attrs = { user_agent: 'Mozilla/5.0', timestamp: Time.zone.at(time),
+                ip: Faker::Internet.ip_v4_address, group: Faker::Lorem.word,
+                unique_id: SecureRandom.urlsafe_base64, phase: 'request',
+                initiating_sp: sps.sample.entity_id }
 
-    if rand < 0.95
-      attrs[:identity_provider] = idps.sample
-      attrs[:timestamp] = Time.zone.at(time + rand(30))
-      create(:discovery_service_event, :response, attrs)
+      y << attrs
+
+      if rand < 0.95
+        y << attrs.merge(
+          phase: 'response',
+          selection_method: %w(manual cookie).sample,
+          selected_idp: idps.sample.entity_id,
+          timestamp: Time.zone.at(time + rand(30))
+        )
+      end
+
+      time += rand(60)
+    end
+  end
+
+  def sql_quote(str)
+    ActiveRecord::Base.connection.quote(str)
+  end
+
+  events.each_slice(1000) do |slice|
+    sqlio = StringIO.new
+    sqlio.puts(
+      'INSERT INTO discovery_service_events ' \
+      '(user_agent, ip, `group`, phase, unique_id, timestamp,' \
+      ' selection_method, return_url, initiating_sp, selected_idp,' \
+      ' created_at, updated_at) ' \
+      'VALUES '
+    )
+
+    slice.each do |attrs|
+      sqlio.puts(
+        format(
+          '(%<user_agent>s, %<ip>s, %<group>s, %<phase>s, %<unique_id>s,' \
+          ' %<timestamp>s, %<selection_method>s, %<return_url>s,' \
+          ' %<initiating_sp>s, %<selected_idp>s, now(), now()),',
+          Hash.new('NULL').merge(attrs.transform_values { |v| sql_quote(v) })
+        )
+      )
     end
 
-    time += rand(3600)
+    sqlio.seek(-2, IO::SEEK_CUR)
+    sqlio.puts(';')
+
+    ActiveRecord::Base.connection.execute(sqlio.string)
+
+    i += slice.length
+    offset = (slice.last[:timestamp].to_i - start)
+    pc = 100 * offset.to_f / (finish - start).to_f
+    print("\rCreating Events: #{i} (#{pc.to_i}%)\e[0K")
   end
 end
 

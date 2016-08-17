@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Authentication
   module IdentityEnhancement
     def update_roles(subject)

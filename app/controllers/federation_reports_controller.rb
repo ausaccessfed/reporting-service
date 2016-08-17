@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FederationReportsController < ApplicationController
   before_action :set_range
 
@@ -31,7 +32,7 @@ class FederationReportsController < ApplicationController
   private
 
   def set_range
-    @start = 1.year.ago.utc.beginning_of_day
-    @end = Time.now.utc.tomorrow.beginning_of_day
+    @start = 1.year.ago.beginning_of_day
+    @end = Time.zone.tomorrow.beginning_of_day
   end
 end

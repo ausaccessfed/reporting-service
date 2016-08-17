@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe IdentityProviderSessionsReport do
@@ -9,10 +10,14 @@ RSpec.describe IdentityProviderSessionsReport do
   let(:labels) { { y: 'Sessions / hour (average)', sessions: 'Sessions' } }
   let(:units) { '' }
 
-  let!(:start) { 10.days.ago.beginning_of_day }
-  let!(:finish) { 1.day.ago.end_of_day }
+  let(:start) { 10.days.ago.beginning_of_day }
+  let(:finish) { 1.day.ago.end_of_day }
 
-  let!(:range) { { start: start.xmlschema, end: finish.xmlschema } }
+  let(:range) do
+    { start: start.strftime('%FT%H:%M:%S%z'),
+      end: finish.strftime('%FT%H:%M:%S%z') }
+  end
+
   let(:steps) { 5 }
 
   let(:scope_range) do

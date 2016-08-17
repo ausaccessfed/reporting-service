@@ -101,7 +101,7 @@ class CreateAutomatedReportInstances
     (@base_url + ActionController::Base.helpers.image_path(image)).to_s
   end
 
-  FILE = 'app/views/layouts/email_template.html.md'.freeze
+  FILE = 'app/views/layouts/email_template.html.md'
   EMAIL_BODY = File.read(Rails.root.join(FILE)).freeze
 
   private_constant :EMAIL_BODY, :FILE, :INTERVALS

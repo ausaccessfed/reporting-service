@@ -1,9 +1,10 @@
+# frozen_string_literal: true
 source 'https://rubygems.org'
-gem 'rails', '4.2.3'
+gem 'rails', '~> 4.2.5'
 gem 'mysql2'
-gem 'sass-rails', '~> 5.0'
-gem 'uglifier'
-gem 'therubyracer'
+gem 'sass-rails', require: false
+gem 'uglifier', require: false
+gem 'therubyracer', require: false
 gem 'jbuilder'
 gem 'slim'
 
@@ -17,10 +18,10 @@ gem 'implicit-schema'
 
 gem 'aws-sdk'
 gem 'json-jwt'
+gem 'torba-rails'
 
 gem 'aaf-lipstick', git: 'https://github.com/ausaccessfed/aaf-lipstick',
                     branch: 'develop'
-gem 'torba'
 
 gem 'unicorn', require: false
 gem 'god', require: false
@@ -35,20 +36,17 @@ group :development, :test do
   gem 'fakeredis'
   gem 'webmock', require: false
 
-  gem 'distribution' # TODO: Remove this when not needed anymore.
-
   gem 'aaf-gumboot', git: 'https://github.com/ausaccessfed/aaf-gumboot',
                      branch: 'develop'
 
   gem 'pry', require: false
   gem 'byebug'
-  gem 'web-console'
 
   gem 'capybara', require: false
   gem 'poltergeist', require: false
   gem 'launchy', require: false
 
-  gem 'brakeman', require: false
+  gem 'brakeman', '~> 3.2.1', require: false
   gem 'simplecov', require: false
 
   gem 'guard', require: false
@@ -58,4 +56,5 @@ group :development, :test do
   gem 'guard-brakeman', require: false
   gem 'guard-unicorn', require: false
   gem 'terminal-notifier-guard', require: false
+  gem 'bullet'
 end

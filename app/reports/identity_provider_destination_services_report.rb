@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class IdentityProviderDestinationServicesReport < TabularReport
   prepend ReportsSharedMethods
 
@@ -17,6 +18,6 @@ class IdentityProviderDestinationServicesReport < TabularReport
   private
 
   def rows
-    tabular_sessions(:service_provider, idp_sessions)
+    tabular_sessions(ServiceProvider, idp_sessions)
   end
 end

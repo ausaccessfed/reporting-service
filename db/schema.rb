@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160330231532) do
+ActiveRecord::Schema.define(version: 20160613235908) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -92,8 +92,8 @@ ActiveRecord::Schema.define(version: 20160330231532) do
     t.string   "selected_idp",     limit: 255
   end
 
-  add_index "discovery_service_events", ["phase", "unique_id"], name: "index_discovery_service_events_on_phase_and_unique_id", unique: true, using: :btree
-  add_index "discovery_service_events", ["timestamp"], name: "index_discovery_service_events_on_timestamp", using: :btree
+  add_index "discovery_service_events", ["phase", "timestamp"], name: "index_discovery_service_events_on_phase_and_timestamp", using: :btree
+  add_index "discovery_service_events", ["unique_id", "phase"], name: "index_discovery_service_events_on_unique_id_and_phase", unique: true, using: :btree
 
   create_table "federated_login_events", force: :cascade do |t|
     t.string   "relying_party",         limit: 255, null: false

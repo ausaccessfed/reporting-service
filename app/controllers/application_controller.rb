@@ -1,4 +1,7 @@
+# frozen_string_literal: true
 class ApplicationController < ActionController::Base
+  around_action :change_time_zone
+
   Forbidden = Class.new(StandardError)
   private_constant :Forbidden
   rescue_from Forbidden, with: :forbidden
@@ -23,19 +26,19 @@ class ApplicationController < ActionController::Base
     return force_authentication unless session[:subject_id]
 
     @subject = Subject.find_by(id: session[:subject_id])
-    fail(Unauthorized, 'Subject invalid') unless @subject
-    fail(Unauthorized, 'Subject not functional') unless @subject.functioning?
+    raise(Unauthorized, 'Subject invalid') unless @subject
+    raise(Unauthorized, 'Subject not functional') unless @subject.functioning?
   end
 
   def ensure_access_checked
     return if @access_checked
 
     method = "#{self.class.name}##{params[:action]}"
-    fail("No access control performed by #{method}")
+    raise("No access control performed by #{method}")
   end
 
   def check_access!(action)
-    fail(Forbidden) unless subject.permits?(action)
+    raise(Forbidden) unless subject.permits?(action)
     @access_checked = true
   end
 
@@ -56,5 +59,14 @@ class ApplicationController < ActionController::Base
     session[:return_url] = request.url if request.get?
 
     redirect_to('/auth/login')
+  end
+
+  def change_time_zone(&block)
+    timezone = configuration.time_zone
+    Time.use_zone(timezone, &block)
+  end
+
+  def configuration
+    Rails.application.config.reporting_service
   end
 end

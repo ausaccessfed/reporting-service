@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FederationGrowthReport < TimeSeriesReport
   report_type 'federation-growth'
   y_label 'Count'

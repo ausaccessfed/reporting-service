@@ -18,7 +18,7 @@ class UpdateFromRapidConnect
   private
 
   AUTHORIZATION_HEADER_VALUE =
-    'AAF-RAPID-EXPORT service="reporting-service", key="%s"'.freeze
+    'AAF-RAPID-EXPORT service="reporting-service", key="%s"'
 
   def sync_service(service_data)
     org = Organization.find_by_name(service_data[:organization])

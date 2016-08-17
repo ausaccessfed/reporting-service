@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe IdentityProviderDailyDemandReport do
@@ -10,6 +11,11 @@ RSpec.describe IdentityProviderDailyDemandReport do
 
   let(:start) { 10.days.ago.beginning_of_day }
   let(:finish) { Time.zone.now.end_of_day }
+
+  let(:range) do
+    { start: start.strftime('%FT%H:%M:%S%z'),
+      end: finish.strftime('%FT%H:%M:%S%z') }
+  end
 
   let(:identity_provider_01) { create :identity_provider }
   let(:identity_provider_02) { create :identity_provider }
@@ -41,11 +47,7 @@ RSpec.describe IdentityProviderDailyDemandReport do
     it 'should include title, units and labels' do
       output_title = title + ' ' + identity_provider_01.name
       expect(report).to include(title: output_title,
-                                units: units, labels: labels)
-    end
-
-    it 'should include range' do
-      expect(report).to include(:range)
+                                units: units, labels: labels, range: range)
     end
 
     it 'sessions generated within given range' do

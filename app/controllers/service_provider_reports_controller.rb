@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ServiceProviderReportsController < SubscriberReports
   def sessions_report
     report_type = ServiceProviderSessionsReport

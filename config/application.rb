@@ -1,15 +1,12 @@
+# frozen_string_literal: true
 require File.expand_path('../boot', __FILE__)
 
 require 'rails'
 require 'active_model/railtie'
-# require "active_job/railtie"
 require 'active_record/railtie'
 require 'action_controller/railtie'
-# require 'action_mailer/railtie'
 require 'action_view/railtie'
 require 'sprockets/railtie'
-
-require 'torba/rails'
 
 Bundler.require(*Rails.groups)
 
@@ -35,4 +32,6 @@ module ReportingService
   end
 end
 
-Rails.application.assets.register_engine('.aafimg', Lipstick::Images::Processor)
+args = ['.aafimg', Lipstick::Images::Processor]
+args << { silence_deprecation: true } if Sprockets::VERSION.start_with?('3')
+Sprockets.register_engine(*args)
