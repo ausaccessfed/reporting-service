@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe ServiceProviderReportsController do
+RSpec.describe ServiceProviderReportsController, type: :routing do
   shared_examples 'get request' do
     subject do
       { get: "/subscriber_reports#{path}" }

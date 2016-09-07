@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe AutomatedReportInstancesController, type: :controller do
+RSpec.describe AutomatedReportInstancesController, type: :routing do
   describe 'route to /automated_report_instances/show' do
     subject { { get: '/automated_report/identifier' } }
     prefix = 'automated_report_instances#show'
