@@ -14,6 +14,7 @@ gem 'redis-rails'
 gem 'rapid-rack'
 gem 'valhammer'
 gem 'accession'
+gem 'super-identity'
 gem 'implicit-schema'
 
 gem 'aws-sdk'

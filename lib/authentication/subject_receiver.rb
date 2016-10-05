@@ -2,8 +2,8 @@
 module Authentication
   class SubjectReceiver
     include RapidRack::DefaultReceiver
+    include SuperIdentity::Client
     include RapidRack::RedisRegistry
-    include IdentityEnhancement
 
     def map_attributes(_env, attrs)
       {
@@ -29,6 +29,16 @@ module Authentication
       return redirect_to(url) unless url.blank?
       super
     end
+
+    def update_roles(subject)
+      subject.entitlements = entitlements(subject.shared_token)
+    end
+
+    # :nocov:
+    def ide_config
+      Rails.application.config.reporting_service.ide
+    end
+    # :nocov:
 
     private
 
