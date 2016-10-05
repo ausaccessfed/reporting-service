@@ -2,8 +2,6 @@
 require 'rails_helper'
 
 RSpec.feature 'Federation Reports' do
-  include IdentityEnhancementStub
-
   given(:user) { create(:subject) }
   given(:controller) { 'federation_reports' }
 

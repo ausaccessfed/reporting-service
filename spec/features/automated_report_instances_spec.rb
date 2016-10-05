@@ -2,7 +2,6 @@
 require 'rails_helper'
 
 RSpec.feature 'automated report instances' do
-  include IdentityEnhancementStub
   given(:user) { create :subject }
   given(:organization) { create :organization }
   given(:attribute) { create :saml_attribute }
