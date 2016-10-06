@@ -20,8 +20,7 @@ gem 'aws-sdk'
 gem 'json-jwt'
 gem 'torba-rails'
 
-gem 'aaf-lipstick', git: 'https://github.com/ausaccessfed/aaf-lipstick',
-                    branch: 'develop'
+gem 'aaf-lipstick'
 
 gem 'unicorn', require: false
 gem 'god', require: false
