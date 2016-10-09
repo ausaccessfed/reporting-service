@@ -2,8 +2,6 @@
 require 'rails_helper'
 
 RSpec.feature 'Administrator Reports' do
-  include IdentityEnhancementStub
-
   given(:user) { create :subject }
 
   describe 'when subject is administrator' do

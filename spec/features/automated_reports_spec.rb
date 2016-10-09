@@ -2,7 +2,6 @@
 require 'rails_helper'
 
 RSpec.feature 'automated report' do
-  include IdentityEnhancementStub
   given(:user) { create :subject }
   given(:user_02) { create :subject }
   given(:idp) { create :identity_provider }

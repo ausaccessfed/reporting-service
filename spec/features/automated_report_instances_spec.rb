@@ -2,7 +2,6 @@
 require 'rails_helper'
 
 RSpec.feature 'automated report instances' do
-  include IdentityEnhancementStub
   given(:user) { create :subject }
   given(:organization) { create :organization }
   given(:attribute) { create :saml_attribute }
@@ -38,7 +37,7 @@ RSpec.feature 'automated report instances' do
       attrs = create(:aaf_attributes, :from_subject, subject: user)
       RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
-      stub_ide(shared_token: user.shared_token, entitlements: [nil])
+      stub_ide(shared_token: user.shared_token, entitlements: [])
 
       visit '/auth/login'
       click_button 'Login'
