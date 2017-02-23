@@ -27,7 +27,7 @@ class AutomatedReport < ActiveRecord::Base
   end
 
   def target_object
-    klass.find_by(identifying_attribute: target)
+    klass.identifying_attribute(target)
   end
 
   private
@@ -66,7 +66,7 @@ class AutomatedReport < ActiveRecord::Base
     return if report_class.nil?
     return target_must_be_nil if klass.nil?
     return target_must_be_object_type_identifier if klass == :object_type
-    return if klass.find_by(identifying_attribute: target)
+    return if klass.identifying_attribute(target)
 
     errors.add(:target, 'must be appropriate for the report type')
   end

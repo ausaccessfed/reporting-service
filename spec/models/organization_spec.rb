@@ -23,12 +23,12 @@ RSpec.describe Organization, type: :model do
     let!(:org) { create(:organization) }
 
     it 'finds by entity id' do
-      expect(described_class.find_by(identifying_attribute: org.identifier))
+      expect(described_class.identifying_attribute(org.identifier))
         .to eq(org)
     end
 
     it 'returns nil when not found' do
-      expect(described_class.find_by(identifying_attribute: 'urn:nonexistent'))
+      expect(described_class.identifying_attribute('urn:nonexistent'))
         .to be_nil
     end
   end
