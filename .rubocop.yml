@@ -1,22 +1,2 @@
-AllCops:
-  TargetRubyVersion: 2.3
-  Exclude:
-    - db/schema.rb
-
-Rails:
-  Enabled: true
-
-Rails/Output:
-  Exclude:
-    - db/seeds.rb
-
-Style/Documentation:
-  Enabled: false
-
-Metrics/MethodLength:
-  Exclude:
-    - db/migrate/*.rb
-
-Metrics/AbcSize:
-  Exclude:
-    - db/migrate/*.rb
+inherit_from:
+  - https://raw.githubusercontent.com/ausaccessfed/aaf-gumboot/0a6f9e591502156bdb8d831c33cb4cdea5a65ee0/aaf-rubocop.yml
