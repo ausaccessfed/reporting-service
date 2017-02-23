@@ -1,5 +1,9 @@
 class RefactorDiscoveryServiceEventForeignKeys < ActiveRecord::Migration
   def change
+    # I swear that there is a Rubocop bug that stops the main disable logic
+    # from working here.
+
+    # rubocop:disable Metrics/BlockLength
     reversible do |dir|
       dir.up do
         add_column :discovery_service_events, :initiating_sp, :string
@@ -48,5 +52,6 @@ class RefactorDiscoveryServiceEventForeignKeys < ActiveRecord::Migration
         remove_column :discovery_service_events, :selected_idp
       end
     end
+    # rubocop:enable Metrics/BlockLength
   end
 end
