@@ -57,21 +57,21 @@ RSpec.describe IdentityProviderDestinationServicesReport do
 
     it 'creates report :rows with number of related SPs and SP names
         only with existing entities' do
-      sp_name_01 = sp_01.name
-      sp_name_02 = sp_02.name
+      sp_name01 = sp01.name
+      sp_name02 = sp02.name
 
-      expect(report[:rows]).to include([sp_name_01, '20'])
-      expect(report[:rows]).to include([sp_name_02, '5'])
+      expect(report[:rows]).to include([sp_name01, '20'])
+      expect(report[:rows]).to include([sp_name02, '5'])
     end
 
     it 'report should not include sessions out of range' do
-      sp_name_03 = sp_03.name
-      expect(report[:rows]).not_to include([sp_name_03, anything])
+      sp_name03 = sp03.name
+      expect(report[:rows]).not_to include([sp_name03, anything])
     end
 
     it 'report should not include sessions from irrelevant entities' do
-      sp_name_04 = sp_04.name
-      expect(report[:rows]).not_to include([sp_name_04, anything])
+      sp_name04 = sp04.name
+      expect(report[:rows]).not_to include([sp_name04, anything])
     end
   end
 end

@@ -4,8 +4,7 @@ class AdministratorReportsController < ApplicationController
   before_action :set_range_params,
                 except: [:subscriber_registrations_report, :index]
 
-  def index
-  end
+  def index; end
 
   def subscriber_registrations_report
     return if params[:identifier].blank?

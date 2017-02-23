@@ -58,21 +58,21 @@ RSpec.describe ServiceProviderSourceIdentityProvidersReport do
 
     it 'creates report :rows with number of related IdPs and IdP names
         only with existing entities' do
-      idp_name_01 = idp_01.name
-      idp_name_02 = idp_02.name
+      idp_name01 = idp01.name
+      idp_name02 = idp02.name
 
-      expect(report[:rows]).to include([idp_name_01, '20'])
-      expect(report[:rows]).to include([idp_name_02, '5'])
+      expect(report[:rows]).to include([idp_name01, '20'])
+      expect(report[:rows]).to include([idp_name02, '5'])
     end
 
     it 'report should not include sessions out of range' do
-      idp_name_03 = idp_03.name
-      expect(report[:rows]).not_to include([idp_name_03, anything])
+      idp_name03 = idp03.name
+      expect(report[:rows]).not_to include([idp_name03, anything])
     end
 
     it 'report should not include sessions from irrelevant entities' do
-      idp_name_04 = idp_04.name
-      expect(report[:rows]).not_to include([idp_name_04, anything])
+      idp_name04 = idp_04.name
+      expect(report[:rows]).not_to include([idp_name04, anything])
     end
   end
 end

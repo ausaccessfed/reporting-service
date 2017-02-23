@@ -14,12 +14,12 @@ RSpec.describe SAMLAttribute, type: :model do
     let!(:attr) { create(:saml_attribute) }
 
     it 'finds by entity id' do
-      expect(described_class.find_by_identifying_attribute(attr.name))
+      expect(described_class.find_by(identifying_attribute: attr.name))
         .to eq(attr)
     end
 
     it 'returns nil when not found' do
-      expect(described_class.find_by_identifying_attribute('urn:nonexistent'))
+      expect(described_class.find_by(identifying_attribute: 'urn:nonexistent'))
         .to be_nil
     end
   end

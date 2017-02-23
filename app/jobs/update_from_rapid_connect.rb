@@ -21,7 +21,7 @@ class UpdateFromRapidConnect
     'AAF-RAPID-EXPORT service="reporting-service", key="%s"'
 
   def sync_service(service_data)
-    org = Organization.find_by_name(service_data[:organization])
+    org = Organization.find_by(name: service_data[:organization])
     rapid_data = service_data[:rapidconnect]
 
     attrs = { name: service_data[:name],

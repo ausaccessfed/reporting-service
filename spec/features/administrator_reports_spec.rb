@@ -43,8 +43,8 @@ RSpec.feature 'Administrator Reports' do
       end
 
       scenario 'viewing Report' do
-        message_01 = 'You have successfully subscribed to this report'
-        message_02 = 'You have already subscribed to this report'
+        message01 = 'You have successfully subscribed to this report'
+        message02 = 'You have already subscribed to this report'
 
         click_link 'Subscriber Registrations Report'
 
@@ -55,14 +55,14 @@ RSpec.feature 'Administrator Reports' do
             expect(page).to have_css('table.subscriber-registrations')
             click_button('Subscribe')
             click_link(interval)
-            expect(page).to have_selector('p', text: message_01)
+            expect(page).to have_selector('p', text: message01)
 
             select(identifier.titleize, from: 'Subscriber Identifiers')
             click_button('Generate')
             expect(page).to have_css('table.subscriber-registrations')
             click_button('Subscribe')
             click_link(interval)
-            expect(page).to have_selector('p', text: message_02)
+            expect(page).to have_selector('p', text: message02)
 
             expect(current_path)
               .to eq('/admin_reports/subscriber_registrations_report')
