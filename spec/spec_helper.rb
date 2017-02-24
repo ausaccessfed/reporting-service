@@ -24,4 +24,9 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
   RSpec::Matchers.define_negated_matcher :not_change, :change
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
 end
