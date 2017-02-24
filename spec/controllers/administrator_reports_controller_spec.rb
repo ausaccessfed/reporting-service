@@ -16,7 +16,9 @@ RSpec.describe AdministratorReportsController, type: :controller do
   shared_examples 'an admin report' do
     before do
       get action
-      post action, params: params
+      # rubocop:disable Rails/HttpPositionalArguments
+      post action, params
+      # rubocop:enable Rails/HttpPositionalArguments
     end
 
     it 'Assigns report data to template' do

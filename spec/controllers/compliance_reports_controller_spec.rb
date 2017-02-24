@@ -10,7 +10,9 @@ RSpec.describe ComplianceReportsController, type: :controller do
   end
 
   def run_post
-    post route_path, params: { "#{finder}": object.send(finder) }
+    # rubocop:disable Rails/HttpPositionalArguments
+    post route_path, "#{finder}": object.send(finder)
+    # rubocop:enable Rails/HttpPositionalArguments
   end
 
   shared_examples 'get request for provider object' do

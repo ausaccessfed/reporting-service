@@ -35,7 +35,9 @@ RSpec.describe ApplicationController, type: :controller do
     end
 
     it 'GET request should create a uri session including fragments' do
-      get :federation_growth, params: { time: 1000 }
+      # rubocop:disable Rails/HttpPositionalArguments
+      get :federation_growth, time: 1000
+      # rubocop:enable Rails/HttpPositionalArguments
       uri = URI.parse(session[:return_url])
 
       expect(uri.path).to eq('/anonymous/federation_growth')

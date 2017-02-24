@@ -19,11 +19,12 @@ RSpec.shared_examples 'a Subscriber Report' do
   end
 
   def run_post
-    post report_path, params: {
-      entity_id: object.entity_id,
-      start: 1.year.ago.utc,
-      end: Time.now.utc
-    }
+    # rubocop:disable Rails/HttpPositionalArguments
+    post report_path,
+         entity_id: object.entity_id,
+         start: 1.year.ago.utc,
+         end: Time.now.utc
+    # rubocop:enable Rails/HttpPositionalArguments
   end
 
   before do

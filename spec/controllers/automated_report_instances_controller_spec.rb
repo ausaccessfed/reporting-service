@@ -20,7 +20,9 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   end
 
   def run(identifier)
-    get :show, params: { identifier: identifier }
+    # rubocop:disable Rails/HttpPositionalArguments
+    get :show, identifier: identifier
+    # rubocop:enable Rails/HttpPositionalArguments
   end
 
   before do

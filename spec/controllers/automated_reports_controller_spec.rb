@@ -6,17 +6,20 @@ RSpec.describe AutomatedReportsController, type: :controller do
   let(:user) { create :subject }
 
   def destroy
-    delete :destroy, params: { identifier: subscription.identifier }
+    # rubocop:disable Rails/HttpPositionalArguments
+    delete :destroy, identifier: subscription.identifier
+    # rubocop:enable Rails/HttpPositionalArguments
   end
 
   def subscribe(interval)
     request.env['HTTP_REFERER'] = "federation_reports/#{path}"
 
-    post :subscribe, params: {
-      report_class: report_class,
-      interval: interval,
-      back_path: request.env['HTTP_REFERER']
-    }
+    # rubocop:disable Rails/HttpPositionalArguments
+    post :subscribe,
+         report_class: report_class,
+         interval: interval,
+         back_path: request.env['HTTP_REFERER']
+    # rubocop:enable Rails/HttpPositionalArguments
   end
 
   before do
