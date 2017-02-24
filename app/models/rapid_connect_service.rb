@@ -8,7 +8,7 @@ class RapidConnectService < ActiveRecord::Base
 
   valhammer
 
-  def self.find_by_identifying_attribute(value)
+  def self.identifying_attribute(value)
     find_by(identifier: value)
   end
 end

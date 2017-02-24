@@ -13,7 +13,7 @@ RSpec.describe ServiceProvider, type: :model do
     it_behaves_like 'a federation object'
   end
 
-  describe '::find_by_identifying_attribute' do
+  describe '::identifying_attribute' do
     let!(:sp) { create(:service_provider) }
 
     it 'finds by entity id' do

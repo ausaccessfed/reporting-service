@@ -10,7 +10,7 @@ RSpec.describe SAMLAttribute, type: :model do
     it { is_expected.to validate_uniqueness_of(:name) }
   end
 
-  describe '::find_by_identifying_attribute' do
+  describe '::identifying_attribute' do
     let!(:attr) { create(:saml_attribute) }
 
     it 'finds by entity id' do

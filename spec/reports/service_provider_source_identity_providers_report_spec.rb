@@ -12,11 +12,11 @@ RSpec.describe ServiceProviderSourceIdentityProvidersReport do
   let(:finish) { Time.zone.now.end_of_day }
 
   let(:sp) { create :service_provider }
-  let(:sp_02) { create :service_provider }
-  let(:idp_01) { create :identity_provider }
-  let(:idp_02) { create :identity_provider }
-  let(:idp_03) { create :identity_provider }
-  let(:idp_04) { create :identity_provider }
+  let(:sp02) { create :service_provider }
+  let(:idp01) { create :identity_provider }
+  let(:idp02) { create :identity_provider }
+  let(:idp03) { create :identity_provider }
+  let(:idp04) { create :identity_provider }
 
   subject do
     ServiceProviderSourceIdentityProvidersReport
@@ -40,20 +40,20 @@ RSpec.describe ServiceProviderSourceIdentityProvidersReport do
 
       create_list :discovery_service_event, 20, :response,
                   initiating_sp: sp.entity_id,
-                  selected_idp: idp_01.entity_id
+                  selected_idp: idp01.entity_id
 
       create_list :discovery_service_event, 5, :response,
                   initiating_sp: sp.entity_id,
-                  selected_idp: idp_02.entity_id
+                  selected_idp: idp02.entity_id
 
       create_list :discovery_service_event, 10,
                   initiating_sp: sp.entity_id,
-                  selected_idp: idp_03.entity_id,
+                  selected_idp: idp03.entity_id,
                   timestamp: 20.days.ago.beginning_of_day
 
       create_list :discovery_service_event, 5, :response,
-                  initiating_sp: sp_02.entity_id,
-                  selected_idp: idp_04.entity_id
+                  initiating_sp: sp02.entity_id,
+                  selected_idp: idp04.entity_id
     end
 
     it 'creates report :rows with number of related IdPs and IdP names
@@ -71,7 +71,7 @@ RSpec.describe ServiceProviderSourceIdentityProvidersReport do
     end
 
     it 'report should not include sessions from irrelevant entities' do
-      idp_name04 = idp_04.name
+      idp_name04 = idp04.name
       expect(report[:rows]).not_to include([idp_name04, anything])
     end
   end

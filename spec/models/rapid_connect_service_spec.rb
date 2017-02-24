@@ -15,7 +15,7 @@ RSpec.describe RapidConnectService, type: :model do
     it_behaves_like 'a federation object'
   end
 
-  describe '::find_by_identifying_attribute' do
+  describe '::identifying_attribute' do
     let!(:service) { create(:rapid_connect_service) }
 
     it 'finds by entity id' do
