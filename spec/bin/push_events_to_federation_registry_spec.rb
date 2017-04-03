@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-load Rails.root.join('bin/push_events_to_federation_registry.rb').to_s
+load Rails.root.join('bin', 'push_events_to_federation_registry.rb').to_s
 
 RSpec.describe PushEventsToFederationRegistry do
   let(:config) { Rails.application.config.database_configuration[Rails.env] }
@@ -248,7 +248,7 @@ RSpec.describe PushEventsToFederationRegistry do
         end
 
         it 'skips the record' do
-          expect { run }.not_to change { items.count }
+          expect { run }.not_to(change { items.count })
         end
 
         it 'dequeues the item' do
@@ -265,7 +265,7 @@ RSpec.describe PushEventsToFederationRegistry do
         end
 
         it 'skips the record' do
-          expect { run }.not_to change { items.count }
+          expect { run }.not_to(change { items.count })
         end
 
         it 'dequeues the item' do

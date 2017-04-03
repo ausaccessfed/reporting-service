@@ -126,7 +126,7 @@ RSpec.describe CreateAutomatedReportInstances do
       5.times do |i|
         Timecop.travel(january + i.hours) do
           expect { subject.perform }
-            .not_to change { AutomatedReportInstance.count }
+            .not_to(change { AutomatedReportInstance.count })
         end
       end
     end
@@ -143,7 +143,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
         Timecop.travel(time + time_pass) do
           expect { subject.perform }
-            .not_to change { AutomatedReportInstance.count }
+            .not_to(change { AutomatedReportInstance.count })
         end
       end
     end
@@ -160,7 +160,7 @@ RSpec.describe CreateAutomatedReportInstances do
 
         Timecop.travel(time + time_pass) do
           expect { subject.perform }
-            .not_to change { AutomatedReportInstance.count }
+            .not_to(change { AutomatedReportInstance.count })
         end
       end
     end

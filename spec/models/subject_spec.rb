@@ -50,7 +50,7 @@ RSpec.describe Subject, type: :model do
         before { object.roles << role }
 
         it 'makes no change' do
-          expect { run }.not_to change { roles }
+          expect { run }.not_to(change { roles })
         end
       end
     end

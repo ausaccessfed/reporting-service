@@ -158,7 +158,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
 
         it 'does not write the event to the secondary queue' do
           redis = Redis.new
-          expect { run }.not_to change { redis.llen('wayf_access_record') }
+          expect { run }.not_to(change { redis.llen('wayf_access_record') })
         end
       end
 
