@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  include Lipstick::DynamicErrors
+
   around_action :change_time_zone
 
   Forbidden = Class.new(StandardError)
