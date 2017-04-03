@@ -1,6 +1,9 @@
 # frozen_string_literal: true
+
 source 'https://rubygems.org'
+
 gem 'rails', '~> 4.2.5'
+
 gem 'mysql2'
 gem 'sass-rails', require: false
 gem 'uglifier', require: false
