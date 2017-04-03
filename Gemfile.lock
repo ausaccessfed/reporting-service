@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/ausaccessfed/aaf-gumboot
-  revision: 10e4758b4faf6571a924b8ef4527998c2f533b99
+  revision: b869f8ef0a673e8c107a4a184a70fd130e443c66
   branch: develop
   specs:
-    aaf-gumboot (0.0.1)
+    aaf-gumboot (1.0.0.pre.alpha.2)
       accession (~> 1.0)
 
 GEM
