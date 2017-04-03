@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 require 'gumboot/shared_examples/application_controller'
 
@@ -16,7 +17,7 @@ RSpec.describe ApplicationController, type: :controller do
 
   before do
     @routes.draw do
-      match ':controller/:action(/:id)', via: [:get, :post]
+      match ':controller/:action(/:id)', via: %i[get post]
     end
   end
 

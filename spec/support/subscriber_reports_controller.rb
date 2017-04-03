@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.shared_examples 'a Subscriber Report' do
   let(:organization) { create :organization }
 

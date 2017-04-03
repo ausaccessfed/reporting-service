@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'openssl'
 
 module API
@@ -40,7 +41,6 @@ module API
         Hash[x509_dn_parsed.to_a.map { |components| components[0..1] }]
 
       x509_dn_hash['CN'] || raise(Unauthorized, 'Subject CN invalid')
-
     rescue OpenSSL::X509::NameError
       raise(Unauthorized, 'Subject DN invalid')
     end

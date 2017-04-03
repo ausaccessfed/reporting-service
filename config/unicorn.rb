@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 
 worker_processes 5

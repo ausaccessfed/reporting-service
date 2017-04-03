@@ -34,7 +34,7 @@ class PushEventsToFederationRegistry
   end
 
   def config
-    @config ||= YAML.load(File.read('config/fr_database.yml'))
+    @config ||= YAML.safe_load(File.read('config/fr_database.yml'))
   end
 
   private

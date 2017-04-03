@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ProvidedAttributeReport do
   let(:type) { 'provided-attribute' }
-  let(:header) { [%w(Name Supported)] }
+  let(:header) { [%w[Name Supported]] }
 
   let(:first_attribute) { create :saml_attribute }
   let(:second_attribute) { create :saml_attribute }

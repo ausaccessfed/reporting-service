@@ -1,11 +1,11 @@
 # frozen_string_literal: true
+
 class AdministratorReportsController < ApplicationController
   before_action { check_access! 'admin:report' }
   before_action :set_range_params,
-                except: [:subscriber_registrations_report, :index]
+                except: %i[subscriber_registrations_report index]
 
-  def index
-  end
+  def index; end
 
   def subscriber_registrations_report
     return if params[:identifier].blank?

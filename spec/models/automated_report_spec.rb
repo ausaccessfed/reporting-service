@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe AutomatedReport, type: :model do
@@ -26,11 +27,11 @@ RSpec.describe AutomatedReport, type: :model do
     end
 
     it 'requires no target for targetless reports' do
-      targetless_reports = %w(
+      targetless_reports = %w[
         DailyDemandReport FederatedSessionsReport FederationGrowthReport
         IdentityProviderAttributesReport
         IdentityProviderUtilizationReport ServiceProviderUtilizationReport
-      )
+      ]
       targetless_reports.each do |klass|
         subject.report_class = klass
         expect(subject).to allow_value(nil).for(:target)
@@ -42,8 +43,8 @@ RSpec.describe AutomatedReport, type: :model do
 
     it 'requires an object type identifier for object reports' do
       subject.report_class = 'SubscriberRegistrationsReport'
-      types = %w(identity_providers service_providers organizations
-                 rapid_connect_services services)
+      types = %w[identity_providers service_providers organizations
+                 rapid_connect_services services]
       types.each do |type|
         expect(subject).to allow_value(type).for(:target)
       end
@@ -51,10 +52,10 @@ RSpec.describe AutomatedReport, type: :model do
     end
 
     it 'requires an IdP entity_id for IdP reports' do
-      idp_reports = %w(
+      idp_reports = %w[
         IdentityProviderSessionsReport IdentityProviderDailyDemandReport
         IdentityProviderDestinationServicesReport
-      )
+      ]
 
       idp_reports.each do |klass|
         subject.report_class = klass
@@ -66,10 +67,10 @@ RSpec.describe AutomatedReport, type: :model do
     end
 
     it 'requires an SP entity_id for SP reports' do
-      sp_reports = %w(
+      sp_reports = %w[
         ServiceProviderSessionsReport ServiceProviderDailyDemandReport
         ServiceProviderSourceIdentityProvidersReport ServiceCompatibilityReport
-      )
+      ]
       sp_reports.each do |klass|
         subject.report_class = klass
         expect(subject).to allow_value(sp.entity_id).for(:target)
@@ -80,7 +81,7 @@ RSpec.describe AutomatedReport, type: :model do
     end
 
     it 'requires an attribute name for attribute reports' do
-      %w(ProvidedAttributeReport RequestedAttributeReport).each do |klass|
+      %w[ProvidedAttributeReport RequestedAttributeReport].each do |klass|
         subject.report_class = klass
         expect(subject).to allow_value(attribute.name).for(:target)
         expect(subject).not_to allow_value(idp.entity_id).for(:target)

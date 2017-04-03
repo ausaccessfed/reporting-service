@@ -3,3 +3,8 @@ inherit_gem:
 
 AllCops:
   TargetRailsVersion: 4.2
+
+Rails/DynamicFindBy:
+  Whitelist:
+    - find_by_sql
+    - find_by_identifying_attribute

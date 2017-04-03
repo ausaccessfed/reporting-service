@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RapidConnectService < ActiveRecord::Base
   include FederationObject
 

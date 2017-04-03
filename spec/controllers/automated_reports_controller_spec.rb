@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe AutomatedReportsController, type: :controller do
@@ -68,7 +69,7 @@ RSpec.describe AutomatedReportsController, type: :controller do
 
   shared_examples 'Automated Report Subscription' do
     before do
-      %w(monthly quarterly yearly).each do |interval|
+      %w[monthly quarterly yearly].each do |interval|
         subscribe interval
       end
     end

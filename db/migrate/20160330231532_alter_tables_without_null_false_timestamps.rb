@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class AlterTablesWithoutNullFalseTimestamps < ActiveRecord::Migration
-  TABLES = %w(subjects roles api_subjects
-              permissions subject_roles api_subject_roles).freeze
+  TABLES = %w[subjects roles api_subjects
+              permissions subject_roles api_subject_roles].freeze
 
   def change
     TABLES.each do |table|

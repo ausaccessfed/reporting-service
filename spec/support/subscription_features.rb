@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+
 RSpec.shared_examples 'Subscribing to an automated report with target' do
-  %w(monthly quarterly yearly).each do |interval|
+  %w[monthly quarterly yearly].each do |interval|
     given!("auto_report_#{interval}".to_sym) do
       create :automated_report,
              interval: interval,
@@ -31,7 +32,7 @@ RSpec.shared_examples 'Subscribing to an automated report with target' do
       click_link(button)
       expect(current_path).to eq("/#{controller}/#{path}")
 
-      %w(Monthly Quarterly Yearly).each do |interval|
+      %w[Monthly Quarterly Yearly].each do |interval|
         select(object.name, from: list)
         click_button('Generate')
         click_button('Subscribe')
@@ -50,7 +51,7 @@ RSpec.shared_examples 'Subscribing to an automated report with target' do
       click_link(button)
       expect(current_path).to eq("/#{controller}/#{path}")
 
-      %w(Monthly Quarterly Yearly).each do |interval|
+      %w[Monthly Quarterly Yearly].each do |interval|
         select(object.name, from: list)
         click_button('Generate')
         click_button('Subscribe')

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module ApplicationHelper
   include Lipstick::Helpers::LayoutHelper
   include Lipstick::Helpers::NavHelper

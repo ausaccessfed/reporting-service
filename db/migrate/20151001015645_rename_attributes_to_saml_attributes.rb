@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RenameAttributesToSAMLAttributes < ActiveRecord::Migration
   def change
     remove_foreign_key :service_provider_attributes, :attributes

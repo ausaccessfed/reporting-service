@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 load Rails.root.join('bin/push_events_to_federation_registry.rb').to_s
@@ -34,7 +35,7 @@ RSpec.describe PushEventsToFederationRegistry do
         .with('config/fr_database.yml')
         .and_return(yml_file)
 
-      expect(subject.config).to eq(YAML.load(yml_file))
+      expect(subject.config).to eq(YAML.safe_load(yml_file))
     end
   end
 

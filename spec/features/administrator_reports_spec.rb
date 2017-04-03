@@ -1,14 +1,15 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Administrator Reports' do
   given(:user) { create :subject }
 
   describe 'when subject is administrator' do
-    %w(identity_providers
+    %w[identity_providers
        service_providers organizations
-       rapid_connect_services services).each do |identifier|
-      %w(monthly quarterly yearly).each do |interval|
+       rapid_connect_services services].each do |identifier|
+      %w[monthly quarterly yearly].each do |interval|
         given!("auto_report_#{identifier}_#{interval}".to_sym) do
           create :automated_report,
                  interval: interval,
@@ -38,8 +39,8 @@ RSpec.feature 'Administrator Reports' do
 
     context 'Subscriber Registrations' do
       given(:identifiers) do
-        %w(organizations identity_providers service_providers
-           rapid_connect_services services)
+        %w[organizations identity_providers service_providers
+           rapid_connect_services services]
       end
 
       scenario 'viewing Report' do
@@ -48,7 +49,7 @@ RSpec.feature 'Administrator Reports' do
 
         click_link 'Subscriber Registrations Report'
 
-        %w(Monthly Quarterly Yearly).each do |interval|
+        %w[Monthly Quarterly Yearly].each do |interval|
           identifiers.each do |identifier|
             select(identifier.titleize, from: 'Subscriber Identifiers')
             click_button('Generate')

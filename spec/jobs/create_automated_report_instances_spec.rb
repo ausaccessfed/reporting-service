@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe CreateAutomatedReportInstances do
@@ -6,8 +7,8 @@ RSpec.describe CreateAutomatedReportInstances do
 
   around { |spec| Timecop.freeze { spec.run } }
 
-  %w(january february march april may june july august
-     september october november december).each do |month|
+  %w[january february march april may june july august
+     september october november december].each do |month|
     let(month.to_sym) do
       Time.zone.parse("2016-#{month}-01")
     end
@@ -17,7 +18,7 @@ RSpec.describe CreateAutomatedReportInstances do
   let(:user_02) { create :subject }
   let(:idp) { create :identity_provider }
 
-  %w(monthly quarterly yearly).each do |i|
+  %w[monthly quarterly yearly].each do |i|
     let!("auto_report_#{i}_01".to_sym) do
       create :automated_report,
              interval: i,

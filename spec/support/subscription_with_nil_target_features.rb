@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+
 RSpec.shared_examples 'Subscribing to a nil class report' do
-  %w(monthly quarterly yearly).each do |interval|
+  %w[monthly quarterly yearly].each do |interval|
     given!("auto_report_#{interval}".to_sym) do
       create :automated_report,
              interval: interval,
@@ -31,7 +32,7 @@ RSpec.shared_examples 'Subscribing to a nil class report' do
       expect(current_path).to eq("/#{controller}/#{path}")
       expect(page).to have_css(template)
 
-      %w(Monthly Quarterly Yearly).each do |interval|
+      %w[Monthly Quarterly Yearly].each do |interval|
         click_button('Subscribe')
         click_link(interval)
         expect(current_path).to eq("/#{controller}/#{path}")
@@ -48,7 +49,7 @@ RSpec.shared_examples 'Subscribing to a nil class report' do
       expect(current_path).to eq("/#{controller}/#{path}")
       expect(page).to have_css(template)
 
-      %w(Monthly Quarterly Yearly).each do |interval|
+      %w[Monthly Quarterly Yearly].each do |interval|
         click_button('Subscribe')
         click_link(interval)
         expect(current_path).to eq("/#{controller}/#{path}")

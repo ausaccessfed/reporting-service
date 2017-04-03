@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 class AutomatedReport < ActiveRecord::Base
   has_many :automated_report_instances
   has_many :automated_report_subscriptions
 
   valhammer
 
-  validates :interval, inclusion: { in: %w(monthly quarterly yearly) }
+  validates :interval, inclusion: { in: %w[monthly quarterly yearly] }
 
   validate :target_must_be_valid_for_report_type,
            :report_class_must_be_known
@@ -77,8 +78,8 @@ class AutomatedReport < ActiveRecord::Base
   end
 
   OBJECT_TYPE_IDENTIFIERS =
-    %w(identity_providers service_providers organizations
-       rapid_connect_services services).freeze
+    %w[identity_providers service_providers organizations
+       rapid_connect_services services].freeze
 
   def target_must_be_object_type_identifier
     return if OBJECT_TYPE_IDENTIFIERS.include?(target)

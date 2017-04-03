@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe TimeSeriesReport::Lint do
@@ -29,7 +30,7 @@ RSpec.describe TimeSeriesReport::Lint do
         series_b: 'the B series',
         series_c: 'the C series'
       },
-      series: %w(series_a series_b series_c),
+      series: %w[series_a series_b series_c],
       units: 'Hz',
       title: 'A graph!',
       range: {
@@ -127,7 +128,7 @@ RSpec.describe TimeSeriesReport::Lint do
 
   context 'when a series is named "y"' do
     let(:output) do
-      valid_output.merge(series: valid_output[:series] + %w(y))
+      valid_output.merge(series: valid_output[:series] + %w[y])
     end
 
     fails_with 'series name "y" is not permitted'

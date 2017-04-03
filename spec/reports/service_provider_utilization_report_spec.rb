@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ServiceProviderUtilizationReport do
   let(:type) { 'service-provider-utilization' }
-  let(:header) { [%w(Name Sessions)] }
+  let(:header) { [%w[Name Sessions]] }
   let(:title) { 'Service Provider Utilization Report' }
 
   subject { ServiceProviderUtilizationReport.new(start, finish) }
