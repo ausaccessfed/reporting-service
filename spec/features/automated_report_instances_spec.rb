@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'automated report instances' do
@@ -265,8 +266,8 @@ RSpec.feature 'automated report instances' do
   end
 
   context 'Subscriber Registrations Reports' do
-    targets = %w(identity_providers service_providers
-                 organizations rapid_connect_services services)
+    targets = %w[identity_providers service_providers
+                 organizations rapid_connect_services services]
 
     targets.each do |target|
       given(:target) { target }

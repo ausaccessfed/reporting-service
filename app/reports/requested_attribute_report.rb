@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 class RequestedAttributeReport < TabularReport
   report_type 'requested-attribute'
-  header %w(Name Status)
+  header %w[Name Status]
   footer
 
   def initialize(name)

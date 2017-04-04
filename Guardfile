@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 guard :bundler do
   require 'guard/bundler'
   require 'guard/bundler/verify'
@@ -21,7 +22,7 @@ guard :rspec, cmd: 'bundle exec rspec' do
 
   watch('config/routes.rb') { 'spec/routing' }
   watch('app/controllers/application_controller.rb') { 'spec/controllers' }
-  watch(%r{^app/views/layouts/.+$}) { %w(spec/views spec/features) }
+  watch(%r{^app/views/layouts/.+$}) { %w[spec/views spec/features] }
   watch(%r{^app/assets/.+$}) { 'spec/features' }
 
   watch(%r{^spec/(spec|rails)_helper\.rb$}) { 'spec' }

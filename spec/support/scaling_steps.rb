@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.shared_examples 'report with scalable steps' do
   around { |spec| Timecop.freeze { spec.run } }
 

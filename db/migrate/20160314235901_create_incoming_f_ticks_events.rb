@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateIncomingFTicksEvents < ActiveRecord::Migration
   def change
     create_table :incoming_f_ticks_events do |t|

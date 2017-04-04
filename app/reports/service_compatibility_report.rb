@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 class ServiceCompatibilityReport < TabularReport
   report_type 'service-compatibility'
-  header %w(Name Required Optional Compatible)
+  header %w[Name Required Optional Compatible]
   footer
 
   def initialize(entity_id)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AutomatedReportInstance < ActiveRecord::Base
   belongs_to :automated_report
 
@@ -40,23 +41,23 @@ class AutomatedReportInstance < ActiveRecord::Base
     1
   end
 
-  REPORTS_THAT_NEED_RANGE = %w(
+  REPORTS_THAT_NEED_RANGE = %w[
     FederationGrowthReport DailyDemandReport FederatedSessionsReport
     IdentityProviderDailyDemandReport IdentityProviderDestinationServicesReport
     IdentityProviderSessionsReport
     ServiceProviderDailyDemandReport ServiceProviderSessionsReport
     ServiceProviderSourceIdentityProvidersReport
     IdentityProviderUtilizationReport ServiceProviderUtilizationReport
-  ).freeze
+  ].freeze
 
   def needs_range?
     REPORTS_THAT_NEED_RANGE.include?(automated_report.report_class)
   end
 
-  REPORTS_THAT_NEED_STEP_WIDTH = %w(
+  REPORTS_THAT_NEED_STEP_WIDTH = %w[
     FederatedSessionsReport IdentityProviderSessionsReport
     ServiceProviderSessionsReport
-  ).freeze
+  ].freeze
 
   def needs_step_width?
     REPORTS_THAT_NEED_STEP_WIDTH.include?(automated_report.report_class)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe UpdateFromFederationRegistry, type: :job do
@@ -53,7 +54,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
   end
 
   let(:default_attr_data) do
-    oid_tail_pattern = Array.new(rand(6)) { %w(# # # ## #####).sample }
+    oid_tail_pattern = Array.new(rand(6)) { %w[# # # ## #####].sample }
                             .join('.')
     {
       id: 1,
@@ -470,7 +471,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
 
       let(:attributes) do
         i = rand(9999)
-        oid_tail_pattern = Array.new(rand(6)) { %w(# # # ## #####).sample }
+        oid_tail_pattern = Array.new(rand(6)) { %w[# # # ## #####].sample }
                                 .join('.')
 
         Array.new(20) do

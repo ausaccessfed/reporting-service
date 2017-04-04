@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateAPISubjectRoles < ActiveRecord::Migration
   def change
     create_table :api_subject_roles do |t|
@@ -8,7 +10,7 @@ class CreateAPISubjectRoles < ActiveRecord::Migration
 
       t.foreign_key :api_subjects
       t.foreign_key :roles
-      t.index [:api_subject_id, :role_id], unique: true
+      t.index %i[api_subject_id role_id], unique: true
     end
   end
 end

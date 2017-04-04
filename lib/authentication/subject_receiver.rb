@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Authentication
   class SubjectReceiver
     include RapidRack::DefaultReceiver
@@ -26,7 +27,7 @@ module Authentication
       url = env['rack.session']['return_url'].to_s
       env['rack.session'].delete('return_url')
 
-      return redirect_to(url) unless url.blank?
+      return redirect_to(url) if url.present?
       super
     end
 

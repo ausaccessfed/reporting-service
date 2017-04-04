@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class SubscriberReports < ApplicationController
   before_action { permitted_objects(model_object) }
   before_action :requested_entity
@@ -8,7 +9,7 @@ class SubscriberReports < ApplicationController
   private
 
   def requested_entity
-    return unless params[:entity_id].present?
+    return if params[:entity_id].blank?
 
     @entity = @entities.detect do |entity|
       entity.entity_id == params[:entity_id]
@@ -28,7 +29,7 @@ class SubscriberReports < ApplicationController
   end
 
   def access_method
-    return public_action unless params[:entity_id].present?
+    return public_action if params[:entity_id].blank?
     check_access! permission_string(@entity)
   end
 
