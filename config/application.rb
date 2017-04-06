@@ -23,8 +23,6 @@ module ReportingService
 
     config.rapid_rack.receiver = 'Authentication::SubjectReceiver'
 
-    config.active_record.raise_in_transactional_callbacks = true
-
     config.active_record.logger = Logger.new($stderr) if ENV['AAF_DEBUG']
 
     config.cache_store = :redis_store,

@@ -29,7 +29,7 @@ RSpec.describe Subject, type: :model do
     end
 
     def roles
-      object.subject_roles(true).map(&:role)
+      object.subject_roles.reload.map(&:role)
     end
 
     let(:object) { create(:subject) }

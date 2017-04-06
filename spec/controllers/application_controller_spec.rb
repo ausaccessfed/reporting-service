@@ -17,7 +17,10 @@ RSpec.describe ApplicationController, type: :controller do
 
   before do
     @routes.draw do
-      match ':controller/:action(/:id)', via: %i[get post]
+      match 'some_reports/report_action/:id' => 'some_reports#report_action',
+            via: %i[get post]
+      match 'anonymous/federation_growth' => 'anonymous#federation_growth',
+            via: %i[get post]
     end
   end
 
@@ -58,7 +61,7 @@ RSpec.describe ApplicationController, type: :controller do
         public_action
 
         @text = Time.zone.name
-        render nothing: true
+        head :accepted
       end
     end
 

@@ -7,7 +7,7 @@ module FederationObject
 
   included do
     scope(:active, lambda {
-      joins(:activations).where(activations: { deactivated_at: nil }).uniq
+      joins(:activations).where(activations: { deactivated_at: nil }).distinct
     })
   end
 end
