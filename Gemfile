@@ -34,6 +34,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'fakeredis'
+  gem 'rails-controller-testing'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'timecop'
@@ -52,7 +53,6 @@ group :development, :test do
   gem 'brakeman', '~> 3.2.1', require: false
   gem 'simplecov', require: false
 
-  gem 'bullet'
   gem 'guard', require: false
   gem 'guard-brakeman', require: false
   gem 'guard-bundler', require: false
