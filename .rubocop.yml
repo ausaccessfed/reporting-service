@@ -1,9 +1,6 @@
 inherit_gem:
   aaf-gumboot: aaf-rubocop.yml
 
-AllCops:
-  TargetRailsVersion: 4.2
-
 Rails/DynamicFindBy:
   Whitelist:
     - find_by_sql

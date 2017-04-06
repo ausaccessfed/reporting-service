@@ -53,7 +53,7 @@ RSpec.shared_examples 'report with scalable steps' do
 
   it 'Steps should be 1 hour within less than a month' do
     [range_less_than_month, range_less_than_month_02].each do |rng|
-      post path, params.merge(rng)
+      post path, params: params.merge(rng)
 
       data = JSON.parse(assigns[:data], symbolize_names: true)
       sessions = data[:data][:sessions]
@@ -65,7 +65,7 @@ RSpec.shared_examples 'report with scalable steps' do
 
   it 'Steps should be 2 hours within 1 to 3 months' do
     [range_1_month, range_2_months].each do |rng|
-      post path, params.merge(rng)
+      post path, params: params.merge(rng)
 
       data = JSON.parse(assigns[:data], symbolize_names: true)
       sessions = data[:data][:sessions]
@@ -77,7 +77,7 @@ RSpec.shared_examples 'report with scalable steps' do
 
   it 'Steps should be 6 hours within 3 to 6 months' do
     [range_3_months, range_4_months].each do |rng|
-      post path, params.merge(rng)
+      post path, params: params.merge(rng)
 
       data = JSON.parse(assigns[:data], symbolize_names: true)
       sessions = data[:data][:sessions]
@@ -89,7 +89,7 @@ RSpec.shared_examples 'report with scalable steps' do
 
   it 'Steps should be 12 hours within 6 to 12 months' do
     [range_6_months, range_7_months, range_9_months].each do |rng|
-      post path, params.merge(rng)
+      post path, params: params.merge(rng)
 
       data = JSON.parse(assigns[:data], symbolize_names: true)
       sessions = data[:data][:sessions]
@@ -102,7 +102,7 @@ RSpec.shared_examples 'report with scalable steps' do
   it 'Steps should be 24 hours within 1 year or more' do
     [range_1_year,
      range_1_year_3_months, range_2_year_2_months].each do |rng|
-      post path, params.merge(rng)
+      post path, params: params.merge(rng)
 
       data = JSON.parse(assigns[:data], symbolize_names: true)
       sessions = data[:data][:sessions]
