@@ -21,7 +21,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   end
 
   def run(identifier)
-    get :show, identifier: identifier
+    get :show, params: { identifier: identifier }
   end
 
   before do

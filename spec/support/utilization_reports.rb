@@ -27,9 +27,10 @@ RSpec.shared_context 'Utilization Report' do
     def create_events(objects, start, finish)
       objects.each_with_object({}) do |o, a|
         events = Array.new(rand(1..5)) do
+          time = Time.at(rand(start.to_i..finish.to_i)).utc
           create(:discovery_service_event, :response,
                  target => o.entity_id,
-                 timestamp: Faker::Time.between(start, finish))
+                 timestamp: time)
         end
 
         a[o.id] = events.length

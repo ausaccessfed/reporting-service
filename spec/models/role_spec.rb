@@ -69,7 +69,7 @@ RSpec.describe Role, type: :model do
     end
 
     def permission_values
-      subject.permissions(true).map(&:value)
+      subject.permissions.reload.map(&:value)
     end
 
     context 'for an admin entitlement' do

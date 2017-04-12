@@ -1,15 +1,9 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  include Lipstick::DynamicErrors
+
   around_action :change_time_zone
-
-  Forbidden = Class.new(StandardError)
-  private_constant :Forbidden
-  rescue_from Forbidden, with: :forbidden
-
-  Unauthorized = Class.new(StandardError)
-  private_constant :Unauthorized
-  rescue_from Unauthorized, with: :unauthorized
 
   protect_from_forgery with: :exception
   before_action :ensure_authenticated
@@ -45,15 +39,6 @@ class ApplicationController < ActionController::Base
 
   def public_action
     @access_checked = true
-  end
-
-  def unauthorized
-    reset_session
-    render 'errors/unauthorized', status: :unauthorized
-  end
-
-  def forbidden
-    render 'errors/forbidden', status: :forbidden
   end
 
   def force_authentication
