@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AutomatedReports < ApplicationController
   private
 
@@ -6,16 +7,16 @@ class AutomatedReports < ApplicationController
     automated_report.target_object
   end
 
-  SUBSCRIBER_REPORTS = %w(
+  SUBSCRIBER_REPORTS = %w[
     IdentityProviderSessionsReport
     IdentityProviderDailyDemandReport
     IdentityProviderDestinationServicesReport
     ServiceProviderSessionsReport
     ServiceProviderDailyDemandReport
     ServiceProviderSourceIdentityProvidersReport
-  ).freeze
+  ].freeze
 
-  PUBLIC_REPORTS = %w(
+  PUBLIC_REPORTS = %w[
     DailyDemandReport
     FederatedSessionsReport
     FederationGrowthReport
@@ -23,7 +24,7 @@ class AutomatedReports < ApplicationController
     ProvidedAttributeReport
     RequestedAttributeReport
     ServiceCompatibilityReport
-  ).freeze
+  ].freeze
 
   def public_report?
     PUBLIC_REPORTS.include?(report_class)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 
@@ -12,18 +13,33 @@ require 'webmock/rspec'
 require 'capybara/rspec'
 require 'capybara/poltergeist'
 
-Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   include FactoryGirl::Syntax::Methods
+  config.include SuperIdentity::TestStub
 
   config.use_transactional_fixtures = false
 
   config.infer_spec_type_from_file_location!
 
   Capybara.default_driver = Capybara.javascript_driver = :poltergeist
+
+  def ide_config
+    {
+      host: 'ide.example.edu',
+      cert: 'spec/api.crt',
+      key: 'spec/api.key',
+      admin_entitlements: ['urn:mace:aaf.edu.au:ide:internal:aaf-admin']
+    }
+  end
+
+  config.before(:each) do
+    allow(Authentication::SubjectReceiver.new).to receive(:ide_config)
+      .and_return(ide_config)
+  end
 
   config.around(:each, type: :feature) do |spec|
     begin

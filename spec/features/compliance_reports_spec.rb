@@ -1,9 +1,8 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Compliance Reports' do
-  include IdentityEnhancementStub
-
   given(:user) { create(:subject) }
   given(:sp) { create :service_provider }
   given(:idp) { create :identity_provider }

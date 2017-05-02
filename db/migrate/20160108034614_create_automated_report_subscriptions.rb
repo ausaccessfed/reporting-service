@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateAutomatedReportSubscriptions < ActiveRecord::Migration
   def change
     create_table :automated_report_subscriptions do |t|

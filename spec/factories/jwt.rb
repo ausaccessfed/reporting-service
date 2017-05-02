@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryGirl.define do
   factory :aaf_attributes, class: 'Hash' do
     displayname { Faker::Name.name }

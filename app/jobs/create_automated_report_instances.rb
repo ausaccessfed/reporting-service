@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateAutomatedReportInstances
   include Rails.application.routes.url_helpers
 
@@ -41,7 +42,7 @@ class CreateAutomatedReportInstances
 
     reports = reports.select do |r|
       (r.instances_timestamp.blank? || r.instances_timestamp < range_end) &&
-        !r.automated_report_subscriptions.blank?
+        r.automated_report_subscriptions.present?
     end
 
     reports.group_by(&:interval)

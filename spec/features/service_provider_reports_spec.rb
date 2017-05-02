@@ -1,9 +1,8 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Service Provider Reports' do
-  include IdentityEnhancementStub
-
   given(:organization) { create :organization }
   given(:sp) { create :service_provider, organization: organization }
   given(:user) { create :subject }

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 listen 8080
 preload_app false
 stdout_path '/dev/null'

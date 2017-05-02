@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require File.expand_path('../boot', __FILE__)
 
 require 'rails'
@@ -18,11 +19,9 @@ module ReportingService
       File.join(config.root, 'app', 'jobs', 'concerns')
     ]
 
-    config.assets.precompile += %w(render_report.js)
+    config.assets.precompile += %w[render_report.js]
 
     config.rapid_rack.receiver = 'Authentication::SubjectReceiver'
-
-    config.active_record.raise_in_transactional_callbacks = true
 
     config.active_record.logger = Logger.new($stderr) if ENV['AAF_DEBUG']
 

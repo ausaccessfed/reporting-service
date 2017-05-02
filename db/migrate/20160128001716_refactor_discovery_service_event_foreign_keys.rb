@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RefactorDiscoveryServiceEventForeignKeys < ActiveRecord::Migration
   def change
     reversible do |dir|

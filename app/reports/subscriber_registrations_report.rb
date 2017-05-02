@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 class SubscriberRegistrationsReport < TabularReport
   report_type 'subscriber-registrations'
-  header %w(Name Registration\ Date)
+  header %w[Name Registration\ Date]
   footer
 
   def initialize(identifier)

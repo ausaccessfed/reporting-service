@@ -1,22 +1,7 @@
-AllCops:
-  TargetRubyVersion: 2.3
-  Exclude:
-    - db/schema.rb
+inherit_gem:
+  aaf-gumboot: aaf-rubocop.yml
 
-Rails:
-  Enabled: true
-
-Rails/Output:
-  Exclude:
-    - db/seeds.rb
-
-Style/Documentation:
-  Enabled: false
-
-Metrics/MethodLength:
-  Exclude:
-    - db/migrate/*.rb
-
-Metrics/AbcSize:
-  Exclude:
-    - db/migrate/*.rb
+Rails/DynamicFindBy:
+  Whitelist:
+    - find_by_sql
+    - find_by_identifying_attribute

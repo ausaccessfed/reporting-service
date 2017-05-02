@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class APISubject < ActiveRecord::Base
   include Accession::Principal
 

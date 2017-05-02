@@ -1,9 +1,8 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Login Process' do
-  include IdentityEnhancementStub
-
   given(:user) { create(:subject) }
 
   background do

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe FederatedLoginEvent, type: :model do
@@ -59,7 +60,7 @@ RSpec.describe FederatedLoginEvent, type: :model do
         subject.create_instance incoming_event
       end
 
-      %w(#RP #AP #RESULT #TS).each do |field|
+      %w[#RP #AP #RESULT #TS].each do |field|
         it 'should return false when data is invalid' do
           incoming_event.data.remove! field
 

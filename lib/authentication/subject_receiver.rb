@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 module Authentication
   class SubjectReceiver
     include RapidRack::DefaultReceiver
+    include SuperIdentity::Client
     include RapidRack::RedisRegistry
-    include IdentityEnhancement
 
     def map_attributes(_env, attrs)
       {
@@ -26,9 +27,19 @@ module Authentication
       url = env['rack.session']['return_url'].to_s
       env['rack.session'].delete('return_url')
 
-      return redirect_to(url) unless url.blank?
+      return redirect_to(url) if url.present?
       super
     end
+
+    def update_roles(subject)
+      subject.entitlements = entitlements(subject.shared_token)
+    end
+
+    # :nocov:
+    def ide_config
+      Rails.application.config.reporting_service.ide
+    end
+    # :nocov:
 
     private
 

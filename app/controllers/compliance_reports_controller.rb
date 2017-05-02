@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ComplianceReportsController < ApplicationController
   def service_provider_compatibility_report
     public_action

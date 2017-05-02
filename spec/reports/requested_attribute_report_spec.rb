@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe RequestedAttributeReport do
   let(:type) { 'requested-attribute' }
-  let(:header) { [%w(Name Status)] }
+  let(:header) { [%w[Name Status]] }
 
   let(:required_attribute) { create :saml_attribute }
   let(:optional_attribute) { create :saml_attribute }
@@ -50,7 +51,7 @@ RSpec.describe RequestedAttributeReport do
     end
 
     it 'determines attribute status for each SP' do
-      status_flags = %w(required optional none)
+      status_flags = %w[required optional none]
       status_flags.delete(status)
 
       active_service_providers.map do |k|

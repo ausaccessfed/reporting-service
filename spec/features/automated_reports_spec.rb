@@ -1,8 +1,8 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'automated report' do
-  include IdentityEnhancementStub
   given(:user) { create :subject }
   given(:user_02) { create :subject }
   given(:idp) { create :identity_provider }
@@ -67,7 +67,7 @@ RSpec.feature 'automated report' do
 
     scenario 'should unsubscribe and redirect to index' do
       within 'table' do
-        first('button', 'Unsubscribe').click
+        first('button', text: 'Unsubscribe').click
         click_link('Confirm Unsubscribe')
       end
 

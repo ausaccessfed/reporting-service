@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GenericLint
   def generate
     super.tap { |output| validate_report_output(output) }

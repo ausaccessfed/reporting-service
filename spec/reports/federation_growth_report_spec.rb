@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe FederationGrowthReport do
@@ -46,8 +47,8 @@ RSpec.describe FederationGrowthReport do
     point - (range_count % 2)
   end
 
-  [:organization, :identity_provider,
-   :rapid_connect_service, :service_provider].each do |type|
+  %i[organization identity_provider
+     rapid_connect_service service_provider].each do |type|
     let(type) { create type }
     let("#{type}_02") { create type }
   end
@@ -106,8 +107,8 @@ RSpec.describe FederationGrowthReport do
   context '#generate report' do
     let(:report) { subject.generate }
     it 'output structure should match stacked_report' do
-      [:organizations,
-       :identity_providers, :services].each do |type|
+      %i[organizations
+         identity_providers services].each do |type|
         report[:data][type].each { |i| expect(i.count).to eq(3) }
       end
     end

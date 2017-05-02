@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateRapidConnectServices < ActiveRecord::Migration
   def change
     create_table :rapid_connect_services do |t|

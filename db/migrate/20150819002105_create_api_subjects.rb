@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateAPISubjects < ActiveRecord::Migration
   def change
     create_table :api_subjects do |t|

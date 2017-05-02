@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 unless ENV['AAF_DEV'].to_i == 1
   $stderr.puts <<-EOF
 
@@ -101,7 +102,7 @@ ActiveRecord::Base.transaction do
       if rand < 0.95
         y << attrs.merge(
           phase: 'response',
-          selection_method: %w(manual cookie).sample,
+          selection_method: %w[manual cookie].sample,
           selected_idp: idps.sample.entity_id,
           timestamp: Time.zone.at(time + rand(30))
         )

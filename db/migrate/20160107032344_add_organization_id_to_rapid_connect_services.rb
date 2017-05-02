@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddOrganizationIdToRapidConnectServices < ActiveRecord::Migration
   def change
     add_column :rapid_connect_services, :organization_id, :integer, null: false
