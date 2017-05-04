@@ -95,7 +95,7 @@ RSpec.shared_examples 'report with scalable steps' do
         range_1_month_february_exception,
         range_2_months_february_exception
       ].each do |rng|
-        post path, params.merge(rng)
+        post path, params: params.merge(rng)
 
         data = JSON.parse(assigns[:data], symbolize_names: true)
         sessions = data[:data][:sessions]

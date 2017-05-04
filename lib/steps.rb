@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Steps
   def set_range_params
     @start = params[:start]
