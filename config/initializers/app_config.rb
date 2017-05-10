@@ -7,6 +7,9 @@ Rails.application.configure do
   app_config = YAML.safe_load(app_config_file.read)
   config.reporting_service = OpenStruct.new(app_config.deep_symbolize_keys)
 
+  mail_config = config.reporting_service.mail
+  Mail.defaults { delivery_method :smtp, mail_config }
+
   if Rails.env.test?
     config.reporting_service.ide = {
       host: 'ide.example.edu',

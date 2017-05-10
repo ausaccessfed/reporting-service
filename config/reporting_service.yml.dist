@@ -2,7 +2,7 @@
 mail:
   from: noreply@example.com
   port: 1025
-  host: localhost
+  address: localhost
 environment_string: Development
 ide:
   host: ide.test.aaf.edu.au
