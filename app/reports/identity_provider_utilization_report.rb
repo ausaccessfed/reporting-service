@@ -8,10 +8,11 @@ class IdentityProviderUtilizationReport < TabularReport
   header %w[Name Sessions]
   footer
 
-  def initialize(start, finish)
+  def initialize(start, finish, source)
     title = 'Identity Provider Utilization Report'
     @start = start
     @finish = finish
+    @source = source
 
     super(title)
   end

@@ -8,10 +8,11 @@ class DailyDemandReport < TimeSeriesReport
   units ''
   series sessions: 'Sessions'
 
-  def initialize(start, finish)
+  def initialize(start, finish, source)
     title = 'Daily Demand'
     @start = start
     @finish = finish
+    @source = source
 
     super(title, start: @start, end: @finish)
   end

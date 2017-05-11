@@ -8,12 +8,13 @@ class IdentityProviderSessionsReport < TimeSeriesReport
   units ''
   series sessions: 'Sessions'
 
-  def initialize(entity_id, start, finish, steps)
+  def initialize(entity_id, start, finish, steps, source)
     @identity_provider = IdentityProvider.find_by(entity_id: entity_id)
     title = "Identity Provider Sessions for #{@identity_provider.name}"
     @start = start
     @finish = finish
     @steps = steps
+    @source = source
 
     super(title, start: @start, end: @finish)
   end

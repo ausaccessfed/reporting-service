@@ -28,28 +28,28 @@ class AdministratorReportsController < ApplicationController
   def daily_demand_report
     return if params[:start].blank? || params[:end].blank?
 
-    report = DailyDemandReport.new(start, finish)
+    report = DailyDemandReport.new(start, finish, @source)
     @data = JSON.generate(report.generate)
   end
 
   def federated_sessions_report
     return if params[:start].blank? || params[:end].blank?
 
-    report = FederatedSessionsReport.new(start, finish, scaled_steps)
+    report = FederatedSessionsReport.new(start, finish, scaled_steps, @source)
     @data = JSON.generate(report.generate)
   end
 
   def identity_provider_utilization_report
     return if params[:start].blank? || params[:end].blank?
 
-    report = IdentityProviderUtilizationReport.new(start, finish)
+    report = IdentityProviderUtilizationReport.new(start, finish, @source)
     @data = JSON.generate(report.generate)
   end
 
   def service_provider_utilization_report
     return if params[:start].blank? || params[:end].blank?
 
-    report = ServiceProviderUtilizationReport.new(start, finish)
+    report = ServiceProviderUtilizationReport.new(start, finish, @source)
     @data = JSON.generate(report.generate)
   end
 

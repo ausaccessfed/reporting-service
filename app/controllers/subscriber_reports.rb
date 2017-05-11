@@ -25,8 +25,8 @@ class SubscriberReports < ApplicationController
   def generate_report(report_type, steps = nil)
     @entity_id = params[:entity_id]
 
-    return report_type.new(@entity_id, start, finish, steps) if steps
-    report_type.new(@entity_id, start, finish)
+    return report_type.new(@entity_id, start, finish, steps, @source) if steps
+    report_type.new(@entity_id, start, finish, @source)
   end
 
   def access_method

@@ -8,11 +8,12 @@ class FederatedSessionsReport < TimeSeriesReport
   units ''
   series sessions: 'Sessions'
 
-  def initialize(start, finish, steps)
+  def initialize(start, finish, steps, source)
     title = 'Federated Sessions'
     @start = start
     @finish = finish
     @steps = steps
+    @source = source
 
     super(title, start: @start, end: @finish)
   end

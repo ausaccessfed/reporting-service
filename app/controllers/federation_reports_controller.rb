@@ -17,7 +17,7 @@ class FederationReportsController < ApplicationController
     public_action
 
     @data = Rails.cache.fetch('public/federated-sessions') do
-      report = FederatedSessionsReport.new(@start, @end, 10)
+      report = FederatedSessionsReport.new(@start, @end, 10, @source)
       JSON.generate(report.generate)
     end
   end
@@ -26,7 +26,7 @@ class FederationReportsController < ApplicationController
     public_action
 
     @data = Rails.cache.fetch('public/daily-demand') do
-      report = DailyDemandReport.new(@start, @end)
+      report = DailyDemandReport.new(@start, @end, @source)
       JSON.generate(report.generate)
     end
   end
