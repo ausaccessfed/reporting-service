@@ -12,4 +12,5 @@ h1 Service Provider Utilization Report
 
 p Shows the total number of sessions for each service provider during the given date range
 
-= render(partial: 'form')
+= render(partial: 'form',
+         locals: { report_class: 'ServiceProviderUtilizationReport' })
