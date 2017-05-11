@@ -48,17 +48,24 @@ module ReportsSharedMethods
     report[time] ? (report[time].to_f / divider).round(decimal_places) : 0.0
   end
 
+  SESSION_SOURCES = {
+    'DS' => { klass: DiscoveryServiceEvent,
+              idp: 'selected_idp', sp: 'initiating_sp' },
+    'IdP' => { klass: FederatedLoginEvent,
+               idp: 'asserting_party', sp: 'relying_party' }
+  }.freeze
+
   def sessions(where_args = {})
-    DiscoveryServiceEvent
+    SESSION_SOURCES[@source][:klass]
       .within_range(@start, @finish).where(where_args).sessions
   end
 
   def idp_sessions
-    sessions selected_idp: @identity_provider.entity_id
+    sessions(SESSION_SOURCES[@source][:idp] => @identity_provider.entity_id)
   end
 
   def sp_sessions
-    sessions initiating_sp: @service_provider.entity_id
+    sessions(SESSION_SOURCES[@source][:sp] => @service_provider.entity_id)
   end
 
   def tabular_sessions(target, session_objects = sessions)
