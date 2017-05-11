@@ -3,6 +3,13 @@
 class FederatedLoginEvent < ActiveRecord::Base
   valhammer
 
+  scope(:within_range, lambda { |start, finish|
+    where(arel_table[:timestamp].gteq(start)
+      .and(arel_table[:timestamp].lteq(finish)))
+  })
+
+  scope(:sessions, -> { where(result: 'OK') })
+
   def create_instance(event)
     data = fields(event.data)
     update login_event_hash(data)
