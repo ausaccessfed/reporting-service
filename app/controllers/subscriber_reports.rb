@@ -4,6 +4,7 @@ class SubscriberReports < ApplicationController
   before_action { permitted_objects(model_object) }
   before_action :requested_entity
   before_action :set_range_params
+  before_action :set_source
   before_action :access_method
 
   private
@@ -48,6 +49,11 @@ class SubscriberReports < ApplicationController
   def set_range_params
     @start = params[:start]
     @end = params[:end]
+  end
+
+  def set_source
+    return nil if params[:source].blank?
+    @source = params[:source]
   end
 
   def start

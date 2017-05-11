@@ -4,6 +4,9 @@ class AdministratorReportsController < ApplicationController
   before_action { check_access! 'admin:report' }
   before_action :set_range_params,
                 except: %i[subscriber_registrations_report index]
+  before_action :set_source,
+                except: %i[subscriber_registrations_report
+                           federation_growth_report index]
 
   def index; end
 
@@ -55,6 +58,11 @@ class AdministratorReportsController < ApplicationController
   def set_range_params
     @start = params[:start]
     @end = params[:end]
+  end
+
+  def set_source
+    return nil if params[:source].blank?
+    @source = params[:source]
   end
 
   def start
