@@ -3,6 +3,14 @@
 class FederatedLoginEvent < ActiveRecord::Base
   valhammer
 
+  belongs_to :identity_provider,
+             foreign_key: :asserting_party,
+             primary_key: :entity_id
+
+  belongs_to :service_provider,
+             foreign_key: :relying_party,
+             primary_key: :entity_id
+
   scope(:within_range, lambda { |start, finish|
     where(arel_table[:timestamp].gteq(start)
       .and(arel_table[:timestamp].lteq(finish)))
