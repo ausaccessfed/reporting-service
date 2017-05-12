@@ -79,11 +79,11 @@ module ReportsSharedMethods
   TARGET_OPTS = {
     IdentityProvider => {
       assoc: :identity_provider,
-      foreign_key: :selected_idp
+      foreign_key: { 'DS' => 'selected_idp', 'IdP' => 'asserting_party' }.freeze
     }.freeze,
     ServiceProvider => {
       assoc: :service_provider,
-      foreign_key: :initiating_sp
+      foreign_key: { 'DS' => 'initiating_sp', 'IdP' => 'relying_party' }.freeze
     }.freeze
   }.freeze
 
@@ -92,7 +92,7 @@ module ReportsSharedMethods
 
     session_objects
       .joins(opts[:assoc])
-      .group(opts[:foreign_key])
+      .group(opts[:foreign_key][@source])
       .select(target.arel_table[:name], 'count(*)')
       .to_sql
   end
