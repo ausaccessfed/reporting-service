@@ -52,6 +52,6 @@ class AutomatedReportsController < AutomatedReports
   end
 
   def automated_report_params
-    params.permit(:interval, :target, :report_class)
+    params.permit(:interval, :target, :report_class, :source)
   end
 end
