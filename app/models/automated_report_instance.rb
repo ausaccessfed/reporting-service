@@ -70,17 +70,5 @@ class AutomatedReportInstance < ActiveRecord::Base
     REPORTS_THAT_NEED_STEP_WIDTH.include?(automated_report.report_class)
   end
 
-  REPORTS_THAT_NEED_SOURCE = %w[
-    DailyDemandReport FederatedSessionsReport IdentityProviderDailyDemandReport
-    IdentityProviderDestinationServicesReport IdentityProviderSessionsReport
-    ServiceProviderDailyDemandReport ServiceProviderSessionsReport
-    ServiceProviderSourceIdentityProvidersReport
-    IdentityProviderUtilizationReport ServiceProviderUtilizationReport
-  ].freeze
-
-  def needs_source?
-    REPORTS_THAT_NEED_SOURCE.include?(automated_report.report_class)
-  end
-
   private_constant :REPORTS_THAT_NEED_RANGE, :REPORTS_THAT_NEED_STEP_WIDTH
 end

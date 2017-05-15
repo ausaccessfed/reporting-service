@@ -9,7 +9,8 @@ class AutomatedReport < ActiveRecord::Base
   validates :interval, inclusion: { in: %w[monthly quarterly yearly] }
 
   validate :target_must_be_valid_for_report_type,
-           :report_class_must_be_known
+           :report_class_must_be_known,
+           :source_must_be_known_if_needed_by_report_class
 
   def interval
     value = super
@@ -30,6 +31,11 @@ class AutomatedReport < ActiveRecord::Base
   def target_object
     klass.find_by_identifying_attribute(target)
   end
+
+  def needs_source?
+    REPORTS_THAT_NEED_SOURCE.include?(report_class)
+  end
+
 
   private
 
@@ -52,7 +58,9 @@ class AutomatedReport < ActiveRecord::Base
     'ServiceProviderSourceIdentityProvidersReport' => ServiceProvider
   }.freeze
 
-  private_constant :TARGET_CLASSES
+  SOURCE_VALUES = %w[DS IdP].freeze
+
+  private_constant :TARGET_CLASSES, :SOURCE_VALUES
 
   def klass
     TARGET_CLASSES[report_class]
@@ -70,6 +78,21 @@ class AutomatedReport < ActiveRecord::Base
     return if klass.find_by_identifying_attribute(target)
 
     errors.add(:target, 'must be appropriate for the report type')
+  end
+
+  REPORTS_THAT_NEED_SOURCE = %w[
+    DailyDemandReport FederatedSessionsReport IdentityProviderDailyDemandReport
+    IdentityProviderDestinationServicesReport IdentityProviderSessionsReport
+    ServiceProviderDailyDemandReport ServiceProviderSessionsReport
+    ServiceProviderSourceIdentityProvidersReport
+    IdentityProviderUtilizationReport ServiceProviderUtilizationReport
+  ].freeze
+
+  def source_must_be_known_if_needed_by_report_class
+    return if report_class.nil?
+    return if SOURCE_VALUES.include?(source)
+    return unless REPORTS_THAT_NEED_SOURCE.include?(report_class)
+    errors.add(:source, 'must be present for ' + report_class)
   end
 
   def target_must_be_nil
