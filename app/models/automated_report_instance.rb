@@ -11,7 +11,8 @@ class AutomatedReportInstance < ActiveRecord::Base
   delegate :interval, to: :automated_report
 
   def materialize
-    args = [automated_report.target, *report_range, step_width, source].compact
+    args = [automated_report.target, *report_range, step_width,
+            automated_report.source_if_needed].compact
     automated_report.report_class.constantize.new(*args)
   end
 
@@ -39,13 +40,6 @@ class AutomatedReportInstance < ActiveRecord::Base
     return nil unless needs_step_width?
 
     1
-  end
-
-  def source
-    return nil unless needs_source?
-
-    # TODO: this should be specified for the automated report somewhere
-    'DS'
   end
 
   REPORTS_THAT_NEED_RANGE = %w[

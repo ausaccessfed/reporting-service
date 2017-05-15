@@ -36,6 +36,12 @@ class AutomatedReport < ActiveRecord::Base
     REPORTS_THAT_NEED_SOURCE.include?(report_class)
   end
 
+  def source_if_needed
+    return nil unless needs_source?
+    # TODO: default to a value from app_config
+    'DS' if source.blank?
+    source
+  end
 
   private
 
