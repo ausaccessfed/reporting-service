@@ -24,6 +24,7 @@ sqs:
   encryption_key: config/event_encryption_key.pem
   queues:
     discovery: http://localhost:9324/queue/discovery-service-development
+default_session_source: 'DS'
 url_options:
   base_url: 'http://localhost:8080'
 time_zone: Australia/Brisbane

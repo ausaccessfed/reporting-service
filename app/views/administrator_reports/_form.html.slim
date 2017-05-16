@@ -1,6 +1,8 @@
 - start_date = @start ? @start : Time.zone.now.beginning_of_month - 1.month
 - end_date = @end ? @end : Time.zone.now.beginning_of_month
-- source = @source ? @source : 'DS'
+- source = @source
+- source = Rails.application.config.reporting_service.default_session_source if source.blank?
+- source = 'DS' if source.blank?
 
 = form_tag({}, id: 'report-form') do
   = field_block do

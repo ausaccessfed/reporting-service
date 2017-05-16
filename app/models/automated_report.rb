@@ -39,8 +39,12 @@ class AutomatedReport < ActiveRecord::Base
   def source_if_needed
     return nil unless needs_source?
     # TODO: default to a value from app_config
-    'DS' if source.blank?
-    source
+    return source if source.present?
+    return Rails.application.config.reporting_service.default_session_source if
+      Rails.application.config.reporting_service.default_session_source.present?
+    # Complete fall back: default to DS if source is not set in params
+    # and not in app_config.
+    'DS'
   end
 
   private

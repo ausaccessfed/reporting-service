@@ -40,8 +40,10 @@ class FederationReportsController < ApplicationController
 
   def set_source
     @source = params[:source]
-    # TODO: set default source for daily_remand_report
-    # and federated_sessions_report in application config
-    @source = 'DS' if params[:source].blank?
+    return @source if @source.present?
+    @source = Rails.application.config.reporting_service.default_session_source
+    # Complete fall back: default to DS if source is not set in params
+    # and not in app_config.
+    @source = 'DS' if @source.blank?
   end
 end
