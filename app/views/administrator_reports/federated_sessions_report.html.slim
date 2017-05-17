@@ -4,8 +4,9 @@
 = render(partial: 'shared/flash_message',
          locals: { flash_header: 'Successfully Subscribed' })
 
-= render(partial: 'shared/subscribe_form',
-         locals: { target: nil, report_class: 'FederatedSessionsReport' })
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: nil, report_class: 'FederatedSessionsReport' })
 
 h1 Federated Sessions Report
 

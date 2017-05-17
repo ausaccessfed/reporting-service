@@ -4,9 +4,10 @@
 = render(partial: 'shared/flash_message',
          locals: { flash_header: 'Successfully Subscribed' })
 
-= render(partial: 'shared/subscribe_form',
-         locals: { target: nil,
-                   report_class: 'IdentityProviderUtilizationReport' })
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: nil,
+                     report_class: 'IdentityProviderUtilizationReport' })
 
 h1 Identity Provider Utilization Report
 
