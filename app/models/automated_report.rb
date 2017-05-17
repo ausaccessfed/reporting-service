@@ -32,13 +32,20 @@ class AutomatedReport < ActiveRecord::Base
     klass.find_by_identifying_attribute(target)
   end
 
-  def needs_source?
+  def self.report_class_needs_source?(report_class)
     REPORTS_THAT_NEED_SOURCE.include?(report_class)
+  end
+
+  def self.report_class_needs_target?(report_class)
+    !TARGET_CLASSES[report_class].nil?
+  end
+
+  def needs_source?
+    AutomatedReport.report_class_needs_source?(report_class)
   end
 
   def source_if_needed
     return nil unless needs_source?
-    # TODO: default to a value from app_config
     return source if source.present?
     return Rails.application.config.reporting_service.default_session_source if
       Rails.application.config.reporting_service.default_session_source.present?
@@ -101,7 +108,7 @@ class AutomatedReport < ActiveRecord::Base
   def source_must_be_known_if_needed_by_report_class
     return if report_class.nil?
     return if SOURCE_VALUES.include?(source)
-    return unless REPORTS_THAT_NEED_SOURCE.include?(report_class)
+    return unless needs_source?
     errors.add(:source, 'must be present for ' + report_class)
   end
 
