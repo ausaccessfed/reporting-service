@@ -10,6 +10,11 @@ RSpec.describe AdministratorReportsController, type: :controller do
       end: Time.now.utc }
   end
 
+  let(:source) do
+    # TODO: test with other sources?
+    { source: 'DS' }
+  end
+
   subject { response }
 
   before { session[:subject_id] = user.try(:id) }
@@ -57,7 +62,7 @@ RSpec.describe AdministratorReportsController, type: :controller do
   end
 
   context 'generate Daily Demand Report' do
-    let(:params) { range }
+    let(:params) { range.merge(source) }
     let(:template) { 'daily-demand' }
     let(:action) { 'daily_demand_report' }
 
@@ -65,7 +70,7 @@ RSpec.describe AdministratorReportsController, type: :controller do
   end
 
   context 'generate Federated Sessions Report' do
-    let(:params) { range }
+    let(:params) { range.merge(source) }
     let(:template) { 'federated-sessions' }
     let(:action) { 'federated_sessions_report' }
 
@@ -73,14 +78,14 @@ RSpec.describe AdministratorReportsController, type: :controller do
   end
 
   context 'steps should scale correctly' do
-    let(:params) { {} }
+    let(:params) { source }
     let(:path) { :federated_sessions_report }
 
     it_behaves_like 'report with scalable steps'
   end
 
   context 'generate Identity Provider Utilization Report' do
-    let(:params) { range }
+    let(:params) { range.merge(source) }
     let(:template) { 'identity-provider-utilization' }
     let(:action) { 'identity_provider_utilization_report' }
 
@@ -88,7 +93,7 @@ RSpec.describe AdministratorReportsController, type: :controller do
   end
 
   context 'generate Service Provider Utilization Report' do
-    let(:params) { range }
+    let(:params) { range.merge(source) }
     let(:template) { 'service-provider-utilization' }
     let(:action) { 'service_provider_utilization_report' }
 
