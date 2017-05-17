@@ -20,7 +20,8 @@ RSpec.describe IdentityProviderDestinationServicesReport do
   let(:sp4) { create :service_provider }
 
   subject do
-    IdentityProviderDestinationServicesReport.new(idp.entity_id, start, finish)
+    IdentityProviderDestinationServicesReport.new(idp.entity_id, start, finish,
+                                                  'DS')
   end
 
   let(:report) { subject.generate }

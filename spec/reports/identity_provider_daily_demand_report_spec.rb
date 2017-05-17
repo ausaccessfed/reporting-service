@@ -24,7 +24,7 @@ RSpec.describe IdentityProviderDailyDemandReport do
 
   subject do
     IdentityProviderDailyDemandReport
-      .new(identity_provider_01.entity_id, start, finish)
+      .new(identity_provider_01.entity_id, start, finish, 'DS')
   end
 
   let(:report) { subject.generate }

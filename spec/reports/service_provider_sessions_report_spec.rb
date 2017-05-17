@@ -30,7 +30,8 @@ RSpec.describe ServiceProviderSessionsReport do
   let(:sp_02) { create :service_provider }
 
   subject do
-    ServiceProviderSessionsReport.new(sp_01.entity_id, start, finish, steps)
+    ServiceProviderSessionsReport.new(sp_01.entity_id, start, finish, steps,
+                                      'DS')
   end
 
   let(:report) { subject.generate }

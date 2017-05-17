@@ -23,7 +23,7 @@ RSpec.describe DailyDemandReport do
   let(:identity_provider) { create :identity_provider }
   let(:service_provider) { create :service_provider }
 
-  subject { DailyDemandReport.new(start, finish) }
+  subject { DailyDemandReport.new(start, finish, 'DS') }
 
   let(:report) { subject.generate }
   let(:data) { report[:data] }

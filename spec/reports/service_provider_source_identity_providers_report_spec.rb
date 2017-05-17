@@ -21,7 +21,7 @@ RSpec.describe ServiceProviderSourceIdentityProvidersReport do
 
   subject do
     ServiceProviderSourceIdentityProvidersReport
-      .new(sp.entity_id, start, finish)
+      .new(sp.entity_id, start, finish, 'DS')
   end
 
   let(:report) { subject.generate }

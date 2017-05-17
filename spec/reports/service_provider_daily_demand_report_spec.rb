@@ -24,7 +24,7 @@ RSpec.describe ServiceProviderDailyDemandReport do
 
   subject do
     ServiceProviderDailyDemandReport
-      .new(service_provider_01.entity_id, start, finish)
+      .new(service_provider_01.entity_id, start, finish, 'DS')
   end
 
   let(:report) { subject.generate }

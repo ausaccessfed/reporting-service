@@ -7,7 +7,7 @@ RSpec.describe IdentityProviderUtilizationReport do
   let(:header) { [%w[Name Sessions]] }
   let(:title) { 'Identity Provider Utilization Report' }
 
-  subject { IdentityProviderUtilizationReport.new(start, finish) }
+  subject { IdentityProviderUtilizationReport.new(start, finish, 'DS') }
 
   context 'Service Provider Utilization report #Generate' do
     let(:object_type) { :identity_provider }
