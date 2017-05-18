@@ -2,7 +2,8 @@
 
 class FederationReportsController < ApplicationController
   before_action :set_range
-  before_action :set_source
+  before_action :set_source, only: %i[federated_sessions_report
+                                      daily_demand_report]
 
   def federation_growth_report
     public_action
@@ -41,6 +42,9 @@ class FederationReportsController < ApplicationController
   def set_source
     @source = params[:source]
     return @source if @source.present?
+    # Have to provide a default for public reports
+    # (DailyDemand and FederatedSessionsReport)
+    # which do not have a form to set the source
     @source = Rails.application.config.reporting_service.default_session_source
     # Complete fall back: default to DS if source is not set in params
     # and not in app_config.
