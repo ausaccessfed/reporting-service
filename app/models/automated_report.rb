@@ -10,7 +10,7 @@ class AutomatedReport < ActiveRecord::Base
 
   validate :target_must_be_valid_for_report_type,
            :report_class_must_be_known,
-           :source_must_be_known_if_needed_by_report_class
+           :source_must_be_valid_for_report_type
 
   def interval
     value = super
@@ -105,11 +105,11 @@ class AutomatedReport < ActiveRecord::Base
     IdentityProviderUtilizationReport ServiceProviderUtilizationReport
   ].freeze
 
-  def source_must_be_known_if_needed_by_report_class
+  def source_must_be_valid_for_report_type
     return if report_class.nil?
-    return if SOURCE_VALUES.include?(source)
-    return unless needs_source?
-    errors.add(:source, 'must be present for ' + report_class)
+    return if needs_source? && SOURCE_VALUES.include?(source)
+    return if !needs_source? && source.nil?
+    errors.add(:source, 'is not valid for report ' + report_class)
   end
 
   def target_must_be_nil
