@@ -3,6 +3,7 @@
 - source = @source
 - source = Rails.application.config.reporting_service.default_session_source if source.blank?
 - source = 'DS' if source.blank?
+- source_options = ReportsSharedMethods.source_options
 
 = form_tag({}, id: 'report-form') do
   = field_block do
@@ -22,7 +23,7 @@
       = label_tag(:source) do
         | session data source
 
-      = select_tag :source, options_for_select([[ 'Discovery Service', 'DS'], [ 'IdP event log', 'IdP'] ], source), placeholder: 'select the data source'
+      = select_tag :source, options_for_select(source_options, source), placeholder: 'select the data source'
 
   = button_tag(type: 'submit', class: 'btn-lg btn-primary') do
     => icon_tag('ok')

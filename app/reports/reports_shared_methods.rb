@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 module ReportsSharedMethods
+  def source_options
+    SESSION_SOURCES.map { |k, v| [v[:name], k] }
+  end
+  module_function :source_options
+
   private
 
   def output_data(range, report, step_width, divider, decimal_places = 1)
@@ -50,8 +55,10 @@ module ReportsSharedMethods
 
   SESSION_SOURCES = {
     'DS' => { klass: DiscoveryServiceEvent,
+              name: 'Discovery Service',
               idp: 'selected_idp', sp: 'initiating_sp' },
     'IdP' => { klass: FederatedLoginEvent,
+               name: 'IdP Event Log',
                idp: 'asserting_party', sp: 'relying_party' }
   }.freeze
 
