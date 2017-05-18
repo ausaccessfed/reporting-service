@@ -41,7 +41,9 @@ class TimeSeriesReport
 
   def generate
     range = @range.try(:transform_values) { |t| t.strftime('%FT%H:%M:%S%z') }
+    title = @title
+    title += ' (' + source_name + ')' if @source.present?
 
-    self.class.options.merge(title: @title, data: data, range: range).compact
+    self.class.options.merge(title: title, data: data, range: range).compact
   end
 end

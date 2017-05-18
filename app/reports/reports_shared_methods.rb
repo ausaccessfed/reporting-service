@@ -6,6 +6,10 @@ module ReportsSharedMethods
   end
   module_function :source_options
 
+  def source_name
+    SESSION_SOURCES[@source][:name]
+  end
+
   private
 
   def output_data(range, report, step_width, divider, decimal_places = 1)
