@@ -1,3 +1,4 @@
+- source_display_names = ReportsSharedMethods.source_display_names
 = breadcrumbs({ 'Dashboard' => dashboard_path },
                 'Subscriptions')
 
@@ -14,6 +15,7 @@
   - objects = @subscriptions.map do |s|
     - { report_type: s.automated_report.report_class,
         name: s.automated_report.target_name,
+        source: s.automated_report.source,
         interval: s.automated_report.interval,
         identifier: s.identifier }
 
@@ -23,6 +25,7 @@
       tr
         th Report Type
         th Report Target
+        th Session Data Source
         th Interval
         th Action
 
@@ -37,6 +40,7 @@
             a title=s[:name]
               = name
 
+          td= source_display_names[s[:source]]
           td= s[:interval]
           td
             .dropdown

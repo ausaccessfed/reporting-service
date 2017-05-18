@@ -4,7 +4,11 @@ module ReportsSharedMethods
   def source_options
     SESSION_SOURCES.map { |k, v| [v[:name], k] }
   end
-  module_function :source_options
+
+  def source_display_names
+    SESSION_SOURCES.transform_values { |v| v[:name] }.merge(nil => 'N/A')
+  end
+  module_function :source_options, :source_display_names
 
   def source_name
     SESSION_SOURCES[@source][:name]
