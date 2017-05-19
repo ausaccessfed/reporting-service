@@ -26,7 +26,8 @@ RSpec.feature 'automated report instances' do
     given(:auto_report) do
       create :automated_report,
              target: target,
-             report_class: report_class
+             report_class: report_class,
+             source: source
     end
 
     given!(:instance) do
@@ -56,6 +57,7 @@ RSpec.feature 'automated report instances' do
 
   context 'Federation Growth Report' do
     given(:report_class) { 'FederationGrowthReport' }
+    given(:source) { nil }
     given(:target) { nil }
 
     it_behaves_like 'Automated Public Report'
@@ -63,6 +65,7 @@ RSpec.feature 'automated report instances' do
 
   context 'Federated Sessions Report' do
     given(:report_class) { 'FederatedSessionsReport' }
+    given(:source) { 'DS' }
     given(:target) { nil }
 
     it_behaves_like 'Automated Public Report'
@@ -70,6 +73,7 @@ RSpec.feature 'automated report instances' do
 
   context 'Daily Demand Report' do
     given(:report_class) { 'DailyDemandReport' }
+    given(:source) { 'DS' }
     given(:target) { nil }
 
     it_behaves_like 'Automated Public Report'
@@ -77,6 +81,7 @@ RSpec.feature 'automated report instances' do
 
   context 'Identity Provider Attributes Report' do
     given(:report_class) { 'IdentityProviderAttributesReport' }
+    given(:source) { nil }
     given(:target) { nil }
 
     it_behaves_like 'Automated Public Report'
@@ -84,6 +89,7 @@ RSpec.feature 'automated report instances' do
 
   context 'Provided Attribute Report Report' do
     given(:report_class) { 'ProvidedAttributeReport' }
+    given(:source) { nil }
     given(:target) { attribute.name }
 
     it_behaves_like 'Automated Public Report'
@@ -91,6 +97,7 @@ RSpec.feature 'automated report instances' do
 
   context 'Requested Attribute Report' do
     given(:report_class) { 'RequestedAttributeReport' }
+    given(:source) { nil }
     given(:target) { attribute.name }
 
     it_behaves_like 'Automated Public Report'
@@ -99,6 +106,7 @@ RSpec.feature 'automated report instances' do
   context 'Automated Federation Service Compatibility Report' do
     given(:target) { sp.entity_id }
     given(:report_class) { 'ServiceCompatibilityReport' }
+    given(:source) { nil }
 
     it_behaves_like 'Automated Public Report'
   end
@@ -107,7 +115,8 @@ RSpec.feature 'automated report instances' do
     given(:auto_report) do
       create :automated_report,
              target: object.entity_id,
-             report_class: report_class
+             report_class: report_class,
+             source: source
     end
 
     given!(:instance) do
@@ -118,7 +127,8 @@ RSpec.feature 'automated report instances' do
     given!(:unknown_auto_report) do
       create :automated_report,
              target: unknown_object.entity_id,
-             report_class: report_class
+             report_class: report_class,
+             source: source
     end
 
     given!(:unknown_instance) do
@@ -161,6 +171,7 @@ RSpec.feature 'automated report instances' do
 
   context 'Identity Provider Sessions Report' do
     given(:report_class) { 'IdentityProviderSessionsReport' }
+    given(:source) { 'DS' }
     given(:object) { idp }
     given(:unknown_object) { unknown_idp }
 
@@ -169,6 +180,7 @@ RSpec.feature 'automated report instances' do
 
   context 'Identity Provider Daily Demand Report' do
     given(:report_class) { 'IdentityProviderDailyDemandReport' }
+    given(:source) { 'DS' }
     given(:object) { idp }
     given(:unknown_object) { unknown_idp }
 
@@ -177,6 +189,7 @@ RSpec.feature 'automated report instances' do
 
   context 'Identity Provider Destination Services Report' do
     given(:report_class) { 'IdentityProviderDestinationServicesReport' }
+    given(:source) { 'DS' }
     given(:object) { idp }
     given(:unknown_object) { unknown_idp }
 
@@ -185,6 +198,7 @@ RSpec.feature 'automated report instances' do
 
   context 'Service Provider Source Identity Providers Report' do
     given(:report_class) { 'ServiceProviderSourceIdentityProvidersReport' }
+    given(:source) { 'DS' }
     given(:object) { sp }
     given(:unknown_object) { unknown_sp }
 
@@ -193,6 +207,7 @@ RSpec.feature 'automated report instances' do
 
   context 'Service Provider Sessions Report' do
     given(:report_class) { 'ServiceProviderSessionsReport' }
+    given(:source) { 'DS' }
     given(:object) { sp }
     given(:unknown_object) { unknown_sp }
 
@@ -201,6 +216,7 @@ RSpec.feature 'automated report instances' do
 
   context 'Service Provider Daily Demand Report' do
     given(:report_class) { 'ServiceProviderDailyDemandReport' }
+    given(:source) { 'DS' }
     given(:object) { sp }
     given(:unknown_object) { unknown_sp }
 

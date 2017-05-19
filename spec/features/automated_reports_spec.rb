@@ -11,6 +11,7 @@ RSpec.feature 'automated report' do
   given!(:auto_report_idp) do
     create :automated_report,
            report_class: 'IdentityProviderSessionsReport',
+           source: 'DS',
            target: idp.entity_id
   end
 
