@@ -44,7 +44,8 @@ RSpec.describe DailyDemandReport do
     let(:value) { anything }
 
     it 'should include title, units and labels' do
-      expect(report).to include(title: title, units: units,
+      output_title = title + ' (Discovery Service)'
+      expect(report).to include(title: output_title, units: units,
                                 labels: labels, range: range)
     end
 

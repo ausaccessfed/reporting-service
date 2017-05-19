@@ -53,7 +53,7 @@ RSpec.describe ServiceProviderSessionsReport do
     let(:value) { anything }
 
     it 'should include title, units, labels and range' do
-      output_title = title + ' ' + sp_01.name
+      output_title = title + ' ' + sp_01.name + ' (Discovery Service)'
       expect(report).to include(title: output_title, units: units,
                                 labels: labels, range: range)
     end
