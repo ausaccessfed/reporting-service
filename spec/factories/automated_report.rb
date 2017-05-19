@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :automated_report do
-    report_class 'DailyDemandReport'
+    report_class 'FederationGrowthReport'
     interval 'monthly'
   end
 end
