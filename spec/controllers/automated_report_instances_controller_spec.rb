@@ -34,7 +34,8 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     let(:auto_report) do
       create :automated_report,
              target: target,
-             report_class: report_class
+             report_class: report_class,
+             source: source
     end
 
     let!(:instance) do
@@ -57,6 +58,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
   context 'Federation Growth Report' do
     let(:report_class) { 'FederationGrowthReport' }
+    let(:source) { nil }
     let(:target) { nil }
 
     it_behaves_like 'Automated Public Report'
@@ -64,6 +66,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
   context 'Federated Sessions Report' do
     let(:report_class) { 'FederatedSessionsReport' }
+    let(:source) { 'DS' }
     let(:target) { nil }
 
     it_behaves_like 'Automated Public Report'
@@ -71,6 +74,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
   context 'Daily Demand Report' do
     let(:report_class) { 'DailyDemandReport' }
+    let(:source) { 'DS' }
     let(:target) { nil }
 
     it_behaves_like 'Automated Public Report'
@@ -78,6 +82,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
   context 'Identity Provider Attributes Report' do
     let(:report_class) { 'IdentityProviderAttributesReport' }
+    let(:source) { nil }
     let(:target) { nil }
 
     it_behaves_like 'Automated Public Report'
@@ -85,6 +90,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
   context 'Provided Attribute Report Report' do
     let(:report_class) { 'ProvidedAttributeReport' }
+    let(:source) { nil }
     let(:target) { attribute.name }
 
     it_behaves_like 'Automated Public Report'
@@ -92,6 +98,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
   context 'Requested Attribute Report' do
     let(:report_class) { 'RequestedAttributeReport' }
+    let(:source) { nil }
     let(:target) { attribute.name }
 
     it_behaves_like 'Automated Public Report'
@@ -99,6 +106,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
   context 'Automated Federation Service Compatibility Report' do
     let(:target) { sp.entity_id }
+    let(:source) { nil }
     let(:report_class) { 'ServiceCompatibilityReport' }
 
     it_behaves_like 'Automated Public Report'
@@ -108,7 +116,8 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     let(:auto_report) do
       create :automated_report,
              target: object.entity_id,
-             report_class: report_class
+             report_class: report_class,
+             source: source
     end
 
     let!(:instance) do
@@ -119,7 +128,8 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     let!(:unknown_auto_report) do
       create :automated_report,
              target: unknown_object.entity_id,
-             report_class: report_class
+             report_class: report_class,
+             source: source
     end
 
     let!(:unknown_instance) do
@@ -170,6 +180,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
   context 'Identity Provider Sessions Report' do
     let(:report_class) { 'IdentityProviderSessionsReport' }
+    let(:source) { 'DS' }
     let(:object) { idp }
     let(:unknown_object) { unknown_idp }
 
@@ -178,6 +189,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
   context 'Identity Provider Daily Demand Report' do
     let(:report_class) { 'IdentityProviderDailyDemandReport' }
+    let(:source) { 'DS' }
     let(:object) { idp }
     let(:unknown_object) { unknown_idp }
 
@@ -186,6 +198,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
   context 'Identity Provider Destination Services Report' do
     let(:report_class) { 'IdentityProviderDestinationServicesReport' }
+    let(:source) { 'DS' }
     let(:object) { idp }
     let(:unknown_object) { unknown_idp }
 
@@ -194,6 +207,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
   context 'Service Provider Sessions Report' do
     let(:report_class) { 'ServiceProviderSessionsReport' }
+    let(:source) { 'DS' }
     let(:object) { sp }
     let(:unknown_object) { unknown_sp }
 
@@ -202,6 +216,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
   context 'Service Provider Daily Demand Report' do
     let(:report_class) { 'ServiceProviderDailyDemandReport' }
+    let(:source) { 'DS' }
     let(:object) { sp }
     let(:unknown_object) { unknown_sp }
 
@@ -210,6 +225,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
   context 'Service Provider Source Identity Providers Report' do
     let(:report_class) { 'ServiceProviderSourceIdentityProvidersReport' }
+    let(:source) { 'DS' }
     let(:object) { sp }
     let(:unknown_object) { unknown_sp }
 
