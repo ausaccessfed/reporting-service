@@ -28,7 +28,7 @@ RSpec.describe ServiceProviderSourceIdentityProvidersReport do
 
   context 'SP Source IdPs Report' do
     it 'output should include :type, :title, :header and :footer' do
-      output_title = "#{title} #{sp.name}"
+      output_title = "#{title} #{sp.name} (Discovery Service)"
       expect(report).to include(type: type,
                                 title: output_title, header: header)
     end
