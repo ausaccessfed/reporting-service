@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class DiscoveryServiceEvent < ActiveRecord::Base
   valhammer
 
@@ -10,10 +11,10 @@ class DiscoveryServiceEvent < ActiveRecord::Base
              foreign_key: :initiating_sp,
              primary_key: :entity_id
 
-  scope :within_range, lambda { |start, finish|
+  scope(:within_range, lambda { |start, finish|
     where(arel_table[:timestamp].gteq(start)
       .and(arel_table[:timestamp].lteq(finish)))
-  }
+  })
 
-  scope :sessions, -> { where(phase: 'response') }
+  scope(:sessions, -> { where(phase: 'response') })
 end

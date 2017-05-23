@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe SubscriberRegistrationsReport do
-  let(:header) { [%w(Name Registration\ Date)] }
+  let(:header) { [%w[Name Registration\ Date]] }
   let(:type) { 'subscriber-registrations' }
 
   let(:organization) { create(:organization) }
@@ -31,7 +32,7 @@ RSpec.describe SubscriberRegistrationsReport do
 
       it 'includes reported objects' do
         reported_objects.each do |o|
-          activated_date = o.activations(true)
+          activated_date = o.activations.reload
                             .flat_map(&:activated_at).min
 
           expect(report[:rows]).to include([o.name, activated_date])

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 require 'gumboot/shared_examples/roles'
 
@@ -68,7 +69,7 @@ RSpec.describe Role, type: :model do
     end
 
     def permission_values
-      subject.permissions(true).map(&:value)
+      subject.permissions.reload.map(&:value)
     end
 
     context 'for an admin entitlement' do

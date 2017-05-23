@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class UpdateFromFederationRegistry
   include QueryFederationRegistry
 
@@ -87,7 +88,7 @@ class UpdateFromFederationRegistry
   end
 
   def sync_saml_entity_attribute(scope, attr_data, extra_attrs = {})
-    attribute = SAMLAttribute.find_by_name(attr_data[:name])
+    attribute = SAMLAttribute.find_by(name: attr_data[:name])
     assoc = scope.find_or_initialize_by(saml_attribute_id: attribute.id)
     assoc.update!(extra_attrs)
     assoc

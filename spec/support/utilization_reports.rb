@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 RSpec.shared_context 'Utilization Report' do
   around { |spec| Timecop.freeze { spec.run } }
 
   let!(:start) { 10.days.ago.beginning_of_day }
   let!(:finish) { 1.day.ago.beginning_of_day }
-  let(:header) { [%w(Name Sessions)] }
+  let(:header) { [%w[Name Sessions]] }
 
   let(:included_objects) { create_list(object_type, rand(4..7)) }
   let(:before_objects) { create_list(object_type, rand(1..3)) }
@@ -26,9 +27,10 @@ RSpec.shared_context 'Utilization Report' do
     def create_events(objects, start, finish)
       objects.each_with_object({}) do |o, a|
         events = Array.new(rand(1..5)) do
+          time = Time.at(rand(start.to_i..finish.to_i)).utc
           create(:discovery_service_event, :response,
                  target => o.entity_id,
-                 timestamp: Faker::Time.between(start, finish))
+                 timestamp: time)
         end
 
         a[o.id] = events.length
@@ -63,7 +65,7 @@ RSpec.shared_context 'Utilization Report' do
     context 'with random case permutations' do
       before do
         objects.each do |o|
-          o.update!(name: o.name.send([:upcase, :downcase].sample))
+          o.update!(name: o.name.send(%i[upcase downcase].sample))
         end
       end
 

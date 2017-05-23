@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe TabularReport::Lint do
@@ -26,7 +27,7 @@ RSpec.describe TabularReport::Lint do
       title: 'A tabular report!',
       header: [['Column 1', 'Column 2', 'Column 3']],
       footer: [['Footer 1', 'Footer 2', 'Footer 3']],
-      rows: [%w(a b c), %w(d e f), %w(g h i), %w(j k l)]
+      rows: [%w[a b c], %w[d e f], %w[g h i], %w[j k l]]
     }
   end
 
@@ -60,12 +61,12 @@ RSpec.describe TabularReport::Lint do
   end
 
   context 'when the header is an array of strings' do
-    let(:output) { valid_output.merge(header: %w(a b c)) }
+    let(:output) { valid_output.merge(header: %w[a b c]) }
     fails_with 'header must be an array of arrays'
   end
 
   context 'when the header has too few items' do
-    let(:output) { valid_output.merge(header: [%w(a b)]) }
+    let(:output) { valid_output.merge(header: [%w[a b]]) }
     fails_with 'row data has inconsistent width'
   end
 
@@ -87,7 +88,7 @@ RSpec.describe TabularReport::Lint do
   end
 
   context 'when the footer is an array of strings' do
-    let(:output) { valid_output.merge(footer: %w(a b c)) }
+    let(:output) { valid_output.merge(footer: %w[a b c]) }
     fails_with 'footer must be an array of arrays'
   end
 
@@ -97,7 +98,7 @@ RSpec.describe TabularReport::Lint do
   end
 
   context 'when the footer has too few items' do
-    let(:output) { valid_output.merge(footer: [%w(a b)]) }
+    let(:output) { valid_output.merge(footer: [%w[a b]]) }
     fails_with 'footer size is incorrect'
   end
 
@@ -114,7 +115,7 @@ RSpec.describe TabularReport::Lint do
   end
 
   context 'when the row data is an array of strings' do
-    let(:output) { valid_output.merge(rows: %w(a b c d e f g)) }
+    let(:output) { valid_output.merge(rows: %w[a b c d e f g]) }
     fails_with 'row data must be an array of arrays'
   end
 
@@ -124,7 +125,7 @@ RSpec.describe TabularReport::Lint do
   end
 
   context 'when the rows differ in length' do
-    let(:output) { valid_output.merge(rows: [%w(a b c), %w(d e)]) }
+    let(:output) { valid_output.merge(rows: [%w[a b c], %w[d e]]) }
     fails_with 'row data has inconsistent width'
   end
 end

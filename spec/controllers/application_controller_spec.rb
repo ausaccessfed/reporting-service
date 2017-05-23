@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 require 'gumboot/shared_examples/application_controller'
 
@@ -16,7 +17,10 @@ RSpec.describe ApplicationController, type: :controller do
 
   before do
     @routes.draw do
-      match ':controller/:action(/:id)', via: [:get, :post]
+      match 'some_reports/report_action/:id' => 'some_reports#report_action',
+            via: %i[get post]
+      match 'anonymous/federation_growth' => 'anonymous#federation_growth',
+            via: %i[get post]
     end
   end
 
@@ -35,7 +39,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
 
     it 'GET request should create a uri session including fragments' do
-      get :federation_growth, time: 1000
+      get :federation_growth, params: { time: 1000 }
       uri = URI.parse(session[:return_url])
 
       expect(uri.path).to eq('/anonymous/federation_growth')
@@ -57,7 +61,7 @@ RSpec.describe ApplicationController, type: :controller do
         public_action
 
         @text = Time.zone.name
-        render nothing: true
+        head :accepted
       end
     end
 

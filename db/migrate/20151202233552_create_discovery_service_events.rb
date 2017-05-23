@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateDiscoveryServiceEvents < ActiveRecord::Migration
   def change
     create_table :discovery_service_events do |t|

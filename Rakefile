@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 begin
   require 'rubocop/rake_task'
   require 'brakeman'
@@ -16,4 +17,4 @@ task :brakeman do
   Brakeman.run app_path: '.', print_report: true, exit_on_warn: true
 end
 
-task default: [:rubocop, :spec, :brakeman]
+task default: %i[rubocop spec brakeman]

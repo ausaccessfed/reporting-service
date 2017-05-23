@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 RSpec.shared_examples 'a federation object' do
   context '#active' do
     let(:object) do

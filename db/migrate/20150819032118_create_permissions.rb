@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePermissions < ActiveRecord::Migration
   def change
     create_table :permissions do |t|
@@ -8,7 +10,7 @@ class CreatePermissions < ActiveRecord::Migration
       t.timestamps
 
       t.foreign_key :roles
-      t.index [:role_id, :value], unique: true
+      t.index %i[role_id value], unique: true
     end
   end
 end

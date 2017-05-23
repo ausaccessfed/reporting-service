@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 class IdentityProviderUtilizationReport < TabularReport
   prepend ReportsSharedMethods
 
   report_type 'identity-provider-utilization'
 
-  header %w(Name Sessions)
+  header %w[Name Sessions]
   footer
 
   def initialize(start, finish)

@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ServiceCompatibilityReport do
   let(:type) { 'service-compatibility' }
-  let(:header) { [%w(Name Required Optional Compatible)] }
+  let(:header) { [%w[Name Required Optional Compatible]] }
 
   let(:service_provider_01) { create :service_provider }
   let(:core_attributes) { create_list :saml_attribute, 8, :core_attribute }

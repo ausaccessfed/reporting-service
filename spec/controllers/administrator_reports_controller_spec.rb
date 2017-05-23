@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe AdministratorReportsController, type: :controller do
@@ -16,7 +17,7 @@ RSpec.describe AdministratorReportsController, type: :controller do
   shared_examples 'an admin report' do
     before do
       get action
-      post action, params
+      post action, params: params
     end
 
     it 'Assigns report data to template' do

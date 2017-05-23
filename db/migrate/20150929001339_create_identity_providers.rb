@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateIdentityProviders < ActiveRecord::Migration
   def change
     create_table :identity_providers do |t|

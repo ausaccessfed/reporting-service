@@ -1,14 +1,15 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Administrator Reports' do
   given(:user) { create :subject }
 
   describe 'when subject is administrator' do
-    %w(identity_providers
+    %w[identity_providers
        service_providers organizations
-       rapid_connect_services services).each do |identifier|
-      %w(monthly quarterly yearly).each do |interval|
+       rapid_connect_services services].each do |identifier|
+      %w[monthly quarterly yearly].each do |interval|
         given!("auto_report_#{identifier}_#{interval}".to_sym) do
           create :automated_report,
                  interval: interval,
@@ -38,31 +39,31 @@ RSpec.feature 'Administrator Reports' do
 
     context 'Subscriber Registrations' do
       given(:identifiers) do
-        %w(organizations identity_providers service_providers
-           rapid_connect_services services)
+        %w[organizations identity_providers service_providers
+           rapid_connect_services services]
       end
 
       scenario 'viewing Report' do
-        message_01 = 'You have successfully subscribed to this report'
-        message_02 = 'You have already subscribed to this report'
+        message1 = 'You have successfully subscribed to this report'
+        message2 = 'You have already subscribed to this report'
 
         click_link 'Subscriber Registrations Report'
 
-        %w(Monthly Quarterly Yearly).each do |interval|
+        %w[Monthly Quarterly Yearly].each do |interval|
           identifiers.each do |identifier|
             select(identifier.titleize, from: 'Subscriber Identifiers')
             click_button('Generate')
             expect(page).to have_css('table.subscriber-registrations')
             click_button('Subscribe')
             click_link(interval)
-            expect(page).to have_selector('p', text: message_01)
+            expect(page).to have_selector('p', text: message1)
 
             select(identifier.titleize, from: 'Subscriber Identifiers')
             click_button('Generate')
             expect(page).to have_css('table.subscriber-registrations')
             click_button('Subscribe')
             click_link(interval)
-            expect(page).to have_selector('p', text: message_02)
+            expect(page).to have_selector('p', text: message2)
 
             expect(current_path)
               .to eq('/admin_reports/subscriber_registrations_report')

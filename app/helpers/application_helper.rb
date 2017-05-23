@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 module ApplicationHelper
   include Lipstick::Helpers::LayoutHelper
   include Lipstick::Helpers::NavHelper
   include Lipstick::Helpers::FormHelper
 
-  VERSION = '0.2.4'
+  VERSION = '0.3.0'
 
   def permitted?(action)
     @subject.try(:permits?, action)

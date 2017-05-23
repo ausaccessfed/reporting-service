@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 require 'gumboot/shared_examples/subjects'
 
@@ -28,7 +29,7 @@ RSpec.describe Subject, type: :model do
     end
 
     def roles
-      object.subject_roles(true).map(&:role)
+      object.subject_roles.reload.map(&:role)
     end
 
     let(:object) { create(:subject) }
@@ -49,7 +50,7 @@ RSpec.describe Subject, type: :model do
         before { object.roles << role }
 
         it 'makes no change' do
-          expect { run }.not_to change { roles }
+          expect { run }.not_to(change { roles })
         end
       end
     end

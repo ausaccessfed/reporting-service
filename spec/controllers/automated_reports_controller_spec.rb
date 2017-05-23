@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe AutomatedReportsController, type: :controller do
@@ -6,16 +7,16 @@ RSpec.describe AutomatedReportsController, type: :controller do
   let(:user) { create :subject }
 
   def destroy
-    delete :destroy, identifier: subscription.identifier
+    delete :destroy, params: { identifier: subscription.identifier }
   end
 
   def subscribe(interval)
     request.env['HTTP_REFERER'] = "federation_reports/#{path}"
 
-    post :subscribe,
-         report_class: report_class,
-         interval: interval,
-         back_path: request.env['HTTP_REFERER']
+    post :subscribe, params: {
+      report_class: report_class, interval: interval,
+      back_path: request.env['HTTP_REFERER']
+    }
   end
 
   before do
@@ -68,7 +69,7 @@ RSpec.describe AutomatedReportsController, type: :controller do
 
   shared_examples 'Automated Report Subscription' do
     before do
-      %w(monthly quarterly yearly).each do |interval|
+      %w[monthly quarterly yearly].each do |interval|
         subscribe interval
       end
     end

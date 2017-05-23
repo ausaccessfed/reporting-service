@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class ChangeTablesCollationToBinary < ActiveRecord::Migration
-  TABLES = %w(activations api_subject_roles api_subjects
+  TABLES = %w[activations api_subject_roles api_subjects
               automated_report_instances
               automated_report_subscriptions automated_reports
               discovery_service_events federated_login_events
@@ -7,7 +9,7 @@ class ChangeTablesCollationToBinary < ActiveRecord::Migration
               incoming_f_ticks_events organizations
               permissions rapid_connect_services roles
               saml_attributes service_provider_saml_attributes
-              service_providers subject_roles subjects).freeze
+              service_providers subject_roles subjects].freeze
 
   def change
     TABLES.each do |table|

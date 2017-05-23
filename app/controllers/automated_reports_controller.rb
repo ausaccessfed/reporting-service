@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+
 class AutomatedReportsController < AutomatedReports
-  before_action :public_action, only: [:index, :destroy]
+  before_action :public_action, only: %i[index destroy]
   before_action :set_access_method, only: :subscribe
 
   def index

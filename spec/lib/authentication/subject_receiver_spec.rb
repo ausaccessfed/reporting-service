@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Authentication::SubjectReceiver do
@@ -8,7 +9,7 @@ RSpec.describe Authentication::SubjectReceiver do
 
   context '#map_attributes' do
     let(:attrs) do
-      keys = %w(edupersontargetedid auedupersonsharedtoken displayname mail)
+      keys = %w[edupersontargetedid auedupersonsharedtoken displayname mail]
       keys.reduce({}) { |a, e| a.merge(e => e) }
     end
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class TimeSeriesReport
   module Lint
     include GenericLint
@@ -41,7 +42,7 @@ class TimeSeriesReport
 
       validate_required_field(output, :range, Hash)
 
-      [:start, :end].each do |k|
+      %i[start end].each do |k|
         v = output[:range][k]
         fail_with("time range is missing #{k}") unless v
 

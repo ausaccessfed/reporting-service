@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe AutomatedReportInstancesController, type: :controller do
@@ -20,7 +21,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   end
 
   def run(identifier)
-    get :show, identifier: identifier
+    get :show, params: { identifier: identifier }
   end
 
   before do
@@ -256,8 +257,8 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   end
 
   context 'Subscriber Registrations Reports' do
-    targets = %w(identity_providers service_providers
-                 organizations rapid_connect_services services)
+    targets = %w[identity_providers service_providers
+                 organizations rapid_connect_services services]
 
     targets.each do |target|
       let(:target) { target }
