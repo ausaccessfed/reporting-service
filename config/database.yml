@@ -21,3 +21,5 @@ production:
   username: <%= ENV['REPORTING_DB_USERNAME'] %>
   password: <%= ENV['REPORTING_DB_PASSWORD'] %>
   database: <%= ENV['REPORTING_DB_NAME'] %>
+  host: <%= ENV['REPORTING_DB_HOST'] %>
+  port: <%= ENV['REPORTING_DB_PORT'] %>
