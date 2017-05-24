@@ -17,21 +17,13 @@ module Steps
   end
 
   def scaled_steps
-    range = range(start, finish)
+    s = start
+    f = finish
 
-    return 24 if range >= 1.year
-    return 12 if range >= 6.months
-    return 6 if range >= 3.months
-    return 2 if range >= 1.month
+    return 24 if f >= 1.year.since(s)
+    return 12 if f >= 6.months.since(s)
+    return 6 if f >= 3.months.since(s)
+    return 2 if f >= 1.month.since(s)
     1
-  end
-
-  def range(start, finish)
-    range = finish - start
-
-    # February could have less days, therefore offset
-    range += 2.days if (start.month..finish.month).cover?(2)
-
-    range
   end
 end

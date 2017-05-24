@@ -29,6 +29,20 @@ RSpec.shared_examples 'report with scalable steps' do
     }
   end
 
+  let(:range_3_months_february_exception) do
+    {
+      start: DateTime.parse('2017-01-09 00:00:00').utc,
+      end: DateTime.parse('2017-04-09 00:00:00').utc
+    }
+  end
+
+  let(:range_3_months_across_year_end_february_exception) do
+    {
+      start: DateTime.parse('2016-12-09 00:00:00').utc,
+      end: DateTime.parse('2017-03-09 00:00:00').utc
+    }
+  end
+
   let(:range_2_months) do
     { start: Time.now.utc - 2.months, end: Time.now.utc }
   end
@@ -78,7 +92,7 @@ RSpec.shared_examples 'report with scalable steps' do
   end
 
   context 'Steps should be 2 hours within 1 to 3 months' do
-    it 'normal' do
+    it 'behaves correctly for 30+ day months' do
       [range_1_month, range_2_months].each do |rng|
         post path, params: params.merge(rng)
 
@@ -90,7 +104,7 @@ RSpec.shared_examples 'report with scalable steps' do
       end
     end
 
-    it 'February exception' do
+    it 'behaves correctly when the time range spans February' do
       [
         range_1_month_february_exception,
         range_2_months_february_exception
@@ -106,15 +120,32 @@ RSpec.shared_examples 'report with scalable steps' do
     end
   end
 
-  it 'Steps should be 6 hours within 3 to 6 months' do
-    [range_3_months, range_4_months].each do |rng|
-      post path, params: params.merge(rng)
+  context 'Steps should be 6 hours within 3 to 6 months' do
+    it 'behaves correctly for 30+ day months' do
+      [range_3_months, range_4_months].each do |rng|
+        post path, params: params.merge(rng)
 
-      data = JSON.parse(assigns[:data], symbolize_names: true)
-      sessions = data[:data][:sessions]
+        data = JSON.parse(assigns[:data], symbolize_names: true)
+        sessions = data[:data][:sessions]
 
-      expect(sessions[1]).to eq([21_600, 0.0])
-      expect(sessions[2]).to eq([21_600 * 2, 0.0])
+        expect(sessions[1]).to eq([21_600, 0.0])
+        expect(sessions[2]).to eq([21_600 * 2, 0.0])
+      end
+    end
+
+    it 'behaves correctly when the time range spans February' do
+      [
+        range_3_months_february_exception,
+        range_3_months_across_year_end_february_exception
+      ].each do |rng|
+        post path, params: params.merge(rng)
+
+        data = JSON.parse(assigns[:data], symbolize_names: true)
+        sessions = data[:data][:sessions]
+
+        expect(sessions[1]).to eq([21_600, 0.0])
+        expect(sessions[2]).to eq([21_600 * 2, 0.0])
+      end
     end
   end
 
