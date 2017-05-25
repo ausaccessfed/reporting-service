@@ -7,7 +7,7 @@ class CreatePermissions < ActiveRecord::Migration
 
       t.string :value, null: false
 
-      t.timestamps
+      t.timestamps null: false
 
       t.foreign_key :roles
       t.index %i[role_id value], unique: true

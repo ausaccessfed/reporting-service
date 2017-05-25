@@ -11,7 +11,7 @@ class CreateSubjects < ActiveRecord::Migration
       t.boolean :enabled, null: false, default: true
       t.boolean :complete, null: false, default: true
 
-      t.timestamps
+      t.timestamps null: false
 
       t.index :targeted_id, unique: true
       t.index :shared_token, unique: true

@@ -5,6 +5,7 @@ class CreateServiceProviderAttributes < ActiveRecord::Migration
     create_table :service_provider_attributes do |t|
       t.belongs_to :service_provider, :attribute, null: false
       t.boolean :optional, null: false
+
       t.timestamps null: false
 
       t.foreign_key :service_providers

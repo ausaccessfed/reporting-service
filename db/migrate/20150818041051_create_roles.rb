@@ -5,7 +5,8 @@ class CreateRoles < ActiveRecord::Migration
     create_table :roles do |t|
       t.string :name, null: false
       t.string :entitlement, null: false
-      t.timestamps
+
+      t.timestamps null: false
 
       t.index :entitlement, unique: true
     end

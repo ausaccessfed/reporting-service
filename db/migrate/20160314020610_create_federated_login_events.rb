@@ -9,6 +9,7 @@ class CreateFederatedLoginEvents < ActiveRecord::Migration
       t.string :hashed_principal_name, null: false
 
       t.timestamp :timestamp, null: false
+
       t.timestamps null: false
 
       t.index :hashed_principal_name
