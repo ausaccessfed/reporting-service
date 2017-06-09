@@ -52,5 +52,4 @@ class SubscriberReports < ApplicationController
     return nil if params[:source].blank?
     @source = params[:source]
   end
-
 end
