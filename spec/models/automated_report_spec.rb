@@ -80,6 +80,25 @@ RSpec.describe AutomatedReport, type: :model do
       end
     end
 
+    it 'requires a source for reports that need it' do
+      reports_that_need_source = %w[
+        DailyDemandReport FederatedSessionsReport
+        IdentityProviderDailyDemandReport
+        IdentityProviderDestinationServicesReport IdentityProviderSessionsReport
+        ServiceProviderDailyDemandReport ServiceProviderSessionsReport
+        ServiceProviderSourceIdentityProvidersReport
+        IdentityProviderUtilizationReport ServiceProviderUtilizationReport
+      ]
+      reports_that_need_source.each do |klass|
+        subject.report_class = klass
+        expect(subject).to allow_value('DS').for(:source)
+        expect(subject).to allow_value('IdP').for(:source)
+        expect(subject).not_to allow_value(nil).for(:source)
+        expect(subject).not_to allow_value('').for(:source)
+        expect(subject).not_to allow_value('CrystalBall').for(:source)
+      end
+    end
+
     it 'requires an attribute name for attribute reports' do
       %w[ProvidedAttributeReport RequestedAttributeReport].each do |klass|
         subject.report_class = klass
