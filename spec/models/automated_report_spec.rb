@@ -121,4 +121,17 @@ RSpec.describe AutomatedReport, type: :model do
       expect(subject.interval).to be_nil
     end
   end
+
+  before do
+    allow(Rails.application.config)
+      .to receive_message_chain(:reporting_service, :default_session_source)
+      .and_return(nil)
+  end
+
+  describe '#source_if_needed' do
+    it 'returns a valid source' do
+      subject.report_class = :DailyDemandReport
+      expect(subject.source_if_needed).not_to be_nil
+    end
+  end
 end
