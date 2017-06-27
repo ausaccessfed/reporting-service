@@ -8,15 +8,15 @@ FactoryGirl.define do
       "https://sp.#{Faker::Internet.domain_name}/shibboleth"
     end
 
+    asserting_party do
+      "https://idp.#{Faker::Internet.domain_name}/idp/shibboleth"
+    end
+
     timestamp do
       Faker::Time.between(10.days.ago, Time.zone.today, :day)
     end
 
     trait :OK do
-      asserting_party do
-        "https://idp.#{Faker::Internet.domain_name}/idp/shibboleth"
-      end
-
       result { 'OK' }
     end
   end
