@@ -10,7 +10,7 @@ RSpec.describe IdentityProviderUtilizationReport do
 
   subject { IdentityProviderUtilizationReport.new(start, finish, 'DS') }
 
-  context 'Service Provider Utilization report #Generate' do
+  context 'Identity Provider Utilization report #Generate' do
     let(:object_type) { :identity_provider }
     let(:target) { :selected_idp }
 
