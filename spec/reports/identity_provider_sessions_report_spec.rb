@@ -31,7 +31,7 @@ RSpec.describe IdentityProviderSessionsReport do
 
   subject do
     IdentityProviderSessionsReport.new(idp.entity_id, start, finish, steps,
-                                       'DS')
+                                       source)
   end
 
   let(:report) { subject.generate }
@@ -43,17 +43,13 @@ RSpec.describe IdentityProviderSessionsReport do
     end
   end
 
-  context 'when events are sessions with response' do
-    before do
-      create_list :discovery_service_event, 20, :response,
-                  selected_idp: idp.entity_id,
-                  initiating_sp: sp.entity_id
-    end
+  shared_examples 'a report procesing events from the selected source' do
+    before { 20.times { create_event(idp.entity_id, sp.entity_id) } }
 
     let(:value) { anything }
 
     it 'should include title, units, labels and range' do
-      output_title = title + ' ' + idp.name + ' (Discovery Service)'
+      output_title = title + ' ' + idp.name + ' (' + source_name + ')'
       expect(report).to include(title: output_title, units: units,
                                 labels: labels, range: range)
     end
@@ -63,40 +59,40 @@ RSpec.describe IdentityProviderSessionsReport do
     end
   end
 
-  context 'when IdP sessions are not yet completed' do
+  context 'when IdP sessions from DS are not yet completed' do
     before do
       create_list :discovery_service_event, 2,
                   initiating_sp: sp.entity_id
     end
 
     let(:value) { 0.0 }
+    let(:source) { 'DS' }
 
     it 'should not count IdP sessions' do
       expect_in_range
     end
   end
 
-  context 'when IdPs have sessions' do
+  context 'when IdP sessions from IdP are failed' do
+    before do
+      create_list :federated_login_event, 2,
+                  relying_party: sp.entity_id
+    end
+
+    let(:value) { 0.0 }
+    let(:source) { 'IdP' }
+
+    it 'should not count IdP sessions' do
+      expect_in_range
+    end
+  end
+
+  shared_examples 'when IdPs have sessions' do
     before :example do
-      create_list :discovery_service_event, 5, :response,
-                  selected_idp: idp.entity_id,
-                  initiating_sp: sp.entity_id,
-                  timestamp: start
-
-      create_list :discovery_service_event, 10, :response,
-                  selected_idp: idp.entity_id,
-                  initiating_sp: sp.entity_id,
-                  timestamp: finish - 2.days
-
-      create_list :discovery_service_event, 9, :response,
-                  selected_idp: idp.entity_id,
-                  initiating_sp: sp.entity_id,
-                  timestamp: finish
-
-      create_list :discovery_service_event, 9, :response,
-                  selected_idp: idp_2.entity_id,
-                  initiating_sp: sp.entity_id,
-                  timestamp: finish
+      5.times { create_event(idp.entity_id, sp.entity_id, start) }
+      10.times { create_event(idp.entity_id, sp.entity_id, finish - 2.days) }
+      9.times { create_event(idp.entity_id, sp.entity_id, finish) }
+      9.times { create_event(idp_2.entity_id, sp.entity_id, finish) }
     end
 
     it 'average should be 1.0 for 5 IdP sessions during first 5 hours' do
@@ -117,5 +113,35 @@ RSpec.describe IdentityProviderSessionsReport do
       time = [*scope_range].last
       expect(data[:sessions]).to include([time, 1.8])
     end
+  end
+
+  context 'when events are sessions with response' do
+    def create_event(idp, sp, timestamp = nil)
+      create :discovery_service_event, :response,
+             { selected_idp: idp,
+               initiating_sp: sp,
+               timestamp: timestamp }.compact
+    end
+
+    let(:source) { 'DS' }
+    let(:source_name) { 'Discovery Service' }
+
+    it_behaves_like 'a report procesing events from the selected source'
+    it_behaves_like 'when IdPs have sessions'
+  end
+
+  context 'when events are IdP sessions' do
+    def create_event(idp, sp, timestamp = nil)
+      create :federated_login_event, :OK,
+             { asserting_party: idp,
+               relying_party: sp,
+               timestamp: timestamp }.compact
+    end
+
+    let(:source) { 'IdP' }
+    let(:source_name) { 'IdP Event Log' }
+
+    it_behaves_like 'a report procesing events from the selected source'
+    it_behaves_like 'when IdPs have sessions'
   end
 end
