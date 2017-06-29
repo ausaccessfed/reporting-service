@@ -87,64 +87,100 @@ RSpec.feature 'Administrator Reports' do
       end
     end
 
-    context 'Daily Demand Report' do
+    shared_examples 'Daily Demand Report' do
       scenario 'viewing Report' do
         click_link 'Daily Demand Report'
 
         fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
         fill_in 'end', with: Time.now.utc.beginning_of_month
+        select data_source_name, from: 'source'
 
         click_button('Generate')
 
         expect(current_path)
           .to eq('/admin_reports/daily_demand_report')
         expect(page).to have_css('svg.daily-demand')
+        expect(page).to have_content("(#{data_source_name})")
       end
     end
 
-    context 'Federated Sessions Report' do
+    shared_examples 'Federated Sessions Report' do
       scenario 'viewing Report' do
         click_link 'Federated Sessions Report'
 
         fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
         fill_in 'end', with: Time.now.utc.beginning_of_month
+        select data_source_name, from: 'source'
 
         click_button('Generate')
 
         expect(current_path)
           .to eq('/admin_reports/federated_sessions_report')
         expect(page).to have_css('svg.federated-sessions')
+        expect(page).to have_content("(#{data_source_name})")
       end
     end
 
-    context 'Identity Provider Utilization Report' do
+    shared_examples 'Identity Provider Utilization Report' do
       scenario 'viewing Report' do
         click_link 'Identity Provider Utilization Report'
 
         fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
         fill_in 'end', with: Time.now.utc.beginning_of_month
+        select data_source_name, from: 'source'
 
         click_button('Generate')
 
         expect(current_path)
           .to eq('/admin_reports/identity_provider_utilization_report')
         expect(page).to have_css('table.identity-provider-utilization')
+        # Tabular reports do not render report title - see #178
+        # So instead just confirm the report-data JSON contains the title.
+        report_data = page.evaluate_script(
+          'document.getElementsByClassName("report-data")[0].innerHTML'
+        )
+        expect(report_data).to have_text("(#{data_source_name})")
       end
     end
 
-    context 'Service Provider Utilization Report' do
+    shared_examples 'Service Provider Utilization Report' do
       scenario 'viewing Report' do
         click_link 'Service Provider Utilization Report'
 
         fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
         fill_in 'end', with: Time.now.utc.beginning_of_month
+        select data_source_name, from: 'source'
 
         click_button('Generate')
 
         expect(current_path)
           .to eq('/admin_reports/service_provider_utilization_report')
         expect(page).to have_css('table.service-provider-utilization')
+        # Tabular reports do not render report title - see #178
+        # So instead just confirm the report-data JSON contains the title.
+        report_data = page.evaluate_script(
+          'document.getElementsByClassName("report-data")[0].innerHTML'
+        )
+        expect(report_data).to have_text("(#{data_source_name})")
       end
+    end
+
+    context 'selecting DS session data source' do
+      let(:data_source_name) { 'Discovery Service' }
+
+      it_behaves_like 'Daily Demand Report'
+      it_behaves_like 'Federated Sessions Report'
+      it_behaves_like 'Identity Provider Utilization Report'
+      it_behaves_like 'Service Provider Utilization Report'
+    end
+
+    context 'selecting IdP session data source' do
+      let(:data_source_name) { 'IdP Event Log' }
+
+      it_behaves_like 'Daily Demand Report'
+      it_behaves_like 'Federated Sessions Report'
+      it_behaves_like 'Identity Provider Utilization Report'
+      it_behaves_like 'Service Provider Utilization Report'
     end
   end
 end
