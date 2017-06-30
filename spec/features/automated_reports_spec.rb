@@ -108,16 +108,16 @@ RSpec.feature 'automated report' do
   end
 
   context 'session source is DS' do
-      given(:data_source) { 'DS' }
-      given(:data_source_name) { 'Discovery Service' }
+    given(:data_source) { 'DS' }
+    given(:data_source_name) { 'Discovery Service' }
 
-      it_behaves_like 'automated reports tests'
+    it_behaves_like 'automated reports tests'
   end
 
   context 'session source is IdP' do
-      given(:data_source) { 'IdP' }
-      given(:data_source_name) { 'IdP Event Log' }
+    given(:data_source) { 'IdP' }
+    given(:data_source_name) { 'IdP Event Log' }
 
-      it_behaves_like 'automated reports tests'
+    it_behaves_like 'automated reports tests'
   end
 end

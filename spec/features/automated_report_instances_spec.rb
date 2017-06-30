@@ -53,9 +53,7 @@ RSpec.feature 'automated report instances' do
       expect(current_path).to eq("/automated_report/#{instance.identifier}")
       expect(page).to have_css("#output #{prefix}.#{template}")
       # For reports that depend on session source, check the right one was used.
-      if defined? source_name
-        expect(page).to have_content("(#{source_name})")
-      end
+      expect(page).to have_content("(#{source_name})") if defined? source_name
     end
   end
 
