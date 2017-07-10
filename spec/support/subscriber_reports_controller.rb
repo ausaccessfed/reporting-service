@@ -21,7 +21,9 @@ RSpec.shared_examples 'a Subscriber Report' do
 
   def run_post
     post report_path, params: {
-      entity_id: object.entity_id, start: 1.year.ago.utc, end: Time.now.utc
+      entity_id: object.entity_id, start: 1.year.ago.utc, end: Time.now.utc,
+      source: 'DS'
+      # TODO: test also other sources
     }
   end
 
@@ -74,7 +76,7 @@ RSpec.shared_examples 'a Subscriber Report' do
   end
 
   context 'steps should scale correctly' do
-    let(:params) { { entity_id: object.entity_id } }
+    let(:params) { { entity_id: object.entity_id, source: 'DS' } }
     let(:path) { :sessions_report }
 
     it_behaves_like 'report with scalable steps'

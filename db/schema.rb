@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160613235908) do
+ActiveRecord::Schema.define(version: 20170516001834) do
 
   create_table "activations", force: :cascade do |t|
     t.integer  "federation_object_id",   limit: 4,   null: false
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 20160613235908) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.datetime "instances_timestamp"
+    t.string   "source",              limit: 255
   end
 
   create_table "discovery_service_events", force: :cascade do |t|
@@ -106,6 +107,7 @@ ActiveRecord::Schema.define(version: 20160613235908) do
   end
 
   add_index "federated_login_events", ["hashed_principal_name"], name: "index_federated_login_events_on_hashed_principal_name", using: :btree
+  add_index "federated_login_events", ["result", "timestamp"], name: "index_federated_login_events_on_result_and_timestamp", using: :btree
 
   create_table "identity_provider_saml_attributes", force: :cascade do |t|
     t.integer  "identity_provider_id", limit: 4, null: false

@@ -6,6 +6,7 @@ class SubscriberReports < ApplicationController
   before_action { permitted_objects(model_object) }
   before_action :requested_entity
   before_action :set_range_params
+  before_action :set_source
   before_action :access_method
 
   private
@@ -26,8 +27,8 @@ class SubscriberReports < ApplicationController
   def generate_report(report_type, steps = nil)
     @entity_id = params[:entity_id]
 
-    return report_type.new(@entity_id, start, finish, steps) if steps
-    report_type.new(@entity_id, start, finish)
+    return report_type.new(@entity_id, start, finish, steps, @source) if steps
+    report_type.new(@entity_id, start, finish, @source)
   end
 
   def access_method
@@ -45,5 +46,10 @@ class SubscriberReports < ApplicationController
     @entities = active_objects.select do |sp|
       subject.permits? permission_string(sp)
     end
+  end
+
+  def set_source
+    return nil if params[:source].blank?
+    @source = params[:source]
   end
 end

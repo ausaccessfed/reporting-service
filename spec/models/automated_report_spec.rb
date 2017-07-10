@@ -80,6 +80,25 @@ RSpec.describe AutomatedReport, type: :model do
       end
     end
 
+    it 'requires a source for reports that need it' do
+      reports_that_need_source = %w[
+        DailyDemandReport FederatedSessionsReport
+        IdentityProviderDailyDemandReport
+        IdentityProviderDestinationServicesReport IdentityProviderSessionsReport
+        ServiceProviderDailyDemandReport ServiceProviderSessionsReport
+        ServiceProviderSourceIdentityProvidersReport
+        IdentityProviderUtilizationReport ServiceProviderUtilizationReport
+      ]
+      reports_that_need_source.each do |klass|
+        subject.report_class = klass
+        expect(subject).to allow_value('DS').for(:source)
+        expect(subject).to allow_value('IdP').for(:source)
+        expect(subject).not_to allow_value(nil).for(:source)
+        expect(subject).not_to allow_value('').for(:source)
+        expect(subject).not_to allow_value('CrystalBall').for(:source)
+      end
+    end
+
     it 'requires an attribute name for attribute reports' do
       %w[ProvidedAttributeReport RequestedAttributeReport].each do |klass|
         subject.report_class = klass
@@ -100,6 +119,19 @@ RSpec.describe AutomatedReport, type: :model do
     it 'returns nil when unset' do
       subject.interval = nil
       expect(subject.interval).to be_nil
+    end
+  end
+
+  before do
+    allow(Rails.application.config)
+      .to receive_message_chain(:reporting_service, :default_session_source)
+      .and_return(nil)
+  end
+
+  describe '#source_if_needed' do
+    it 'returns a valid source' do
+      subject.report_class = :DailyDemandReport
+      expect(subject.source_if_needed).not_to be_nil
     end
   end
 end

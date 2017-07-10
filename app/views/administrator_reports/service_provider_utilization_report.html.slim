@@ -4,12 +4,14 @@
 = render(partial: 'shared/flash_message',
          locals: { flash_header: 'Successfully Subscribed' })
 
-= render(partial: 'shared/subscribe_form',
-         locals: { target: nil,
-                   report_class: 'ServiceProviderUtilizationReport' })
+- if @data
+  = render(partial: 'shared/subscribe_form',
+           locals: { target: nil,
+                     report_class: 'ServiceProviderUtilizationReport' })
 
 h1 Service Provider Utilization Report
 
 p Shows the total number of sessions for each service provider during the given date range
 
-= render(partial: 'form')
+= render(partial: 'form',
+         locals: { report_class: 'ServiceProviderUtilizationReport' })

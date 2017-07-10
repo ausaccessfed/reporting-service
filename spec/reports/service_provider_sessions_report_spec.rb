@@ -30,7 +30,8 @@ RSpec.describe ServiceProviderSessionsReport do
   let(:sp_02) { create :service_provider }
 
   subject do
-    ServiceProviderSessionsReport.new(sp_01.entity_id, start, finish, steps)
+    ServiceProviderSessionsReport.new(sp_01.entity_id, start, finish, steps,
+                                      source)
   end
 
   let(:report) { subject.generate }
@@ -42,17 +43,17 @@ RSpec.describe ServiceProviderSessionsReport do
     end
   end
 
-  context 'sessions' do
+  shared_examples 'sessions' do
     before do
-      create_list :discovery_service_event, 20, :response,
-                  selected_idp: idp.entity_id,
-                  initiating_sp: sp_01.entity_id
+      20.times do
+        create_event(idp.entity_id, sp_01.entity_id)
+      end
     end
 
     let(:value) { anything }
 
     it 'should include title, units, labels and range' do
-      output_title = title + ' ' + sp_01.name
+      output_title = title + ' ' + sp_01.name + ' (' + source_name + ')'
       expect(report).to include(title: output_title, units: units,
                                 labels: labels, range: range)
     end
@@ -69,33 +70,33 @@ RSpec.describe ServiceProviderSessionsReport do
     end
 
     let(:value) { 0.0 }
+    let(:source) { 'DS' }
 
     it 'should not count SP sessions' do
       expect_in_range
     end
   end
 
-  context 'SPs with sessions' do
+  context 'when SP sessions are failed at IdP' do
+    before do
+      create_list :federated_login_event, 2,
+                  relying_party: sp_01.entity_id
+    end
+
+    let(:value) { 0.0 }
+    let(:source) { 'IdP' }
+
+    it 'should not count SP sessions' do
+      expect_in_range
+    end
+  end
+
+  shared_examples 'SPs with sessions' do
     before :example do
-      create_list :discovery_service_event, 5, :response,
-                  selected_idp: idp.entity_id,
-                  initiating_sp: sp_01.entity_id,
-                  timestamp: start
-
-      create_list :discovery_service_event, 10, :response,
-                  selected_idp: idp.entity_id,
-                  initiating_sp: sp_01.entity_id,
-                  timestamp: finish - 2.days
-
-      create_list :discovery_service_event, 9, :response,
-                  selected_idp: idp.entity_id,
-                  initiating_sp: sp_01.entity_id,
-                  timestamp: finish
-
-      create_list :discovery_service_event, 9, :response,
-                  selected_idp: idp.entity_id,
-                  initiating_sp: sp_02.entity_id,
-                  timestamp: finish
+      5.times { create_event(idp.entity_id, sp_01.entity_id, start) }
+      10.times { create_event(idp.entity_id, sp_01.entity_id, finish - 2.days) }
+      9.times { create_event(idp.entity_id, sp_01.entity_id, finish) }
+      9.times { create_event(idp.entity_id, sp_02.entity_id, finish) }
     end
 
     it 'average should be 1.0 for 5 SP sessions during first 5 hours' do
@@ -116,5 +117,35 @@ RSpec.describe ServiceProviderSessionsReport do
       time = [*scope_range].last
       expect(data[:sessions]).to include([time, 1.8])
     end
+  end
+
+  context 'when events are sessions with response' do
+    def create_event(idp, sp, timestamp = nil)
+      create :discovery_service_event, :response,
+             { selected_idp: idp,
+               initiating_sp: sp,
+               timestamp: timestamp }.compact
+    end
+
+    let(:source) { 'DS' }
+    let(:source_name) { 'Discovery Service' }
+
+    it_behaves_like 'sessions'
+    it_behaves_like 'SPs with sessions'
+  end
+
+  context 'when events are IdP sessions' do
+    def create_event(idp, sp, timestamp = nil)
+      create :federated_login_event, :OK,
+             { asserting_party: idp,
+               relying_party: sp,
+               timestamp: timestamp }.compact
+    end
+
+    let(:source) { 'IdP' }
+    let(:source_name) { 'IdP Event Log' }
+
+    it_behaves_like 'sessions'
+    it_behaves_like 'SPs with sessions'
   end
 end

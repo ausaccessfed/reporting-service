@@ -1,6 +1,19 @@
 # frozen_string_literal: true
 
 module ReportsSharedMethods
+  def source_options
+    SESSION_SOURCES.map { |k, v| [v[:name], k] }
+  end
+
+  def source_display_names
+    SESSION_SOURCES.transform_values { |v| v[:name] }.merge(nil => 'N/A')
+  end
+  module_function :source_options, :source_display_names
+
+  def source_name
+    SESSION_SOURCES[@source][:name]
+  end
+
   private
 
   def output_data(range, report, step_width, divider, decimal_places = 1)
@@ -48,17 +61,26 @@ module ReportsSharedMethods
     report[time] ? (report[time].to_f / divider).round(decimal_places) : 0.0
   end
 
+  SESSION_SOURCES = {
+    'DS' => { klass: DiscoveryServiceEvent,
+              name: 'Discovery Service',
+              idp: 'selected_idp', sp: 'initiating_sp' },
+    'IdP' => { klass: FederatedLoginEvent,
+               name: 'IdP Event Log',
+               idp: 'asserting_party', sp: 'relying_party' }
+  }.freeze
+
   def sessions(where_args = {})
-    DiscoveryServiceEvent
+    SESSION_SOURCES[@source][:klass]
       .within_range(@start, @finish).where(where_args).sessions
   end
 
   def idp_sessions
-    sessions selected_idp: @identity_provider.entity_id
+    sessions(SESSION_SOURCES[@source][:idp] => @identity_provider.entity_id)
   end
 
   def sp_sessions
-    sessions initiating_sp: @service_provider.entity_id
+    sessions(SESSION_SOURCES[@source][:sp] => @service_provider.entity_id)
   end
 
   def tabular_sessions(target, session_objects = sessions)
@@ -72,11 +94,11 @@ module ReportsSharedMethods
   TARGET_OPTS = {
     IdentityProvider => {
       assoc: :identity_provider,
-      foreign_key: :selected_idp
+      foreign_key: { 'DS' => 'selected_idp', 'IdP' => 'asserting_party' }.freeze
     }.freeze,
     ServiceProvider => {
       assoc: :service_provider,
-      foreign_key: :initiating_sp
+      foreign_key: { 'DS' => 'initiating_sp', 'IdP' => 'relying_party' }.freeze
     }.freeze
   }.freeze
 
@@ -85,7 +107,7 @@ module ReportsSharedMethods
 
     session_objects
       .joins(opts[:assoc])
-      .group(opts[:foreign_key])
+      .group(opts[:foreign_key][@source])
       .select(target.arel_table[:name], 'count(*)')
       .to_sql
   end

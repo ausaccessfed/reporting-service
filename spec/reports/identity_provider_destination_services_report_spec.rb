@@ -20,40 +20,28 @@ RSpec.describe IdentityProviderDestinationServicesReport do
   let(:sp4) { create :service_provider }
 
   subject do
-    IdentityProviderDestinationServicesReport.new(idp.entity_id, start, finish)
+    IdentityProviderDestinationServicesReport.new(idp.entity_id, start, finish,
+                                                  source)
   end
 
   let(:report) { subject.generate }
 
-  context 'IdP Destination Report' do
+  shared_examples 'IdP Destination Report' do
     it 'output should include :type, :title, :header and :footer' do
-      output_title = "#{title} #{idp.name}"
+      output_title = "#{title} #{idp.name} (#{source_name})"
       expect(report).to include(type: type,
                                 title: output_title, header: header)
     end
   end
 
-  context '#generate' do
+  shared_examples '#generate' do
     before do
-      create_list :discovery_service_event, 20, :response,
-                  selected_idp: idp.entity_id
-
-      create_list :discovery_service_event, 20, :response,
-                  selected_idp: idp.entity_id,
-                  initiating_sp: sp1.entity_id
-
-      create_list :discovery_service_event, 5, :response,
-                  selected_idp: idp.entity_id,
-                  initiating_sp: sp2.entity_id
-
-      create_list :discovery_service_event, 10,
-                  selected_idp: idp.entity_id,
-                  initiating_sp: sp3.entity_id,
-                  timestamp: 20.days.ago.beginning_of_day
-
-      create_list :discovery_service_event, 5, :response,
-                  selected_idp: idp2.entity_id,
-                  initiating_sp: sp4.entity_id
+      20.times { create_event(idp.entity_id) }
+      20.times { create_event(idp.entity_id, sp1.entity_id) }
+      5.times { create_event(idp.entity_id, sp2.entity_id) }
+      long_ago = 20.days.ago.beginning_of_day
+      10.times { create_event(idp.entity_id, sp3.entity_id, long_ago) }
+      5.times { create_event(idp2.entity_id, sp4.entity_id) }
     end
 
     it 'creates report :rows with number of related SPs and SP names
@@ -69,5 +57,35 @@ RSpec.describe IdentityProviderDestinationServicesReport do
     it 'report should not include sessions from irrelevant entities' do
       expect(report[:rows]).not_to include([sp4.name, anything])
     end
+  end
+
+  context 'when sessions are Discovery Service sessions' do
+    def create_event(idp_entity_id, sp_entity_id = nil, timestamp = nil)
+      create :discovery_service_event, :response,
+             { selected_idp: idp_entity_id,
+               initiating_sp: sp_entity_id,
+               timestamp: timestamp }.compact
+    end
+
+    let(:source) { 'DS' }
+    let(:source_name) { 'Discovery Service' }
+
+    it_behaves_like 'IdP Destination Report'
+    it_behaves_like '#generate'
+  end
+
+  context 'when events are IdP sessions' do
+    def create_event(idp_entity_id, sp_entity_id = nil, timestamp = nil)
+      create :federated_login_event, :OK,
+             { asserting_party: idp_entity_id,
+               relying_party: sp_entity_id,
+               timestamp: timestamp }.compact
+    end
+
+    let(:source) { 'IdP' }
+    let(:source_name) { 'IdP Event Log' }
+
+    it_behaves_like 'IdP Destination Report'
+    it_behaves_like '#generate'
   end
 end

@@ -6,7 +6,8 @@ RSpec.shared_examples 'Subscribing to an automated report with target' do
       create :automated_report,
              interval: interval,
              target: target,
-             report_class: report_class
+             report_class: report_class,
+             source: source
     end
   end
 
