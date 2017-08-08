@@ -9,7 +9,8 @@ class AutomatedReport < ActiveRecord::Base
   validates :interval, inclusion: { in: %w[monthly quarterly yearly] }
 
   validate :target_must_be_valid_for_report_type,
-           :report_class_must_be_known
+           :report_class_must_be_known,
+           :source_must_be_valid_for_report_type
 
   def interval
     value = super
@@ -29,6 +30,28 @@ class AutomatedReport < ActiveRecord::Base
 
   def target_object
     klass.find_by_identifying_attribute(target)
+  end
+
+  def self.report_class_needs_source?(report_class)
+    REPORTS_THAT_NEED_SOURCE.include?(report_class)
+  end
+
+  def self.report_class_needs_target?(report_class)
+    !TARGET_CLASSES[report_class].nil?
+  end
+
+  def needs_source?
+    AutomatedReport.report_class_needs_source?(report_class)
+  end
+
+  def source_if_needed
+    return nil unless needs_source?
+    return source if source.present?
+    return Rails.application.config.reporting_service.default_session_source if
+      Rails.application.config.reporting_service.default_session_source.present?
+    # Complete fall back: default to DS if source is not set in params
+    # and not in app_config.
+    'DS'
   end
 
   private
@@ -52,7 +75,9 @@ class AutomatedReport < ActiveRecord::Base
     'ServiceProviderSourceIdentityProvidersReport' => ServiceProvider
   }.freeze
 
-  private_constant :TARGET_CLASSES
+  SOURCE_VALUES = %w[DS IdP].freeze
+
+  private_constant :TARGET_CLASSES, :SOURCE_VALUES
 
   def klass
     TARGET_CLASSES[report_class]
@@ -70,6 +95,21 @@ class AutomatedReport < ActiveRecord::Base
     return if klass.find_by_identifying_attribute(target)
 
     errors.add(:target, 'must be appropriate for the report type')
+  end
+
+  REPORTS_THAT_NEED_SOURCE = %w[
+    DailyDemandReport FederatedSessionsReport IdentityProviderDailyDemandReport
+    IdentityProviderDestinationServicesReport IdentityProviderSessionsReport
+    ServiceProviderDailyDemandReport ServiceProviderSessionsReport
+    ServiceProviderSourceIdentityProvidersReport
+    IdentityProviderUtilizationReport ServiceProviderUtilizationReport
+  ].freeze
+
+  def source_must_be_valid_for_report_type
+    return if report_class.nil?
+    return if needs_source? && SOURCE_VALUES.include?(source)
+    return if !needs_source? && source.nil?
+    errors.add(:source, 'is not valid for report ' + report_class)
   end
 
   def target_must_be_nil

@@ -15,8 +15,9 @@ RSpec.describe AutomatedReportsController, type: :controller do
 
     post :subscribe, params: {
       report_class: report_class, interval: interval,
+      source: source,
       back_path: request.env['HTTP_REFERER']
-    }
+    }.compact
   end
 
   before do
@@ -33,6 +34,7 @@ RSpec.describe AutomatedReportsController, type: :controller do
     let(:auto_report) do
       create :automated_report,
              report_class: 'IdentityProviderSessionsReport',
+             source: 'DS',
              target: idp.entity_id
     end
 
@@ -83,6 +85,7 @@ RSpec.describe AutomatedReportsController, type: :controller do
   context 'Federation Growth Report' do
     let(:path) { 'federation_growth_report' }
     let(:report_class) { 'FederationGrowthReport' }
+    let(:source) { nil }
     let(:template) { 'svg.federation-growth' }
 
     it_behaves_like 'Automated Report Subscription'
@@ -91,6 +94,7 @@ RSpec.describe AutomatedReportsController, type: :controller do
   context 'Federated Sessions Report' do
     let(:path) { 'federated_sessions' }
     let(:report_class) { 'FederatedSessionsReport' }
+    let(:source) { 'DS' }
     let(:template) { 'svg.federated-sessions' }
 
     it_behaves_like 'Automated Report Subscription'
@@ -99,6 +103,7 @@ RSpec.describe AutomatedReportsController, type: :controller do
   context 'Daily Demand Report' do
     let(:path) { 'daily_demand_report' }
     let(:report_class) { 'DailyDemandReport' }
+    let(:source) { 'DS' }
     let(:template) { 'svg.daily-demand_report' }
 
     it_behaves_like 'Automated Report Subscription'

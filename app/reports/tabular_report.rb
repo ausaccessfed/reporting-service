@@ -29,6 +29,9 @@ class TabularReport
   end
 
   def generate
-    self.class.options.merge(title: @title, rows: rows)
+    title = @title
+    title += ' (' + source_name + ')' if @source.present?
+
+    self.class.options.merge(title: title, rows: rows)
   end
 end

@@ -25,56 +25,81 @@ RSpec.feature 'Identity Provider Reports' do
       visit '/subscriber_reports'
     end
 
-    scenario 'viewing the IdP Sessions Report' do
-      click_link('Identity Provider Sessions Report')
+    shared_examples 'viewing reports depending on session source' do
+      scenario 'viewing the IdP Sessions Report' do
+        click_link('Identity Provider Sessions Report')
 
-      expect(current_path)
-        .to eq('/subscriber_reports/identity_provider_sessions_report')
+        expect(current_path)
+          .to eq('/subscriber_reports/identity_provider_sessions_report')
 
-      select idp.name, from: 'Identity Providers'
-      fill_in 'start', with: 1.year.ago
-      fill_in 'end', with: Time.zone.now
+        select idp.name, from: 'Identity Providers'
+        fill_in 'start', with: 1.year.ago
+        fill_in 'end', with: Time.zone.now
+        select data_source_name, from: 'source'
 
-      click_button 'Generate'
+        click_button 'Generate'
 
-      expect(current_path)
-        .to eq('/subscriber_reports/identity_provider_sessions_report')
-      expect(page).to have_css('svg.identity-provider-sessions')
+        expect(current_path)
+          .to eq('/subscriber_reports/identity_provider_sessions_report')
+        expect(page).to have_css('svg.identity-provider-sessions')
+        expect(page).to have_content("(#{data_source_name})")
+      end
+
+      scenario 'viewing the IdP Daily Demand Report' do
+        click_link('Identity Provider Daily Demand Report')
+
+        expect(current_path)
+          .to eq('/subscriber_reports/identity_provider_daily_demand_report')
+
+        select idp.name, from: 'Identity Providers'
+        fill_in 'start', with: 1.year.ago
+        fill_in 'end', with: Time.zone.now
+        select data_source_name, from: 'source'
+
+        click_button 'Generate'
+
+        expect(current_path).to eq('/subscriber_reports/identity_provider_'\
+                                   'daily_demand_report')
+        expect(page).to have_css('svg.identity-provider-daily-demand')
+        expect(page).to have_content("(#{data_source_name})")
+      end
+
+      scenario 'viewing the Destination Services Report' do
+        click_link('Identity Provider Destination Services Report')
+
+        expect(current_path)
+          .to eq('/subscriber_reports/identity_provider_'\
+                 'destination_services_report')
+
+        select idp.name, from: 'Identity Providers'
+        fill_in 'start', with: 1.year.ago
+        fill_in 'end', with: Time.zone.now
+        select data_source_name, from: 'source'
+
+        click_button 'Generate'
+
+        expect(current_path)
+          .to eq('/subscriber_reports/identity_provider_'\
+                 'destination_services_report')
+        # Tabular reports do not render report title - see #178
+        # So instead just confirm the report-data JSON contains the title.
+        report_data = page.evaluate_script(
+          'document.getElementsByClassName("report-data")[0].innerHTML'
+        )
+        expect(report_data).to have_text("(#{data_source_name})")
+      end
     end
 
-    scenario 'viewing the IdP Daily Demand Report' do
-      click_link('Identity Provider Daily Demand Report')
+    context 'selecting DS session data source' do
+      let(:data_source_name) { 'Discovery Service' }
 
-      expect(current_path)
-        .to eq('/subscriber_reports/identity_provider_daily_demand_report')
-
-      select idp.name, from: 'Identity Providers'
-      fill_in 'start', with: 1.year.ago
-      fill_in 'end', with: Time.zone.now
-
-      click_button 'Generate'
-
-      expect(current_path).to eq('/subscriber_reports/identity_provider_'\
-                                 'daily_demand_report')
-      expect(page).to have_css('svg.identity-provider-daily-demand')
+      it_behaves_like 'viewing reports depending on session source'
     end
 
-    scenario 'viewing the Destination Services Report' do
-      click_link('Identity Provider Destination Services Report')
+    context 'selecting IdP session data source' do
+      let(:data_source_name) { 'IdP Event Log' }
 
-      expect(current_path)
-        .to eq('/subscriber_reports/identity_provider_'\
-               'destination_services_report')
-
-      select idp.name, from: 'Identity Providers'
-      fill_in 'start', with: 1.year.ago
-      fill_in 'end', with: Time.zone.now
-
-      click_button 'Generate'
-
-      expect(current_path)
-        .to eq('/subscriber_reports/identity_provider_'\
-               'destination_services_report')
+      it_behaves_like 'viewing reports depending on session source'
     end
   end
 

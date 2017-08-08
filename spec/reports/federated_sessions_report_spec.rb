@@ -27,7 +27,7 @@ RSpec.describe FederatedSessionsReport do
   let(:identity_provider) { create :identity_provider }
   let(:service_provider) { create :service_provider }
 
-  subject { FederatedSessionsReport.new(start, finish, steps) }
+  subject { FederatedSessionsReport.new(start, finish, steps, source) }
 
   let(:report) { subject.generate }
   let(:data) { report[:data] }
@@ -38,17 +38,13 @@ RSpec.describe FederatedSessionsReport do
     end
   end
 
-  context 'when events are sessions with response' do
-    before do
-      create_list :discovery_service_event, 20, :response,
-                  selected_idp: identity_provider.entity_id,
-                  initiating_sp: service_provider.entity_id
-    end
-
+  shared_examples 'a report procesing events from the selected source' do
+    before { 20.times { create_event } }
     let(:value) { anything }
 
     it 'should include title, units, labels and range' do
-      expect(report).to include(title: title, units: units,
+      output_title = title + ' (' + source_name + ')'
+      expect(report).to include(title: output_title, units: units,
                                 labels: labels, range: range)
     end
 
@@ -65,28 +61,33 @@ RSpec.describe FederatedSessionsReport do
     end
 
     let(:value) { 0.0 }
+    let(:source) { 'DS' }
 
     it 'should not count any sessions' do
       expect_in_range
     end
   end
 
-  context 'when events timestamps are specified manually' do
+  context 'when IdP events are failed' do
+    before do
+      create_list :federated_login_event, 20,
+                  relying_party: service_provider.entity_id,
+                  timestamp: 1.day.ago.beginning_of_day
+    end
+
+    let(:value) { 0.0 }
+    let(:source) { 'IdP' }
+
+    it 'should not count any sessions' do
+      expect_in_range
+    end
+  end
+
+  shared_examples 'when events timestamps are specified manually' do
     before :example do
-      create_list :discovery_service_event, 5, :response,
-                  selected_idp: identity_provider.entity_id,
-                  initiating_sp: service_provider.entity_id,
-                  timestamp: start
-
-      create_list :discovery_service_event, 10, :response,
-                  selected_idp: identity_provider.entity_id,
-                  initiating_sp: service_provider.entity_id,
-                  timestamp: 2.days.ago.beginning_of_day
-
-      create_list :discovery_service_event, 9, :response,
-                  selected_idp: identity_provider.entity_id,
-                  initiating_sp: service_provider.entity_id,
-                  timestamp: finish
+      5.times { create_event(start) }
+      10.times { create_event(2.days.ago.beginning_of_day) }
+      9.times { create_event(finish) }
     end
 
     it 'average should be 1.0 for 5 sessions during first 5 hours' do
@@ -107,5 +108,35 @@ RSpec.describe FederatedSessionsReport do
       time = [*scope_range].last
       expect(data[:sessions]).to include([time, 1.8])
     end
+  end
+
+  context 'when events are sessions with response' do
+    def create_event(timestamp = nil)
+      create :discovery_service_event, :response,
+             { selected_idp: identity_provider.entity_id,
+               initiating_sp: service_provider.entity_id,
+               timestamp: timestamp }.compact
+    end
+
+    let(:source) { 'DS' }
+    let(:source_name) { 'Discovery Service' }
+
+    it_behaves_like 'a report procesing events from the selected source'
+    it_behaves_like 'when events timestamps are specified manually'
+  end
+
+  context 'when events are IdP sessions' do
+    def create_event(timestamp = nil)
+      create :federated_login_event, :OK,
+             { asserting_party: identity_provider.entity_id,
+               relying_party: service_provider.entity_id,
+               timestamp: timestamp }.compact
+    end
+
+    let(:source) { 'IdP' }
+    let(:source_name) { 'IdP Event Log' }
+
+    it_behaves_like 'a report procesing events from the selected source'
+    it_behaves_like 'when events timestamps are specified manually'
   end
 end

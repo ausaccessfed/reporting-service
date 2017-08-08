@@ -24,6 +24,7 @@ RSpec.feature 'Federation Reports' do
     given(:button) { 'Federation Growth Report' }
     given(:path) { 'federation_growth_report' }
     given(:report_class) { 'FederationGrowthReport' }
+    given(:source) { nil }
     given(:template) { 'svg.federation-growth' }
 
     it_behaves_like 'Subscribing to a nil class report'
@@ -32,6 +33,7 @@ RSpec.feature 'Federation Reports' do
   context 'Federated Sessions Report' do
     given(:button) { 'Federated Sessions Report' }
     given(:report_class) { 'FederatedSessionsReport' }
+    given(:source) { 'DS' }
     given(:path) { 'federated_sessions_report' }
     given(:template) { 'svg.federated-sessions' }
 
@@ -41,6 +43,7 @@ RSpec.feature 'Federation Reports' do
   context 'Daily Demand Report' do
     given(:button) { 'Daily Demand Report' }
     given(:report_class) { 'DailyDemandReport' }
+    given(:source) { 'DS' }
     given(:path) { 'daily_demand_report' }
     given(:template) { 'svg.daily-demand' }
 

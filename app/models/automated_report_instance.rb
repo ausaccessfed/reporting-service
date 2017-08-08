@@ -11,7 +11,8 @@ class AutomatedReportInstance < ActiveRecord::Base
   delegate :interval, to: :automated_report
 
   def materialize
-    args = [automated_report.target, *report_range, step_width].compact
+    args = [automated_report.target, *report_range, step_width,
+            automated_report.source_if_needed].compact
     automated_report.report_class.constantize.new(*args)
   end
 

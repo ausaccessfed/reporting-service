@@ -57,6 +57,7 @@ RSpec.feature 'Compliance Reports' do
   context 'Identity Provider Attributes Report' do
     given(:button) { 'Identity Provider Attributes Report' }
     given(:report_class) { 'IdentityProviderAttributesReport' }
+    given(:source) { nil }
     given(:path) { 'identity_provider_attributes_report' }
     given(:template) { 'svg.identity-provider-attributes' }
 
@@ -69,6 +70,7 @@ RSpec.feature 'Compliance Reports' do
     given(:list) { 'Attributes' }
     given(:button) { 'Single Attribute Report – Service Providers' }
     given(:report_class) { 'RequestedAttributeReport' }
+    given(:source) { nil }
     given(:path) { 'attribute_service_providers_report' }
 
     it_behaves_like 'Subscribing to an automated report with target'
@@ -80,6 +82,7 @@ RSpec.feature 'Compliance Reports' do
     given(:list) { 'Attributes' }
     given(:button) { 'Single Attribute Report – Identity Providers' }
     given(:report_class) { 'ProvidedAttributeReport' }
+    given(:source) { nil }
     given(:path) { 'attribute_identity_providers_report' }
 
     it_behaves_like 'Subscribing to an automated report with target'
@@ -91,6 +94,7 @@ RSpec.feature 'Compliance Reports' do
     given(:list) { 'Service Provider' }
     given(:button) { 'Service Compatibility Report' }
     given(:report_class) { 'ServiceCompatibilityReport' }
+    given(:source) { nil }
     given(:path) { 'service_provider_compatibility_report' }
 
     it_behaves_like 'Subscribing to an automated report with target'

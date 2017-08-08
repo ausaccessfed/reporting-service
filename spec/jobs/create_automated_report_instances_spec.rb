@@ -22,13 +22,15 @@ RSpec.describe CreateAutomatedReportInstances do
     let!("auto_report_#{i}_01".to_sym) do
       create :automated_report,
              interval: i,
-             report_class: 'DailyDemandReport'
+             report_class: 'DailyDemandReport',
+             source: 'DS'
     end
 
     let!("auto_report_#{i}_02".to_sym) do
       create :automated_report,
              interval: i,
              report_class: 'IdentityProviderDailyDemandReport',
+             source: 'DS',
              target: idp.entity_id
     end
   end
