@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-class Organization < ActiveRecord::Base
+class Organization < ApplicationRecord
   include FederationObject
 
-  has_many :activations, as: :federation_object
-  has_many :identity_providers
-  has_many :service_providers
-  has_many :rapid_connect_services
+  has_many :activations, as: :federation_object, dependent: :destroy
+  has_many :identity_providers, dependent: :destroy
+  has_many :service_providers, dependent: :destroy
+  has_many :rapid_connect_services, dependent: :destroy
 
   valhammer
 

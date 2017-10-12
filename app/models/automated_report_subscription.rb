@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AutomatedReportSubscription < ActiveRecord::Base
+class AutomatedReportSubscription < ApplicationRecord
   belongs_to :subject
   belongs_to :automated_report
 

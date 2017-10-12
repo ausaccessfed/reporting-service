@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-class IdentityProvider < ActiveRecord::Base
+class IdentityProvider < ApplicationRecord
   include FederationObject
 
   belongs_to :organization
 
-  has_many :activations, as: :federation_object
-  has_many :identity_provider_saml_attributes
+  has_many :activations, as: :federation_object, dependent: :destroy
+  has_many :identity_provider_saml_attributes, dependent: :destroy
   has_many :saml_attributes,
-           through: :identity_provider_saml_attributes
+           through: :identity_provider_saml_attributes, dependent: :destroy
 
   valhammer
 

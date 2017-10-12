@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class AutomatedReport < ActiveRecord::Base
-  has_many :automated_report_instances
-  has_many :automated_report_subscriptions
+class AutomatedReport < ApplicationRecord
+  has_many :automated_report_instances, dependent: :destroy
+  has_many :automated_report_subscriptions, dependent: :destroy
 
   valhammer
 

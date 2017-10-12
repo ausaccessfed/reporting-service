@@ -98,7 +98,7 @@ class TimeSeriesReport
         fail_with("missing #{kind} for #{k}")
       end
 
-      items.each { |k, _| fail_with("extra #{kind} present for #{k}") }
+      items.each_key { |k| fail_with("extra #{kind} present for #{k}") }
     end
   end
 end

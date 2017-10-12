@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class IncomingFTicksEvent < ActiveRecord::Base
+class IncomingFTicksEvent < ApplicationRecord
   valhammer
 
   # This model represents incoming data from rsyslog. The data is populated

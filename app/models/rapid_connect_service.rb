@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RapidConnectService < ActiveRecord::Base
+class RapidConnectService < ApplicationRecord
   include FederationObject
 
   belongs_to :organization

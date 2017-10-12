@@ -22,11 +22,11 @@ RSpec.describe PushEventsToFederationRegistry do
 
   context 'load db config' do
     let(:yml_file) do
-      <<-EOF
+      <<-YAML
         a: 1
         b: 2
         c: 3
-      EOF
+      YAML
     end
 
     it 'should read fr_database.yml' do
@@ -300,7 +300,8 @@ RSpec.describe PushEventsToFederationRegistry do
       before { events.each { |e| enqueue_event(e) } }
 
       it 'stores the records' do
-        expect { run }.to change { items.count }.by(100)
+        expect { run }.to change { items.count }
+          .by(100)
           .and change { redis.llen('wayf_access_record') }.to(0)
       end
     end

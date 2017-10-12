@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class SAMLAttribute < ActiveRecord::Base
-  has_many :service_provider_saml_attributes
+class SAMLAttribute < ApplicationRecord
+  has_many :service_provider_saml_attributes, dependent: :destroy
   has_many :service_providers,
-           through: :service_provider_saml_attributes
+           through: :service_provider_saml_attributes, dependent: :destroy
 
   valhammer
 
