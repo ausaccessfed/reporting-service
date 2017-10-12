@@ -34,7 +34,7 @@ class FederatedLoginEvent < ApplicationRecord
 
   def login_event_hash(data)
     timestamp = nil
-    timestamp = Time.zone.at(data['TS'].to_i) if data['TS'].match?(/^\d+$/)
+    timestamp = Time.zone.at(data['TS'].to_i) if data['TS']&.match?(/^\d+$/)
 
     { relying_party: data['RP'],
       asserting_party: data['AP'],
