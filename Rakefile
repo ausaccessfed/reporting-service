@@ -14,7 +14,12 @@ Rails.application.load_tasks
 RuboCop::RakeTask.new if defined? RuboCop
 
 task :brakeman do
-  Brakeman.run app_path: '.', print_report: true, exit_on_warn: true
+  result = Brakeman.run app_path: '.', print_report: true, pager: false
+
+  unless result.filtered_warnings.empty?
+    puts "Brakeman found #{result.filtered_warnings.count} warnings"
+    exit 1
+  end
 end
 
 task default: %i[rubocop spec brakeman]
