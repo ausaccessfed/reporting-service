@@ -20,7 +20,7 @@ gem 'rapid-rack'
 gem 'super-identity'
 gem 'valhammer'
 
-gem 'aws-sdk', '~> 2.9.1'
+gem 'aws-sdk', '~> 2'
 gem 'json-jwt'
 gem 'torba-rails'
 
