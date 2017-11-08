@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateAPISubjects < ActiveRecord::Migration
+class CreateAPISubjects < ActiveRecord::Migration[4.2]
   def change
     create_table :api_subjects do |t|
       t.string :x509_cn, null: false

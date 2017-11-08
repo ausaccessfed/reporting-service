@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateServiceProviderAttributes < ActiveRecord::Migration
+class CreateServiceProviderAttributes < ActiveRecord::Migration[4.2]
   def change
     create_table :service_provider_attributes do |t|
       t.belongs_to :service_provider, :attribute, null: false

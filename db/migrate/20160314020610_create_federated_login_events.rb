@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateFederatedLoginEvents < ActiveRecord::Migration
+class CreateFederatedLoginEvents < ActiveRecord::Migration[4.2]
   def change
     create_table :federated_login_events do |t|
       t.string :relying_party,

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateAutomatedReports < ActiveRecord::Migration
+class CreateAutomatedReports < ActiveRecord::Migration[4.2]
   def change
     create_table :automated_reports do |t|
       t.string :report_class, null: false

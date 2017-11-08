@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateIncomingFTicksEvents < ActiveRecord::Migration
+class CreateIncomingFTicksEvents < ActiveRecord::Migration[4.2]
   def change
     create_table :incoming_f_ticks_events do |t|
       t.string :data, limit: 4096, null: false
