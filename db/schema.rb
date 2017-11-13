@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -13,228 +12,210 @@
 
 ActiveRecord::Schema.define(version: 20170516001834) do
 
-  create_table "activations", force: :cascade do |t|
-    t.integer  "federation_object_id",   limit: 4,   null: false
-    t.string   "federation_object_type", limit: 255, null: false
-    t.datetime "activated_at",                       null: false
-    t.datetime "deactivated_at"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+  create_table "activations", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "federation_object_type", null: false
+    t.integer "federation_object_id", null: false
+    t.timestamp "activated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.timestamp "deactivated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "api_subject_roles", force: :cascade do |t|
-    t.integer  "api_subject_id", limit: 4, null: false
-    t.integer  "role_id",        limit: 4, null: false
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+  create_table "api_subject_roles", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.integer "api_subject_id", null: false
+    t.integer "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_subject_id", "role_id"], name: "index_api_subject_roles_on_api_subject_id_and_role_id", unique: true
+    t.index ["role_id"], name: "fk_rails_3c99dcce56"
   end
 
-  add_index "api_subject_roles", ["api_subject_id", "role_id"], name: "index_api_subject_roles_on_api_subject_id_and_role_id", unique: true, using: :btree
-  add_index "api_subject_roles", ["role_id"], name: "fk_rails_3c99dcce56", using: :btree
-
-  create_table "api_subjects", force: :cascade do |t|
-    t.string   "x509_cn",      limit: 255,                null: false
-    t.string   "contact_name", limit: 255,                null: false
-    t.string   "contact_mail", limit: 255,                null: false
-    t.string   "description",  limit: 255,                null: false
-    t.boolean  "enabled",                  default: true, null: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+  create_table "api_subjects", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "x509_cn", null: false
+    t.string "contact_name", null: false
+    t.string "contact_mail", null: false
+    t.string "description", null: false
+    t.boolean "enabled", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["x509_cn"], name: "index_api_subjects_on_x509_cn", unique: true
   end
 
-  add_index "api_subjects", ["x509_cn"], name: "index_api_subjects_on_x509_cn", unique: true, using: :btree
-
-  create_table "automated_report_instances", force: :cascade do |t|
-    t.integer  "automated_report_id", limit: 4,   null: false
-    t.datetime "range_end",                       null: false
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.string   "identifier",          limit: 255, null: false
+  create_table "automated_report_instances", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.integer "automated_report_id", null: false
+    t.timestamp "range_end", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "identifier", null: false
+    t.index ["automated_report_id"], name: "fk_rails_40d5ad7e3d"
+    t.index ["identifier"], name: "index_automated_report_instances_on_identifier", unique: true
+    t.index ["range_end", "automated_report_id"], name: "automated_report_instances_start_report", unique: true
   end
 
-  add_index "automated_report_instances", ["automated_report_id"], name: "fk_rails_40d5ad7e3d", using: :btree
-  add_index "automated_report_instances", ["identifier"], name: "index_automated_report_instances_on_identifier", unique: true, using: :btree
-  add_index "automated_report_instances", ["range_end", "automated_report_id"], name: "automated_report_instances_start_report", unique: true, using: :btree
-
-  create_table "automated_report_subscriptions", force: :cascade do |t|
-    t.integer  "automated_report_id", limit: 4,   null: false
-    t.integer  "subject_id",          limit: 4,   null: false
-    t.string   "identifier",          limit: 255, null: false
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+  create_table "automated_report_subscriptions", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.integer "automated_report_id", null: false
+    t.integer "subject_id", null: false
+    t.string "identifier", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["automated_report_id"], name: "fk_rails_f6b97923bf"
+    t.index ["identifier"], name: "index_automated_report_subscriptions_on_identifier", unique: true
+    t.index ["subject_id"], name: "fk_rails_59e1f019b3"
   end
 
-  add_index "automated_report_subscriptions", ["automated_report_id"], name: "fk_rails_f6b97923bf", using: :btree
-  add_index "automated_report_subscriptions", ["identifier"], name: "index_automated_report_subscriptions_on_identifier", unique: true, using: :btree
-  add_index "automated_report_subscriptions", ["subject_id"], name: "fk_rails_59e1f019b3", using: :btree
-
-  create_table "automated_reports", force: :cascade do |t|
-    t.string   "report_class",        limit: 255, null: false
-    t.string   "interval",            limit: 255, null: false
-    t.string   "target",              limit: 255
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+  create_table "automated_reports", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "report_class", null: false
+    t.string "interval", null: false
+    t.string "target"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "instances_timestamp"
-    t.string   "source",              limit: 255
+    t.string "source"
   end
 
-  create_table "discovery_service_events", force: :cascade do |t|
-    t.string   "user_agent",       limit: 4096
-    t.string   "ip",               limit: 255,  null: false
-    t.string   "group",            limit: 255,  null: false
-    t.string   "phase",            limit: 255,  null: false
-    t.string   "unique_id",        limit: 255,  null: false
-    t.datetime "timestamp",                     null: false
-    t.string   "selection_method", limit: 255
-    t.string   "return_url",       limit: 255
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.string   "initiating_sp",    limit: 255,  null: false
-    t.string   "selected_idp",     limit: 255
+  create_table "discovery_service_events", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "user_agent", limit: 4096
+    t.string "ip", null: false
+    t.string "group", null: false
+    t.string "phase", null: false
+    t.string "unique_id", null: false
+    t.datetime "timestamp", null: false
+    t.string "selection_method"
+    t.string "return_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "initiating_sp", null: false
+    t.string "selected_idp"
+    t.index ["phase", "timestamp"], name: "index_discovery_service_events_on_phase_and_timestamp"
+    t.index ["unique_id", "phase"], name: "index_discovery_service_events_on_unique_id_and_phase", unique: true
   end
 
-  add_index "discovery_service_events", ["phase", "timestamp"], name: "index_discovery_service_events_on_phase_and_timestamp", using: :btree
-  add_index "discovery_service_events", ["unique_id", "phase"], name: "index_discovery_service_events_on_unique_id_and_phase", unique: true, using: :btree
-
-  create_table "federated_login_events", force: :cascade do |t|
-    t.string   "relying_party",         limit: 255, null: false
-    t.string   "asserting_party",       limit: 255, null: false
-    t.string   "result",                limit: 255, null: false
-    t.string   "hashed_principal_name", limit: 255, null: false
-    t.datetime "timestamp",                         null: false
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+  create_table "federated_login_events", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "relying_party", null: false
+    t.string "asserting_party", null: false
+    t.string "result", null: false
+    t.string "hashed_principal_name", null: false
+    t.timestamp "timestamp", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hashed_principal_name"], name: "index_federated_login_events_on_hashed_principal_name"
+    t.index ["result", "timestamp"], name: "index_federated_login_events_on_result_and_timestamp"
   end
 
-  add_index "federated_login_events", ["hashed_principal_name"], name: "index_federated_login_events_on_hashed_principal_name", using: :btree
-  add_index "federated_login_events", ["result", "timestamp"], name: "index_federated_login_events_on_result_and_timestamp", using: :btree
-
-  create_table "identity_provider_saml_attributes", force: :cascade do |t|
-    t.integer  "identity_provider_id", limit: 4, null: false
-    t.integer  "saml_attribute_id",    limit: 4, null: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+  create_table "identity_provider_saml_attributes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.integer "identity_provider_id", null: false
+    t.integer "saml_attribute_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["identity_provider_id", "saml_attribute_id"], name: "unique_identity_provider_attribute", unique: true
+    t.index ["saml_attribute_id"], name: "fk_rails_3afed16ec1"
   end
 
-  add_index "identity_provider_saml_attributes", ["identity_provider_id", "saml_attribute_id"], name: "unique_identity_provider_attribute", unique: true, using: :btree
-  add_index "identity_provider_saml_attributes", ["saml_attribute_id"], name: "fk_rails_3afed16ec1", using: :btree
-
-  create_table "identity_providers", force: :cascade do |t|
-    t.string   "entity_id",       limit: 255, null: false
-    t.string   "name",            limit: 255, null: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.integer  "organization_id", limit: 4,   null: false
+  create_table "identity_providers", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "entity_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "organization_id", null: false
+    t.index ["entity_id"], name: "index_identity_providers_on_entity_id", unique: true
+    t.index ["organization_id"], name: "fk_rails_7a44c5f546"
   end
 
-  add_index "identity_providers", ["entity_id"], name: "index_identity_providers_on_entity_id", unique: true, using: :btree
-  add_index "identity_providers", ["organization_id"], name: "fk_rails_7a44c5f546", using: :btree
-
-  create_table "incoming_f_ticks_events", force: :cascade do |t|
-    t.string   "data",       limit: 4096,                 null: false
-    t.string   "ip",         limit: 255,                  null: false
-    t.boolean  "discarded",               default: false, null: false
-    t.datetime "timestamp",                               null: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+  create_table "incoming_f_ticks_events", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "data", limit: 4096, null: false
+    t.string "ip", null: false
+    t.boolean "discarded", default: false, null: false
+    t.timestamp "timestamp", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discarded"], name: "index_incoming_f_ticks_events_on_discarded"
   end
 
-  add_index "incoming_f_ticks_events", ["discarded"], name: "index_incoming_f_ticks_events_on_discarded", using: :btree
-
-  create_table "organizations", force: :cascade do |t|
-    t.string   "identifier", limit: 255, null: false
-    t.string   "name",       limit: 255, null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+  create_table "organizations", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "identifier", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["identifier"], name: "index_organizations_on_identifier", unique: true
   end
 
-  add_index "organizations", ["identifier"], name: "index_organizations_on_identifier", unique: true, using: :btree
-
-  create_table "permissions", force: :cascade do |t|
-    t.integer  "role_id",    limit: 4,   null: false
-    t.string   "value",      limit: 255, null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+  create_table "permissions", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.integer "role_id", null: false
+    t.string "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id", "value"], name: "index_permissions_on_role_id_and_value", unique: true
   end
 
-  add_index "permissions", ["role_id", "value"], name: "index_permissions_on_role_id_and_value", unique: true, using: :btree
-
-  create_table "rapid_connect_services", force: :cascade do |t|
-    t.string   "identifier",      limit: 255, null: false
-    t.string   "name",            limit: 255, null: false
-    t.string   "service_type",    limit: 255, null: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.integer  "organization_id", limit: 4
+  create_table "rapid_connect_services", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "identifier", null: false
+    t.string "name", null: false
+    t.string "service_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "organization_id"
+    t.index ["identifier"], name: "index_rapid_connect_services_on_identifier", unique: true
+    t.index ["organization_id"], name: "fk_rails_b509da8b0a"
   end
 
-  add_index "rapid_connect_services", ["identifier"], name: "index_rapid_connect_services_on_identifier", unique: true, using: :btree
-  add_index "rapid_connect_services", ["organization_id"], name: "fk_rails_b509da8b0a", using: :btree
-
-  create_table "roles", force: :cascade do |t|
-    t.string   "name",        limit: 255, null: false
-    t.string   "entitlement", limit: 255, null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+  create_table "roles", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "name", null: false
+    t.string "entitlement", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entitlement"], name: "index_roles_on_entitlement", unique: true
   end
 
-  add_index "roles", ["entitlement"], name: "index_roles_on_entitlement", unique: true, using: :btree
-
-  create_table "saml_attributes", force: :cascade do |t|
-    t.string   "name",        limit: 255, null: false
-    t.string   "description", limit: 255, null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.boolean  "core",                    null: false
+  create_table "saml_attributes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "name", null: false
+    t.string "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "core", null: false
+    t.index ["name"], name: "index_saml_attributes_on_name", unique: true
   end
 
-  add_index "saml_attributes", ["name"], name: "index_saml_attributes_on_name", unique: true, using: :btree
-
-  create_table "service_provider_saml_attributes", force: :cascade do |t|
-    t.integer  "service_provider_id", limit: 4, null: false
-    t.integer  "saml_attribute_id",   limit: 4, null: false
-    t.boolean  "optional",                      null: false
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+  create_table "service_provider_saml_attributes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.integer "service_provider_id", null: false
+    t.integer "saml_attribute_id", null: false
+    t.boolean "optional", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["saml_attribute_id"], name: "fk_rails_5dcfbc93eb"
+    t.index ["service_provider_id", "saml_attribute_id"], name: "unique_service_provider_attribute", unique: true
   end
 
-  add_index "service_provider_saml_attributes", ["saml_attribute_id"], name: "fk_rails_5dcfbc93eb", using: :btree
-  add_index "service_provider_saml_attributes", ["service_provider_id", "saml_attribute_id"], name: "unique_service_provider_attribute", unique: true, using: :btree
-
-  create_table "service_providers", force: :cascade do |t|
-    t.string   "entity_id",       limit: 255, null: false
-    t.string   "name",            limit: 255, null: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.integer  "organization_id", limit: 4,   null: false
+  create_table "service_providers", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "entity_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "organization_id", null: false
+    t.index ["entity_id"], name: "index_service_providers_on_entity_id", unique: true
+    t.index ["organization_id"], name: "fk_rails_36567d88d4"
   end
 
-  add_index "service_providers", ["entity_id"], name: "index_service_providers_on_entity_id", unique: true, using: :btree
-  add_index "service_providers", ["organization_id"], name: "fk_rails_36567d88d4", using: :btree
-
-  create_table "subject_roles", force: :cascade do |t|
-    t.integer  "subject_id", limit: 4, null: false
-    t.integer  "role_id",    limit: 4, null: false
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+  create_table "subject_roles", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.integer "subject_id", null: false
+    t.integer "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "fk_rails_775c958b0f"
+    t.index ["subject_id", "role_id"], name: "index_subject_roles_on_subject_id_and_role_id", unique: true
   end
 
-  add_index "subject_roles", ["role_id"], name: "fk_rails_775c958b0f", using: :btree
-  add_index "subject_roles", ["subject_id", "role_id"], name: "index_subject_roles_on_subject_id_and_role_id", unique: true, using: :btree
-
-  create_table "subjects", force: :cascade do |t|
-    t.string   "targeted_id",  limit: 255,                null: false
-    t.string   "shared_token", limit: 255,                null: false
-    t.string   "name",         limit: 255,                null: false
-    t.string   "mail",         limit: 255,                null: false
-    t.boolean  "enabled",                  default: true, null: false
-    t.boolean  "complete",                 default: true, null: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+  create_table "subjects", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin" do |t|
+    t.string "targeted_id", null: false
+    t.string "shared_token", null: false
+    t.string "name", null: false
+    t.string "mail", null: false
+    t.boolean "enabled", default: true, null: false
+    t.boolean "complete", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shared_token"], name: "index_subjects_on_shared_token", unique: true
+    t.index ["targeted_id"], name: "index_subjects_on_targeted_id", unique: true
   end
-
-  add_index "subjects", ["shared_token"], name: "index_subjects_on_shared_token", unique: true, using: :btree
-  add_index "subjects", ["targeted_id"], name: "index_subjects_on_targeted_id", unique: true, using: :btree
 
   add_foreign_key "api_subject_roles", "api_subjects"
   add_foreign_key "api_subject_roles", "roles"

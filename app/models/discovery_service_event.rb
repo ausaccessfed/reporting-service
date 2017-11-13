@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DiscoveryServiceEvent < ActiveRecord::Base
+class DiscoveryServiceEvent < ApplicationRecord
   valhammer
 
   belongs_to :identity_provider,

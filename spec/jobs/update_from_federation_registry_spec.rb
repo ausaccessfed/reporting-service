@@ -560,12 +560,20 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
             .flat_map { |s| s[:attributes] }
         end
 
-        expect { run }.to change(Organization, :count).by(organizations.count)
-          .and change(IdentityProvider, :count).by(identity_providers.count)
-          .and change(ServiceProvider, :count).by(service_providers.count)
-          .and change(SAMLAttribute, :count).by(attributes.count)
-          .and change(IdentityProviderSAMLAttribute, :count).by(idp_attrs.count)
-          .and change(ServiceProviderSAMLAttribute, :count).by(sp_attrs.count)
+        expect { run }.to(
+          change(Organization, :count).by(organizations.count)
+          .and(
+            change(IdentityProvider, :count).by(identity_providers.count)
+          ).and(
+            change(ServiceProvider, :count).by(service_providers.count)
+          ).and(
+            change(SAMLAttribute, :count).by(attributes.count)
+          ).and(
+            change(IdentityProviderSAMLAttribute, :count).by(idp_attrs.count)
+          ).and(
+            change(ServiceProviderSAMLAttribute, :count).by(sp_attrs.count)
+          )
+        )
 
         expect(Organization.all.map(&:name))
           .to contain_exactly(*organizations.map { |o| o[:display_name] })

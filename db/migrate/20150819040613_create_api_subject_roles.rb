@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateAPISubjectRoles < ActiveRecord::Migration
+class CreateAPISubjectRoles < ActiveRecord::Migration[4.2]
   def change
     create_table :api_subject_roles do |t|
       t.belongs_to :api_subject, null: false

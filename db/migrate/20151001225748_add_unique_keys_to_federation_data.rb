@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddUniqueKeysToFederationData < ActiveRecord::Migration
+class AddUniqueKeysToFederationData < ActiveRecord::Migration[4.2]
   def change
     add_index :identity_providers, :entity_id, unique: true
     add_index :service_providers, :entity_id, unique: true

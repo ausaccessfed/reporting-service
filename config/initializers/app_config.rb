@@ -59,7 +59,7 @@ Rails.application.configure do
       sqs_client = Aws::SQS::Client.new(region: sqs_config[:region],
                                         endpoint: sqs_config[:endpoint])
 
-      sqs_config[:queues].each do |_, url|
+      sqs_config[:queues].each_value do |url|
         queue_name = url.split('/').last
         sqs_client.create_queue(queue_name: queue_name)
       end

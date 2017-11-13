@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 unless ENV['AAF_DEV'].to_i == 1
-  $stderr.puts <<-EOF
+  $stderr.puts <<-WARNING
 
   This is a destructive action, intended only for use in development
   environments where you wish to replace ALL data with generated sample data.
@@ -9,7 +9,7 @@ unless ENV['AAF_DEV'].to_i == 1
   If this is what you want, set the AAF_DEV environment variable to 1 before
   attempting to seed your database.
 
-  EOF
+  WARNING
   raise('Not proceeding, missing AAF_DEV=1 environment variable')
 end
 

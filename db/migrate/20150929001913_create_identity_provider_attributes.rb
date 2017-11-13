@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateIdentityProviderAttributes < ActiveRecord::Migration
+class CreateIdentityProviderAttributes < ActiveRecord::Migration[4.2]
   def change
     create_table :identity_provider_attributes do |t|
       t.belongs_to :identity_provider, :attribute, null: false

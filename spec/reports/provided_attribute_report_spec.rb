@@ -92,7 +92,7 @@ RSpec.describe ProvidedAttributeReport do
       end
 
       it 'should generate an array of report rows' do
-        active_identity_providers.each do |_k, v|
+        active_identity_providers.each_value do |v|
           expect(report[:rows]).to include([v.name, anything])
         end
       end

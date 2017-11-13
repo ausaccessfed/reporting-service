@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ChangeTablesCollationToBinary < ActiveRecord::Migration
+class ChangeTablesCollationToBinary < ActiveRecord::Migration[4.2]
   TABLES = %w[activations api_subject_roles api_subjects
               automated_report_instances
               automated_report_subscriptions automated_reports

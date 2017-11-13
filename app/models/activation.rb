@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Activation < ActiveRecord::Base
+class Activation < ApplicationRecord
   belongs_to :federation_object, polymorphic: true
 
   valhammer
