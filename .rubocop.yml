@@ -5,3 +5,8 @@ Rails/DynamicFindBy:
   Whitelist:
     - find_by_sql
     - find_by_identifying_attribute
+
+Lint/RescueWithoutErrorClass:
+  Exclude:
+    - config/initializers/app_config.rb
+    - spec/bin/push_events_to_federation_registry_spec.rb

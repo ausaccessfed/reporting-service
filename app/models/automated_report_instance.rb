@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AutomatedReportInstance < ActiveRecord::Base
+class AutomatedReportInstance < ApplicationRecord
   belongs_to :automated_report
 
   valhammer

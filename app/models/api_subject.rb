@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class APISubject < ActiveRecord::Base
+class APISubject < ApplicationRecord
   include Accession::Principal
 
-  has_many :api_subject_roles
-  has_many :roles, through: :api_subject_roles
+  has_many :api_subject_roles, dependent: :destroy
+  has_many :roles, through: :api_subject_roles, dependent: :destroy
 
   valhammer
   validates :x509_cn, format: { with: /\A[\w-]+\z/ }

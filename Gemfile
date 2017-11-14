@@ -20,7 +20,7 @@ gem 'rapid-rack'
 gem 'super-identity'
 gem 'valhammer'
 
-gem 'aws-sdk'
+gem 'aws-sdk', '~> 2'
 gem 'json-jwt'
 gem 'torba-rails'
 
@@ -40,8 +40,7 @@ group :development, :test do
   gem 'timecop'
   gem 'webmock', require: false
 
-  gem 'aaf-gumboot', git: 'https://github.com/ausaccessfed/aaf-gumboot',
-                     branch: 'develop'
+  gem 'aaf-gumboot'
 
   gem 'byebug'
   gem 'pry', require: false
@@ -50,7 +49,7 @@ group :development, :test do
   gem 'launchy', require: false
   gem 'poltergeist', require: false
 
-  gem 'brakeman', '~> 3.2.1', require: false
+  gem 'brakeman', require: false
   gem 'simplecov', require: false
 
   gem 'guard', require: false

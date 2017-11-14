@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateDiscoveryServiceEvents < ActiveRecord::Migration
+class CreateDiscoveryServiceEvents < ActiveRecord::Migration[4.2]
   def change
     create_table :discovery_service_events do |t|
       t.string :user_agent, null: false

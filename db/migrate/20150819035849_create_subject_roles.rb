@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateSubjectRoles < ActiveRecord::Migration
+class CreateSubjectRoles < ActiveRecord::Migration[4.2]
   def change
     create_table :subject_roles do |t|
       t.belongs_to :subject, null: false
