@@ -38,7 +38,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
 
     context 'when the queue contains many SQS messages' do
       let(:events_attrs) do
-        Array.new(5) { FactoryGirl.attributes_for(:discovery_service_event) }
+        Array.new(5) { FactoryBot.attributes_for(:discovery_service_event) }
       end
 
       let(:events) { events_attrs }
@@ -96,7 +96,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
 
     context 'when a message is in the queue' do
       let(:event_attrs) do
-        FactoryGirl.attributes_for(:discovery_service_event)
+        FactoryBot.attributes_for(:discovery_service_event)
       end
 
       let(:event) { event_attrs }
@@ -142,7 +142,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
 
       context 'when the event is a response' do
         let(:event_attrs) do
-          FactoryGirl.attributes_for(:discovery_service_event, :response)
+          FactoryBot.attributes_for(:discovery_service_event, :response)
         end
 
         it 'writes the event to a secondary local queue' do
@@ -153,7 +153,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
 
       context 'when the event is a request' do
         let(:event_attrs) do
-          FactoryGirl.attributes_for(:discovery_service_event, phase: 'request')
+          FactoryBot.attributes_for(:discovery_service_event, phase: 'request')
         end
 
         it 'does not write the event to the secondary queue' do

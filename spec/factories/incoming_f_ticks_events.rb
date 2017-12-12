@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :incoming_f_ticks_event do
     transient do
       sp_domain { Faker::Internet.domain_name }

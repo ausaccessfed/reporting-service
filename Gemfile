@@ -31,7 +31,7 @@ gem 'unicorn', require: false
 
 group :development, :test do
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'faker'
   gem 'fakeredis'
   gem 'rails-controller-testing'

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :automated_report_instance do
     automated_report
     range_end { Time.zone.now.beginning_of_month }
