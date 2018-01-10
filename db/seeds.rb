@@ -13,12 +13,12 @@ unless ENV['AAF_DEV'].to_i == 1
   raise('Not proceeding, missing AAF_DEV=1 environment variable')
 end
 
-include FactoryGirl::Syntax::Methods
+include FactoryBot::Syntax::Methods
 
 i = 0
 time = nil
 
-FactoryGirl.define do
+FactoryBot.define do
   after(:create) do
     i += 1
     print("\rCreating Objects: #{i}\e[0K")

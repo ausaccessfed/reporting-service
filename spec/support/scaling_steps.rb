@@ -17,29 +17,29 @@ RSpec.shared_examples 'report with scalable steps' do
 
   let(:range_1_month_february_exception) do
     {
-      start: DateTime.parse('2017-02-09 00:00:00').utc,
-      end: DateTime.parse('2017-03-09 00:00:00').utc
+      start: Time.parse('2017-02-09 00:00:00').utc,
+      end: Time.parse('2017-03-09 00:00:00').utc
     }
   end
 
   let(:range_2_months_february_exception) do
     {
-      start: DateTime.parse('2017-01-09 00:00:00').utc,
-      end: DateTime.parse('2017-03-09 00:00:00').utc
+      start: Time.parse('2017-01-09 00:00:00').utc,
+      end: Time.parse('2017-03-09 00:00:00').utc
     }
   end
 
   let(:range_3_months_february_exception) do
     {
-      start: DateTime.parse('2017-01-09 00:00:00').utc,
-      end: DateTime.parse('2017-04-09 00:00:00').utc
+      start: Time.parse('2017-01-09 00:00:00').utc,
+      end: Time.parse('2017-04-09 00:00:00').utc
     }
   end
 
   let(:range_3_months_across_year_end_february_exception) do
     {
-      start: DateTime.parse('2016-12-09 00:00:00').utc,
-      end: DateTime.parse('2017-03-09 00:00:00').utc
+      start: Time.parse('2016-12-09 00:00:00').utc,
+      end: Time.parse('2017-03-09 00:00:00').utc
     }
   end
 
