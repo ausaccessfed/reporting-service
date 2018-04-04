@@ -1,6 +1,9 @@
 inherit_gem:
   aaf-gumboot: aaf-rubocop.yml
 
+Style/StderrPuts:
+  Enabled: false
+
 Rails/DynamicFindBy:
   Whitelist:
     - find_by_sql

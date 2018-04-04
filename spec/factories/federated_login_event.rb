@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :federated_login_event do
     hashed_principal_name { Faker::Internet.password(10) }
     result { 'FAIL' }

@@ -31,11 +31,12 @@ gem 'unicorn', require: false
 
 group :development, :test do
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'faker'
   gem 'fakeredis'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
+  gem 'rubocop', '0.51'
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'webmock', require: false
@@ -49,7 +50,7 @@ group :development, :test do
   gem 'launchy', require: false
   gem 'poltergeist', require: false
 
-  gem 'brakeman', require: false
+  gem 'brakeman', '~> 3.0.0', require: false
   gem 'simplecov', require: false
 
   gem 'guard', require: false

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :api_subject do
     x509_cn { SecureRandom.urlsafe_base64 }
     contact_name { Faker::Name.name }
