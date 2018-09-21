@@ -104,7 +104,7 @@ GEM
     fakeredis (0.7.0)
       redis (>= 3.2, < 5.0)
     fastercsv (1.5.5)
-    ffi (1.9.23)
+    ffi (1.9.25)
     formatador (0.2.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
