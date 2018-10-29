@@ -32,6 +32,8 @@ RSpec.feature 'Service Provider Reports' do
         expect(current_path)
           .to eq('/subscriber_reports/service_provider_sessions_report')
 
+        page.execute_script('$("input").attr("readonly", false);')
+
         select sp.name, from: 'Service Providers'
         fill_in 'start', with: 1.year.ago
         fill_in 'end', with: Time.zone.now
@@ -50,6 +52,8 @@ RSpec.feature 'Service Provider Reports' do
 
         expect(current_path)
           .to eq('/subscriber_reports/service_provider_daily_demand_report')
+
+        page.execute_script('$("input").attr("readonly", false);')
 
         select sp.name, from: 'Service Providers'
         fill_in 'start', with: 1.year.ago
@@ -70,6 +74,8 @@ RSpec.feature 'Service Provider Reports' do
         expect(current_path)
           .to eq('/subscriber_reports/service_provider_'\
                  'source_identity_providers_report')
+
+        page.execute_script('$("input").attr("readonly", false);')
 
         select sp.name, from: 'Service Providers'
         fill_in 'start', with: 1.year.ago.utc
