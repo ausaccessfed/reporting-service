@@ -28,6 +28,7 @@ gem 'aaf-lipstick'
 
 gem 'god', require: false
 gem 'unicorn', require: false
+gem 'puma', require: false
 
 group :development, :test do
   gem 'database_cleaner'
