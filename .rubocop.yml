@@ -13,3 +13,7 @@ Lint/RescueWithoutErrorClass:
   Exclude:
     - config/initializers/app_config.rb
     - spec/bin/push_events_to_federation_registry_spec.rb
+
+Metrics/BlockLength:
+  Exclude:
+    - Gemfile
