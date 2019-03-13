@@ -76,6 +76,8 @@ RSpec.feature 'Administrator Reports' do
       scenario 'viewing Report' do
         click_link 'Federation Growth Report'
 
+        page.execute_script("$('input').removeAttr('readonly')")
+
         fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
         fill_in 'end', with: Time.now.utc.beginning_of_month
 
@@ -90,6 +92,8 @@ RSpec.feature 'Administrator Reports' do
     shared_examples 'Daily Demand Report' do
       scenario 'viewing Report' do
         click_link 'Daily Demand Report'
+
+        page.execute_script("$('input').removeAttr('readonly')")
 
         fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
         fill_in 'end', with: Time.now.utc.beginning_of_month
@@ -108,6 +112,8 @@ RSpec.feature 'Administrator Reports' do
       scenario 'viewing Report' do
         click_link 'Federated Sessions Report'
 
+        page.execute_script("$('input').removeAttr('readonly')")
+
         fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
         fill_in 'end', with: Time.now.utc.beginning_of_month
         select data_source_name, from: 'source'
@@ -124,6 +130,8 @@ RSpec.feature 'Administrator Reports' do
     shared_examples 'Identity Provider Utilization Report' do
       scenario 'viewing Report' do
         click_link 'Identity Provider Utilization Report'
+
+        page.execute_script("$('input').removeAttr('readonly')")
 
         fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
         fill_in 'end', with: Time.now.utc.beginning_of_month
@@ -146,6 +154,8 @@ RSpec.feature 'Administrator Reports' do
     shared_examples 'Service Provider Utilization Report' do
       scenario 'viewing Report' do
         click_link 'Service Provider Utilization Report'
+
+        page.execute_script("$('input').removeAttr('readonly')")
 
         fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
         fill_in 'end', with: Time.now.utc.beginning_of_month
