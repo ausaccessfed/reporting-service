@@ -25,6 +25,7 @@ gem 'json-jwt'
 gem 'torba-rails'
 
 gem 'aaf-lipstick'
+gem 'rmagick', '~> 2.16'
 
 gem 'god', require: false
 gem 'unicorn', require: false
