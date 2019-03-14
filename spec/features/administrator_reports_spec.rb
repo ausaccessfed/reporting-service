@@ -73,7 +73,7 @@ RSpec.feature 'Administrator Reports' do
     end
 
     context 'Federation Growth Report' do
-      scenario 'viewing Report', :pending do
+      scenario 'viewing Report' do
         click_link 'Federation Growth Report'
 
         page.execute_script("$('input').removeAttr('readonly')")
@@ -81,7 +81,8 @@ RSpec.feature 'Administrator Reports' do
         fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
         fill_in 'end', with: Time.now.utc.beginning_of_month
 
-        click_button('Generate')
+        # HACK: Works around an overlapping element that affects this test.
+        find('button', text: 'Generate').trigger('click')
 
         expect(current_path)
           .to eq('/admin_reports/federation_growth_report')
