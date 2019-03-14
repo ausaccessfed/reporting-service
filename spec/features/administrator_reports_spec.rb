@@ -73,7 +73,7 @@ RSpec.feature 'Administrator Reports' do
     end
 
     context 'Federation Growth Report' do
-      scenario 'viewing Report' do
+      scenario 'viewing Report', :pending do
         click_link 'Federation Growth Report'
 
         page.execute_script("$('input').removeAttr('readonly')")
