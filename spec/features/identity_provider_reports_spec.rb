@@ -33,6 +33,9 @@ RSpec.feature 'Identity Provider Reports' do
           .to eq('/subscriber_reports/identity_provider_sessions_report')
 
         select idp.name, from: 'Identity Providers'
+
+        page.execute_script("$('input').removeAttr('readonly')")
+
         fill_in 'start', with: 1.year.ago
         fill_in 'end', with: Time.zone.now
         select data_source_name, from: 'source'
@@ -52,6 +55,9 @@ RSpec.feature 'Identity Provider Reports' do
           .to eq('/subscriber_reports/identity_provider_daily_demand_report')
 
         select idp.name, from: 'Identity Providers'
+
+        page.execute_script("$('input').removeAttr('readonly')")
+
         fill_in 'start', with: 1.year.ago
         fill_in 'end', with: Time.zone.now
         select data_source_name, from: 'source'
@@ -72,6 +78,9 @@ RSpec.feature 'Identity Provider Reports' do
                  'destination_services_report')
 
         select idp.name, from: 'Identity Providers'
+
+        page.execute_script("$('input').removeAttr('readonly')")
+
         fill_in 'start', with: 1.year.ago
         fill_in 'end', with: Time.zone.now
         select data_source_name, from: 'source'

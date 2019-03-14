@@ -25,13 +25,15 @@ gem 'json-jwt'
 gem 'torba-rails'
 
 gem 'aaf-lipstick'
+gem 'rmagick', '~> 2.16'
 
 gem 'god', require: false
+gem 'puma', require: false
 gem 'unicorn', require: false
 
 group :development, :test do
   gem 'database_cleaner'
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '~> 4.11'
   gem 'faker'
   gem 'fakeredis'
   gem 'rails-controller-testing'
