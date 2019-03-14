@@ -28,8 +28,8 @@ gem 'aaf-lipstick'
 gem 'rmagick', '~> 2.16'
 
 gem 'god', require: false
-gem 'unicorn', require: false
 gem 'puma', require: false
+gem 'unicorn', require: false
 
 group :development, :test do
   gem 'database_cleaner'
