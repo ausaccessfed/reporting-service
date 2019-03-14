@@ -33,6 +33,9 @@ RSpec.feature 'Service Provider Reports' do
           .to eq('/subscriber_reports/service_provider_sessions_report')
 
         select sp.name, from: 'Service Providers'
+
+        page.execute_script("$('input').removeAttr('readonly')")
+
         fill_in 'start', with: 1.year.ago
         fill_in 'end', with: Time.zone.now
         select data_source_name, from: 'source'
@@ -52,6 +55,9 @@ RSpec.feature 'Service Provider Reports' do
           .to eq('/subscriber_reports/service_provider_daily_demand_report')
 
         select sp.name, from: 'Service Providers'
+
+        page.execute_script("$('input').removeAttr('readonly')")
+
         fill_in 'start', with: 1.year.ago
         fill_in 'end', with: Time.zone.now
         select data_source_name, from: 'source'
@@ -72,6 +78,9 @@ RSpec.feature 'Service Provider Reports' do
                  'source_identity_providers_report')
 
         select sp.name, from: 'Service Providers'
+
+        page.execute_script("$('input').removeAttr('readonly')")
+
         fill_in 'start', with: 1.year.ago.utc
         fill_in 'end', with: Time.now.utc
         select data_source_name, from: 'source'
