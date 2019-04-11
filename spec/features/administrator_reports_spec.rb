@@ -20,12 +20,12 @@ RSpec.feature 'Administrator Reports' do
     end
 
     background do
+      entitlements = ['urn:mace:aaf.edu.au:ide:internal:aaf-admin']
+      admins = Rails.application.config.reporting_service.admins
+      admins[user.shared_token.to_sym] = entitlements
+
       attrs = create(:aaf_attributes, :from_subject, subject: user)
       RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
-
-      entitlements = 'urn:mace:aaf.edu.au:ide:internal:aaf-admin'
-
-      stub_ide(shared_token: user.shared_token, entitlements: [entitlements])
 
       visit '/auth/login'
       click_button 'Login'

@@ -8,8 +8,6 @@ RSpec.feature 'Login Process' do
   background do
     attrs = create(:aaf_attributes, :from_subject, subject: user)
     RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
-
-    stub_ide(shared_token: user.shared_token)
   end
 
   scenario 'clicking "Log In" from the welcome page' do
