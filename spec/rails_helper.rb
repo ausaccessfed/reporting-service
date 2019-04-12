@@ -19,7 +19,6 @@ ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   include FactoryBot::Syntax::Methods
-  config.include SuperIdentity::TestStub
 
   config.use_transactional_fixtures = false
 

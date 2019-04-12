@@ -39,8 +39,6 @@ RSpec.feature 'automated report instances' do
       attrs = create(:aaf_attributes, :from_subject, subject: user)
       RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
-      stub_ide(shared_token: user.shared_token, entitlements: [])
-
       visit '/auth/login'
       click_button 'Login'
     end
@@ -142,9 +140,10 @@ RSpec.feature 'automated report instances' do
 
       identifier = organization.identifier
       entitlements =
-        "urn:mace:aaf.edu.au:ide:internal:organization:#{identifier}"
+        ["urn:mace:aaf.edu.au:ide:internal:organization:#{identifier}"]
 
-      stub_ide(shared_token: user.shared_token, entitlements: [entitlements])
+      admins = Rails.application.config.reporting_service.admins
+      admins[user.shared_token.to_sym] = entitlements
 
       visit '/auth/login'
       click_button 'Login'
@@ -274,9 +273,9 @@ RSpec.feature 'automated report instances' do
 
         identifier = organization.identifier
         entitlements =
-          "urn:mace:aaf.edu.au:ide:internal:organization:#{identifier}"
-
-        stub_ide(shared_token: user.shared_token, entitlements: [entitlements])
+          ["urn:mace:aaf.edu.au:ide:internal:organization:#{identifier}"]
+        admins = Rails.application.config.reporting_service.admins
+        admins[user.shared_token.to_sym] = entitlements
 
         visit '/auth/login'
         click_button 'Login'
@@ -298,8 +297,9 @@ RSpec.feature 'automated report instances' do
         attrs = create(:aaf_attributes, :from_subject, subject: user)
         RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
-        entitlements = 'urn:mace:aaf.edu.au:ide:internal:aaf-admin'
-        stub_ide(shared_token: user.shared_token, entitlements: [entitlements])
+        entitlements = ['urn:mace:aaf.edu.au:ide:internal:aaf-admin']
+        admins = Rails.application.config.reporting_service.admins
+        admins[user.shared_token.to_sym] = entitlements
 
         visit '/auth/login'
         click_button 'Login'

@@ -3,7 +3,6 @@
 module Authentication
   class SubjectReceiver
     include RapidRack::DefaultReceiver
-    include SuperIdentity::Client
     include RapidRack::RedisRegistry
 
     def map_attributes(_env, attrs)
@@ -18,8 +17,9 @@ module Authentication
     def subject(_env, attrs)
       subject = subject_scope(attrs).find_or_initialize_by({})
       check_subject(subject, attrs) if subject.persisted?
-      update_roles(subject)
+
       subject.update_attributes!(attrs.merge(complete: true))
+      update_roles(subject)
       subject
     end
 
@@ -32,14 +32,9 @@ module Authentication
     end
 
     def update_roles(subject)
-      subject.entitlements = entitlements(subject.shared_token)
+      admins = Rails.application.config.reporting_service.admins
+      subject.entitlements = admins.fetch(subject.shared_token.to_sym, [])
     end
-
-    # :nocov:
-    def ide_config
-      Rails.application.config.reporting_service.ide
-    end
-    # :nocov:
 
     private
 
