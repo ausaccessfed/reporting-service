@@ -4,13 +4,11 @@ mail:
   port: 1025
   address: localhost
 environment_string: Development
-ide:
-  host: ide.test.aaf.edu.au
-  cert: config/api-client.crt
-  key: config/api-client.key
-  admin_entitlements:
-    - urn:mace:aaf.edu.au:ide:internal:aaf-admin
-    - urn:mace:aaf.edu.au:ide:internal:aaf-reporting
+admins:
+  "shared_token_value":
+    - "urn:mace:aaf.edu.au:ide:internal:aaf-admin"
+  "shared_token_value2":
+    - "urn:mace:aaf.edu.au:ide:internal:aaf-admin"
 federationregistry:
   host: manager.test.aaf.edu.au
   secret: 'This is the shared secret used for authenticating to the FR export API'

@@ -51,8 +51,6 @@ RSpec.feature 'automated report' do
         attrs = create(:aaf_attributes, :from_subject, subject: user)
         RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
-        stub_ide(shared_token: user.shared_token)
-
         visit '/auth/login'
         click_button 'Login'
         visit '/subscriber_reports'
@@ -86,8 +84,6 @@ RSpec.feature 'automated report' do
       background do
         attrs = create(:aaf_attributes, :from_subject, subject: user_02)
         RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
-
-        stub_ide(shared_token: user_02.shared_token)
 
         visit '/auth/login'
         click_button 'Login'
