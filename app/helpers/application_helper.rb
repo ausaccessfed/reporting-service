@@ -5,7 +5,7 @@ module ApplicationHelper
   include Lipstick::Helpers::NavHelper
   include Lipstick::Helpers::FormHelper
 
-  VERSION = '1.1.1'
+  VERSION = '1.1.2'
 
   def permitted?(action)
     @subject.try(:permits?, action)
