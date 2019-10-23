@@ -15,3 +15,4 @@ log
 vendor
 .DS_Store
 dump.rdb
+.idea/

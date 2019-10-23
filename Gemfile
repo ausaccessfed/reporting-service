@@ -51,7 +51,7 @@ group :development, :test do
   gem 'launchy', require: false
   gem 'poltergeist', require: false
 
-  gem 'brakeman', '~> 3.0.0', require: false
+  gem 'brakeman', require: false
   gem 'simplecov', require: false
 
   gem 'guard', require: false
