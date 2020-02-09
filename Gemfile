@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails'
+gem 'rails', '>= 5', '< 6'
 
 gem 'jbuilder'
 gem 'mysql2'
