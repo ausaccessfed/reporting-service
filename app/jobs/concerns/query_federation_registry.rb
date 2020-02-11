@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'net/http'
+
 module QueryFederationRegistry
   def fr_objects(sym, path)
     @fr_objects ||= {}
