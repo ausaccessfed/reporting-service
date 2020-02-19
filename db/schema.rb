@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_09_214427) do
+ActiveRecord::Schema.define(version: 2020_02_19_023010) do
 
   create_table "activations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.string "federation_object_type", null: false
@@ -94,7 +94,7 @@ ActiveRecord::Schema.define(version: 2020_02_09_214427) do
     t.string "relying_party", null: false
     t.string "asserting_party", null: false
     t.string "result", null: false
-    t.string "hashed_principal_name", null: false
+    t.string "hashed_principal_name"
     t.datetime "timestamp", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
