@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2017_05_16_001834) do
+ActiveRecord::Schema.define(version: 2020_02_09_214427) do
 
   create_table "activations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.string "federation_object_type", null: false
     t.integer "federation_object_id", null: false
-    t.timestamp "activated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.timestamp "deactivated_at"
+    t.datetime "activated_at", null: false
+    t.datetime "deactivated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 2017_05_16_001834) do
 
   create_table "automated_report_instances", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin", force: :cascade do |t|
     t.integer "automated_report_id", null: false
-    t.timestamp "range_end", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "range_end", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "identifier", null: false
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 2017_05_16_001834) do
     t.string "asserting_party", null: false
     t.string "result", null: false
     t.string "hashed_principal_name", null: false
-    t.timestamp "timestamp", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "timestamp", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["hashed_principal_name"], name: "index_federated_login_events_on_hashed_principal_name"
@@ -125,7 +125,7 @@ ActiveRecord::Schema.define(version: 2017_05_16_001834) do
     t.string "data", limit: 4096, null: false
     t.string "ip", null: false
     t.boolean "discarded", default: false, null: false
-    t.timestamp "timestamp", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "timestamp", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["discarded"], name: "index_incoming_f_ticks_events_on_discarded"
