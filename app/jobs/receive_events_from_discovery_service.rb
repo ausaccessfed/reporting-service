@@ -33,7 +33,7 @@ class ReceiveEventsFromDiscoveryService
 
         DiscoveryServiceEvent
           .create_with(event)
-          .find_or_create_by!(event.slice(:unique_id, :phase))
+          .find_or_create_by(event.slice(:unique_id, :phase))
       end
     end
   end

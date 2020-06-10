@@ -82,16 +82,6 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
             .to have_attributes(attrs)
         end
       end
-
-      context 'when an event is not able to be stored' do
-        let(:events) do
-          events_attrs.dup.unshift(timestamp: Time.zone.now)
-        end
-
-        it 'raises an exception' do
-          expect { run }.to raise_error(ActiveRecord::RecordInvalid)
-        end
-      end
     end
 
     context 'when a message is in the queue' do
