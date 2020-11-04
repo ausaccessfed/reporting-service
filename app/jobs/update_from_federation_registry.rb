@@ -106,9 +106,8 @@ class UpdateFromFederationRegistry
   def activate_object(obj, obj_data)
     activation_attrs = { activated_at: obj_data[:created_at] }
 
-    unless obj_data[:functioning]
-      activation_attrs[:deactivated_at] = obj_data[:updated_at]
-    end
+    activation_attrs[:deactivated_at] =
+      obj_data[:functioning] ? nil : obj_data[:updated_at]
 
     obj.activations.find_or_initialize_by({}).update!(activation_attrs)
   end
