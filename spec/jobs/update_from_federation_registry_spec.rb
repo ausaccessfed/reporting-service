@@ -174,6 +174,18 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
           )
         end
       end
+
+      context 'when the object is deactivated but functioning' do
+        let!(:activation) { create(:activation, :deactivated, federation_object: object) }
+
+        it 'marks the object as activated' do
+          expect { run }.not_to change(object.activations, :count)
+          expect(object.activations.first).to have_attributes(
+            activated_at: Time.parse(obj_data[:created_at]).utc,
+            deactivated_at: nil
+          )
+        end
+      end
     end
 
     shared_examples 'sync of a removed object' do
