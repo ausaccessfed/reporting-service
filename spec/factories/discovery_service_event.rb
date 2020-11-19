@@ -12,7 +12,7 @@ FactoryBot.define do
     end
 
     timestamp do
-      Faker::Time.between(10.days.ago, Time.zone.today, :day)
+      Faker::Time.between(from: 10.days.ago, to: Time.zone.today).round
     end
 
     trait :response do
