@@ -22,4 +22,4 @@ task brakeman: :environment do
   end
 end
 
-task default: %i[rubocop spec]
+task default: %i[rubocop spec brakeman]
