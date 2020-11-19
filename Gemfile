@@ -2,8 +2,8 @@
 
 source 'https://rubygems.org'
 
-gem 'sass-rails'
 gem 'rails', '>= 5', '< 6'
+gem 'sass-rails'
 
 gem 'jbuilder'
 gem 'mysql2'
@@ -37,7 +37,8 @@ group :development, :test do
   gem 'fakeredis'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
-  gem 'rubocop', '0.51'
+  gem 'rubocop'
+  gem 'rubocop-rails'
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'webmock', require: false
