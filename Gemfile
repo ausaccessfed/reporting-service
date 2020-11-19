@@ -2,11 +2,11 @@
 
 source 'https://rubygems.org'
 
+gem 'sass-rails'
 gem 'rails', '>= 5', '< 6'
 
 gem 'jbuilder'
 gem 'mysql2'
-gem 'sass-rails', require: false
 gem 'slim'
 gem 'therubyracer', require: false
 gem 'uglifier', require: false
