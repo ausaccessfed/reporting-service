@@ -51,6 +51,7 @@ group :development, :test do
   gem 'capybara', require: false
   gem 'launchy', require: false
   gem 'poltergeist', require: false
+  gem 'puma', require: false
 
   gem 'brakeman', require: false
   gem 'simplecov', require: false
