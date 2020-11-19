@@ -27,7 +27,6 @@ gem 'aaf-lipstick', '>= 4.5.1'
 gem 'rmagick', '~> 2.16'
 
 gem 'god', require: false
-gem 'puma', require: false
 gem 'unicorn', require: false
 
 # rubocop:disable Metrics/BlockLength
