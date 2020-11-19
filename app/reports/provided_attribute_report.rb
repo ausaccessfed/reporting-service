@@ -32,6 +32,7 @@ class ProvidedAttributeReport < TabularReport
     names = idp.saml_attributes.map(&:name)
 
     return 'yes' if names.include?(@name)
+
     'no'
   end
 end

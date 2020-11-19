@@ -49,6 +49,7 @@ class AutomatedReport < ApplicationRecord
     return source if source.present?
     return Rails.application.config.reporting_service.default_session_source if
       Rails.application.config.reporting_service.default_session_source.present?
+
     # Complete fall back: default to DS if source is not set in params
     # and not in app_config.
     'DS'
@@ -85,6 +86,7 @@ class AutomatedReport < ApplicationRecord
 
   def report_class_must_be_known
     return if TARGET_CLASSES.key?(report_class)
+
     errors.add(:report_class, 'must be of known type')
   end
 
@@ -109,11 +111,13 @@ class AutomatedReport < ApplicationRecord
     return if report_class.nil?
     return if needs_source? && SOURCE_VALUES.include?(source)
     return if !needs_source? && source.nil?
-    errors.add(:source, 'is not valid for report ' + report_class)
+
+    errors.add(:source, "is not valid for report #{report_class}")
   end
 
   def target_must_be_nil
     return if target.nil?
+
     errors.add(:target, 'must be omitted for the report type')
   end
 
@@ -123,6 +127,7 @@ class AutomatedReport < ApplicationRecord
 
   def target_must_be_object_type_identifier
     return if OBJECT_TYPE_IDENTIFIERS.include?(target)
+
     errors.add(:target, 'must be an object type identifier')
   end
 end

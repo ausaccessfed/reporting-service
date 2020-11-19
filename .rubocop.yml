@@ -6,7 +6,6 @@ AllCops:
   Exclude:
     - bin/**
     - db/**/*
-    - Gemfile
 
 Layout/LineLength:
   Max: 120

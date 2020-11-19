@@ -30,6 +30,7 @@ gem 'god', require: false
 gem 'puma', require: false
 gem 'unicorn', require: false
 
+# rubocop:disable Metrics/BlockLength
 group :development, :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails', '~> 4.11'
@@ -63,3 +64,4 @@ group :development, :test do
   gem 'guard-unicorn', require: false
   gem 'terminal-notifier-guard', require: false
 end
+# rubocop:enable Metrics/BlockLength

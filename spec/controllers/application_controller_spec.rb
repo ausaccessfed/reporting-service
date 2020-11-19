@@ -3,6 +3,8 @@
 require 'rails_helper'
 require 'gumboot/shared_examples/application_controller'
 
+class SomeReportsController < ApplicationController; end
+
 RSpec.describe ApplicationController, type: :controller do
   include_examples 'Application controller'
 
@@ -51,8 +53,6 @@ RSpec.describe ApplicationController, type: :controller do
   context 'use time zone around filter' do
     let(:user) { create :subject, :authorized }
     let!(:zone) { Faker::Address.time_zone }
-
-    class SomeReportsController < ApplicationController; end
 
     controller SomeReportsController do
       before_action :ensure_authenticated

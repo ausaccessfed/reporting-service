@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :federated_login_event do
-    hashed_principal_name { Faker::Internet.password(10) }
+    hashed_principal_name { Faker::Internet.password(min_length: 10) }
     result { 'FAIL' }
     relying_party do
       "https://sp.#{Faker::Internet.domain_name}/shibboleth"

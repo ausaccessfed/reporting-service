@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative '../config/environment.rb'
+require_relative '../config/environment'
 require 'English'
 
 class PushEventsToFederationRegistry
@@ -20,6 +20,7 @@ class PushEventsToFederationRegistry
     loop do
       json = redis.rpoplpush(QUEUE, PENDING_QUEUE)
       break unless json
+
       event = ImplicitSchema.new(JSON.parse(json, symbolize_names: true))
 
       insert_record(event)
@@ -59,6 +60,7 @@ class PushEventsToFederationRegistry
 
   def insert_record(event)
     return if skip?(event)
+
     sql = format(INSERT_SQL, convert(event))
     mysql_client.query(sql)
   end
@@ -88,6 +90,7 @@ class PushEventsToFederationRegistry
     sql = format(RESOLVE_IDPID_SQL, e(event[:selected_idp]))
     result = mysql_client.query(sql).first
     return result['id'] if result
+
     -1
   end
 
@@ -103,6 +106,7 @@ class PushEventsToFederationRegistry
     sql = format(RESOLVE_SPID_SQL, e(event[:initiating_sp]))
     result = mysql_client.query(sql).first
     return result['id'] if result
+
     -1
   end
 

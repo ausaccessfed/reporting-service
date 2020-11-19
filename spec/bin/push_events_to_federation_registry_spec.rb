@@ -172,7 +172,7 @@ RSpec.describe PushEventsToFederationRegistry do
 
       def swallow_exception
         yield
-      rescue
+      rescue StandardError
         nil
       end
 
