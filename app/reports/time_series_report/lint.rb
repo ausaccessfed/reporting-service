@@ -23,6 +23,7 @@ class TimeSeriesReport
       validate_required_field(output, :series, Array)
 
       return if output[:series].all? { |k| k.to_sym != :y }
+
       fail_with('series name "y" is not permitted')
     end
 
@@ -47,6 +48,7 @@ class TimeSeriesReport
         fail_with("time range is missing #{k}") unless v
 
         next if v.is_a?(String) && Time.zone.parse(v)
+
         fail_with("#{k} of time range is invalid")
       end
     end
@@ -76,6 +78,7 @@ class TimeSeriesReport
         fail_with("data for #{series} is not numeric") unless v.is_a?(Numeric)
 
         next if s >= 0 && s.seconds.since(start) <= finish
+
         fail_with("data for #{series} is outside time range")
       end
     end

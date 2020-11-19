@@ -10,7 +10,7 @@ module QueryFederationRegistry
   end
 
   def org_identifier(fr_id)
-    digest = OpenSSL::Digest::SHA256.new.digest("aaf:subscriber:#{fr_id}")
+    digest = OpenSSL::Digest.new('SHA256').digest("aaf:subscriber:#{fr_id}")
     Base64.urlsafe_encode64(digest, padding: false)
   end
 

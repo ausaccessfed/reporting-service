@@ -19,6 +19,7 @@ class ReceiveEventsFromDiscoveryService
       loop do
         result = sqs_client.receive_message(queue_url: queue_url)
         break if result.messages.empty?
+
         y << result
       end
     end
@@ -40,6 +41,7 @@ class ReceiveEventsFromDiscoveryService
 
   def push_to_fr_queue(event)
     return unless event[:phase] == 'response'
+
     redis.lpush('wayf_access_record', JSON.generate(event))
   end
 

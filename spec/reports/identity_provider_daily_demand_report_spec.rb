@@ -46,8 +46,7 @@ RSpec.describe IdentityProviderDailyDemandReport do
     let(:value) { anything }
 
     it 'should include title, units and labels' do
-      output_title = title + ' ' + identity_provider_01.name +
-                     ' (' + source_name + ')'
+      output_title = "#{title} #{identity_provider_01.name} (#{source_name})"
       expect(report).to include(title: output_title,
                                 units: units, labels: labels, range: range)
     end
@@ -130,7 +129,7 @@ RSpec.describe IdentityProviderDailyDemandReport do
       create :discovery_service_event, :response,
              { selected_idp: idp,
                initiating_sp: sp,
-               timestamp: timestamp } .compact
+               timestamp: timestamp }.compact
     end
 
     let(:source) { 'DS' }
@@ -145,7 +144,7 @@ RSpec.describe IdentityProviderDailyDemandReport do
       create :federated_login_event, :OK,
              { asserting_party: idp,
                relying_party: sp,
-               timestamp: timestamp } .compact
+               timestamp: timestamp }.compact
     end
 
     let(:source) { 'IdP' }

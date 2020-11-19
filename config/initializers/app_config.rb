@@ -63,7 +63,7 @@ Rails.application.configure do
         queue_name = url.split('/').last
         sqs_client.create_queue(queue_name: queue_name)
       end
-    rescue
+    rescue StandardError
       :ok
     end
   end

@@ -1,6 +1,15 @@
 inherit_gem:
   aaf-gumboot: aaf-rubocop.yml
 
+AllCops:
+  NewCops: enable
+  Exclude:
+    - bin/**
+    - db/**/*
+
+Layout/LineLength:
+  Max: 120
+
 Style/StderrPuts:
   Enabled: false
 
@@ -9,7 +18,15 @@ Rails/DynamicFindBy:
     - find_by_sql
     - find_by_identifying_attribute
 
-Lint/RescueWithoutErrorClass:
-  Exclude:
-    - config/initializers/app_config.rb
-    - spec/bin/push_events_to_federation_registry_spec.rb
+Naming/MethodParameterName:
+  Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false
+
+Rails/InverseOf:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false
+

@@ -59,6 +59,7 @@ class AdministratorReportsController < ApplicationController
 
   def set_source
     return nil if params[:source].blank?
+
     @source = params[:source]
   end
 end

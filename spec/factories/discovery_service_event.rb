@@ -5,14 +5,14 @@ FactoryBot.define do
     user_agent { 'Mozilla/5.0' }
     ip { Faker::Internet.ip_v4_address }
     group { Faker::Lorem.word }
-    unique_id { Faker::Internet.password(10) }
+    unique_id { Faker::Internet.password(min_length: 10) }
     phase { 'request' }
     initiating_sp do
       "https://sp.#{Faker::Internet.domain_name}/shibboleth"
     end
 
     timestamp do
-      Faker::Time.between(10.days.ago, Time.zone.today, :day)
+      Faker::Time.between(from: 10.days.ago, to: Time.zone.today).round
     end
 
     trait :response do

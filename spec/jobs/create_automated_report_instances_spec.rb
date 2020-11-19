@@ -81,6 +81,7 @@ RSpec.describe CreateAutomatedReportInstances do
     end
   end
 
+  # rubocop:disable Lint/BinaryOperatorWithIdenticalOperands
   context 'include range_end' do
     it 'for monthly interval should be from last month' do
       range_end = january.beginning_of_month
@@ -101,6 +102,7 @@ RSpec.describe CreateAutomatedReportInstances do
       end
     end
   end
+  # rubocop:enable Lint/BinaryOperatorWithIdenticalOperands
 
   context 'send email' do
     it 'should send email with subject' do

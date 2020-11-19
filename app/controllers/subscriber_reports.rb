@@ -28,11 +28,13 @@ class SubscriberReports < ApplicationController
     @entity_id = params[:entity_id]
 
     return report_type.new(@entity_id, start, finish, steps, @source) if steps
+
     report_type.new(@entity_id, start, finish, @source)
   end
 
   def access_method
     return public_action if params[:entity_id].blank?
+
     check_access! permission_string(@entity)
   end
 
@@ -50,6 +52,7 @@ class SubscriberReports < ApplicationController
 
   def set_source
     return nil if params[:source].blank?
+
     @source = params[:source]
   end
 end

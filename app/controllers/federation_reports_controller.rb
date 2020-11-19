@@ -42,6 +42,7 @@ class FederationReportsController < ApplicationController
   def set_source
     @source = params[:source]
     return @source if @source.present?
+
     # Have to provide a default for public reports
     # (DailyDemand and FederatedSessionsReport)
     # which do not have a form to set the source

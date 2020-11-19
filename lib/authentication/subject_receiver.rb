@@ -18,7 +18,7 @@ module Authentication
       subject = subject_scope(attrs).find_or_initialize_by({})
       check_subject(subject, attrs) if subject.persisted?
 
-      subject.update_attributes!(attrs.merge(complete: true))
+      subject.update!(attrs.merge(complete: true))
       update_roles(subject)
       subject
     end
@@ -28,6 +28,7 @@ module Authentication
       env['rack.session'].delete('return_url')
 
       return redirect_to(url) if url.present?
+
       super
     end
 
