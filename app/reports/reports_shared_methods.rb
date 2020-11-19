@@ -54,7 +54,7 @@ module ReportsSharedMethods
   end
 
   def days_count
-    (@start.to_i..@finish.to_i).step(1.day).count
+    (@start.to_i..@finish.to_i).step(1.day).size
   end
 
   def average(report, time, divider, decimal_places = 1)
