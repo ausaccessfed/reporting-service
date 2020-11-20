@@ -8,11 +8,13 @@ module Steps
 
   def start
     return nil if params[:start].blank?
+
     Time.zone.parse(params[:start]).beginning_of_day
   end
 
   def finish
     return nil if params[:end].blank?
+
     Time.zone.parse(params[:end]).tomorrow.beginning_of_day
   end
 
@@ -24,6 +26,7 @@ module Steps
     return 12 if f >= 6.months.since(s)
     return 6 if f >= 3.months.since(s)
     return 2 if f >= 1.month.since(s)
+
     1
   end
 end

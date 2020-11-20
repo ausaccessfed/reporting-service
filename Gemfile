@@ -3,10 +3,10 @@
 source 'https://rubygems.org'
 
 gem 'rails', '>= 5', '< 6'
+gem 'sass-rails'
 
 gem 'jbuilder'
 gem 'mysql2'
-gem 'sass-rails', require: false
 gem 'slim'
 gem 'therubyracer', require: false
 gem 'uglifier', require: false
@@ -23,13 +23,13 @@ gem 'aws-sdk', '~> 2'
 gem 'json-jwt'
 gem 'torba-rails'
 
-gem 'aaf-lipstick'
+gem 'aaf-lipstick', '>= 4.5.1'
 gem 'rmagick', '~> 2.16'
 
 gem 'god', require: false
-gem 'puma', require: false
 gem 'unicorn', require: false
 
+# rubocop:disable Metrics/BlockLength
 group :development, :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails', '~> 4.11'
@@ -37,7 +37,8 @@ group :development, :test do
   gem 'fakeredis'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
-  gem 'rubocop', '0.51'
+  gem 'rubocop'
+  gem 'rubocop-rails'
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'webmock', require: false
@@ -50,6 +51,7 @@ group :development, :test do
   gem 'capybara', require: false
   gem 'launchy', require: false
   gem 'poltergeist', require: false
+  gem 'puma', require: false
 
   gem 'brakeman', require: false
   gem 'simplecov', require: false
@@ -62,3 +64,4 @@ group :development, :test do
   gem 'guard-unicorn', require: false
   gem 'terminal-notifier-guard', require: false
 end
+# rubocop:enable Metrics/BlockLength

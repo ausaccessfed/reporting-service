@@ -80,10 +80,4 @@ Rails.application.routes.draw do
     post '/' => 'automated_reports#subscribe'
     delete '/:identifier' => 'automated_reports#destroy'
   end
-
-  namespace :api, defaults: { format: 'json' } do
-    v1_constraints = APIConstraints.new(version: 1, default: true)
-    scope constraints: v1_constraints do
-    end
-  end
 end

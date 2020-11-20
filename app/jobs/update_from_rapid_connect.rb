@@ -9,6 +9,7 @@ class UpdateFromRapidConnect
 
       rapid_data[:services].each do |service_data|
         next unless service_data[:enabled]
+
         service = sync_service(service_data)
         sync_activations(service, service_data)
         touched << service

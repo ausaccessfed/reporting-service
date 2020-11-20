@@ -30,7 +30,7 @@ class TabularReport
 
   def generate
     title = @title
-    title += ' (' + source_name + ')' if @source.present?
+    title += " (#{source_name})" if @source.present?
 
     self.class.options.merge(title: title, rows: rows)
   end

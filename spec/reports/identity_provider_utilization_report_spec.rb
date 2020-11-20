@@ -6,7 +6,7 @@ RSpec.describe IdentityProviderUtilizationReport do
   let(:type) { 'identity-provider-utilization' }
   let(:header) { [%w[Name Sessions]] }
   let(:title) { 'Identity Provider Utilization Report' }
-  let(:output_title) { title + ' (' + source_name + ')' }
+  let(:output_title) { "#{title} (#{source_name})" }
 
   subject { IdentityProviderUtilizationReport.new(start, finish, source) }
 

@@ -38,6 +38,6 @@ class SubscriberRegistrationsReport < TabularReport
   end
 
   def standard_title(prefix)
-    prefix.strip.downcase.titleize + ' ' + @identifier.strip.downcase.titleize
+    "#{prefix.strip.downcase.titleize} #{@identifier.strip.downcase.titleize}"
   end
 end

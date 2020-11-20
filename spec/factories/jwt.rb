@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :aaf_attributes, class: 'Hash' do
     displayname { Faker::Name.name }
-    mail { Faker::Internet.email(displayname) }
+    mail { Faker::Internet.email(name: displayname) }
     auedupersonsharedtoken { SecureRandom.urlsafe_base64(16) }
     edupersontargetedid do
       'https://rapid.example.com!https://reporting.example.com!' \

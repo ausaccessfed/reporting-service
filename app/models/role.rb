@@ -60,7 +60,7 @@ class Role < ApplicationRecord
     return nil unless entitlement.start_with?("#{prefix}:")
 
     i = prefix.length + 1
-    entitlement[i..-1]
+    entitlement[i..]
   end
 
   def config

@@ -20,7 +20,7 @@ RSpec.describe TabularReport do
   end
 
   let(:title) { Faker::Lorem.sentence }
-  let(:report_rows) { (1..10).to_a.map { Faker::Lorem.words(3) } }
+  let(:report_rows) { (1..10).to_a.map { Faker::Lorem.words(number: 3) } }
   let(:report) { klass.new(title, report_rows) }
 
   context '::options' do
@@ -38,7 +38,7 @@ RSpec.describe TabularReport do
         subclass.new(title, subclass_report_rows)
       end
 
-      let(:subclass_report_rows) { (1..20).to_a.map { Faker::Lorem.words(2) } }
+      let(:subclass_report_rows) { (1..20).to_a.map { Faker::Lorem.words(number: 2) } }
 
       it 'has a separate options hash' do
         expect(subclass_report.generate).to include(type: 'subclass-table')

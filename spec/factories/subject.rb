@@ -10,7 +10,7 @@ FactoryBot.define do
     targeted_id { "#{idp}!#{sp}!#{SecureRandom.uuid}" }
     shared_token { SecureRandom.urlsafe_base64(19) }
     name { Faker::Name.name }
-    mail { Faker::Internet.email(name) }
+    mail { Faker::Internet.email(name: name) }
 
     trait :authorized do
       transient { permission '*' }

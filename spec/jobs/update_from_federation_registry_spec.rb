@@ -94,7 +94,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
   end
 
   let(:org_identifier) do
-    hash = OpenSSL::Digest::SHA256.new.digest("aaf:subscriber:#{org_fr_id}")
+    hash = OpenSSL::Digest.new('SHA256').digest("aaf:subscriber:#{org_fr_id}")
     Base64.urlsafe_encode64(hash, padding: false)
   end
 
@@ -171,6 +171,18 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
           expect(object.activations.first).to have_attributes(
             activated_at: Time.parse(obj_data[:created_at]).utc,
             deactivated_at: Time.parse(obj_data[:updated_at]).utc
+          )
+        end
+      end
+
+      context 'when the object is deactivated but functioning' do
+        let!(:activation) { create(:activation, :deactivated, federation_object: object) }
+
+        it 'marks the object as activated' do
+          expect { run }.not_to change(object.activations, :count)
+          expect(object.activations.first).to have_attributes(
+            activated_at: Time.parse(obj_data[:created_at]).utc,
+            deactivated_at: nil
           )
         end
       end
@@ -576,16 +588,16 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         )
 
         expect(Organization.all.map(&:name))
-          .to contain_exactly(*organizations.map { |o| o[:display_name] })
+          .to contain_exactly(*organizations.pluck(:display_name))
 
         expect(IdentityProvider.all.map(&:name))
-          .to contain_exactly(*identity_providers.map { |o| o[:display_name] })
+          .to contain_exactly(*identity_providers.pluck(:display_name))
 
         expect(ServiceProvider.all.map(&:name))
-          .to contain_exactly(*service_providers.map { |o| o[:display_name] })
+          .to contain_exactly(*service_providers.pluck(:display_name))
 
         expect(SAMLAttribute.all.map(&:name))
-          .to contain_exactly(*attributes.map { |o| o[:name] })
+          .to contain_exactly(*attributes.pluck(:name))
 
         expect { run }.to not_change(Organization, :count)
           .and not_change(IdentityProvider, :count)
