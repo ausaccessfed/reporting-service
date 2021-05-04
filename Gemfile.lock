@@ -144,7 +144,7 @@ GEM
       aes_key_wrap
       bindata
     kgio (2.11.3)
-    kramdown (2.3.0)
+    kramdown (2.3.1)
       rexml
     launchy (2.5.0)
       addressable (~> 2.7)
