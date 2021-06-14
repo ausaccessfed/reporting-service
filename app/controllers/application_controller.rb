@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
   end
 
   def force_authentication
-    session[:return_url] = request.url if request.get?
+    session[:return_url] = request.url if request.get? || request.head?
 
     redirect_to('/auth/login')
   end
