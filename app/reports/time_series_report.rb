@@ -7,7 +7,7 @@ class TimeSeriesReport
   class_attribute :options
   self.options = {}
 
-  class <<self
+  class << self
     def inherited(klass)
       klass.options = klass.options.dup
     end
