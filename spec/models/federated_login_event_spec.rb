@@ -6,11 +6,11 @@ RSpec.describe FederatedLoginEvent, type: :model do
   describe 'Parse data String' do
     let(:data) do
       'F-TICKS/AAF/1.0'\
-      '#a#TS=1457558279'\
-      '#RP=https://sp.example.edu/shibboleth#a'\
-      '#AP=https://idp.example.edu/idp/shibboleth#4'\
-      '#PN=72d2cce1bcda092e028ebf2a37a6001dcd6b444181fa2981100d12589b061942'\
-      '#RESULT=OK#'
+        '#a#TS=1457558279'\
+        '#RP=https://sp.example.edu/shibboleth#a'\
+        '#AP=https://idp.example.edu/idp/shibboleth#4'\
+        '#PN=72d2cce1bcda092e028ebf2a37a6001dcd6b444181fa2981100d12589b061942'\
+        '#RESULT=OK#'
     end
 
     let!(:incoming_event) { create :incoming_f_ticks_event, data: data }

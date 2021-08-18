@@ -8,7 +8,7 @@ root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 pid File.join(root, 'tmp', 'pids', 'unicorn.pid')
 
 class DevWorker
-  class <<self
+  class << self
     attr_accessor :attempts
   end
   @attempts = []
