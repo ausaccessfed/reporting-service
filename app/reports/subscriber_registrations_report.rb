@@ -2,7 +2,7 @@
 
 class SubscriberRegistrationsReport < TabularReport
   report_type 'subscriber-registrations'
-  header %w[Name Registration\ Date]
+  header ['Name', 'Registration Date']
   footer
 
   def initialize(identifier)
