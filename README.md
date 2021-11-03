@@ -29,3 +29,7 @@ AAF Reporting Service generates reports and graphs from data sourced from:
 2. `brew install phantomjs`
 3. `bin/setup` (and read the output for any additional steps)
 4. `guard`
+
+## Running tests in development environment
+1. `RAILS_ENV=test bundle exec rake db:reset` to reset the database
+2. `RAILS_ENV=test bundle exec rake` to run test suite

@@ -19,7 +19,7 @@ gem 'implicit-schema'
 gem 'rapid-rack'
 gem 'valhammer'
 
-gem 'aws-sdk', '~> 2'
+gem 'aws-sdk-sqs', '~> 1'
 gem 'json-jwt'
 gem 'torba-rails'
 
