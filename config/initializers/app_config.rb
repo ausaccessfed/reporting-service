@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'mail'
+require 'aws-sdk-sqs'
 
 Rails.application.configure do
   app_config_file = Rails.root.join('config', 'reporting_service.yml')
@@ -41,8 +42,6 @@ Rails.application.configure do
     }
 
     config.reporting_service.url_options = { base_url: 'example.com' }
-
-    Aws::SQS::Client.remove_plugin(Aws::Plugins::SQSQueueUrls)
     Aws.config.update(stub_responses: true)
 
     config.reporting_service.mail = OpenStruct.new(from: 'noreply@example.com')
@@ -54,7 +53,6 @@ Rails.application.configure do
   sqs_config = config.reporting_service.sqs
   if sqs_config[:fake]
     begin
-      Aws::SQS::Client.remove_plugin(Aws::Plugins::SQSQueueUrls)
 
       sqs_client = Aws::SQS::Client.new(region: sqs_config[:region],
                                         endpoint: sqs_config[:endpoint])
