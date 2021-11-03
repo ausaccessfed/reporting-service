@@ -53,7 +53,6 @@ Rails.application.configure do
   sqs_config = config.reporting_service.sqs
   if sqs_config[:fake]
     begin
-
       sqs_client = Aws::SQS::Client.new(region: sqs_config[:region],
                                         endpoint: sqs_config[:endpoint])
 
