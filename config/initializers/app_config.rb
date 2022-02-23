@@ -2,11 +2,11 @@
 
 require 'mail'
 require 'aws-sdk-sqs'
-
+# rubocop:disable Style/OpenStructUse
 Rails.application.configure do
   app_config_file = Rails.root.join('config', 'reporting_service.yml')
   app_config = YAML.safe_load(app_config_file.read)
-  config.reporting_service = Struct.new(app_config.deep_symbolize_keys)
+  config.reporting_service = OpenStruct.new(app_config.deep_symbolize_keys)
 
   mail_config = config.reporting_service.mail
   Mail.defaults { delivery_method :smtp, mail_config }
@@ -44,7 +44,7 @@ Rails.application.configure do
     config.reporting_service.url_options = { base_url: 'example.com' }
     Aws.config.update(stub_responses: true)
 
-    config.reporting_service.mail = Struct.new(from: 'noreply@example.com')
+    config.reporting_service.mail = OpenStruct.new(from: 'noreply@example.com')
     config.reporting_service.environment_string = 'Test'
 
     Mail.defaults { delivery_method :test }
@@ -65,3 +65,5 @@ Rails.application.configure do
     end
   end
 end
+
+# rubocop:enable Style/OpenStructUse
