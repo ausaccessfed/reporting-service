@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 require 'fileutils'
+require 'gumboot/strap'
+
+include Gumboot::Strap
+
 
 # path to your application root.
 APP_ROOT = File.expand_path('..', __dir__)
@@ -17,10 +21,11 @@ FileUtils.chdir APP_ROOT do
   system! 'gem install bundler --conservative'
   system('bundle check') || system!('bundle install')
 
-  # puts "\n== Copying sample files =="
-  # unless File.exist?('config/database.yml')
-  #   FileUtils.cp 'config/database.yml.sample', 'config/database.yml'
-  # end
+
+  puts "\n== Installing configuration files =="
+  link_global_configuration %w[rapidconnect.yml api-client.crt api-client.key
+                             event_encryption_key.pem]
+  update_local_configuration %w[reporting_service.yml]
 
   puts "\n== Preparing database =="
   system! 'bin/rails db:prepare'
