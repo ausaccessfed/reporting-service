@@ -305,6 +305,8 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
+    rubocop-rspec (2.9.0)
+      rubocop (~> 1.19)
     ruby-progressbar (1.11.0)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
@@ -411,6 +413,7 @@ DEPENDENCIES
   rspec-rails
   rubocop
   rubocop-rails
+  rubocop-rspec (~> 2.9)
   sass-rails
   shoulda-matchers
   simplecov
