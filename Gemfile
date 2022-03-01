@@ -66,4 +66,4 @@ group :development, :test do
 end
 # rubocop:enable Metrics/BlockLength
 
-gem "rubocop-rspec", "~> 2.9"
+gem 'rubocop-rspec', '~> 2.9'
