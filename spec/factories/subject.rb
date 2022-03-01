@@ -13,7 +13,7 @@ FactoryBot.define do
     mail { Faker::Internet.email(name: name) }
 
     trait :authorized do
-      transient { permission '*' }
+      transient { permission { '*' } }
 
       after(:create) do |user, attrs|
         role = create(:permission, value: attrs.permission).role

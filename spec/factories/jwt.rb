@@ -27,14 +27,14 @@ FactoryBot.define do
     iat { Time.zone.now.to_i }
     nbf { 30.seconds.ago.to_i }
     exp { 30.seconds.from_now.to_i }
-    typ 'authnresponse'
+    typ { 'authnresponse' }
     jti { SecureRandom.hex }
 
     config = Rails.configuration.rapid_rack
-    iss config.issuer
-    aud config.audience
+    iss { config.issuer }
+    aud { config.audience }
     transient do
-      secret(config.secret)
+      secret { config.secret }
       association :aaf_attributes
     end
 
