@@ -20,6 +20,7 @@ FileUtils.chdir APP_ROOT do
   puts '== Installing dependencies =='
   system! 'gem install bundler --conservative'
   system('bundle check') || system!('bundle install')
+  system 'bundle exec torba pack'
 
 
   puts "\n== Installing configuration files =="
