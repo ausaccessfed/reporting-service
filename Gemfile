@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '>= 5', '< 6'
+gem 'rails', '6.0.4.4'
 gem 'sass-rails'
 
 gem 'jbuilder'

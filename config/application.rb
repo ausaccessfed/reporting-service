@@ -19,6 +19,8 @@ module ReportingService
       File.join(config.root, 'app', 'jobs', 'concerns')
     ]
 
+    config.autoloader = :zeitwerk
+
     config.assets.precompile += %w[render_report.js]
 
     config.rapid_rack.receiver = 'Authentication::SubjectReceiver'
