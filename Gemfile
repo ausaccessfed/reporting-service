@@ -65,5 +65,3 @@ group :development, :test do
   gem 'terminal-notifier-guard', require: false
 end
 # rubocop:enable Metrics/BlockLength
-
-gem 'rubocop-rspec', '~> 2.9'
