@@ -8,7 +8,6 @@ gem 'sass-rails'
 gem 'jbuilder'
 gem 'mysql2'
 gem 'slim'
-gem 'therubyracer', require: false
 gem 'uglifier', require: false
 
 gem 'redis'
