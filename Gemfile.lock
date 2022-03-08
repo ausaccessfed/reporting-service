@@ -170,8 +170,6 @@ GEM
       rexml
     launchy (2.5.0)
       addressable (~> 2.7)
-    libv8 (3.16.14.19)
-    libv8 (3.16.14.19-x86_64-linux)
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -268,7 +266,6 @@ GEM
       redis-store (>= 1.2, < 2)
     redis-store (1.9.1)
       redis (>= 4, < 5)
-    ref (2.0.0)
     regexp_parser (2.2.1)
     rexml (3.2.5)
     rmagick (2.16.0)
@@ -340,9 +337,6 @@ GEM
       sprockets (>= 3.0.0)
     temple (0.8.2)
     terminal-notifier-guard (1.7.0)
-    therubyracer (0.12.3)
-      libv8 (~> 3.16.14.15)
-      ref
     thor (1.2.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -406,7 +400,7 @@ DEPENDENCIES
   poltergeist
   pry
   puma
-  rails (= 6.0.4.4)
+  rails (< 6.1)
   rails-controller-testing
   rapid-rack
   redis
@@ -420,7 +414,6 @@ DEPENDENCIES
   simplecov
   slim
   terminal-notifier-guard
-  therubyracer
   timecop
   torba-rails
   uglifier
