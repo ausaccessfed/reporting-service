@@ -8,7 +8,7 @@ FactoryBot.define do
     description { Faker::Lorem.sentence }
 
     trait :authorized do
-      transient { permission '*' }
+      transient { permission { '*' } }
 
       after(:create) do |user, attrs|
         role = create(:permission, value: attrs.permission).role

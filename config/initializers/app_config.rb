@@ -2,7 +2,7 @@
 
 require 'mail'
 require 'aws-sdk-sqs'
-
+# rubocop:disable Style/OpenStructUse
 Rails.application.configure do
   app_config_file = Rails.root.join('config', 'reporting_service.yml')
   app_config = YAML.safe_load(app_config_file.read)
@@ -65,3 +65,5 @@ Rails.application.configure do
     end
   end
 end
+
+# rubocop:enable Style/OpenStructUse

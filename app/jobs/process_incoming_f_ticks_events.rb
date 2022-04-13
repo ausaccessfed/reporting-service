@@ -4,7 +4,7 @@ class ProcessIncomingFTicksEvents
   def perform
     FederatedLoginEvent.transaction do
       incoming_events.find_each do |event|
-        create_instance(event) && event.destroy! || event.discard!
+        (create_instance(event) && event.destroy!) || event.discard!
       end
     end
   end
