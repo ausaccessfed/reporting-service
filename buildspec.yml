@@ -8,7 +8,7 @@ phases:
       - echo 'export LC_ALL=en_US.UTF-8' >> ~/.bashrc
       - echo 'export AAF_DEV=1' >> ~/.bashrc
 
-      - mysqld_safe & disown -h
+      - mysqld --user=root & disown -h
       - sleep 5
       - mysql -e "grant all privileges on *.* to 'reporting_app'@'%' identified by 'password';"
 
