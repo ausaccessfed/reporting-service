@@ -8,6 +8,7 @@ require 'active_record/railtie'
 require 'action_controller/railtie'
 require 'action_view/railtie'
 require 'sprockets/railtie'
+require_relative 'reporting_service_configuration'
 
 Bundler.require(*Rails.groups)
 
@@ -23,13 +24,13 @@ module ReportingService
 
     config.assets.precompile += %w[render_report.js]
 
-    config.rapid_rack.receiver = 'Authentication::SubjectReceiver'
-
     config.active_record.logger = Logger.new($stderr) if ENV['AAF_DEBUG']
 
+    config.reporting_service = ReportingService::Configuration.build_configuration.deep_symbolize_keys
+
     config.cache_store = :redis_store,
-                         'redis://127.0.0.1/0/reporting-service-cache',
-                         { expire_in: 1.day }
+                         config.reporting_service[:redis][:url]
+    { expire_in: 1.day }
   end
 end
 

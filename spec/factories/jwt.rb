@@ -29,8 +29,7 @@ FactoryBot.define do
     exp { 30.seconds.from_now.to_i }
     typ { 'authnresponse' }
     jti { SecureRandom.hex }
-
-    config = Rails.configuration.rapid_rack
+    config = Rails.application.config.reporting_service[:rapid_connect][:rack]
     iss { config.issuer }
     aud { config.audience }
     transient do

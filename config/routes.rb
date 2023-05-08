@@ -81,3 +81,10 @@ Rails.application.routes.draw do
     delete '/:identifier' => 'automated_reports#destroy'
   end
 end
+
+RapidRack::Engine.routes.draw do
+  opts = Rails.application.config.reporting_service[:rapid_connect][:rack]
+  authenticator = opts[:authenticator].constantize.new(opts)
+
+  mount authenticator => ''
+end
