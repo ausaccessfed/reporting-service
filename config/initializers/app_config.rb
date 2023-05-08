@@ -4,23 +4,10 @@ require 'mail'
 require 'aws-sdk-sqs'
 # rubocop:disable Style/OpenStructUse
 Rails.application.configure do
-  app_config_file = Rails.root.join('config', 'reporting_service.yml')
-  app_config = YAML.safe_load(app_config_file.read)
-  config.reporting_service = OpenStruct.new(app_config.deep_symbolize_keys)
-
-  mail_config = config.reporting_service.mail
+  mail_config = config.reporting_service[:mail]
   Mail.defaults { delivery_method :smtp, mail_config }
 
   if Rails.env.test?
-    config.reporting_service.ide = {
-      host: 'ide.example.edu',
-      cert: 'spec/api.crt',
-      key: 'spec/api.key',
-      admin_entitlements: ['urn:mace:aaf.edu.au:ide:internal:aaf-admin',
-                           'urn:mace:aaf.edu.au:ide:internal:aaf-reporting'],
-      federation_object_entitlement_prefix: 'urn:mace:aaf.edu.au:ide:internal'
-    }
-
     config.reporting_service.federationregistry = {
       host: 'manager.example.edu',
       secret: 'abcdef'
@@ -50,7 +37,7 @@ Rails.application.configure do
     Mail.defaults { delivery_method :test }
   end
 
-  sqs_config = config.reporting_service.sqs
+  sqs_config = config.reporting_service[:sqs]
   if sqs_config[:fake]
     begin
       sqs_client = Aws::SQS::Client.new(region: sqs_config[:region],

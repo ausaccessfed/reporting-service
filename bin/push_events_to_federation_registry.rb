@@ -35,7 +35,7 @@ class PushEventsToFederationRegistry
   end
 
   def config
-    @config ||= YAML.safe_load(File.read('config/fr_database.yml'))
+    @config ||= Rails.application.reporting_service[:federationregistry][:database]
   end
 
   private

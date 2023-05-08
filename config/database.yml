@@ -2,15 +2,16 @@ default: &default
   adapter: mysql2
   encoding: utf8
   collation: utf8_bin
-  username: reporting_app
-  password: password
-  host: 127.0.0.1
+  username: <%= ENV['REPORTING_DB_USERNAME'] || 'reporting_app' %>
+  password: "<%= ENV['REPORTING_DB_PASSWORD'] || 'password' %>"
+  host: <%= ENV['REPORTING_DB_HOST'] || '127.0.0.1' %>
+  port: <%= ENV['REPORTING_DB_PORT'] || 3306 %>
   pool: 5
   timeout: 5000
 
 development:
   <<: *default
-  database: reporting_development
+  database: <%= ENV['REPORTING_DB_NAME'] || 'reporting_dev' %>
 
 test:
   <<: *default
@@ -18,8 +19,4 @@ test:
 
 production:
   <<: *default
-  username: <%= ENV['REPORTING_DB_USERNAME'] %>
-  password: <%= ENV['REPORTING_DB_PASSWORD'] %>
-  database: <%= ENV['REPORTING_DB_NAME'] %>
-  host: <%= ENV['REPORTING_DB_HOST'] %>
-  port: <%= ENV['REPORTING_DB_PORT'] %>
+  database: <%= ENV['REPORTING_DB_NAME'] || 'reporting_production' %>
