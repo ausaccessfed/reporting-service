@@ -15,15 +15,16 @@ gem 'redis-rails'
 
 gem 'accession'
 gem 'implicit-schema'
-gem 'rapid-rack'
+gem 'lograge'
 gem 'valhammer'
 
+gem 'aaf-lipstick', '>= 4.5.1'
 gem 'aws-sdk-sqs', '~> 1'
 gem 'json-jwt'
-gem 'torba-rails'
-
-gem 'aaf-lipstick', '>= 4.5.1'
 gem 'rmagick', '~> 2.16'
+gem 'sentry-rails'
+gem 'sentry-ruby'
+gem 'torba-rails'
 
 gem 'god', require: false
 gem 'unicorn', require: false

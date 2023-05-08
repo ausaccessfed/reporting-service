@@ -18,3 +18,5 @@ dump.rdb
 
 .idea
 reporting-service.iml
+.env
+.vscode
