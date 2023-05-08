@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   get '/dashboard' => 'dashboard#index', as: 'dashboard'
   root to: 'welcome#index'
+  get 'health' => 'health#show'
 
   scope '/federation_reports' do
     get 'federation_growth_report' =>
