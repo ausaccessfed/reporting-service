@@ -30,14 +30,15 @@ run-image-bash:
 
 
 run-image:
-	docker run --rm -p 3000:3000 --name reporting-service --env-file=.env \
+	docker run --rm -p ${PORT}:${PORT} --name reporting-service --env-file=.env \
 	-v ${PWD}/db:/app/db \
 	-v ${PWD}/lib:/app/lib \
 	-v ${PWD}/app:/app/app \
 	-v ${PWD}/config:/app/config \
-	-e DATABASE_HOST=${LOCAL_IP} \
+	-e REPORTING_DB_HOST=${LOCAL_IP} \
 	-v ${PWD}/log:/app/log \
-	${DOCKER_ECR}reporting-service:${BUILD_TARGET}
+	${DOCKER_ECR}reporting-service:${BUILD_TARGET} \
+	"bundle exec unicorn -c config/unicorn.rb -p ${PORT}"
 FILE=
 run-image-tests:
 	docker run -it --rm --env-file=.env  \
@@ -48,13 +49,14 @@ run-image-tests:
 	-v ${PWD}/log:/app/log \
 	-v ${PWD}/coverage:/app/coverage \
 	-v ${PWD}/spec:/app/spec \
-	-v ${PWD}/log:/app/log \
-	-e DATABASE_HOST=${LOCAL_IP} \
-	-e DATABASE_PASSWORD='' \
+	-v ${PWD}/tmp:/app/tmp \
+	-e REPORTING_DB_HOST=${LOCAL_IP} \
+	-e REPORTING_DB_PASSWORD='' \
 	-e COVERAGE=true \
 	-e CI=true \
-	--name reporting-service \
-	--entrypoint "rspec -fd ${FILE}" \
-	${DOCKER_ECR}reporting-service:${BUILD_TARGET}
+	-e RAILS_ENV=test \
+	--name reporting-service-test \
+	${DOCKER_ECR}reporting-service:${BUILD_TARGET} \
+	"bundle exec rspec -fd ${FILE}"
 
 

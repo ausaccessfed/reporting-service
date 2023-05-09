@@ -16,7 +16,11 @@ module RapidRack
       @secret = opts[:secret]
       @issuer = opts[:issuer]
       @audience = opts[:audience]
-      @error_handler = opts[:error_handler].try(:constantize).try(:new) || self
+      @error_handler = if opts[:error_handler].nil?
+                         self
+                       else
+                         opts[:error_handler].constantize.new
+                       end
     end
 
     def call(env)
@@ -55,7 +59,6 @@ module RapidRack
       return method_not_allowed unless method?(env, 'POST')
 
       params = Rack::Utils.parse_query(env['rack.input'].read)
-
       with_claims(env, params['assertion']) do |claims|
         receiver.receive(env, claims)
       end

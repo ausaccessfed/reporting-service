@@ -22,14 +22,16 @@ module ReportingService
 
     config.autoloader = :zeitwerk
 
+    config.assets.enabled = true
+
     config.assets.precompile += %w[render_report.js]
 
     config.active_record.logger = Logger.new($stderr) if ENV['AAF_DEBUG']
 
-    config.reporting_service = ReportingService::Configuration.build_configuration.deep_symbolize_keys
+    config.reporting_service = OpenStruct.new(ReportingService::Configuration.build_configuration)
 
     config.cache_store = :redis_store,
-                         config.reporting_service[:redis][:url]
+                         config.reporting_service.redis[:url]
     { expire_in: 1.day }
   end
 end

@@ -5,9 +5,7 @@ config/api-client.*
 config/event_encryption_key.pem
 spec/examples.txt
 
-public/404.html
-public/422.html
-public/500.html
+public/*
 
 coverage
 tmp

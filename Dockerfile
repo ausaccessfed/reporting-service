@@ -22,51 +22,22 @@ RUN yum install -y \
 EXPOSE 3000
 
 ENTRYPOINT ["/app/bin/boot.sh"]
-CMD ["bundle exec puma"]
+CMD ["bundle exec unicorn -c config/unicorn.rb"]
 
-# FROM base as aws-dependencies
+FROM base as geckodriver
+RUN yum -y update \
+    && yum -y install \
+        tar \
+        wget \
+    && yum -y clean all \
+    && rm -rf /var/cache/yum
 
-# RUN yum install -y \
-#     unzip \
-#     && yum -y clean all \
-#     && rm -rf /var/cache/yum
-
-# RUN export arch=$(rpm --eval '%{_arch}') \
-#     && curl "https://awscli.amazonaws.com/awscli-exe-linux-${arch}.zip" -o "awscliv2.zip" \
-#     && unzip -q awscliv2.zip \
-#     && ./aws/install \
-#     && rm awscliv2.zip \
-#     && rm -rf aws
-
-# FROM base as js-dependencies
-
-# RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash - \
-#     && curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo \
-#     && rpm --import https://dl.yarnpkg.com/rpm/pubkey.gpg \
-#     && yum -y install epel-release \
-#     && yum remove libuv -y \
-#     && yum install -y nodejs yarn --disableplugin=priorities \
-#     && yum -y clean all \
-#     && rm -rf /var/cache/yum
-
-# USER app
-
-# COPY --chown=app ./package.json ./yarn.lock ./.yarnrc.yml ./webpack.config.js ./
-# COPY --chown=app ./.yarn ./.yarn
-# RUN yarn install
-
-# COPY --chown=app ./babel.config.js ./postcss.config.js ./
-
-# COPY --chown=app ./app/components ./app/components
-# COPY --chown=app ./app/views ./app/views
-# COPY --chown=app ./app/helpers ./app/helpers
-# COPY --chown=app ./app/decorators ./app/decorators
-# COPY --chown=app ./app/assets ./app/assets
-
-# COPY --chown=app ./app/frontend ./app/frontend
-
-# RUN yarn build
-
+RUN export gecko_version='0.32.0' \
+    && export arch="$([ "$(rpm --eval '%{_arch}')" = "aarch64" ] && echo "linux-aarch64" || echo "linux64")" \
+    && wget https://github.com/mozilla/geckodriver/releases/download/v${gecko_version}/geckodriver-v${gecko_version}-${arch}.tar.gz \
+    && tar -zxvf geckodriver-v${gecko_version}-${arch}.tar.gz \
+    && mv geckodriver /usr/local/bin/ \
+    && rm geckodriver-v${gecko_version}-${arch}.tar.gz
 FROM base as dependencies
 
 RUN yum -y update \
@@ -77,10 +48,10 @@ RUN yum -y update \
     make \
     automake \
     ImageMagick-devel \
+    firefox \
     gcc \
     gcc-c++ \
     xz \
-    chromium \
     kernel-devel \
     mysql-devel \
     procps \
@@ -88,8 +59,6 @@ RUN yum -y update \
     && rm -rf /var/cache/yum
 
 USER app
-# COPY --chown=app --from=aws-dependencies /usr/local/aws-cli/v2/current/dist /tmp/aws
-# COPY --chown=app --from=aws-dependencies /usr/local/aws-cli/v2/current/dist /usr/local/bin
 
 COPY --chown=app ./Gemfile ./Gemfile.lock ./
 
@@ -97,11 +66,12 @@ COPY --chown=app ./Gemfile ./Gemfile.lock ./
 RUN bundle install \
     && rbenv rehash
 
+COPY --from=geckodriver /usr/local/bin/geckodriver /usr/local/bin/geckodriver
+
 COPY --chown=app  ./Torbafile ./
 
 RUN secret_key_base=1 bundle exec torba pack
 
-# COPY --from=js-dependencies /app/app/assets ./app/assets
 ## needed for precompile to run with prebuilt assets
 COPY --chown=app ./config ./config
 COPY --chown=app ./Rakefile ./Rakefile
@@ -126,12 +96,6 @@ USER app
 RUN bundle install \
     && rbenv rehash
 
-## needed for prettier to be runnable
-# COPY --from=js-dependencies /usr/bin/node /usr/bin/yarn /usr/bin/
-# COPY --from=js-dependencies /usr/share/yarn/bin/yarn.js /usr/bin/yarn.js
-# COPY --from=js-dependencies /usr/share/yarn/lib/cli.js /usr/lib/cli
-# COPY --from=js-dependencies /app/node_modules/ ./node_modules/
-
 COPY --chown=app . .
 
 ARG RELEASE_VERSION="VERSION_PROVIDED_ON_BUILD"
@@ -143,7 +107,6 @@ USER app
 COPY --from=dependencies /opt/.rbenv /opt/.rbenv
 COPY --from=dependencies ${APP_DIR}/public/assets ${APP_DIR}/public/assets
 COPY --from=dependencies /usr/lib64/mysql /usr/lib64/mysql
-# COPY --chown=app --from=dependencies /tmp/aws /usr/local/bin/
 COPY --from=dependencies /usr/local/bundle /usr/local/bundle
 COPY --from=dependencies /usr/sbin/pidof /usr/sbin/pidof
 COPY --from=dependencies /usr/lib64/libprocps.so.8 /usr/lib64/libprocps.so.8

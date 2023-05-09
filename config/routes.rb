@@ -84,7 +84,7 @@ Rails.application.routes.draw do
 end
 
 RapidRack::Engine.routes.draw do
-  opts = Rails.application.config.reporting_service[:rapid_connect][:rack]
+  opts = Rails.application.config.reporting_service.rapid_connect[:rack]
   authenticator = opts[:authenticator].constantize.new(opts)
 
   mount authenticator => ''

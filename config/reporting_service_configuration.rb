@@ -23,6 +23,7 @@ module ReportingService
           host: ENV.fetch('FR_HOST', 'manager.test.aaf.edu.au'),
           secret: ENV.fetch('FR_SECRET', 'This is the shared secret used for authenticating to the FR export API'),
           database: {
+            name: ENV.fetch('FR_DB_NAME', ''),
             username: ENV.fetch('FR_DB_USERNAME', ''),
             password: ENV.fetch('FR_DB_PASSWORD', ''),
             host: ENV.fetch('FR_DB_HOST', ''),
@@ -58,7 +59,7 @@ module ReportingService
         },
         environment_string: ENV.fetch('ENVIRONMENT_NAME', 'Test'),
         url_options: {
-          base_url: ENV.fetch('BASE_URL', 'http://localhost:8080')
+          base_url: ENV.fetch('BASE_URL', 'http://localhost:8082')
         },
         time_zone: 'Australia/Brisbane'
       }
@@ -67,16 +68,18 @@ module ReportingService
     def rapid_connect_rack
       authenticator = 'RapidRack::Authenticator'
 
-      authenticator = 'RapidRack::MockAuthenticator' if Rails.env.development?
+      ## TODO this doesnt exist use rapid.test russels rapid_connect_service
+      # authenticator = 'RapidRack::MockAuthenticator' if Rails.env.development?
       authenticator = 'RapidRack::TestAuthenticator' if Rails.env.test?
 
       {
         url: ENV.fetch('RC_RACK_URL', 'https://rapid.test.aaf.edu.au/jwt/authnrequest/auresearch/29MDwRXGUEY5fVOM'),
         secret: ENV.fetch('RC_RACK_SECRET', 'hL9NM4Y8Q6RU85//b8xJ325yL1D5kzanTMX9IrNygQm'),
         issuer: ENV.fetch('RC_RACK_ISSUER', 'https://rapid.test.aaf.edu.au'),
-        audience: ENV.fetch('RC_RACK_AUDIENCE', 'http://localhost:8080'),
+        audience: ENV.fetch('RC_RACK_AUDIENCE', 'http://localhost:8082'),
         authenticator: authenticator,
-        receiver: 'Authentication::SubjectReceiver'
+        receiver: 'Authentication::SubjectReceiver',
+        error_handler: nil
       }
     end
 

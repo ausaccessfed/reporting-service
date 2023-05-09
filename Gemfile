@@ -48,10 +48,13 @@ group :development, :test do
   gem 'byebug'
   gem 'pry', require: false
 
-  gem 'capybara', require: false
+  gem 'capybara'
+  gem 'capybara-selenium'
   gem 'launchy', require: false
-  gem 'poltergeist', require: false
   gem 'puma', require: false
+  gem 'rspec'
+
+  gem 'selenium-webdriver'
 
   gem 'brakeman', require: false
   gem 'simplecov', require: false

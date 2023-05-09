@@ -58,7 +58,7 @@ class UpdateFromRapidConnect
   end
 
   def rapid_config
-    configuration.rapidconnect
+    configuration.rapid_connect
   end
 
   def configuration

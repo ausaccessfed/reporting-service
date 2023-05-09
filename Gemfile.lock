@@ -95,7 +95,9 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
-    cliver (0.3.2)
+    capybara-selenium (0.0.6)
+      capybara
+      selenium-webdriver
     coderay (1.1.3)
     concurrent-ruby (1.2.0)
     crack (0.4.5)
@@ -217,10 +219,6 @@ GEM
     parallel (1.21.0)
     parser (3.1.1.0)
       ast (~> 2.4.1)
-    poltergeist (1.18.1)
-      capybara (>= 2.1, < 4)
-      cliver (~> 0.3.1)
-      websocket-driver (>= 0.2.0)
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -264,8 +262,6 @@ GEM
     rainbow (3.1.1)
     raindrops (0.20.0)
     rake (13.0.6)
-    rapid-rack (0.3.0)
-      json-jwt
     rb-fsevent (0.11.1)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -328,6 +324,7 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
     ruby-progressbar (1.11.0)
+    rubyzip (2.3.2)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -338,6 +335,10 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    selenium-webdriver (4.9.0)
+      rexml (~> 3.2, >= 3.2.5)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
     sentry-rails (5.4.2)
       railties (>= 5.0)
       sentry-ruby (~> 5.4.2)
@@ -389,6 +390,7 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
+    websocket (1.2.9)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -410,6 +412,7 @@ DEPENDENCIES
   brakeman
   byebug
   capybara
+  capybara-selenium
   database_cleaner
   factory_bot_rails (~> 4.11)
   faker
@@ -427,19 +430,19 @@ DEPENDENCIES
   launchy
   lograge
   mysql2
-  poltergeist
   pry
   puma
   rails (< 6.1)
   rails-controller-testing
-  rapid-rack
   redis
   redis-rails
   rmagick (~> 2.16)
+  rspec
   rspec-rails
   rubocop
   rubocop-rails
   sass-rails
+  selenium-webdriver
   sentry-rails
   sentry-ruby
   shoulda-matchers

@@ -35,7 +35,7 @@ class PushEventsToFederationRegistry
   end
 
   def config
-    @config ||= Rails.application.reporting_service[:federationregistry][:database]
+    @config ||= Rails.application.config.reporting_service[:federationregistry][:database]
   end
 
   private

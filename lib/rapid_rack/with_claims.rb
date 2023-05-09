@@ -56,8 +56,8 @@ module RapidRack
 
     def reject_claim_if(claims, key)
       val = claims[key]
-      fail(InvalidClaim, "nil #{key}") unless val
-      fail(InvalidClaim, "bad #{key}: #{val}") if yield(val)
+      raise(InvalidClaim, "nil #{key}") unless val
+      raise(InvalidClaim, "bad #{key}: #{val}") if yield(val)
     end
   end
 end
