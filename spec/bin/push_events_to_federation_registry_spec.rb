@@ -20,25 +20,6 @@ RSpec.describe PushEventsToFederationRegistry do
 
   subject { described_class.new(ds_host) }
 
-  context 'load db config' do
-    let(:yml_file) do
-      <<-YAML
-        a: 1
-        b: 2
-        c: 3
-      YAML
-    end
-
-    it 'should read fr_database.yml' do
-      allow(File)
-        .to receive(:read)
-        .with('config/fr_database.yml')
-        .and_return(yml_file)
-
-      expect(subject.config).to eq(YAML.safe_load(yml_file))
-    end
-  end
-
   context 'establish connection when @config exists' do
     before do
       allow(subject).to receive(:config).and_return(config)

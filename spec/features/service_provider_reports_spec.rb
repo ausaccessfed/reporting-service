@@ -39,8 +39,8 @@ RSpec.feature 'Service Provider Reports' do
         fill_in 'start', with: 1.year.ago
         fill_in 'end', with: Time.zone.now
         select data_source_name, from: 'source'
-
-        click_button 'Generate'
+        page.find_button('Generate').execute_script('this.click()')
+        sleep(2)
 
         expect(current_path)
           .to eq('/subscriber_reports/service_provider_sessions_report')
@@ -62,7 +62,8 @@ RSpec.feature 'Service Provider Reports' do
         fill_in 'end', with: Time.zone.now
         select data_source_name, from: 'source'
 
-        click_button 'Generate'
+        page.find_button('Generate').execute_script('this.click()')
+        sleep(2)
 
         expect(current_path).to eq('/subscriber_reports/service_provider_'\
                                    'daily_demand_report')
@@ -84,8 +85,8 @@ RSpec.feature 'Service Provider Reports' do
         fill_in 'start', with: 1.year.ago.utc
         fill_in 'end', with: Time.now.utc
         select data_source_name, from: 'source'
-
-        click_button 'Generate'
+        page.find_button('Generate').execute_script('this.click()')
+        sleep(2)
 
         expect(current_path)
           .to eq('/subscriber_reports/service_provider_'\

@@ -18,10 +18,10 @@ module RapidRack
     let(:secret) { '1234abcd' }
     let(:app) { build_app(prefix) }
     let(:receiver) do
-      build_class {}
+      TemporaryTestClass.build_class {}
     end
 
-    subject { last_response }
+    subject { response }
 
     context 'get /login' do
       def run
@@ -30,19 +30,17 @@ module RapidRack
 
       context 'with a JWT' do
         around do |example|
-          begin
-            TestAuthenticator.jwt = 'the jwt'
-            example.run
-          ensure
-            TestAuthenticator.jwt = nil
-          end
+          TestAuthenticator.jwt = 'the jwt'
+          example.run
+        ensure
+          TestAuthenticator.jwt = nil
         end
 
         before { run }
         it { is_expected.to be_successful }
 
         context 'login form' do
-          subject { Capybara.string(last_response.body) }
+          subject { Capybara.string(response.body) }
 
           it { is_expected.to have_xpath("//form[@action='/auth/jwt']") }
           it { is_expected.to have_xpath("//form/input[@value='the jwt']") }
@@ -60,7 +58,7 @@ module RapidRack
 
     context 'post /jwt' do
       it 'passes through to the parent' do
-        post '/auth/jwt', assertion: 'x.y.z'
+        post '/auth/jwt', params: { assertion: 'x.y.z' }
         expect(subject).to be_bad_request
       end
     end

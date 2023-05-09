@@ -30,10 +30,10 @@ FactoryBot.define do
     typ { 'authnresponse' }
     jti { SecureRandom.hex }
     config = Rails.application.config.reporting_service[:rapid_connect][:rack]
-    iss { config.issuer }
-    aud { config.audience }
+    iss { config[:issuer] }
+    aud { config[:audience] }
     transient do
-      secret { config.secret }
+      secret { config[:secret] }
       association :aaf_attributes
     end
 

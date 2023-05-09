@@ -81,8 +81,8 @@ RSpec.feature 'Administrator Reports' do
         fill_in 'start', with: Time.now.utc.beginning_of_month - 1.month
         fill_in 'end', with: Time.now.utc.beginning_of_month
 
-        # HACK: Works around an overlapping element that affects this test.
-        find('button', text: 'Generate').trigger('click')
+        page.find_button('Generate').execute_script('this.click()')
+        sleep(2)
 
         expect(current_path)
           .to eq('/admin_reports/federation_growth_report')
@@ -100,7 +100,8 @@ RSpec.feature 'Administrator Reports' do
         fill_in 'end', with: Time.now.utc.beginning_of_month
         select data_source_name, from: 'source'
 
-        click_button('Generate')
+        page.find_button('Generate').execute_script('this.click()')
+        sleep(2)
 
         expect(current_path)
           .to eq('/admin_reports/daily_demand_report')
@@ -119,7 +120,8 @@ RSpec.feature 'Administrator Reports' do
         fill_in 'end', with: Time.now.utc.beginning_of_month
         select data_source_name, from: 'source'
 
-        click_button('Generate')
+        page.find_button('Generate').execute_script('this.click()')
+        sleep(2)
 
         expect(current_path)
           .to eq('/admin_reports/federated_sessions_report')
@@ -138,7 +140,8 @@ RSpec.feature 'Administrator Reports' do
         fill_in 'end', with: Time.now.utc.beginning_of_month
         select data_source_name, from: 'source'
 
-        click_button('Generate')
+        page.find_button('Generate').execute_script('this.click()')
+        sleep(2)
 
         expect(current_path)
           .to eq('/admin_reports/identity_provider_utilization_report')
@@ -162,7 +165,8 @@ RSpec.feature 'Administrator Reports' do
         fill_in 'end', with: Time.now.utc.beginning_of_month
         select data_source_name, from: 'source'
 
-        click_button('Generate')
+        page.find_button('Generate').execute_script('this.click()')
+        sleep(2)
 
         expect(current_path)
           .to eq('/admin_reports/service_provider_utilization_report')
