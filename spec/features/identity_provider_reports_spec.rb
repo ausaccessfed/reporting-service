@@ -40,7 +40,8 @@ RSpec.feature 'Identity Provider Reports' do
         fill_in 'end', with: Time.zone.now
         select data_source_name, from: 'source'
 
-        click_button 'Generate'
+        page.find_button('Generate').execute_script('this.click()')
+        sleep(2)
 
         expect(current_path)
           .to eq('/subscriber_reports/identity_provider_sessions_report')
@@ -62,9 +63,10 @@ RSpec.feature 'Identity Provider Reports' do
         fill_in 'end', with: Time.zone.now
         select data_source_name, from: 'source'
 
-        click_button 'Generate'
+        page.find_button('Generate').execute_script('this.click()')
+        sleep(2)
 
-        expect(current_path).to eq('/subscriber_reports/identity_provider_'\
+        expect(current_path).to eq('/subscriber_reports/identity_provider_' \
                                    'daily_demand_report')
         expect(page).to have_css('svg.identity-provider-daily-demand')
         expect(page).to have_content("(#{data_source_name})")
@@ -74,7 +76,7 @@ RSpec.feature 'Identity Provider Reports' do
         click_link('Identity Provider Destination Services Report')
 
         expect(current_path)
-          .to eq('/subscriber_reports/identity_provider_'\
+          .to eq('/subscriber_reports/identity_provider_' \
                  'destination_services_report')
 
         select idp.name, from: 'Identity Providers'
@@ -85,10 +87,11 @@ RSpec.feature 'Identity Provider Reports' do
         fill_in 'end', with: Time.zone.now
         select data_source_name, from: 'source'
 
-        click_button 'Generate'
+        page.find_button('Generate').execute_script('this.click()')
+        sleep(2)
 
         expect(current_path)
-          .to eq('/subscriber_reports/identity_provider_'\
+          .to eq('/subscriber_reports/identity_provider_' \
                  'destination_services_report')
         # Tabular reports do not render report title - see #178
         # So instead just confirm the report-data JSON contains the title.
@@ -125,8 +128,8 @@ RSpec.feature 'Identity Provider Reports' do
     end
 
     scenario 'can not view the IdP Destination Services Report' do
-      message = 'Sorry, it seems there are no identity providers available! '\
-                'or your organization did not allow you to generate '\
+      message = 'Sorry, it seems there are no identity providers available! ' \
+                'or your organization did not allow you to generate ' \
                 'reports for any identity providers'
 
       visit '/subscriber_reports/identity_provider_sessions_report'

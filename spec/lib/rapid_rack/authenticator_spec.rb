@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rack/lobster'
 
 module RapidRack
@@ -6,7 +8,6 @@ module RapidRack
       opts = { url: url, receiver: receiver, secret: secret,
                issuer: issuer, audience: audience, error_handler: handler }
       Rack::Builder.new do
-        use Rack::Lint
         map(prefix) { run Authenticator.new(opts) }
         run Rack::Lobster.new
       end
@@ -100,7 +101,7 @@ module RapidRack
 
       let(:valid_claims) do
         {
-          aud: audience, iss: issuer, iat: Time.now, typ: 'authnresponse',
+          aud: audience, iss: issuer, iat: Time.zone.now, typ: 'authnresponse',
           nbf: 1.minute.ago, exp: 2.minutes.from_now,
           jti: 'accept', 'https://aaf.edu.au/attributes' => attrs
         }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json/jwt'
 require 'rack/utils'
 
@@ -46,7 +48,7 @@ module RapidRack
       '/login' => :initiate,
       '/jwt' => :callback,
       '/logout' => :terminate
-    }
+    }.freeze
     private_constant :DISPATCH
 
     def initiate(env)

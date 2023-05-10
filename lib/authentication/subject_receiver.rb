@@ -73,7 +73,7 @@ module Authentication
       existing = subject.send(key)
       return if existing == incoming
 
-      raise("Incoming #{key} `#{incoming}` did not match"\
+      raise("Incoming #{key} `#{incoming}` did not match" \
             " existing `#{existing}`")
     end
   end

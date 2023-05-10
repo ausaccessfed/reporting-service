@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rack/lobster'
 
 module RapidRack
@@ -6,10 +8,17 @@ module RapidRack
       opts = { receiver: receiver, secret: secret,
                issuer: issuer, audience: audience }
       Rack::Builder.new do
-        use Rack::Lint
         map(prefix) { run TestAuthenticator.new(opts) }
         run Rack::Lobster.new
       end
+    end
+
+    before do
+      config = Rails.application.config.reporting_service.rapid_connect
+      config[:rack][:receiver] = receiver
+
+      allow(Rails.application.config.reporting_service).to receive(:rapid_connect)
+        .and_return(config)
     end
 
     let(:prefix) { '/auth' }
@@ -40,10 +49,12 @@ module RapidRack
         it { is_expected.to be_successful }
 
         context 'login form' do
-          subject { Capybara.string(response.body) }
+          subject do
+            response.body
+          end
 
-          it { is_expected.to have_xpath("//form[@action='/auth/jwt']") }
-          it { is_expected.to have_xpath("//form/input[@value='the jwt']") }
+          it { is_expected.to match(%r{form action="/auth/jwt"}) }
+          it { is_expected.to match(/input type="hidden" name="assertion" value="the jwt"/) }
         end
       end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RapidRack
   module RedisRegistry
     def register_jti(jti)

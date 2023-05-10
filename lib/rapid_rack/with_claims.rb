@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RapidRack
   module WithClaims
     def with_claims(env, assertion)
@@ -34,12 +36,12 @@ module RapidRack
     end
 
     def validate_exp(claims)
-      reject_claim_if(claims, 'exp') { |exp| Time.at(exp) < Time.now }
+      reject_claim_if(claims, 'exp') { |exp| Time.zone.at(exp) < Time.zone.now }
     end
 
     def validate_nbf(claims)
       reject_claim_if(claims, 'nbf', &:zero?)
-      reject_claim_if(claims, 'nbf') { |nbf| Time.at(nbf) > Time.now }
+      reject_claim_if(claims, 'nbf') { |nbf| Time.zone.at(nbf) > Time.zone.now }
     end
 
     def validate_typ(claims)

@@ -15,7 +15,6 @@ Rails.application.configure do
     config.reporting_service.rapid_connect[:rack][:issuer] = 'https://rapid.example.com'
     config.reporting_service.rapid_connect[:rack][:audience] = 'https://service.example.com'
 
-
     config.reporting_service.rapid_connect[:host] = 'rapid.example.edu'
     config.reporting_service.rapid_connect[:secret] = 'fedcba'
 

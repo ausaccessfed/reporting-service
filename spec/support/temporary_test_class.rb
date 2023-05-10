@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TemporaryTestClass
   def self.build_class(&bl)
     klass = Class.new(&bl)

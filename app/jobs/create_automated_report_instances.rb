@@ -103,7 +103,7 @@ class CreateAutomatedReportInstances
   end
 
   FILE = 'app/views/layouts/email_template.html.md'
-  EMAIL_BODY = File.read(Rails.root.join(FILE)).freeze
+  EMAIL_BODY = Rails.root.join(FILE).read.freeze
 
   private_constant :EMAIL_BODY, :FILE, :INTERVALS
 end
