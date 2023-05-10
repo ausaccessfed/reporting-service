@@ -5,7 +5,6 @@ require 'redis'
 
 module RapidRack
   RSpec.describe RedisRegistry do
-
     let(:overrides) { Module.new }
 
     subject do
