@@ -439,6 +439,7 @@ DEPENDENCIES
   mysql2
   pry
   puma
+  rack-test
   rails (< 6.1)
   rails-controller-testing
   redis

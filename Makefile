@@ -44,6 +44,7 @@ run-image-tests:
 	docker run -it --rm --env-file=.env  \
 	-v ${PWD}/app:/app/app \
 	-v ${PWD}/db:/app/db \
+	-v ${PWD}/bin:/app/bin \
 	-v ${PWD}/lib:/app/lib \
 	-v ${PWD}/config:/app/config \
 	-v ${PWD}/log:/app/log \

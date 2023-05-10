@@ -27,7 +27,9 @@ class PushEventsToFederationRegistry
       redis.ltrim(PENDING_QUEUE, 1, -1)
     end
   ensure
+    # :nocov:
     nil while redis.rpoplpush(PENDING_QUEUE, QUEUE)
+    # :nocov:
   end
 
   def mysql_client
@@ -35,7 +37,9 @@ class PushEventsToFederationRegistry
   end
 
   def config
+    # :nocov:
     @config ||= Rails.application.config.reporting_service.federation_registry[:database]
+    # :nocov:
   end
 
   private
@@ -126,5 +130,6 @@ class PushEventsToFederationRegistry
     event[:selected_idp].nil? || event[:initiating_sp].nil?
   end
 end
-
+# :nocov:
 PushEventsToFederationRegistry.new(*ARGV).perform if $PROGRAM_NAME == __FILE__
+# :nocov:

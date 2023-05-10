@@ -229,6 +229,14 @@ RSpec.describe TimeSeriesReport::Lint do
     fails_with 'data for series_a is blank'
   end
 
+  context 'when the data is array' do
+    let(:output) do
+      valid_output.merge(data: valid_output[:data].merge(series_a: ''))
+    end
+
+    fails_with 'data for series_a is not an Array'
+  end
+
   context 'when the data precedes the start of the time range' do
     let(:output) do
       data = valid_output[:data].merge(series_a: [[-1, 0]])

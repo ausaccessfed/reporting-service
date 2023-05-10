@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-
+require 'rack/test'
 RSpec.describe Authentication::SubjectReceiver do
+  include Rack::Test::Methods
   let(:env) { {} }
 
   before { allow(subject).to receive(:update_roles) }

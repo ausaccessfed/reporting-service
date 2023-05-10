@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require 'rack/lobster'
+require 'rack/test'
 
 module RapidRack
   RSpec.describe TestAuthenticator, type: :feature do
+
     def build_app(prefix)
       opts = { receiver: receiver, secret: secret,
                issuer: issuer, audience: audience }

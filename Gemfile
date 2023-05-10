@@ -63,6 +63,7 @@ group :development, :test do
   gem 'guard-rspec', require: false
   gem 'guard-rubocop', require: false
   gem 'guard-unicorn', require: false
+  gem 'rack-test', require: false
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false
   gem 'terminal-notifier-guard', require: false

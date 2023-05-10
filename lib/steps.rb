@@ -7,13 +7,13 @@ module Steps
   end
 
   def start
-    return nil if params[:start].blank?
+    return 1.day.ago if params[:start].blank?
 
     Time.zone.parse(params[:start]).beginning_of_day
   end
 
   def finish
-    return nil if params[:end].blank?
+    return 1.day.from_now if params[:end].blank?
 
     Time.zone.parse(params[:end]).tomorrow.beginning_of_day
   end

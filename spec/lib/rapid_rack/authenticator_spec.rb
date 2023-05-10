@@ -7,7 +7,7 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
     opts = { url: url, receiver: receiver, secret: secret,
              issuer: issuer, audience: audience, error_handler: handler }
     Rack::Builder.new do
-      map(prefix) { run described_class.new(opts) }
+      map(prefix) { run RapidRack::Authenticator.new(opts) }
       run Rack::Lobster.new
     end
   end
@@ -45,6 +45,12 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
         true
       end
     end
+  end
+
+  context 'test initiliser' do
+    let(:receiver) { nil }
+    subject { get '/auth/login' }
+    it { expect { subject }.to raise_error('A receiver must be configured for rapid_rack') }
   end
 
   context 'get /nonexistent' do

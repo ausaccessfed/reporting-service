@@ -1,21 +1,22 @@
 # frozen_string_literal: true
 
 class HealthController < ApplicationController
-  publicly_accessible
+  skip_before_action :ensure_authenticated
 
   def self.redis
     Redis.new(
-      url: Rails.application.config.hosted_idp_service[:redis][:url],
+      url: Rails.application.config.reporting_service.redis[:url],
       ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE }
     )
   end
 
   def show
+    public_action
     redis_active = redis_active?
     db_active = db_active?
 
     render json: {
-      version: Rails.application.config.hosted_idp_service[:version],
+      version: Rails.application.config.reporting_service.version,
       redis_active: redis_active,
       db_active: db_active
     }, status: db_active && redis_active ? 200 : 503
@@ -24,7 +25,9 @@ class HealthController < ApplicationController
   private
 
   def redis_active?
+    # :nocov:
     HealthController.redis&.ping && true
+    # :nocov:
   rescue StandardError
     false
   end

@@ -51,7 +51,7 @@ module Authentication
     end
 
     def logout(env)
-      env['rack.session'] = {}
+      env['rack.session'].destroy
       redirect_to('/')
     end
 

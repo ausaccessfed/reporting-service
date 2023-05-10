@@ -17,6 +17,7 @@ Rails.application.configure do
 
     config.reporting_service.rapid_connect[:host] = 'rapid.example.edu'
     config.reporting_service.rapid_connect[:secret] = 'fedcba'
+    config.reporting_service.version = 'VERSION_PROVIDED_ON_BUILD'
 
     config.reporting_service.sqs[:fake] = false
     config.reporting_service.sqs[:region] = 'dummy'
