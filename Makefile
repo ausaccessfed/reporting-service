@@ -41,7 +41,7 @@ run-image:
 	"bundle exec unicorn -c config/unicorn.rb -p ${PORT}"
 FILE=
 run-image-tests:
-	docker run -it --rm --env-file=.env  \
+	docker run -it --rm  \
 	-v ${PWD}/app:/app/app \
 	-v ${PWD}/db:/app/db \
 	-v ${PWD}/bin:/app/bin \
@@ -52,6 +52,7 @@ run-image-tests:
 	-v ${PWD}/spec:/app/spec \
 	-v ${PWD}/tmp:/app/tmp \
 	-e REPORTING_DB_HOST=${LOCAL_IP} \
+	-e REPORTING_DB_USERNAME=root \
 	-e REPORTING_DB_PASSWORD='' \
 	-e COVERAGE=true \
 	-e CI=true \
