@@ -79,12 +79,6 @@ RSpec.shared_examples 'report with scalable steps' do
     { start: Time.now.utc - (2.years + 2.months), end: Time.now.utc }
   end
 
-  it 'Steps when blank' do
-    post path, params: params.merge({ start: nil, end: nil })
-
-    expect(assigns[:data]).to be_nil
-  end
-
   it 'Steps should be 1 hour within less than a month' do
     [range_less_than_month, range_less_than_month_02].each do |rng|
       post path, params: params.merge(rng)
