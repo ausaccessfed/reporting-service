@@ -171,8 +171,7 @@ RSpec.feature 'automated report instances' do
       visit "/automated_report/#{unknown_instance.identifier}"
       expect(current_path).to eq("/automated_report/#{unknown_identifier}")
 
-      message = 'Oops, you clicked something we didn\'t' \
-                ' expect you to click'
+      message = 'Oops, you clicked something we didn\'t expect you to click'
 
       expect(page).to have_selector('p', text: message)
     end
@@ -285,8 +284,7 @@ RSpec.feature 'automated report instances' do
         visit "/automated_report/#{instance.identifier}"
         expect(current_path).to eq("/automated_report/#{instance.identifier}")
 
-        message = 'Oops, you clicked something we didn\'t' \
-                  ' expect you to click'
+        message = 'Oops, you clicked something we didn\'t expect you to click'
 
         expect(page).to have_selector('p', text: message)
       end

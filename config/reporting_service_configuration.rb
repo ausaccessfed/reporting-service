@@ -9,6 +9,7 @@ module ReportingService
     end
   end
 
+  # rubocop:disable Metrics/ClassLength
   class ConfigurationGenerator
     def build_configuration
       base_config.merge(admins_config, redis)
@@ -19,17 +20,7 @@ module ReportingService
     def base_config
       {
         version: version,
-        federationregistry: {
-          host: ENV.fetch('FR_HOST', 'manager.test.aaf.edu.au'),
-          secret: ENV.fetch('FR_SECRET', 'This is the shared secret used for authenticating to the FR export API'),
-          database: {
-            name: ENV.fetch('FR_DB_NAME', ''),
-            username: ENV.fetch('FR_DB_USERNAME', ''),
-            password: ENV.fetch('FR_DB_PASSWORD', ''),
-            host: ENV.fetch('FR_DB_HOST', ''),
-            port: ENV.fetch('FR_DB_PORT', '3306')
-          }
-        },
+        federation_registry: federation_registry,
         rapid_connect: {
           host: ENV.fetch('RC_HOST', 'rapid.test.aaf.edu.au'),
           secret: ENV.fetch('RC_SECRET', 'This is the shared secret used for authenticating to the Rapid export API'),
@@ -83,6 +74,20 @@ module ReportingService
       }
     end
 
+    def federation_registry
+      {
+        host: ENV.fetch('FR_HOST', 'manager.test.aaf.edu.au'),
+        secret: ENV.fetch('FR_SECRET', 'This is the shared secret used for authenticating to the FR export API'),
+        database: {
+          name: ENV.fetch('FR_DB_NAME', ''),
+          username: ENV.fetch('FR_DB_USERNAME', ''),
+          password: ENV.fetch('FR_DB_PASSWORD', ''),
+          host: ENV.fetch('FR_DB_HOST', ''),
+          port: ENV.fetch('FR_DB_PORT', '3306')
+        }
+      }
+    end
+
     def redis
       redis_url = if ENV.fetch('REDIS_AUTH_TOKEN', nil).present?
                     "#{ENV.fetch('REDIS_SCHEME',
@@ -125,3 +130,4 @@ module ReportingService
   end
   private_constant :ConfigurationGenerator
 end
+# rubocop:enable Metrics/ClassLength

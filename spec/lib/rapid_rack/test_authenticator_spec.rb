@@ -27,7 +27,7 @@ module RapidRack
     let(:secret) { '1234abcd' }
     let(:app) { build_app(prefix) }
     let(:receiver) do
-      TemporaryTestClass.build_class {}
+      TemporaryTestClass.build_class
     end
 
     subject { response }

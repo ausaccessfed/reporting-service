@@ -2,6 +2,9 @@
 
 require 'simplecov'
 require 'fakeredis'
+require 'simplecov-console'
+
+SimpleCov.formatter = SimpleCov::Formatter::Console
 RSpec.configure do |config|
   config.before(:example) { Redis::Connection::Memory.reset_all_databases }
 

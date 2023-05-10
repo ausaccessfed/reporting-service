@@ -7,8 +7,8 @@ Rails.application.configure do
   Mail.defaults { delivery_method :smtp, mail_config }
 
   if Rails.env.test?
-    config.reporting_service.federationregistry[:host] = 'manager.example.edu'
-    config.reporting_service.federationregistry[:secret] = 'abcdef'
+    config.reporting_service.federation_registry[:host] = 'manager.example.edu'
+    config.reporting_service.federation_registry[:secret] = 'abcdef'
 
     config.reporting_service.rapid_connect[:rack][:url] = 'https://rapid.example.com/jwt/authnrequest/research/0vs2aoAbd5bH6HRK'
     config.reporting_service.rapid_connect[:rack][:secret] = '5>O+`=2x%`\=.""f,6KDxV2p|MEE*P<]'

@@ -27,8 +27,9 @@ module ReportingService
     config.assets.precompile += %w[render_report.js]
 
     config.active_record.logger = Logger.new($stderr) if ENV['AAF_DEBUG']
-
+    # rubocop:disable Style/OpenStructUse
     config.reporting_service = OpenStruct.new(ReportingService::Configuration.build_configuration)
+    # rubocop:enable Style/OpenStructUse
 
     config.cache_store = :redis_store,
                          config.reporting_service.redis[:url]

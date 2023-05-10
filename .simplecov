@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
 SimpleCov.start('rails') do
-  # minimum_coverage 100
+  enable_coverage :branch
+  minimum_coverage line: 100, branch: 85
 end

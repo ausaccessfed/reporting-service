@@ -57,14 +57,14 @@ group :development, :test do
   gem 'selenium-webdriver'
 
   gem 'brakeman', require: false
-  gem 'simplecov', require: false
-
   gem 'guard', require: false
   gem 'guard-brakeman', require: false
   gem 'guard-bundler', require: false
   gem 'guard-rspec', require: false
   gem 'guard-rubocop', require: false
   gem 'guard-unicorn', require: false
+  gem 'simplecov', require: false
+  gem 'simplecov-console', require: false
   gem 'terminal-notifier-guard', require: false
 end
 # rubocop:enable Metrics/BlockLength

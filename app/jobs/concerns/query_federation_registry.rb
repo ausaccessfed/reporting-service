@@ -33,7 +33,7 @@ module QueryFederationRegistry
   end
 
   def fr_config
-    configuration.federationregistry
+    configuration.federation_registry
   end
 
   def configuration

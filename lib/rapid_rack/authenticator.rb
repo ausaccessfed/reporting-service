@@ -18,11 +18,7 @@ module RapidRack
       @secret = opts[:secret]
       @issuer = opts[:issuer]
       @audience = opts[:audience]
-      @error_handler = if opts[:error_handler].nil?
-                         self
-                       else
-                         opts[:error_handler].constantize.new
-                       end
+      @error_handler = get_error_handler(opts)
     end
 
     def call(env)
@@ -50,6 +46,14 @@ module RapidRack
       '/logout' => :terminate
     }.freeze
     private_constant :DISPATCH
+
+    def get_error_handler(opts)
+      if opts[:error_handler].nil?
+        self
+      else
+        opts[:error_handler].constantize.new
+      end
+    end
 
     def initiate(env)
       return method_not_allowed unless method?(env, 'GET')

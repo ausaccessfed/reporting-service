@@ -16,14 +16,14 @@ module RapidRack
 
     def login
       jwt = TestAuthenticator.jwt || raise('No login JWT was set')
-      out = [] << <<-EOF
+      out = [] << <<-LOGINPAGE
         <html><body>
           <form action="/auth/jwt" method="post">
             <input type="hidden" name="assertion" value="#{jwt}"/>
             <button type="submit">Login</button>
           </form>
         </body></html>
-      EOF
+      LOGINPAGE
       [200, {}, out]
     end
   end

@@ -6,9 +6,7 @@ module RapidRack
       claims = JSON::JWT.decode(assertion, secret)
       validate_claims(claims)
       yield claims
-    rescue JSON::JWT::Exception => e
-      error_handler.handle(env, e)
-    rescue InvalidClaim => e
+    rescue JSON::JWT::Exception, InvalidClaim => e
       error_handler.handle(env, e)
     end
 
