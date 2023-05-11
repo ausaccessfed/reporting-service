@@ -9,7 +9,7 @@ class PushEventsToFederationRegistry
     sql.lines.map(&:chomp).join(' ').squeeze(' ').strip.freeze
   end
 
-  def initialize(hostname)
+  def initialize(hostname = Rails.application.config.reporting_service.discovery_service_hostname)
     @hostname = hostname
   end
 

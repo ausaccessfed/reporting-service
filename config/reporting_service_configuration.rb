@@ -21,9 +21,11 @@ module ReportingService
       {
         version: version,
         federation_registry: federation_registry,
+        discovery_service_hostname: ENV.fetch('DISCOVERY_SERVICE_HOSTNAME', 'ds.test.aaf.edu.au'),
         rapid_connect: {
-          host: ENV.fetch('RC_HOST', 'rapid.test.aaf.edu.au'),
-          secret: ENV.fetch('RC_SECRET', 'This is the shared secret used for authenticating to the Rapid export API'),
+          host: ENV.fetch('RAPID_CONNECT_HOST', 'rapid.test.aaf.edu.au'),
+          secret: ENV.fetch('RAPID_CONNECT_SECRET',
+                            'This is the shared secret used for authenticating to the Rapid export API'),
           rack: rapid_connect_rack
         },
         sqs: {
@@ -64,10 +66,10 @@ module ReportingService
       authenticator = 'RapidRack::TestAuthenticator' if Rails.env.test?
 
       {
-        url: ENV.fetch('RC_RACK_URL', 'https://rapid.test.aaf.edu.au/jwt/authnrequest/auresearch/29MDwRXGUEY5fVOM'),
-        secret: ENV.fetch('RC_RACK_SECRET', 'hL9NM4Y8Q6RU85//b8xJ325yL1D5kzanTMX9IrNygQm'),
-        issuer: ENV.fetch('RC_RACK_ISSUER', 'https://rapid.test.aaf.edu.au'),
-        audience: ENV.fetch('RC_RACK_AUDIENCE', 'http://localhost:8082'),
+        url: ENV.fetch('RAPID_CONNECT_RACK_URL', 'https://rapid.test.aaf.edu.au/jwt/authnrequest/auresearch/29MDwRXGUEY5fVOM'),
+        secret: ENV.fetch('RAPID_CONNECT_RACK_SECRET', 'hL9NM4Y8Q6RU85//b8xJ325yL1D5kzanTMX9IrNygQm'),
+        issuer: ENV.fetch('RAPID_CONNECT_RACK_ISSUER', 'https://rapid.test.aaf.edu.au'),
+        audience: ENV.fetch('RAPID_CONNECT_RACK_AUDIENCE', 'http://localhost:8082'),
         authenticator: authenticator,
         receiver: 'Authentication::SubjectReceiver',
         error_handler: nil
@@ -76,14 +78,15 @@ module ReportingService
 
     def federation_registry
       {
-        host: ENV.fetch('FR_HOST', 'manager.test.aaf.edu.au'),
-        secret: ENV.fetch('FR_SECRET', 'This is the shared secret used for authenticating to the FR export API'),
+        host: ENV.fetch('FEDERATION_REGISTRY_HOST', 'manager.test.aaf.edu.au'),
+        secret: ENV.fetch('FEDERATION_REGISTRY_SECRET',
+                          'This is the shared secret used for authenticating to the FR export API'),
         database: {
-          name: ENV.fetch('FR_DB_NAME', ''),
-          username: ENV.fetch('FR_DB_USERNAME', ''),
-          password: ENV.fetch('FR_DB_PASSWORD', ''),
-          host: ENV.fetch('FR_DB_HOST', ''),
-          port: ENV.fetch('FR_DB_PORT', '3306')
+          name: ENV.fetch('FEDERATION_REGISTRY_DB_NAME', ''),
+          username: ENV.fetch('FEDERATION_REGISTRY_DB_USERNAME', ''),
+          password: ENV.fetch('FEDERATION_REGISTRY_DB_PASSWORD', ''),
+          host: ENV.fetch('FEDERATION_REGISTRY_DB_HOST', ''),
+          port: ENV.fetch('FEDERATION_REGISTRY_DB_PORT', '3306')
         }
       }
     end
