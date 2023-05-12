@@ -51,7 +51,6 @@ group :development, :test do
   gem 'capybara'
   gem 'capybara-selenium'
   gem 'launchy', require: false
-  gem 'puma', require: false
   gem 'rspec'
 
   gem 'selenium-webdriver'
