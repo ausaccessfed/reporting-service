@@ -8,8 +8,8 @@ worker_timeout 3600 if ENV.fetch('RAILS_ENV', 'development') == 'development'
 
 if ENV.fetch('RAILS_ENV', 'development') == 'production'
   ssl_bind '0.0.0.0', ENV.fetch('PORT', 3000), {
-    key: ENV.fetch('KEY_PATH', '/run/secrets/apache_key'),
-    cert: ENV.fetch('CERT_PATH', '/run/secrets/apache_cert'),
+    key: ENV.fetch('KEY_PATH', '/run/secrets/tls.key'),
+    cert: ENV.fetch('CERT_PATH', '/run/secrets/tls.crt'),
     verify_mode: 'none'
   }
 else
