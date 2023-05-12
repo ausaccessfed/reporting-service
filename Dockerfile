@@ -40,12 +40,14 @@ RUN export gecko_version='0.32.0' \
     && rm geckodriver-v${gecko_version}-${arch}.tar.gz
 FROM base as dependencies
 
-RUN yum -y update \
+RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash - \
+    && yum -y update \
     && yum -y install epel-release \
     && yum install -y \
     --enablerepo=devel \
     libtool \
     make \
+    nodejs \
     automake \
     ImageMagick-devel \
     firefox \
@@ -75,6 +77,7 @@ RUN secret_key_base=1 bundle exec torba pack
 ## needed for precompile to run with prebuilt assets
 COPY --chown=app ./config ./config
 COPY --chown=app ./Rakefile ./Rakefile
+COPY --chown=app ./app/assets ./app/assets
 COPY --chown=app ./lib ./lib
 COPY --chown=app ./app/helpers ./app/helpers
 COPY --chown=app ./app/controllers/application_controller.rb ./app/controllers/application_controller.rb
@@ -148,6 +151,7 @@ COPY --from=dependencies /usr/lib64/mysql \
 COPY --from=dependencies /usr/local/bundle /usr/local/bundle
 COPY --from=dependencies /usr/sbin/pidof /usr/sbin/pidof
 COPY --from=dependencies ${APP_DIR}/.torba ${APP_DIR}/.torba
+COPY --from=dependencies /usr/bin/node /usr/bin/
 
 COPY --chown=app . .
 
