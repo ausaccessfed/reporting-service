@@ -8,7 +8,7 @@ preload_app true
 pid File.join(ROOT, 'tmp', 'pids', 'unicorn.pid')
 stdout_path ENV.fetch('STDOUT', '/var/log/aaf/reporting/puma/stdout.log')
 stderr_path ENV.fetch('STDERR', '/var/log/aaf/reporting/puma/stderr.log')
-listen ENV.fetch('PORT', 8080)
+listen ENV.fetch('PORT', 8080).to_i
 before_fork do |server, _worker|
   old_pid = File.join(ROOT, 'tmp', 'pids', 'unicorn.pid.oldbin')
   if File.exist?(old_pid) && server.pid != old_pid
