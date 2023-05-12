@@ -27,8 +27,8 @@ gem 'sentry-ruby'
 gem 'torba-rails'
 
 gem 'god', require: false
+gem 'puma'
 gem 'unicorn', require: false
-
 # rubocop:disable Metrics/BlockLength
 group :development, :test do
   gem 'database_cleaner'

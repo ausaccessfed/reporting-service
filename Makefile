@@ -37,8 +37,7 @@ run-image:
 	-v ${PWD}/config:/app/config \
 	-e REPORTING_DB_HOST=${LOCAL_IP} \
 	-v ${PWD}/log:/app/log \
-	${DOCKER_ECR}reporting-service:${BUILD_TARGET} \
-	"bundle exec unicorn -c config/unicorn.rb"
+	${DOCKER_ECR}reporting-service:${BUILD_TARGET}
 FILE=
 run-image-tests:
 	docker run -it --rm  \
