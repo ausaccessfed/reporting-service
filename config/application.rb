@@ -31,8 +31,8 @@ module ReportingService
     config.reporting_service = OpenStruct.new(ReportingService::Configuration.build_configuration)
     # rubocop:enable Style/OpenStructUse
 
-    config.cache_store = :redis_store,
-                         config.reporting_service.redis[:url]
+    # config.cache_store = :redis_store,
+    #                      config.reporting_service.redis[:url]
     { expire_in: 1.day }
   end
 end

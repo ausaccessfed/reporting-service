@@ -10,4 +10,4 @@ session_store_opts = {
   key: '_reporting-service-session'
 }
 
-Rails.application.config.session_store(:redis_store, session_store_opts)
+# Rails.application.config.session_store(:redis_store, session_store_opts)
