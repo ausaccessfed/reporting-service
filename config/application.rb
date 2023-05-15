@@ -33,7 +33,7 @@ module ReportingService
 
     config.cache_store = :redis_store,
                          config.reporting_service.redis[:url],
-                        { expire_in: 1.day }
+                         { expire_in: 1.day }
   end
 end
 
