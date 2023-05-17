@@ -23,7 +23,7 @@ RUN yum install -y \
 EXPOSE 3000
 
 ENTRYPOINT ["/app/bin/boot.sh"]
-CMD ["bundle exec unicorn -c config/unicorn.rb -p 3000"]
+CMD ["bundle exec puma"]
 
 FROM base as geckodriver
 RUN yum -y update \

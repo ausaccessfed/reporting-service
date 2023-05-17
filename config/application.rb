@@ -29,7 +29,6 @@ module ReportingService
     # rubocop:disable Style/OpenStructUse
     config.reporting_service = OpenStruct.new(ReportingService::Configuration.build_configuration)
     # rubocop:enable Style/OpenStructUse
-    config.exceptions_app = routes
 
     config.cache_store = [:redis_cache_store, {
       url: config.reporting_service.redis[:url],
