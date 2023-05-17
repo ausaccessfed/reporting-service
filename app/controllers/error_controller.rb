@@ -1,25 +1,62 @@
 # frozen_string_literal: true
 
-class ErrorController < ApplicationController
+class ExceptionController < ApplicationController
   skip_before_action :ensure_authenticated
 
-  def page_not_found
-    public_action
+  # Response
+  respond_to :html, :xml, :json
 
-    respond_to do |format|
-      format.html { render template: 'errors/not_found_error', layout: 'layouts/application', status: :not_found }
-      format.all  { render nothing: true, status: :not_found }
-    end
+  # Dependencies
+  before_action :status
+
+  # Layout
+  layout :layout_status
+
+  ####################
+  #      Action      #
+  ####################
+
+  # Show
+  def show
+    respond_with status: @status
   end
 
-  def server_error
-    public_action
+  ####################
+  #   Dependencies   #
+  ####################
 
-    respond_to do |format|
-      format.html do
-        render template: 'errors/internal_server_error', layout: 'layouts/error', status: :internal_server_error
+  protected
+
+  # Info
+  def status
+    @exception  = env['action_dispatch.exception']
+    @status     = ActionDispatch::ExceptionWrapper.new(env, @exception).status_code
+    @response   = ActionDispatch::ExceptionWrapper.rescue_responses[@exception.class.name]
+  end
+
+  # Format
+  def details
+    @details ||= {}.tap do |h|
+      I18n.with_options scope: [:exception, :show, @response], exception_name: @exception.class.name,
+                        exception_message: @exception.message do |i18n|
+        h[:name]    =
+          i18n.t "#{@exception.class.name.underscore}.title", default: i18n.t(:title, default: @exception.class.name)
+        h[:message] =
+          i18n.t "#{@exception.class.name.underscore}.description",
+                 default: i18n.t(:description, default: @exception.message)
       end
-      format.all { render nothing: true, status: :internal_server_error }
     end
+  end
+  helper_method :details
+
+  ####################
+  #      Layout      #
+  ####################
+
+  private
+
+  # Layout
+  def layout_status
+    @status.to_s == '404' ? 'application' : 'error'
   end
 end

@@ -9,10 +9,6 @@ Rails.application.routes.draw do
   root to: 'welcome#index'
   get 'health' => 'health#show'
 
-  get '404', to: 'error#page_not_found'
-  get '422', to: 'error#server_error'
-  get '500', to: 'error#server_error'
-
   scope '/federation_reports' do
     get 'federation_growth_report' =>
         'federation_reports#federation_growth_report',
