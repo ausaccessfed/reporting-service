@@ -16,6 +16,22 @@ class ApplicationController < ActionController::Base
     @subject = subject
   end
 
+  def page_not_found
+    respond_to do |format|
+      format.html { render template: 'errors/not_found_error', layout: 'layouts/application', status: :not_found }
+      format.all  { render nothing: true, status: :not_found }
+    end
+  end
+
+  def server_error
+    respond_to do |format|
+      format.html do
+        render template: 'errors/internal_server_error', layout: 'layouts/error', status: :internal_server_error
+      end
+      format.all { render nothing: true, status: :internal_server_error }
+    end
+  end
+
   protected
 
   def ensure_authenticated

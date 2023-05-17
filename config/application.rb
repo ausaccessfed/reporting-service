@@ -23,6 +23,7 @@ module ReportingService
     config.autoloader = :zeitwerk
 
     config.assets.enabled = true
+    config.exceptions_app = routes
 
     config.assets.precompile += %w[render_report.js]
 

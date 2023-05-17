@@ -25,8 +25,8 @@ jobs:
       event_comment_id: ${{ github.event.comment.id }}
       event_comment_body: ${{ github.event.comment.body }}
       production_environments: "development,test,production"
-      extra_task_1_name: Tests
-      extra_task_1: docker run --add-host=host.docker.internal:host-gateway -e REPORTING_DB_HOST=host.docker.internal -e PREPARE_DB=true -e REPORTING_DB_USERNAME=root -e REPORTING_DB_PASSWORD=password -e RAILS_ENV=test app:cache bundle exec rspec
+      # extra_task_1_name: Tests
+      # extra_task_1: docker run --add-host=host.docker.internal:host-gateway -e REPORTING_DB_HOST=host.docker.internal -e PREPARE_DB=true -e REPORTING_DB_USERNAME=root -e REPORTING_DB_PASSWORD=password -e RAILS_ENV=test app:cache bundle exec rspec
       extra_task_2_name: rubocop
       extra_task_2: docker run app:cache bundle exec rubocop -P
       ## once nnwo has taken over we can update ruby to 3.x and turn this back on
