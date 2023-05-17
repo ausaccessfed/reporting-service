@@ -22,6 +22,8 @@ module ReportingService
 
     config.autoloader = :zeitwerk
 
+    config.assets.enabled = true
+
     config.assets.precompile += %w[render_report.js]
 
     # rubocop:disable Style/OpenStructUse
