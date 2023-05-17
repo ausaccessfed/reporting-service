@@ -28,8 +28,8 @@ CMD ["bundle exec puma"]
 FROM base as geckodriver
 RUN yum -y update \
     && yum -y install \
-        tar \
-        wget \
+    tar \
+    wget \
     && yum -y clean all \
     && rm -rf /var/cache/yum
 
@@ -105,68 +105,67 @@ COPY --chown=app . .
 ARG RELEASE_VERSION="VERSION_PROVIDED_ON_BUILD"
 ENV RELEASE_VERSION $RELEASE_VERSION
 
-FROM development as production
 
-# FROM base as production
-# USER app
+FROM base as production
+USER app
 
-# COPY --from=dependencies /opt/.rbenv /opt/.rbenv
-# COPY --from=dependencies ${APP_DIR}/public ${APP_DIR}/public
-# COPY --from=dependencies /usr/lib64/mysql \
-#     /usr/lib64/libprocps.so.8 \
-#     /usr/lib64/libm.so.6 \
-#     /usr/lib64/liblz4.so.1 \
-#     /usr/lib64/liblzma.so.5 \
-#     /usr/lib64/libjpeg.so.62 \
-#     /usr/lib64/libIlmThread-3_1.so.30 \
-#     /usr/lib64/libMagickCore-6.Q16.so.7 \
-#     /usr/lib64/liblcms2.so.2 \
-#     /usr/lib64/libraqm.so.0 \
-#     /usr/lib64/liblqr-1.so.0 \
-#     /usr/lib64/libglib-2.0.so.0 \
-#     /usr/lib64/libxml2.so.2 \
-#     /usr/lib64/libfontconfig.so.1 \
-#     /usr/lib64/libfreetype.so.6 \
-#     /usr/lib64/libXext.so.6 \
-#     /usr/lib64/libSM.so.6 \
-#     /usr/lib64/libICE.so.6 \
-#     /usr/lib64/libX11.so.6 \
-#     /usr/lib64/libXt.so.6 \
-#     /usr/lib64/libbz2.so.1 \
-#     /usr/lib64/libz.so.1  \
-#     /usr/lib64/libltdl.so.7 \
-#     /usr/lib64/libgomp.so.1  \
-#     /usr/lib64/libgcc_s.so.1 \
-#     /usr/lib64/libcrypt.so.2  \
-#     /usr/lib64/libharfbuzz.so.0\
-#     /usr/lib64/libfribidi.so.0 \
-#     /usr/lib64/libpcre.so.1 \
-#     /usr/lib64/liblzma.so.5 \
-#     /usr/lib64/libpng16.so.16 \
-#     /usr/lib64/libbrotlidec.so.1 \
-#     /usr/lib64/libuuid.so.1 \
-#     /usr/lib64/libxcb.so.1 \
-#     /usr/lib64/libgraphite2.so.3 \
-#     /usr/lib64/libbrotlicommon.so.1 \
-#     /usr/lib64/libXau.so.6 \
-#     /usr/lib64/libMagickWand-6.Q16.so.7 \
-#     /usr/lib64/
-# COPY --from=dependencies /usr/local/bundle /usr/local/bundle
-# COPY --from=dependencies /usr/sbin/pidof /usr/sbin/pidof
-# COPY --from=dependencies ${APP_DIR}/.torba ${APP_DIR}/.torba
-# COPY --from=dependencies /usr/bin/node /usr/bin/
+COPY --from=dependencies /opt/.rbenv /opt/.rbenv
+COPY --from=dependencies ${APP_DIR}/public ${APP_DIR}/public
+COPY --from=dependencies /usr/lib64/mysql \
+    /usr/lib64/libprocps.so.8 \
+    /usr/lib64/libm.so.6 \
+    /usr/lib64/liblz4.so.1 \
+    /usr/lib64/liblzma.so.5 \
+    /usr/lib64/libjpeg.so.62 \
+    /usr/lib64/libIlmThread-3_1.so.30 \
+    /usr/lib64/libMagickCore-6.Q16.so.7 \
+    /usr/lib64/liblcms2.so.2 \
+    /usr/lib64/libraqm.so.0 \
+    /usr/lib64/liblqr-1.so.0 \
+    /usr/lib64/libglib-2.0.so.0 \
+    /usr/lib64/libxml2.so.2 \
+    /usr/lib64/libfontconfig.so.1 \
+    /usr/lib64/libfreetype.so.6 \
+    /usr/lib64/libXext.so.6 \
+    /usr/lib64/libSM.so.6 \
+    /usr/lib64/libICE.so.6 \
+    /usr/lib64/libX11.so.6 \
+    /usr/lib64/libXt.so.6 \
+    /usr/lib64/libbz2.so.1 \
+    /usr/lib64/libz.so.1  \
+    /usr/lib64/libltdl.so.7 \
+    /usr/lib64/libgomp.so.1  \
+    /usr/lib64/libgcc_s.so.1 \
+    /usr/lib64/libcrypt.so.2  \
+    /usr/lib64/libharfbuzz.so.0\
+    /usr/lib64/libfribidi.so.0 \
+    /usr/lib64/libpcre.so.1 \
+    /usr/lib64/liblzma.so.5 \
+    /usr/lib64/libpng16.so.16 \
+    /usr/lib64/libbrotlidec.so.1 \
+    /usr/lib64/libuuid.so.1 \
+    /usr/lib64/libxcb.so.1 \
+    /usr/lib64/libgraphite2.so.3 \
+    /usr/lib64/libbrotlicommon.so.1 \
+    /usr/lib64/libXau.so.6 \
+    /usr/lib64/libMagickWand-6.Q16.so.7 \
+    /usr/lib64/
+COPY --from=dependencies /usr/local/bundle /usr/local/bundle
+COPY --from=dependencies /usr/sbin/pidof /usr/sbin/pidof
+COPY --from=dependencies ${APP_DIR}/.torba ${APP_DIR}/.torba
+COPY --from=dependencies /usr/bin/node /usr/bin/
 
-# COPY --chown=app . .
+COPY --chown=app . .
 
-# RUN rm -rf spec \
-#     node_modules \
-#     docs \
-#     .yarn \
-#     .cache \
-#     /usr/local/bundle/cache/*.gem \
-#     tmp/cache \
-#     vendor/assets \
-#     lib/assets
+RUN rm -rf spec \
+    node_modules \
+    docs \
+    .yarn \
+    .cache \
+    /usr/local/bundle/cache/*.gem \
+    tmp/cache \
+    vendor/assets \
+    lib/assets
 
-# ARG RELEASE_VERSION="VERSION_PROVIDED_ON_BUILD"
-# ENV RELEASE_VERSION $RELEASE_VERSION
+ARG RELEASE_VERSION="VERSION_PROVIDED_ON_BUILD"
+ENV RELEASE_VERSION $RELEASE_VERSION
