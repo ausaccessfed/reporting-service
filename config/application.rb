@@ -23,7 +23,6 @@ module ReportingService
     config.autoloader = :zeitwerk
 
     config.assets.enabled = true
-    config.exceptions_app = ->(env) { ExceptionController.action(:show).call(env) }
     config.assets.precompile += %w[render_report.js]
 
     # rubocop:disable Style/OpenStructUse
