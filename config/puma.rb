@@ -33,8 +33,8 @@ unless ENV.fetch('STDOUT', nil).nil?
                   :append
 end
 
-lowlevel_error_handler do |ex, env|
-  Sentry.capture_exception(ex, message: ex.message, extra: { puma: env }, transaction: 'Puma')
-  [500, {}, ['An error has occurred, and engineers have been informed. Please reload the page.' \
-             " If you continue to have problems, contact support@aaf.edu.au.\n"]]
-end
+# lowlevel_error_handler do |ex, env|
+#   Sentry.capture_exception(ex, message: ex.message, extra: { puma: env }, transaction: 'Puma')
+#   [500, {}, ['An error has occurred, and engineers have been informed. Please reload the page.' \
+#              " If you continue to have problems, contact support@aaf.edu.au.\n"]]
+# end
