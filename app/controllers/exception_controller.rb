@@ -4,7 +4,7 @@ class ExceptionController < ApplicationController
   skip_before_action :ensure_authenticated
 
   # Response
-  respond_to :html, :xml, :json
+  # respond_to :html, :xml, :json
 
   # Dependencies
   before_action :status
