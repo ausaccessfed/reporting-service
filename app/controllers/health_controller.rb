@@ -4,10 +4,7 @@ class HealthController < ApplicationController
   skip_before_action :ensure_authenticated
 
   def self.redis
-    Redis.new(
-      url: Rails.application.config.reporting_service.redis[:url],
-      ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE }
-    )
+    Rails.application.config.redis_client
   end
 
   def show

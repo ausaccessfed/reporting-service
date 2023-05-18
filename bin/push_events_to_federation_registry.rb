@@ -45,7 +45,7 @@ class PushEventsToFederationRegistry
   private
 
   def redis
-    @redis ||= Redis.new
+    @redis ||= Rails.application.config.redis_client
   end
 
   INSERT_SQL = squeeze_sql %(

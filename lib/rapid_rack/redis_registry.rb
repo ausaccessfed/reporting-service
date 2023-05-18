@@ -8,7 +8,7 @@ module RapidRack
     end
 
     def redis
-      Redis.new
+      Rails.application.config.redis_client
     end
   end
 end

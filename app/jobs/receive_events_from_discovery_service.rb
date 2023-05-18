@@ -63,6 +63,6 @@ class ReceiveEventsFromDiscoveryService
   end
 
   def redis
-    @redis ||= Redis.new
+    @redis ||= Rails.application.config.redis_client
   end
 end
