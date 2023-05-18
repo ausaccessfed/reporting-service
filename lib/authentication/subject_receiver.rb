@@ -57,8 +57,7 @@ module Authentication
 
     def subject_scope(attrs)
       t = Subject.arel_table
-      Subject.where(t[:targeted_id].eq(attrs[:targeted_id])
-        .and(t[:shared_token].eq(attrs[:shared_token])))
+      Subject.where(t[:shared_token].eq(attrs[:shared_token]))
     end
   end
 end
