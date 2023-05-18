@@ -75,6 +75,7 @@ RSpec.describe Authentication::SubjectReceiver do
         expect(subject).to receive(:update_roles).with(an_instance_of(Subject))
         run
       end
+    end
 
     context '#finish' do
       context 'when request url is available' do
