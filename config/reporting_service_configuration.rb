@@ -101,7 +101,8 @@ module ReportingService
                   end
       {
         redis: {
-          url: redis_url
+          url: redis_url,
+          namespace: ENV.fetch('REDIS_NAMESPACE', 'reporting-service')
         }
       }
     end

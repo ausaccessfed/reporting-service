@@ -32,7 +32,7 @@ module ReportingService
     config.cache_store = [:redis_cache_store, {
       url: config.reporting_service.redis[:url],
       ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE },
-      namespace: 'reporting-service',
+      namespace: config.reporting_service.redis[:namespace],
       expire_in: 1.day
     }]
   end
