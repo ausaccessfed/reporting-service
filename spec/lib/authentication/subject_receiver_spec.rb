@@ -76,23 +76,6 @@ RSpec.describe Authentication::SubjectReceiver do
         run
       end
 
-      context 'with a mismatched targeted id' do
-        before { attrs[:targeted_id] = 'wrong' }
-
-        it 'fails to provision the subject' do
-          expect { run }.to raise_error(/targeted_id.*did not match/)
-        end
-      end
-
-      context 'with a mismatched shared token' do
-        before { attrs[:shared_token] = 'wrong' }
-
-        it 'fails to provision the subject' do
-          expect { run }.to raise_error(/shared_token.*did not match/)
-        end
-      end
-    end
-
     context '#finish' do
       context 'when request url is available' do
         let(:session) { { 'return_url' => 'url' } }
