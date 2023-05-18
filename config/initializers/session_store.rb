@@ -11,5 +11,3 @@
 # }
 
 # Rails.application.config.session_store(:redis_store, session_store_opts)
-Rails.application.config.session_store :active_record_store,
-                                       key: "_#{Rails.application.config.reporting_service.redis[:namespace]}_session"
