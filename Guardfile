@@ -43,8 +43,3 @@ guard 'brakeman', run_on_start: true, quiet: true do
   watch(%r{^lib/.+\.rb$})
   watch('Gemfile')
 end
-
-guard :unicorn, daemonize: true do
-  watch('Gemfile.lock')
-  watch(%r{^config/.+\.rb$})
-end
