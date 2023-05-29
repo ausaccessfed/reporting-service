@@ -4,7 +4,7 @@ redis_namespace = "#{Rails.application.config.reporting_service.redis[:namespace
 session_cookie_secure = false
 
 session_store_opts = {
-  redis_server: "#{Rails.application.config.reporting_service.redis[:url]}/#{redis_namespace}",
+  redis_server: "#{Rails.application.config.reporting_service.redis[:url]}/#{redis_namespace}?ssl_cert_reqs=CERT_NONE",
   expire_after: 3600,
   secure: session_cookie_secure,
   key: "_#{Rails.application.config.reporting_service.redis[:namespace]}-session"
