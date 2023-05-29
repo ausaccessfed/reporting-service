@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   get '/dashboard' => 'dashboard#index', as: 'dashboard'
   root to: 'welcome#index'
+  get 'health' => 'health#show'
 
   scope '/federation_reports' do
     get 'federation_growth_report' =>
@@ -80,4 +81,11 @@ Rails.application.routes.draw do
     post '/' => 'automated_reports#subscribe'
     delete '/:identifier' => 'automated_reports#destroy'
   end
+end
+
+RapidRack::Engine.routes.draw do
+  opts = Rails.application.config.reporting_service.rapid_connect[:rack]
+  authenticator = opts[:authenticator].constantize.new(opts)
+
+  mount authenticator => ''
 end

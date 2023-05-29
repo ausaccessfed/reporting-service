@@ -71,13 +71,13 @@ Rails.application.configure do
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
-
   if ENV['RAILS_LOG_TO_STDOUT'].present?
-    logger           = ActiveSupport::Logger.new($stdout)
+    logger           = ActiveSupport::Logger.new(ENV.fetch('STDOUT', $stdout))
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
+    config.lograge.enabled = true
+    config.lograge.ignore_actions = ['HealthController#show', 'WelcomeController#index']
   end
-
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 

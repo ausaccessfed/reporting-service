@@ -63,6 +63,12 @@ RSpec.describe SubscriberRegistrationsReport do
   end
 
   context 'report generation' do
+    context 'invalid indetifier' do
+      let(:report_type) { 'asdsad' }
+      it 'thows an error' do
+        expect { report }.to raise_error('Identifier is not valid!')
+      end
+    end
     context 'for an Organization' do
       let(:report_type) { 'organizations' }
       let(:title) { 'Registered Organizations' }

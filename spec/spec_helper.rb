@@ -2,7 +2,9 @@
 
 require 'simplecov'
 require 'fakeredis'
+require 'simplecov-console'
 
+SimpleCov.formatter = SimpleCov::Formatter::Console
 RSpec.configure do |config|
   config.before(:example) { Redis::Connection::Memory.reset_all_databases }
 
@@ -13,16 +15,13 @@ RSpec.configure do |config|
   config.mock_with :rspec do |mocks|
     mocks.verify_partial_doubles = true
   end
-
   config.filter_run :focus
   config.run_all_when_everything_filtered = true
+  # config.disable_monkey_patching!
 
   config.example_status_persistence_file_path = 'spec/examples.txt'
 
-  config.disable_monkey_patching!
-
   config.order = :random
   Kernel.srand config.seed
-
   RSpec::Matchers.define_negated_matcher :not_change, :change
 end

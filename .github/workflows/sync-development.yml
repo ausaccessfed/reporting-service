@@ -1,0 +1,20 @@
+name: Sync development
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * SUN"
+
+jobs:
+  call-development-sync:
+    concurrency:
+      group: sync-development
+      cancel-in-progress: true
+    uses: ausaccessfed/workflows/.github/workflows/sync-development.yml@main
+    with:
+      ecr_repository: reporting-service
+      app: reporting-service
+      sha: ${{ github.sha }}
+    secrets: inherit
+    permissions:
+      id-token: write
+      contents: read

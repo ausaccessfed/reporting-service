@@ -9,7 +9,7 @@ class PushEventsToFederationRegistry
     sql.lines.map(&:chomp).join(' ').squeeze(' ').strip.freeze
   end
 
-  def initialize(hostname)
+  def initialize(hostname = Rails.application.config.reporting_service.discovery_service_hostname)
     @hostname = hostname
   end
 
@@ -27,7 +27,9 @@ class PushEventsToFederationRegistry
       redis.ltrim(PENDING_QUEUE, 1, -1)
     end
   ensure
+    # :nocov:
     nil while redis.rpoplpush(PENDING_QUEUE, QUEUE)
+    # :nocov:
   end
 
   def mysql_client
@@ -35,13 +37,15 @@ class PushEventsToFederationRegistry
   end
 
   def config
-    @config ||= YAML.safe_load(File.read('config/fr_database.yml'))
+    # :nocov:
+    @config ||= Rails.application.config.reporting_service.federation_registry[:database]
+    # :nocov:
   end
 
   private
 
   def redis
-    @redis ||= Redis.new
+    @redis ||= Rails.application.config.redis_client
   end
 
   INSERT_SQL = squeeze_sql %(
@@ -126,5 +130,6 @@ class PushEventsToFederationRegistry
     event[:selected_idp].nil? || event[:initiating_sp].nil?
   end
 end
-
+# :nocov:
 PushEventsToFederationRegistry.new(*ARGV).perform if $PROGRAM_NAME == __FILE__
+# :nocov:

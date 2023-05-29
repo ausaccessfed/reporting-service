@@ -8,6 +8,7 @@ require 'active_record/railtie'
 require 'action_controller/railtie'
 require 'action_view/railtie'
 require 'sprockets/railtie'
+require_relative 'reporting_service_configuration'
 
 Bundler.require(*Rails.groups)
 
@@ -21,15 +22,23 @@ module ReportingService
 
     config.autoloader = :zeitwerk
 
+    config.assets.enabled = true
     config.assets.precompile += %w[render_report.js]
 
-    config.rapid_rack.receiver = 'Authentication::SubjectReceiver'
+    # rubocop:disable Style/OpenStructUse
+    config.reporting_service = OpenStruct.new(ReportingService::Configuration.build_configuration)
+    # rubocop:enable Style/OpenStructUse
 
-    config.active_record.logger = Logger.new($stderr) if ENV['AAF_DEBUG']
-
-    config.cache_store = :redis_store,
-                         'redis://127.0.0.1/0/reporting-service-cache',
-                         { expire_in: 1.day }
+    config.cache_store = [:redis_cache_store, {
+      url: config.reporting_service.redis[:url],
+      ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE },
+      namespace: config.reporting_service.redis[:namespace],
+      expire_in: 1.day
+    }]
+    config.redis_client = Redis.new(
+      url: Rails.application.config.reporting_service.redis[:url],
+      ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE }
+    )
   end
 end
 

@@ -2,55 +2,41 @@
 
 require 'mail'
 require 'aws-sdk-sqs'
-# rubocop:disable Style/OpenStructUse
 Rails.application.configure do
-  app_config_file = Rails.root.join('config', 'reporting_service.yml')
-  app_config = YAML.safe_load(app_config_file.read)
-  config.reporting_service = OpenStruct.new(app_config.deep_symbolize_keys)
-
-  mail_config = config.reporting_service.mail
+  mail_config = config.reporting_service[:mail]
   Mail.defaults { delivery_method :smtp, mail_config }
 
   if Rails.env.test?
-    config.reporting_service.ide = {
-      host: 'ide.example.edu',
-      cert: 'spec/api.crt',
-      key: 'spec/api.key',
-      admin_entitlements: ['urn:mace:aaf.edu.au:ide:internal:aaf-admin',
-                           'urn:mace:aaf.edu.au:ide:internal:aaf-reporting'],
-      federation_object_entitlement_prefix: 'urn:mace:aaf.edu.au:ide:internal'
+    config.reporting_service.federation_registry[:host] = 'manager.example.edu'
+    config.reporting_service.federation_registry[:secret] = 'abcdef'
+
+    config.reporting_service.rapid_connect[:rack][:url] = 'https://rapid.example.com/jwt/authnrequest/research/0vs2aoAbd5bH6HRK'
+    config.reporting_service.rapid_connect[:rack][:secret] = '5>O+`=2x%`\=.""f,6KDxV2p|MEE*P<]'
+    config.reporting_service.rapid_connect[:rack][:issuer] = 'https://rapid.example.com'
+    config.reporting_service.rapid_connect[:rack][:audience] = 'https://service.example.com'
+
+    config.reporting_service.rapid_connect[:host] = 'rapid.example.edu'
+    config.reporting_service.rapid_connect[:secret] = 'fedcba'
+    config.reporting_service.version = 'VERSION_PROVIDED_ON_BUILD'
+
+    config.reporting_service.sqs[:fake] = false
+    config.reporting_service.sqs[:region] = 'dummy'
+    config.reporting_service.sqs[:endpoint] = 'https://dummy.sqs.example.edu'
+    config.reporting_service.sqs[:encryption_key] = 'spec/encryption_key.pem'
+    config.reporting_service.sqs[:queues] = {
+      discovery: 'https://dummy.sqs.example.edu/queue/discovery-service-test'
     }
 
-    config.reporting_service.federationregistry = {
-      host: 'manager.example.edu',
-      secret: 'abcdef'
-    }
-
-    config.reporting_service.rapidconnect = {
-      host: 'rapid.example.edu',
-      secret: 'fedcba'
-    }
-
-    config.reporting_service.sqs = {
-      fake: false,
-      region: 'dummy',
-      endpoint: 'https://dummy.sqs.example.edu',
-      encryption_key: 'spec/encryption_key.pem',
-      queues: {
-        discovery: 'https://dummy.sqs.example.edu/queue/discovery-service-test'
-      }
-    }
-
-    config.reporting_service.url_options = { base_url: 'example.com' }
+    config.reporting_service.url_options[:base_url] = 'example.com'
     Aws.config.update(stub_responses: true)
 
-    config.reporting_service.mail = OpenStruct.new(from: 'noreply@example.com')
+    config.reporting_service.mail[:from] = 'noreply@example.com'
     config.reporting_service.environment_string = 'Test'
 
     Mail.defaults { delivery_method :test }
   end
 
-  sqs_config = config.reporting_service.sqs
+  sqs_config = config.reporting_service[:sqs]
   if sqs_config[:fake]
     begin
       sqs_client = Aws::SQS::Client.new(region: sqs_config[:region],
@@ -65,5 +51,3 @@ Rails.application.configure do
     end
   end
 end
-
-# rubocop:enable Style/OpenStructUse

@@ -23,7 +23,8 @@ class AutomatedReportsController < AutomatedReports
     object = subscriptions.find_by(identifier: params[:identifier])
     name = object.automated_report.target_name
 
-    flash[:target_name] = name if object.destroy
+    object.destroy
+    flash[:target_name] = name
 
     redirect_to automated_reports_path
   end

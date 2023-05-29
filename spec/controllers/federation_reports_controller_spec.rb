@@ -43,6 +43,32 @@ RSpec.describe FederationReportsController, type: :controller do
         expect(assigns[:data]).to eq('{"b":2}')
       end
     end
+
+    context 'without source set' do
+      def run
+        allow(Rails.application.config.reporting_service).to receive(:default_session_source).and_return(nil)
+
+        expect_any_instance_of(report_class).to receive(:generate)
+          .and_return(data)
+        get route_value.to_sym
+      end
+
+      it 'assigns the report data' do
+        expect(assigns[:data]).to eq('{"a":1}')
+      end
+    end
+
+    context 'without source set' do
+      def run
+        expect_any_instance_of(report_class).to receive(:generate)
+          .and_return(data)
+        get route_value.to_sym, params: { source: Rails.application.config.reporting_service.default_session_source }
+      end
+
+      it 'assigns the report data' do
+        expect(assigns[:data]).to eq('{"a":1}')
+      end
+    end
   end
 
   context 'get :federation_growth' do

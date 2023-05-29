@@ -22,4 +22,10 @@ task brakeman: :environment do
   end
 end
 
+task write_public_errors: :environment do
+  StaticErrors.write_public_error_files
+end
+
+Rake::Task['assets:precompile'].enhance { Rake::Task['write_public_errors'].invoke }
+
 task default: %i[rubocop spec brakeman]

@@ -9,15 +9,14 @@ RSpec.describe Role, type: :model do
   let(:admin) { 'a:b:c:admin' }
   let(:admin_reporting) { 'a:b:c:reporting' }
   let(:prefix) { 'a:b:c' }
-
+  let(:admin_entitlements) { [admin, admin_reporting] }
   let(:config) do
-    { admin_entitlements: [admin, admin_reporting],
+    { admin_entitlements: admin_entitlements,
       federation_object_entitlement_prefix: prefix }
   end
 
   before do
-    allow(Rails.application)
-      .to receive_message_chain(:config, :reporting_service, :ide)
+    allow(Rails.application.config.reporting_service).to receive(:ide)
       .and_return(config)
   end
 
@@ -29,6 +28,22 @@ RSpec.describe Role, type: :model do
     end
 
     subject { -> { run } }
+
+    context 'when admin_entitlements is missing ' do
+      let(:admin_entitlements) { nil }
+      let!(:role) { create(:role, entitlement: entitlement) }
+      it { is_expected.not_to change(Role, :count) }
+
+      it 'returns the existing role' do
+        expect(run).to eq(role)
+      end
+
+      it 'updates the permissions' do
+        expect_any_instance_of(Role)
+          .to receive(:update_permissions).and_call_original
+        run
+      end
+    end
 
     context 'when the role exists' do
       let!(:role) { create(:role, entitlement: entitlement) }

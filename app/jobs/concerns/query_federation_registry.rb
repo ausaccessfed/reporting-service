@@ -33,10 +33,6 @@ module QueryFederationRegistry
   end
 
   def fr_config
-    configuration.federationregistry
-  end
-
-  def configuration
-    Rails.application.config.reporting_service
+    Rails.application.config.reporting_service.federation_registry
   end
 end

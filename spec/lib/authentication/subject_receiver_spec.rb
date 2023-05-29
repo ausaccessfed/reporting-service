@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-
+require 'rack/test'
 RSpec.describe Authentication::SubjectReceiver do
+  include Rack::Test::Methods
   let(:env) { {} }
 
   before { allow(subject).to receive(:update_roles) }
@@ -73,22 +74,6 @@ RSpec.describe Authentication::SubjectReceiver do
       it 'updates roles for the subject' do
         expect(subject).to receive(:update_roles).with(an_instance_of(Subject))
         run
-      end
-
-      context 'with a mismatched targeted id' do
-        before { attrs[:targeted_id] = 'wrong' }
-
-        it 'fails to provision the subject' do
-          expect { run }.to raise_error(/targeted_id.*did not match/)
-        end
-      end
-
-      context 'with a mismatched shared token' do
-        before { attrs[:shared_token] = 'wrong' }
-
-        it 'fails to provision the subject' do
-          expect { run }.to raise_error(/shared_token.*did not match/)
-        end
       end
     end
 

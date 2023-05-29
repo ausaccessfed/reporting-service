@@ -1,0 +1,15 @@
+/.git
+/.github
+/.idea
+/.vscode
+/Dockerfile
+/compose.yml
+/copilot
+/coverage
+/docs
+/dump.rdb
+/log
+/public/assets
+/tmp
+./coverage
+.env*

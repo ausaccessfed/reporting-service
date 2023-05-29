@@ -1,5 +1,0 @@
----
-url: 'https://rapid.test.aaf.edu.au/jwt/authnrequest/auresearch/29MDwRXGUEY5fVOM'
-secret: 'hL9NM4Y8Q6RU85//b8xJ325yL1D5kzanTMX9IrNygQm'
-issuer: 'https://rapid.test.aaf.edu.au'
-audience: 'http://localhost:8080'

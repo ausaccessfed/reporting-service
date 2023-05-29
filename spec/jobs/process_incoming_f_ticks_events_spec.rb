@@ -20,7 +20,7 @@ RSpec.describe ProcessIncomingFTicksEvents do
   end
 
   context 'Process IncomingFTicksEvents' do
-    it 'should create an instance of FederatedLoginEvent'\
+    it 'should create an instance of FederatedLoginEvent' \
        'and delete IncomingFTicksEvent' do
       expect { run }.to(
         change(FederatedLoginEvent, :count).by(10)
