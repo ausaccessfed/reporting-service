@@ -59,7 +59,7 @@ class ReceiveEventsFromDiscoveryService
   end
 
   def key
-    @key ||= OpenSSL::PKey::RSA.new(File.read(sqs_config[:encryption_key]))
+    @key ||= OpenSSL::PKey::RSA.new(sqs_config[:encryption_key])
   end
 
   def redis
