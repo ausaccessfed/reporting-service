@@ -21,14 +21,11 @@ gem 'valhammer'
 gem 'aaf-lipstick', '>= 4.5.1'
 gem 'aws-sdk-sqs', '~> 1'
 gem 'json-jwt'
+gem 'puma'
 gem 'rmagick', '~> 2.16'
 gem 'sentry-rails'
 gem 'sentry-ruby'
 gem 'torba-rails'
-
-gem 'god', require: false
-gem 'puma'
-gem 'unicorn', require: false
 # rubocop:disable Metrics/BlockLength
 group :development, :test do
   gem 'database_cleaner'
@@ -61,7 +58,6 @@ group :development, :test do
   gem 'guard-bundler', require: false
   gem 'guard-rspec', require: false
   gem 'guard-rubocop', require: false
-  gem 'guard-unicorn', require: false
   gem 'rack-test', require: false
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false

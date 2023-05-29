@@ -139,7 +139,6 @@ GEM
     formatador (1.1.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
-    god (0.13.7)
     guard (2.18.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -165,8 +164,6 @@ GEM
     guard-rubocop (1.5.0)
       guard (~> 2.0)
       rubocop (< 2.0)
-    guard-unicorn (0.2.0)
-      guard (>= 1.1)
     hashdiff (1.0.1)
     i18n (1.13.0)
       concurrent-ruby (~> 1.0)
@@ -179,7 +176,6 @@ GEM
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
-    kgio (2.11.4)
     kramdown (2.4.0)
       rexml
     launchy (2.5.0)
@@ -276,7 +272,6 @@ GEM
       rake (>= 12.2)
       thor (~> 1.0)
     rainbow (3.1.1)
-    raindrops (0.20.0)
     rake (13.0.6)
     rb-fsevent (0.11.1)
     rb-inotify (0.10.1)
@@ -401,9 +396,6 @@ GEM
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (2.1.0)
-    unicorn (6.1.0)
-      kgio (~> 2.6)
-      raindrops (~> 0.7)
     valhammer (1.0.0)
       activerecord (> 4.1)
       activesupport (> 4.1)
@@ -440,13 +432,11 @@ DEPENDENCIES
   factory_bot_rails (~> 4.11)
   faker
   fakeredis
-  god
   guard
   guard-brakeman
   guard-bundler
   guard-rspec
   guard-rubocop
-  guard-unicorn
   implicit-schema
   jbuilder
   json-jwt
@@ -477,7 +467,6 @@ DEPENDENCIES
   timecop
   torba-rails
   uglifier
-  unicorn
   valhammer
   webmock
 

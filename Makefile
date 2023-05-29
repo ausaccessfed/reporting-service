@@ -30,7 +30,8 @@ run-image-bash:
 
 
 run-image:
-	docker run --rm -p ${PORT}:${PORT} --name reporting-service --env-file=.env \
+	docker run --rm -p ${PORT}:${PORT} \
+	--name reporting-service --env-file=.env \
 	-v ${PWD}/db:/app/db \
 	-v ${PWD}/lib:/app/lib \
 	-v ${PWD}/app:/app/app \
