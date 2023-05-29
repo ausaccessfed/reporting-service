@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 redis_namespace = "#{Rails.application.config.reporting_service.redis[:namespace]}:#{Rails.env}:session"
-session_cookie_secure = false
+session_cookie_secure = Rails.env.production?
 
 session_store_opts = {
   redis_server: "#{Rails.application.config.reporting_service.redis[:url]}/#{redis_namespace}?ssl_cert_reqs=CERT_NONE",
