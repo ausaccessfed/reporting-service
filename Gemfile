@@ -10,12 +10,12 @@ gem 'mysql2'
 gem 'slim'
 gem 'uglifier', require: false
 
-gem 'redis'
-gem 'redis-rails'
-
 gem 'accession'
+gem 'activerecord-session_store'
 gem 'implicit-schema'
 gem 'lograge'
+gem 'redis'
+gem 'redis-rails'
 gem 'valhammer'
 
 gem 'aaf-lipstick', '>= 4.5.1'
