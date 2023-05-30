@@ -31,7 +31,7 @@ module ReportingService
           fake: ENV.fetch('SQS_FAKE', false),
           region: ENV.fetch('SQS_REGION', 'localhost'),
           endpoint: ENV.fetch('SQS_ENDPOINT', 'http://localhost:9324'),
-          encryption_key: ENV.fetch('SQS_DS_EVENT_ENCRYPTION_KEY', 'config/event_encryption_key.pem'),
+          encryption_key: ENV.fetch('SQS_DS_EVENT_ENCRYPTION_KEY', ''),
           queues: {
             discovery: ENV.fetch('SQS_DS_EVENT_QUEUE', 'http://localhost:9324/queue/discovery-service-development')
           }
