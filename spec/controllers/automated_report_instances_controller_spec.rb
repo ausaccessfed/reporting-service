@@ -5,9 +5,9 @@ require 'rails_helper'
 RSpec.describe AutomatedReportInstancesController, type: :controller do
   let(:organization) { create :organization }
   let(:attribute) { create :saml_attribute }
-  let(:sp) { create :service_provider, organization: organization }
+  let(:sp) { create :service_provider, organization: }
   let(:unknown_sp) { create :service_provider }
-  let(:idp) { create :identity_provider, organization: organization }
+  let(:idp) { create :identity_provider, organization: }
   let(:unknown_idp) { create :identity_provider }
 
   let(:user) do
@@ -21,7 +21,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   end
 
   def run(identifier)
-    get :show, params: { identifier: identifier }
+    get :show, params: { identifier: }
   end
 
   before do
@@ -33,9 +33,9 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
 
     let(:auto_report) do
       create :automated_report,
-             target: target,
-             report_class: report_class,
-             source: source
+             target:,
+             report_class:,
+             source:
     end
 
     let!(:instance) do
@@ -116,8 +116,8 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     let(:auto_report) do
       create :automated_report,
              target: object.entity_id,
-             report_class: report_class,
-             source: source
+             report_class:,
+             source:
     end
 
     let!(:instance) do
@@ -128,8 +128,8 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     let!(:unknown_auto_report) do
       create :automated_report,
              target: unknown_object.entity_id,
-             report_class: report_class,
-             source: source
+             report_class:,
+             source:
     end
 
     let!(:unknown_instance) do
@@ -235,7 +235,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   shared_examples 'Automated Subscriber Registrations Report' do
     let(:auto_report) do
       create :automated_report,
-             target: target,
+             target:,
              report_class: 'SubscriberRegistrationsReport'
     end
 

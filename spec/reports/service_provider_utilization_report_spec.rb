@@ -20,7 +20,7 @@ RSpec.describe ServiceProviderUtilizationReport do
     let(:target) { :initiating_sp }
     def create_event(timestamp, eid)
       create :discovery_service_event, :response,
-             target => eid, timestamp: timestamp
+             target => eid, timestamp:
     end
 
     let(:source) { 'DS' }
@@ -32,7 +32,7 @@ RSpec.describe ServiceProviderUtilizationReport do
   context 'ServiceProviderUtilizationReport with IdP sessions' do
     let(:target) { :relying_party }
     def create_event(timestamp, eid)
-      create :federated_login_event, :OK, target => eid, timestamp: timestamp
+      create :federated_login_event, :OK, target => eid, timestamp:
     end
 
     let(:source) { 'IdP' }

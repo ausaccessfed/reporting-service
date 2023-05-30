@@ -11,7 +11,7 @@ RSpec.describe Role, type: :model do
   let(:prefix) { 'a:b:c' }
   let(:admin_entitlements) { [admin, admin_reporting] }
   let(:config) do
-    { admin_entitlements: admin_entitlements,
+    { admin_entitlements:,
       federation_object_entitlement_prefix: prefix }
   end
 
@@ -31,7 +31,7 @@ RSpec.describe Role, type: :model do
 
     context 'when admin_entitlements is missing ' do
       let(:admin_entitlements) { nil }
-      let!(:role) { create(:role, entitlement: entitlement) }
+      let!(:role) { create(:role, entitlement:) }
       it { is_expected.not_to change(Role, :count) }
 
       it 'returns the existing role' do
@@ -46,7 +46,7 @@ RSpec.describe Role, type: :model do
     end
 
     context 'when the role exists' do
-      let!(:role) { create(:role, entitlement: entitlement) }
+      let!(:role) { create(:role, entitlement:) }
       it { is_expected.not_to change(Role, :count) }
 
       it 'returns the existing role' do
@@ -67,7 +67,7 @@ RSpec.describe Role, type: :model do
         result = run
         expect(result).to eq(Role.last)
         expect(result).to have_attributes(name: 'auto',
-                                          entitlement: entitlement)
+                                          entitlement:)
       end
 
       it 'updates the permissions' do

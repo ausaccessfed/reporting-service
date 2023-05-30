@@ -59,10 +59,10 @@ RSpec.describe TabularReport do
     let(:header) { [['Column 1', 'Column 2', 'Column 3']] }
     let(:footer) { [['Footer 1', 'Footer 2', 'Footer 3']] }
 
-    it { is_expected.to include(title: title) }
+    it { is_expected.to include(title:) }
     it { is_expected.to include(rows: report_rows) }
     it { is_expected.to include(type: 'test-table') }
-    it { is_expected.to include(header: header) }
-    it { is_expected.to include(footer: footer) }
+    it { is_expected.to include(header:) }
+    it { is_expected.to include(footer:) }
   end
 end

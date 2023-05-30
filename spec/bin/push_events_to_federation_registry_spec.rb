@@ -141,9 +141,9 @@ RSpec.describe PushEventsToFederationRegistry do
 
       let(:event) do
         attributes_for(:discovery_service_event, :response,
-                       selection_method: selection_method,
-                       initiating_sp: initiating_sp,
-                       selected_idp: selected_idp)
+                       selection_method:,
+                       initiating_sp:,
+                       selected_idp:)
       end
 
       let!(:idp_fr_id) { create_fr_idp(selected_idp) }
@@ -161,7 +161,7 @@ RSpec.describe PushEventsToFederationRegistry do
         {
           version: 0,
           date_created: event[:timestamp],
-          ds_host: ds_host,
+          ds_host:,
           idp_entity: selected_idp,
           idpid: idp_fr_id,
           request_type: 'DS Request',
@@ -223,8 +223,8 @@ RSpec.describe PushEventsToFederationRegistry do
       context 'when the idp entity_id is missing' do
         let(:event) do
           attributes_for(:discovery_service_event, :response,
-                         selection_method: selection_method,
-                         initiating_sp: initiating_sp,
+                         selection_method:,
+                         initiating_sp:,
                          selected_idp: nil)
         end
 
@@ -240,9 +240,9 @@ RSpec.describe PushEventsToFederationRegistry do
       context 'when the idp entity_id is missing' do
         let(:event) do
           attributes_for(:discovery_service_event, :response,
-                         selection_method: selection_method,
+                         selection_method:,
                          initiating_sp: nil,
-                         selected_idp: selected_idp)
+                         selected_idp:)
         end
 
         it 'skips the record' do

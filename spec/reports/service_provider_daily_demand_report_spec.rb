@@ -48,7 +48,7 @@ RSpec.describe ServiceProviderDailyDemandReport do
     it 'should include title, units and labels' do
       output_title = "#{title} #{service_provider_01.name} (#{source_name})"
       expect(report).to include(title: output_title,
-                                units: units, labels: labels, range: range)
+                                units:, labels:, range:)
     end
 
     it 'sessions generated within given range' do
@@ -129,7 +129,7 @@ RSpec.describe ServiceProviderDailyDemandReport do
       create :discovery_service_event, :response,
              { selected_idp: idp,
                initiating_sp: sp,
-               timestamp: timestamp }.compact
+               timestamp: }.compact
     end
 
     let(:source) { 'DS' }
@@ -144,7 +144,7 @@ RSpec.describe ServiceProviderDailyDemandReport do
       create :federated_login_event, :OK,
              { asserting_party: idp,
                relying_party: sp,
-               timestamp: timestamp }.compact
+               timestamp: }.compact
     end
 
     let(:source) { 'IdP' }

@@ -12,7 +12,7 @@ RSpec.feature 'Administrator Reports' do
       %w[monthly quarterly yearly].each do |interval|
         given!("auto_report_#{identifier}_#{interval}".to_sym) do
           create :automated_report,
-                 interval: interval,
+                 interval:,
                  target: identifier,
                  report_class: 'SubscriberRegistrationsReport'
         end

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.feature 'Identity Provider Reports' do
   given(:organization) { create :organization }
-  given(:idp) { create :identity_provider, organization: organization }
+  given(:idp) { create :identity_provider, organization: }
   given(:user) { create :subject }
 
   describe 'subject with permissions' do

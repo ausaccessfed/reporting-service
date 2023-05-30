@@ -4,7 +4,7 @@ RSpec.shared_examples 'a Subscriber Report' do
   let(:organization) { create :organization }
 
   let(:object) do
-    create "#{prefix}_provider".to_sym, organization: organization
+    create "#{prefix}_provider".to_sym, organization:
   end
 
   let(:bad_object) { create "#{prefix}_provider".to_sym }

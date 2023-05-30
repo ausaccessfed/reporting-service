@@ -44,6 +44,6 @@ class TimeSeriesReport
     title = @title
     title += " (#{source_name})" if @source.present?
 
-    self.class.options.merge(title: title, data: data, range: range).compact
+    self.class.options.merge(title:, data:, range:).compact
   end
 end

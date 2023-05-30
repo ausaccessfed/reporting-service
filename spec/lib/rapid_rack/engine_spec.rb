@@ -53,7 +53,7 @@ RSpec.describe RapidRack::Engine, type: :feature do
     let(:session) { {} }
 
     def run
-      post '/auth/jwt', params: { assertion: assertion }
+      post '/auth/jwt', params: { assertion: }
     end
 
     it 'creates the subject' do
@@ -78,7 +78,7 @@ RSpec.describe RapidRack::Engine, type: :feature do
 
       context 'when sesssion' do
         def run
-          post '/auth/jwt', params: { assertion: assertion }
+          post '/auth/jwt', params: { assertion: }
           get '/auth/logout'
         end
         it 'should redirect to / and reset session' do

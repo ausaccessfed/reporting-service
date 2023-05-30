@@ -19,7 +19,7 @@ module ReportingService
 
     def base_config
       {
-        version: version,
+        version:,
         discovery_service_hostname: ENV.fetch('DISCOVERY_SERVICE_HOSTNAME', 'ds.test.aaf.edu.au'),
         rapid_connect: {
           host: ENV.fetch('RAPID_CONNECT_HOST', 'rapid.test.aaf.edu.au'),
@@ -69,7 +69,7 @@ module ReportingService
         secret: ENV.fetch('RAPID_CONNECT_RACK_SECRET', 'hL9NM4Y8Q6RU85//b8xJ325yL1D5kzanTMX9IrNygQm'),
         issuer: ENV.fetch('RAPID_CONNECT_RACK_ISSUER', 'https://rapid.test.aaf.edu.au'),
         audience: ENV.fetch('RAPID_CONNECT_RACK_AUDIENCE', 'http://localhost:8082'),
-        authenticator: authenticator,
+        authenticator:,
         receiver: 'Authentication::SubjectReceiver',
         error_handler: nil
       }

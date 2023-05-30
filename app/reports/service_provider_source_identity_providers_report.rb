@@ -8,7 +8,7 @@ class ServiceProviderSourceIdentityProvidersReport < TabularReport
   footer
 
   def initialize(entity_id, start, finish, source)
-    @service_provider = ServiceProvider.find_by(entity_id: entity_id)
+    @service_provider = ServiceProvider.find_by(entity_id:)
     title = "SP Source Identity Providers Report for #{@service_provider.name}"
     @start = start
     @finish = finish

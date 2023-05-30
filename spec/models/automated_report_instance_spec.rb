@@ -38,14 +38,14 @@ RSpec.describe AutomatedReportInstance, type: :model do
 
     let(:automated_report) do
       create(:automated_report,
-             report_class: report_class, source: source,
-             target: target, interval: interval)
+             report_class:, source:,
+             target:, interval:)
     end
 
     subject do
       create(:automated_report_instance,
-             automated_report: automated_report,
-             range_end: range_end)
+             automated_report:,
+             range_end:)
     end
 
     let(:report) { subject.materialize }

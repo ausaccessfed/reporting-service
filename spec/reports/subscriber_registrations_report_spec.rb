@@ -20,8 +20,8 @@ RSpec.describe SubscriberRegistrationsReport do
     end
 
     it 'produces title, header and type' do
-      expect(report).to include(title: title,
-                                header: header, type: type)
+      expect(report).to include(title:,
+                                header:, type:)
     end
 
     context 'when all objects are activated' do

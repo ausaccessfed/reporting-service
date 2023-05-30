@@ -12,7 +12,7 @@ module API
     private_constant :Unauthorized
     rescue_from Unauthorized, with: :unauthorized
 
-    protect_from_forgery with: :null_session
+    protect_from_forgery with: :exception
     before_action :ensure_authenticated
     after_action :ensure_access_checked
 
@@ -21,7 +21,7 @@ module API
     protected
 
     def ensure_authenticated
-      @subject = APISubject.find_by(x509_cn: x509_cn)
+      @subject = APISubject.find_by(x509_cn:)
       raise(Unauthorized, 'Subject invalid') unless @subject
       raise(Unauthorized, 'Subject not functional') unless @subject.functioning?
     end
@@ -63,12 +63,12 @@ module API
     def unauthorized(exception)
       message = 'SSL client failure.'
       error = exception.message
-      render json: { message: message, error: error }, status: :unauthorized
+      render json: { message:, error: }, status: :unauthorized
     end
 
     def forbidden(_exception)
       message = 'The request was understood but explicitly denied.'
-      render json: { message: message }, status: :forbidden
+      render json: { message: }, status: :forbidden
     end
   end
 end

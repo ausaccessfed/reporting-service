@@ -29,8 +29,8 @@ RSpec.describe ServiceProviderSourceIdentityProvidersReport do
   shared_examples 'SP Source IdPs Report' do
     it 'output should include :type, :title, :header and :footer' do
       output_title = "#{title} #{sp.name} (#{source_name})"
-      expect(report).to include(type: type,
-                                title: output_title, header: header)
+      expect(report).to include(type:,
+                                title: output_title, header:)
     end
   end
 
@@ -64,7 +64,7 @@ RSpec.describe ServiceProviderSourceIdentityProvidersReport do
       create :discovery_service_event, :response,
              { selected_idp: idp_entity_id,
                initiating_sp: sp_entity_id,
-               timestamp: timestamp }.compact
+               timestamp: }.compact
     end
 
     let(:source) { 'DS' }
@@ -79,7 +79,7 @@ RSpec.describe ServiceProviderSourceIdentityProvidersReport do
       create :federated_login_event, :OK,
              { asserting_party: idp_entity_id,
                relying_party: sp_entity_id,
-               timestamp: timestamp }.compact
+               timestamp: }.compact
     end
 
     let(:source) { 'IdP' }

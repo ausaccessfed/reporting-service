@@ -13,7 +13,7 @@ RSpec.describe FederatedLoginEvent, type: :model do
         '#RESULT=OK#'
     end
 
-    let!(:incoming_event) { create :incoming_f_ticks_event, data: data }
+    let!(:incoming_event) { create :incoming_f_ticks_event, data: }
 
     subject { FederatedLoginEvent.new }
 

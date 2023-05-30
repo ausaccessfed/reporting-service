@@ -240,7 +240,7 @@ RSpec.describe TimeSeriesReport::Lint do
   context 'when the data precedes the start of the time range' do
     let(:output) do
       data = valid_output[:data].merge(series_a: [[-1, 0]])
-      valid_output.merge(data: data)
+      valid_output.merge(data:)
     end
 
     fails_with 'data for series_a is outside time range'
@@ -250,7 +250,7 @@ RSpec.describe TimeSeriesReport::Lint do
     let(:output) do
       t = 14 * 24 * 3600
       data = valid_output[:data].merge(series_a: [[t, 0]])
-      valid_output.merge(data: data)
+      valid_output.merge(data:)
     end
 
     fails_with 'data for series_a is outside time range'
@@ -259,7 +259,7 @@ RSpec.describe TimeSeriesReport::Lint do
   context 'when the data is unsorted' do
     let(:output) do
       data = valid_output[:data].merge(series_a: [[60, 1], [30, 2], [0, 3]])
-      valid_output.merge(data: data)
+      valid_output.merge(data:)
     end
 
     fails_with 'data for series_a is unsorted'
@@ -268,7 +268,7 @@ RSpec.describe TimeSeriesReport::Lint do
   context 'when a data point is non-numeric' do
     let(:output) do
       data = valid_output[:data].merge(series_a: [0, 'a'])
-      valid_output.merge(data: data)
+      valid_output.merge(data:)
     end
 
     fails_with 'data for series_a is not numeric'

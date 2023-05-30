@@ -52,7 +52,7 @@ RSpec.describe ServiceCompatibilityReport do
 
     it 'must contain type, header, title' do
       title = "Service Compatibility for #{service_provider_01.name}"
-      expect(report).to include(type: type, title: title, header: header)
+      expect(report).to include(type:, title:, header:)
     end
 
     it 'should count required and optional attributes provider by IdP' do
