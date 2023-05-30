@@ -68,7 +68,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
       let(:messages) do
         message_bodies.zip(receipt_handles).map do |(body, receipt_handle)|
           double(Aws::SQS::Types::Message,
-                 receipt_handle: receipt_handle, body: body)
+                 receipt_handle:, body:)
         end
       end
 
@@ -80,7 +80,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
 
       before do
         allow(client).to receive(:receive_message)
-          .with(queue_url: sqs_config[:queues][:discovery])
+          .with({ queue_url: sqs_config[:queues][:discovery] })
           .and_return(*receive_message_results, empty_result)
 
         allow(client).to receive(:delete_message).with(any_args)
@@ -114,17 +114,17 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
       let(:messages) do
         [
           double(Aws::SQS::Types::Message,
-                 receipt_handle: receipt_handle, body: message_body)
+                 receipt_handle:, body: message_body)
         ]
       end
 
       let(:receive_message_result) do
-        double(Aws::SQS::Types::ReceiveMessageResult, messages: messages)
+        double(Aws::SQS::Types::ReceiveMessageResult, messages:)
       end
 
       before do
         allow(client).to receive(:receive_message)
-          .with(queue_url: sqs_config[:queues][:discovery])
+          .with({ queue_url: sqs_config[:queues][:discovery] })
           .and_return(receive_message_result, empty_result)
 
         allow(client).to receive(:delete_message).with(any_args)
@@ -138,7 +138,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
       it 'removes the SQS message' do
         expect(client).to receive(:delete_message)
           .with(queue_url: sqs_config[:queues][:discovery],
-                receipt_handle: receipt_handle)
+                receipt_handle:)
 
         run
       end
