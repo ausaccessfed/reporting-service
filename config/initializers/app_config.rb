@@ -22,7 +22,7 @@ Rails.application.configure do
     config.reporting_service.sqs[:fake] = false
     config.reporting_service.sqs[:region] = 'dummy'
     config.reporting_service.sqs[:endpoint] = 'https://dummy.sqs.example.edu'
-    config.reporting_service.sqs[:encryption_key] = <<-KEY
+    rsa_key_string = <<~RAWCERT
       -----BEGIN RSA PRIVATE KEY-----
       MIIBOwIBAAJBANXI+YMTbremHgVLuc/AbaZTKeqvXgs32Em6OOCbE7P+flb3qAMO
       t2SgUCSFYZAOGk8SUoO3ffj6n30cfRA/weUCAwEAAQJAJ+eYs1/INd17Ew/8ggvw
@@ -32,7 +32,8 @@ Rails.application.configure do
       yvkieEapd6BwiQIhAMkHns3f/690lrsD+OpSCNkh7uQSBCSJuDEm9H95YdcRAiBY
       GGUfLfsFNdNhxp69xipHXoL6od4h/fWWrjZhu1/aiQ==
       -----END RSA PRIVATE KEY-----
-    KEY
+    RAWCERT
+    config.reporting_service.sqs[:encryption_key] = Base64.encode64(rsa_key_string)
 
     config.reporting_service.sqs[:queues] = {
       discovery: 'https://dummy.sqs.example.edu/queue/discovery-service-test'

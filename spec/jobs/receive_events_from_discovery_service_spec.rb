@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
   describe '#perform' do
     let(:client) { double(Aws::SQS::Client) }
-    let(:raw_key) do
-      <<-KEY
+    let(:rsa_key_string) do
+      <<~RAWCERT
         -----BEGIN RSA PRIVATE KEY-----
         MIIBOwIBAAJBANXI+YMTbremHgVLuc/AbaZTKeqvXgs32Em6OOCbE7P+flb3qAMO
         t2SgUCSFYZAOGk8SUoO3ffj6n30cfRA/weUCAwEAAQJAJ+eYs1/INd17Ew/8ggvw
@@ -16,17 +16,16 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
         yvkieEapd6BwiQIhAMkHns3f/690lrsD+OpSCNkh7uQSBCSJuDEm9H95YdcRAiBY
         GGUfLfsFNdNhxp69xipHXoL6od4h/fWWrjZhu1/aiQ==
         -----END RSA PRIVATE KEY-----
-      KEY
+      RAWCERT
     end
-
-    let(:key) { OpenSSL::PKey::RSA.new(raw_key) }
+    let(:key) { OpenSSL::PKey::RSA.new(rsa_key_string) }
 
     let(:sqs_config) do
       {
         fake: false,
         region: 'dummy',
         endpoint: Faker::Internet.url,
-        encryption_key: raw_key,
+        encryption_key: Base64.encode64(rsa_key_string),
         queues: {
           discovery: Faker::Internet.url
         }
