@@ -8,7 +8,7 @@ class RequestedAttributeReport < TabularReport
   def initialize(name)
     title = "Service Providers requesting #{name}"
     super(title)
-    @saml_attribute = SAMLAttribute.find_by(name: name)
+    @saml_attribute = SAMLAttribute.find_by(name:)
   end
 
   private

@@ -23,9 +23,9 @@ RSpec.describe ProvidedAttributeReport do
   end
 
   let(:active_identity_providers) do
-    { identity_provider_01: identity_provider_01,
-      identity_provider_02: identity_provider_02,
-      identity_provider_03: identity_provider_03 }
+    { identity_provider_01:,
+      identity_provider_02:,
+      identity_provider_03: }
   end
 
   before do
@@ -40,8 +40,8 @@ RSpec.describe ProvidedAttributeReport do
 
     it 'produces title, header and type' do
       title = "Identity Providers supporting #{name}"
-      expect(report).to include(header: header,
-                                type: type, title: title)
+      expect(report).to include(header:,
+                                type:, title:)
     end
 
     it 'determines whether IdP is supported or not' do

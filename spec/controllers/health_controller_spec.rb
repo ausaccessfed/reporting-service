@@ -10,7 +10,7 @@ RSpec.describe HealthController, type: :controller do
       it 'returns http success' do
         show
         expect(response).to have_http_status(:success)
-        expect(JSON.parse(response.body).symbolize_keys).to match(
+        expect(response.parsed_body.symbolize_keys).to match(
           hash_including({
                            version: 'VERSION_PROVIDED_ON_BUILD',
                            db_active: true
@@ -27,7 +27,7 @@ RSpec.describe HealthController, type: :controller do
       it 'returns http 503' do
         show
         expect(response).to have_http_status(:service_unavailable)
-        expect(JSON.parse(response.body).symbolize_keys).to match(
+        expect(response.parsed_body.symbolize_keys).to match(
           hash_including({
                            db_active: false
                          })
@@ -43,7 +43,7 @@ RSpec.describe HealthController, type: :controller do
       it 'returns http 503' do
         show
         expect(response).to have_http_status(:service_unavailable)
-        expect(JSON.parse(response.body).symbolize_keys).to match(
+        expect(response.parsed_body.symbolize_keys).to match(
           hash_including({
                            redis_active: false
                          })

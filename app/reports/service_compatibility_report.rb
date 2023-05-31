@@ -6,7 +6,7 @@ class ServiceCompatibilityReport < TabularReport
   footer
 
   def initialize(entity_id)
-    @service_provider = ServiceProvider.find_by(entity_id: entity_id)
+    @service_provider = ServiceProvider.find_by(entity_id:)
     title = "Service Compatibility for #{@service_provider.name}"
 
     super(title)
@@ -53,6 +53,6 @@ class ServiceCompatibilityReport < TabularReport
 
   def grouped_attributes
     optional, required = requested_attributes.partition(&:optional)
-    { optional: optional, required: required }
+    { optional:, required: }
   end
 end

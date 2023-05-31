@@ -44,8 +44,8 @@ RSpec.describe FederatedSessionsReport do
 
     it 'should include title, units, labels and range' do
       output_title = "#{title} (#{source_name})"
-      expect(report).to include(title: output_title, units: units,
-                                labels: labels, range: range)
+      expect(report).to include(title: output_title, units:,
+                                labels:, range:)
     end
 
     it 'sessions should be generated within given range' do
@@ -115,7 +115,7 @@ RSpec.describe FederatedSessionsReport do
       create :discovery_service_event, :response,
              { selected_idp: identity_provider.entity_id,
                initiating_sp: service_provider.entity_id,
-               timestamp: timestamp }.compact
+               timestamp: }.compact
     end
 
     let(:source) { 'DS' }
@@ -130,7 +130,7 @@ RSpec.describe FederatedSessionsReport do
       create :federated_login_event, :OK,
              { asserting_party: identity_provider.entity_id,
                relying_party: service_provider.entity_id,
-               timestamp: timestamp }.compact
+               timestamp: }.compact
     end
 
     let(:source) { 'IdP' }

@@ -9,7 +9,7 @@ class ServiceProviderSessionsReport < TimeSeriesReport
   series sessions: 'Sessions'
 
   def initialize(entity_id, start, finish, steps, source)
-    @service_provider = ServiceProvider.find_by(entity_id: entity_id)
+    @service_provider = ServiceProvider.find_by(entity_id:)
     title = "Service Provider Sessions for #{@service_provider.name}"
     @start = start
     @finish = finish

@@ -11,7 +11,7 @@ require 'webmock/rspec'
 require 'capybara/rspec'
 require 'selenium/webdriver'
 
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
@@ -40,11 +40,11 @@ RSpec.configure do |config|
   end
 
   Capybara.register_driver :adapter do |app|
-    Capybara::Selenium::Driver.new(app, browser: browser)
+    Capybara::Selenium::Driver.new(app, browser:)
   end
 
   Capybara.register_driver :adapter_headless do |app|
-    Capybara::Selenium::Driver.new(app, browser: browser, options: options)
+    Capybara::Selenium::Driver.new(app, browser:, options:)
   end
   Capybara.raise_server_errors = false
   Capybara.default_driver = Capybara.javascript_driver = if ENV.fetch('HEADLESS_TESTS',

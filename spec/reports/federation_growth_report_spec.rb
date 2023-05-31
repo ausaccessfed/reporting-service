@@ -114,8 +114,8 @@ RSpec.describe FederationGrowthReport do
     end
 
     it 'includes title, units, labels and range' do
-      expect(report).to include(title: title, units: units,
-                                labels: labels, range: range)
+      expect(report).to include(title:, units:,
+                                labels:, range:)
     end
 
     context 'with objects deactivated before start' do

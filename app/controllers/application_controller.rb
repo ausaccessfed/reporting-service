@@ -49,9 +49,9 @@ class ApplicationController < ActionController::Base
     redirect_to('/auth/login')
   end
 
-  def change_time_zone(&block)
+  def change_time_zone(&)
     timezone = configuration.time_zone
-    Time.use_zone(timezone, &block)
+    Time.use_zone(timezone, &)
   end
 
   def configuration

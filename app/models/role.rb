@@ -12,7 +12,7 @@ class Role < ApplicationRecord
   valhammer
 
   def self.for_entitlement(entitlement)
-    create_with(name: 'auto').find_or_create_by!(entitlement: entitlement)
+    create_with(name: 'auto').find_or_create_by!(entitlement:)
                              .tap(&:update_permissions)
   end
 

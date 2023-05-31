@@ -40,6 +40,6 @@ class FederatedLoginEvent < ApplicationRecord
       asserting_party: data['AP'],
       result: data['RESULT'],
       hashed_principal_name: data['PN'],
-      timestamp: timestamp }
+      timestamp: }
   end
 end

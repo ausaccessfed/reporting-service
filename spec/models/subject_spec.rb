@@ -71,7 +71,7 @@ RSpec.describe Subject, type: :model do
     context 'when an entitlement is removed' do
       let(:entitlements) { [] }
       let!(:role) { create(:role, entitlement: 'a:b:c') }
-      let!(:subject_role) { object.subject_roles.create!(role: role) }
+      let!(:subject_role) { object.subject_roles.create!(role:) }
 
       it 'removes the role' do
         expect { run }.to change { roles }.to be_empty

@@ -18,7 +18,7 @@ RSpec.describe TimeSeriesReport do
       units ' Hz'
 
       def initialize(title, start, finish, data)
-        super(title, start: start, end: finish)
+        super(title, start:, end: finish)
         @data = data
       end
     end
@@ -84,8 +84,8 @@ RSpec.describe TimeSeriesReport do
   context '#generate' do
     subject { report.generate }
 
-    it { is_expected.to include(title: title) }
-    it { is_expected.to include(range: { start: start, end: finish }) }
+    it { is_expected.to include(title:) }
+    it { is_expected.to include(range: { start:, end: finish }) }
     it { is_expected.to include(type: 'test-report') }
     it { is_expected.to include(labels: include(y: 'Y Label')) }
     it { is_expected.to include(labels: include(a: 'The letter A')) }

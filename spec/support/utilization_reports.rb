@@ -15,7 +15,7 @@ RSpec.shared_context 'Utilization Report' do
 
   context 'a utilization report' do
     it 'must contain type, header, title' do
-      expect(report).to include(type: type, title: output_title, header: header)
+      expect(report).to include(type:, title: output_title, header:)
     end
   end
 

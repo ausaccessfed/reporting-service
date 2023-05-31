@@ -6,7 +6,7 @@ class ReceiveEventsFromDiscoveryService
       result.messages.each do |message|
         process_message(message)
 
-        sqs_client.delete_message(queue_url: queue_url,
+        sqs_client.delete_message(queue_url:,
                                   receipt_handle: message.receipt_handle)
       end
     end
@@ -17,7 +17,7 @@ class ReceiveEventsFromDiscoveryService
   def sqs_results
     Enumerator.new do |y|
       loop do
-        result = sqs_client.receive_message(queue_url: queue_url)
+        result = sqs_client.receive_message(queue_url:)
         break if result.messages.empty?
 
         y << result

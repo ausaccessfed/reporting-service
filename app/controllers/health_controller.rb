@@ -14,8 +14,8 @@ class HealthController < ApplicationController
 
     render json: {
       version: Rails.application.config.reporting_service.version,
-      redis_active: redis_active,
-      db_active: db_active
+      redis_active:,
+      db_active:
     }, status: db_active && redis_active ? 200 : 503
   end
 

@@ -6,8 +6,8 @@ require 'rack/test'
 module RapidRack
   RSpec.describe TestAuthenticator, type: :feature do
     def build_app(prefix)
-      opts = { receiver: receiver, secret: secret,
-               issuer: issuer, audience: audience }
+      opts = { receiver:, secret:,
+               issuer:, audience: }
       Rack::Builder.new do
         map(prefix) { run TestAuthenticator.new(opts) }
         run Rack::Lobster.new

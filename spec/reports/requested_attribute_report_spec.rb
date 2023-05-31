@@ -47,7 +47,7 @@ RSpec.describe RequestedAttributeReport do
     it 'must contain type' do
       title = "Service Providers requesting #{attribute.name}"
 
-      expect(report).to include(type: type, title: title, header: header)
+      expect(report).to include(type:, title:, header:)
     end
 
     it 'determines attribute status for each SP' do

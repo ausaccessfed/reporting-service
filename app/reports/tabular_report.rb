@@ -32,6 +32,6 @@ class TabularReport
     title = @title
     title += " (#{source_name})" if @source.present?
 
-    self.class.options.merge(title: title, rows: rows)
+    self.class.options.merge(title:, rows:)
   end
 end

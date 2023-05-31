@@ -6,9 +6,9 @@ RSpec.feature 'automated report instances' do
   given(:user) { create :subject }
   given(:organization) { create :organization }
   given(:attribute) { create :saml_attribute }
-  given(:idp) { create :identity_provider, organization: organization }
+  given(:idp) { create :identity_provider, organization: }
   given(:unknown_idp) { create :identity_provider }
-  given(:sp) { create :service_provider, organization: organization }
+  given(:sp) { create :service_provider, organization: }
   given(:unknown_sp) { create :service_provider }
 
   given(:svg_templates) do
@@ -25,9 +25,9 @@ RSpec.feature 'automated report instances' do
   shared_examples 'Automated Public Report' do
     given(:auto_report) do
       create :automated_report,
-             target: target,
-             report_class: report_class,
-             source: source
+             target:,
+             report_class:,
+             source:
     end
 
     given!(:instance) do
@@ -113,8 +113,8 @@ RSpec.feature 'automated report instances' do
     given(:auto_report) do
       create :automated_report,
              target: object.entity_id,
-             report_class: report_class,
-             source: source
+             report_class:,
+             source:
     end
 
     given!(:instance) do
@@ -125,8 +125,8 @@ RSpec.feature 'automated report instances' do
     given!(:unknown_auto_report) do
       create :automated_report,
              target: unknown_object.entity_id,
-             report_class: report_class,
-             source: source
+             report_class:,
+             source:
     end
 
     given!(:unknown_instance) do
@@ -256,7 +256,7 @@ RSpec.feature 'automated report instances' do
   shared_examples 'Automated Subscriber Registrations Report' do
     given(:auto_report) do
       create :automated_report,
-             target: target,
+             target:,
              report_class: 'SubscriberRegistrationsReport'
     end
 

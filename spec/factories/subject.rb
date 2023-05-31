@@ -10,14 +10,14 @@ FactoryBot.define do
     targeted_id { "#{idp}!#{sp}!#{SecureRandom.uuid}" }
     shared_token { SecureRandom.urlsafe_base64(19) }
     name { Faker::Name.name }
-    mail { Faker::Internet.email(name: name) }
+    mail { Faker::Internet.email(name:) }
 
     trait :authorized do
       transient { permission { '*' } }
 
       after(:create) do |user, attrs|
         role = create(:permission, value: attrs.permission).role
-        user.subject_roles.create!(role: role)
+        user.subject_roles.create!(role:)
         user.reload
       end
     end

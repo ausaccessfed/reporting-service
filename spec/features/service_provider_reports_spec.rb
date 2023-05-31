@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.feature 'Service Provider Reports' do
   given(:organization) { create :organization }
-  given(:sp) { create :service_provider, organization: organization }
+  given(:sp) { create :service_provider, organization: }
   given(:user) { create :subject }
 
   describe 'subject has permissions' do

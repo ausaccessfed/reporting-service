@@ -4,8 +4,8 @@ require 'rack/lobster'
 
 RSpec.describe RapidRack::Authenticator, type: :feature do
   def build_app(prefix)
-    opts = { url: url, receiver: receiver, secret: secret,
-             issuer: issuer, audience: audience, error_handler: handler }
+    opts = { url:, receiver:, secret:,
+             issuer:, audience:, error_handler: handler }
     Rack::Builder.new do
       map(prefix) { run RapidRack::Authenticator.new(opts) }
       run Rack::Lobster.new
@@ -91,7 +91,7 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
   end
 
   context 'post /jwt' do
-    before { post '/auth/jwt', params: { assertion: assertion } }
+    before { post '/auth/jwt', params: { assertion: } }
 
     let(:attrs) do
       {

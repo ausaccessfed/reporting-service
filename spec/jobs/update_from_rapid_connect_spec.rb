@@ -19,7 +19,7 @@ RSpec.describe UpdateFromRapidConnect do
         type: Faker::Lorem.word
       },
       organization: organization.name,
-      enabled: enabled
+      enabled:
     }
   end
 
@@ -126,7 +126,7 @@ RSpec.describe UpdateFromRapidConnect do
     it 'associates the service with the organization' do
       run
       expect(RapidConnectService.last)
-        .to have_attributes(organization: organization)
+        .to have_attributes(organization:)
     end
   end
 

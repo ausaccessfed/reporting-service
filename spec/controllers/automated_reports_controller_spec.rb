@@ -14,8 +14,8 @@ RSpec.describe AutomatedReportsController, type: :controller do
     request.env['HTTP_REFERER'] = "federation_reports/#{path}"
 
     post :subscribe, params: {
-      report_class: report_class, interval: interval,
-      source: source,
+      report_class:, interval:,
+      source:,
       back_path: request.env['HTTP_REFERER']
     }.compact
   end

@@ -34,8 +34,8 @@ RSpec.describe IdentityProviderAttributesReport do
     end
 
     it 'includes report :type, :header, :footer' do
-      expect(report).to include(type: type,
-                                title: title, header: header)
+      expect(report).to include(type:,
+                                title:, header:)
     end
 
     it '#row should be :core and :optional attributes' do

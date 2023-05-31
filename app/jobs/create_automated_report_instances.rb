@@ -30,7 +30,7 @@ class CreateAutomatedReportInstances
 
     AutomatedReportInstance
       .create!(identifier: SecureRandom.urlsafe_base64,
-               automated_report: report, range_end: range_end)
+               automated_report: report, range_end:)
   end
 
   def select_reports
@@ -91,7 +91,7 @@ class CreateAutomatedReportInstances
   end
 
   def email_body(identifier, report_class)
-    url = automated_report_url host: @base_url, identifier: identifier
+    url = automated_report_url(host: @base_url, identifier:)
 
     opts = { report_url: url, report_class: report_class.titleize }
 

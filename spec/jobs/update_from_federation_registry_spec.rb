@@ -107,7 +107,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
     }.each do |endpoint, body|
       stub_request(:get, "#{base_url}/export/#{endpoint}")
         .with(headers: { 'Authorization' => /AAF-FR-EXPORT .+/ })
-        .to_return(status: 200, body: body)
+        .to_return(status: 200, body:)
         .then.to_return { raise('endpoint should only be called once') }
     end
   end
@@ -242,7 +242,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
       let(:scope) { Organization }
       let(:expected_attrs) do
         identifier = org_identifier
-        { identifier: identifier, name: org_data[:display_name] }
+        { identifier:, name: org_data[:display_name] }
       end
 
       let(:org_data) { default_org_data.merge(extra_obj_attrs) }
@@ -306,7 +306,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         context 'for an existing identity provider' do
           let!(:object) do
             create(:identity_provider, entity_id: idp_entity_id,
-                                       organization: organization)
+                                       organization:)
           end
 
           it_behaves_like 'sync of an existing object'
@@ -317,7 +317,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
 
           let!(:object) do
             create(:identity_provider, entity_id: idp_entity_id,
-                                       organization: organization)
+                                       organization:)
           end
 
           it_behaves_like 'sync of a removed object'
@@ -326,7 +326,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         context 'provided attributes' do
           let!(:object) do
             create(:identity_provider, entity_id: idp_entity_id,
-                                       organization: organization)
+                                       organization:)
           end
 
           let(:attribute_scope) { object.identity_provider_saml_attributes }
@@ -371,7 +371,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         context 'for an existing service provider' do
           let!(:object) do
             create(:service_provider, entity_id: sp_entity_id,
-                                      organization: organization)
+                                      organization:)
           end
 
           it_behaves_like 'sync of an existing object'
@@ -382,7 +382,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
 
           let!(:object) do
             create(:service_provider, entity_id: sp_entity_id,
-                                      organization: organization)
+                                      organization:)
           end
 
           it_behaves_like 'sync of a removed object'
@@ -391,7 +391,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         context 'requested attributes' do
           let!(:object) do
             create(:service_provider, entity_id: sp_entity_id,
-                                      organization: organization)
+                                      organization:)
           end
 
           let(:attribute_scope) { object.service_provider_saml_attributes }
@@ -550,19 +550,19 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
       end
 
       let(:organizations_response) do
-        JSON.pretty_generate(organizations: organizations)
+        JSON.pretty_generate(organizations:)
       end
 
       let(:identityproviders_response) do
-        JSON.pretty_generate(identity_providers: identity_providers)
+        JSON.pretty_generate(identity_providers:)
       end
 
       let(:serviceproviders_response) do
-        JSON.pretty_generate(service_providers: service_providers)
+        JSON.pretty_generate(service_providers:)
       end
 
       let(:attributes_response) do
-        JSON.pretty_generate(attributes: attributes)
+        JSON.pretty_generate(attributes:)
       end
 
       it 'syncs the objects' do

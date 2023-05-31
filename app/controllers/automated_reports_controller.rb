@@ -8,6 +8,7 @@ class AutomatedReportsController < AutomatedReports
     @subscriptions = subscriptions.preload(:automated_report)
   end
 
+  # rubocop:disable  Rails/I18nLocaleTexts
   def subscribe
     if subscription_exists?
       flash[:notice] = 'You have already subscribed to this report'
@@ -15,6 +16,7 @@ class AutomatedReportsController < AutomatedReports
       create_subscription
       flash[:notice] = 'You have successfully subscribed to this report'
     end
+    # rubocop:enable  Rails/I18nLocaleTexts
 
     redirect_to(request.referer || dashboard_path)
   end
@@ -41,11 +43,11 @@ class AutomatedReportsController < AutomatedReports
 
   def create_subscription
     subscriptions.create!(identifier: SecureRandom.urlsafe_base64,
-                          automated_report: automated_report)
+                          automated_report:)
   end
 
   def subscription_exists?
-    subscriptions.find_by(automated_report: automated_report)
+    subscriptions.find_by(automated_report:)
   end
 
   def report_class
