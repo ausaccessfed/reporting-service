@@ -16,8 +16,6 @@ else
   port ENV.fetch('PORT', 3000)
 end
 
-log_requests true
-
 # Specifies the `environment` that Puma will run in.
 environment ENV.fetch('RAILS_ENV', 'development')
 

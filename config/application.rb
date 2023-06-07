@@ -39,6 +39,14 @@ module ReportingService
       url: Rails.application.config.reporting_service.redis[:url],
       ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE }
     )
+
+    if ENV['RAILS_LOG_TO_STDOUT'].present?
+      logger           = ActiveSupport::Logger.new(ENV.fetch('STDOUT', $stdout))
+      logger.formatter = config.log_formatter
+      config.logger    = ActiveSupport::TaggedLogging.new(logger)
+      config.lograge.enabled = true
+      config.lograge.ignore_actions = ['HealthController#show', 'WelcomeController#index']
+    end
   end
 end
 
