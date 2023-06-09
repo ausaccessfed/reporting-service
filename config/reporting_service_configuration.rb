@@ -43,7 +43,7 @@ module ReportingService
           ],
           federation_object_entitlement_prefix: 'urn:mace:aaf.edu.au:ide:internal'
         },
-        default_session_source: 'DS',
+        default_session_source: ENV.fetch('DEFAULT_SESSION_SOURCE', 'DS'),
         mail: {
           from: ENV.fetch('EMAIL_FROM', 'noreply@example.com'),
           port: ENV.fetch('EMAIL_PORT', 1025).to_i,
@@ -53,7 +53,7 @@ module ReportingService
         url_options: {
           base_url: ENV.fetch('BASE_URL', 'http://localhost:8082')
         },
-        time_zone: 'Australia/Brisbane'
+        time_zone: ENV.fetch('TIME_ZONE', 'Australia/Brisbane')
       }
     end
 
