@@ -12,7 +12,7 @@ module ReportingService
   # rubocop:disable Metrics/ClassLength
   class ConfigurationGenerator
     def build_configuration
-      base_config.merge(admins_config, redis, federation_registry)
+      base_config.merge(admins_config, redis, federation_registry, rapid_connect)
     end
 
     private
@@ -21,12 +21,6 @@ module ReportingService
       {
         version:,
         discovery_service_hostname: ENV.fetch('DISCOVERY_SERVICE_HOSTNAME', 'ds.test.aaf.edu.au'),
-        rapid_connect: {
-          host: ENV.fetch('RAPID_CONNECT_HOST', 'rapid.test.aaf.edu.au'),
-          secret: ENV.fetch('RAPID_CONNECT_SECRET',
-                            'This is the shared secret used for authenticating to the Rapid export API'),
-          rack: rapid_connect_rack
-        },
         sqs: {
           fake: ENV.fetch('SQS_FAKE', false),
           region: ENV.fetch('SQS_REGION', 'localhost'),
@@ -87,6 +81,15 @@ module ReportingService
           host: ENV.fetch('FEDERATION_REGISTRY_DB_HOST', ''),
           port: ENV.fetch('FEDERATION_REGISTRY_DB_PORT', '3306')
         }
+      } }
+    end
+
+    def rapid_connect
+      { rapid_connect: {
+        host: ENV.fetch('RAPID_CONNECT_HOST', 'rapid.test.aaf.edu.au'),
+        secret: ENV.fetch('RAPID_CONNECT_SECRET',
+                          'This is the shared secret used for authenticating to the Rapid export API'),
+        rack: rapid_connect_rack
       } }
     end
 
