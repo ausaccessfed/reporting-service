@@ -12,7 +12,7 @@ module ReportingService
   # rubocop:disable Metrics/ClassLength
   class ConfigurationGenerator
     def build_configuration
-      base_config.merge(admins_config, redis, federation_registry)
+      base_config.merge(admins_config, redis, federation_registry, rapid_connect)
     end
 
     private
@@ -21,12 +21,6 @@ module ReportingService
       {
         version:,
         discovery_service_hostname: ENV.fetch('DISCOVERY_SERVICE_HOSTNAME', 'ds.test.aaf.edu.au'),
-        rapid_connect: {
-          host: ENV.fetch('RAPID_CONNECT_HOST', 'rapid.test.aaf.edu.au'),
-          secret: ENV.fetch('RAPID_CONNECT_SECRET',
-                            'This is the shared secret used for authenticating to the Rapid export API'),
-          rack: rapid_connect_rack
-        },
         sqs: {
           fake: ENV.fetch('SQS_FAKE', false),
           region: ENV.fetch('SQS_REGION', 'localhost'),
@@ -43,7 +37,7 @@ module ReportingService
           ],
           federation_object_entitlement_prefix: 'urn:mace:aaf.edu.au:ide:internal'
         },
-        default_session_source: 'DS',
+        default_session_source: ENV.fetch('DEFAULT_SESSION_SOURCE', 'DS'),
         mail: {
           from: ENV.fetch('EMAIL_FROM', 'noreply@example.com'),
           port: ENV.fetch('EMAIL_PORT', 1025).to_i,
@@ -53,7 +47,7 @@ module ReportingService
         url_options: {
           base_url: ENV.fetch('BASE_URL', 'http://localhost:8082')
         },
-        time_zone: 'Australia/Brisbane'
+        time_zone: ENV.fetch('TIME_ZONE', 'Australia/Brisbane')
       }
     end
 
@@ -87,6 +81,15 @@ module ReportingService
           host: ENV.fetch('FEDERATION_REGISTRY_DB_HOST', ''),
           port: ENV.fetch('FEDERATION_REGISTRY_DB_PORT', '3306')
         }
+      } }
+    end
+
+    def rapid_connect
+      { rapid_connect: {
+        host: ENV.fetch('RAPID_CONNECT_HOST', 'rapid.test.aaf.edu.au'),
+        secret: ENV.fetch('RAPID_CONNECT_SECRET',
+                          'This is the shared secret used for authenticating to the Rapid export API'),
+        rack: rapid_connect_rack
       } }
     end
 
