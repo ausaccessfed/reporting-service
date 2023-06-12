@@ -71,6 +71,7 @@ module ReportingService
 
     def federation_registry
       { federation_registry: {
+        enable_sync: ENV.fetch('FEDERATION_REGISTRY_ENABLE_SYNC', 'true') == 'true',
         host: ENV.fetch('FEDERATION_REGISTRY_HOST', 'manager.test.aaf.edu.au'),
         secret: ENV.fetch('FEDERATION_REGISTRY_SECRET',
                           'This is the shared secret used for authenticating to the FR export API'),
