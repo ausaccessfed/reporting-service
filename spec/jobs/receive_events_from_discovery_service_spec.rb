@@ -95,6 +95,25 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
             .to have_attributes(attrs)
         end
       end
+
+      context 'when not syncing fr' do
+        before do
+          fr_config = Rails.application.config.reporting_service.federation_registry
+          fr_config[:enable_sync] = false
+          allow(Rails.application.config.reporting_service).to receive(:federation_registry)
+            .and_return(fr_config)
+        end
+
+        it 'creates the events' do
+          expect { run }
+            .to change(DiscoveryServiceEvent, :count).by(events.length)
+
+          events_attrs.each do |attrs|
+            expect(DiscoveryServiceEvent.find_by(attrs.slice(:unique_id)))
+              .to have_attributes(attrs)
+          end
+        end
+      end
     end
 
     context 'when a message is in the queue' do
