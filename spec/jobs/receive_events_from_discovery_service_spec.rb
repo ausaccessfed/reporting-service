@@ -99,7 +99,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
       context 'when not syncing fr' do
         before do
           fr_config = Rails.application.config.reporting_service.federation_registry
-          fr_config[:enable_sync] = 'false'
+          fr_config[:enable_sync] = false
           allow(Rails.application.config.reporting_service).to receive(:federation_registry)
             .and_return(fr_config)
         end
