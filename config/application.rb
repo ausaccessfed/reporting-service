@@ -33,7 +33,7 @@ module ReportingService
       url: config.reporting_service.redis[:url],
       ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE },
       namespace: config.reporting_service.redis[:namespace],
-      expire_in: 1.day
+      expires_in: 1.day
     }]
     config.redis_client = Redis.new(
       url: Rails.application.config.reporting_service.redis[:url],
