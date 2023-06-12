@@ -25,12 +25,13 @@ class ReceiveEventsFromDiscoveryService
     end
   end
 
+  # rubocop:disable Metrics/AbcSize
   def process_message(message)
     jwe = JSON::JWT.decode(message.body, key)
     data = JSON::JWT.decode(jwe.plain_text, key)
     DiscoveryServiceEvent.transaction do
       data['events'].each do |event|
-        push_to_fr_queue(event)
+        push_to_fr_queue(event) if Rails.application.config.reporting_service.federation_registry[:enable_sync]
 
         DiscoveryServiceEvent
           .create_with(event)
@@ -38,6 +39,7 @@ class ReceiveEventsFromDiscoveryService
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def push_to_fr_queue(event)
     return unless event[:phase] == 'response'
