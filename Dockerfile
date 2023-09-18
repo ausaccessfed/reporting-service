@@ -41,14 +41,18 @@ RUN export gecko_version='0.32.0' \
     && rm geckodriver-v${gecko_version}-${arch}.tar.gz
 FROM base as dependencies
 
-RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash - \
-    && yum -y update \
+# sha1 needs to be enabled - https://github.com/nodesource/distributions/issues/1653
+RUN update-crypto-policies --set DEFAULT:SHA1 \
+    && yum install https://rpm.nodesource.com/pub_16.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm -y \
+    && yum install nodejs -y --setopt=nodesource-nodejs.module_hotfixes=1 \
+    && update-crypto-policies --set DEFAULT
+
+RUN yum -y update \
     && yum -y install epel-release \
     && yum install -y \
     --enablerepo=devel \
     libtool \
     make \
-    nodejs \
     automake \
     ImageMagick-devel \
     firefox \
