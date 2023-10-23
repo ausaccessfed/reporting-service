@@ -1,5 +1,10 @@
 ARG BASE_IMAGE=""
+# Version is pinned via .ruby-version
+# hadolint ignore=DL3006
 FROM ${BASE_IMAGE} as base
+
+WORKDIR $APP_DIR
+
 COPY .FORCE_NEW_DOCKER_BUILD  .FORCE_NEW_DOCKER_BUILD
 
 ENV TORBA_HOME_PATH=/app/.torba
@@ -15,8 +20,10 @@ RUN mkdir -p ./public/assets \
 
 USER root
 
-RUN yum install -y \
-    jq \
+RUN yum -y update \
+    && yum install -y \
+    # renovate: datasource=yum repo=rocky-9-appstream-x86_64
+    jq-1.6-14.el9 \
     && yum -y clean all \
     && rm -rf /var/cache/yum
 
@@ -24,58 +31,148 @@ EXPOSE 3000
 
 ENTRYPOINT ["/app/bin/boot.sh"]
 CMD ["bundle exec puma"]
+USER app
 
-FROM base as geckodriver
+FROM base as js-dependencies
+USER root
+
 RUN yum -y update \
-    && yum -y install \
-    tar \
-    wget \
-    && yum -y clean all \
-    && rm -rf /var/cache/yum
-
-RUN export gecko_version='0.32.0' \
-    && export arch="$([ "$(rpm --eval '%{_arch}')" = "aarch64" ] && echo "linux-aarch64" || echo "linux64")" \
-    && wget https://github.com/mozilla/geckodriver/releases/download/v${gecko_version}/geckodriver-v${gecko_version}-${arch}.tar.gz \
-    && tar -zxvf geckodriver-v${gecko_version}-${arch}.tar.gz \
-    && mv geckodriver /usr/local/bin/ \
-    && rm geckodriver-v${gecko_version}-${arch}.tar.gz
-FROM base as dependencies
-
-# sha1 needs to be enabled - https://github.com/nodesource/distributions/issues/1653
-RUN update-crypto-policies --set DEFAULT:SHA1 \
+    && update-crypto-policies --set DEFAULT:SHA1 \
     && yum install https://rpm.nodesource.com/pub_16.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm -y \
-    && yum install nodejs -y --setopt=nodesource-nodejs.module_hotfixes=1 \
-    && update-crypto-policies --set DEFAULT
-
-RUN yum -y update \
-    && yum -y install epel-release \
     && yum install -y \
-    --enablerepo=devel \
-    libtool \
-    make \
-    automake \
-    ImageMagick-devel \
-    firefox \
-    gcc \
-    gcc-c++ \
-    xz \
-    kernel-devel \
-    mysql-devel \
-    procps \
+    # renovate: datasource=yum repo=rocky-9-appstream-x86_64/nodejs:16
+    nodejs-16.20.1 \
+    # renovate: datasource=yum repo=rocky-9-extras-x86_64
+    epel-release-9-7.el9 \
+    && update-crypto-policies --set DEFAULT \
+    && yum install -y \
+    # renovate: datasource=yum repo=epel-9-everything-x86_64
+    yarnpkg-1.22.19-5.el9  \
     && yum -y clean all \
     && rm -rf /var/cache/yum
+
+# use ldd to get required libs
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN ldd \
+    /usr/bin/node \
+    | tr -s "[:blank:]" "\n" | grep "^/" | sed "/\/usr\/bin\//d" | \
+    xargs -I % sh -c "mkdir -p /\$(dirname deps%); cp % /deps%;"
 
 USER app
 
-COPY --chown=app ./Gemfile ./Gemfile.lock ./
+COPY --chown=app ./package.json ./yarn.lock ./
+RUN yarn install
+
+FROM base as imagick-dependencies
+USER root
+
+RUN yum -y update \
+    && yum -y install \
+    # renovate: datasource=yum repo=rocky-9-extras-x86_64
+    epel-release-9-7.el9 \
+    && yum install -y \
+    --enablerepo=devel \
+    # renovate: datasource=yum repo=epel-9-everything-x86_64
+    ImageMagick-devel-6.9.12.93-1.el9 \
+    # renovate: datasource=yum repo=epel-9-everything-x86_64
+    advancecomp-2.5-1.el9 \
+    # renovate: datasource=yum repo=epel-9-everything-x86_64
+    gifsicle-1.93-1.el9 \
+    # renovate: datasource=yum repo=epel-9-everything-x86_64
+    jhead-3.06.0.1-5.el9 \
+    # renovate: datasource=yum repo=epel-9-everything-x86_64
+    jpegoptim-1.5.5-1.el9 \
+    # renovate: datasource=yum repo=epel-9-everything-x86_64
+    pngcrush-1.8.13-9.el9 \
+    # renovate: datasource=yum repo=epel-9-everything-x86_64
+    optipng-0.7.7-8.el9 \
+    # renovate: datasource=yum repo=epel-9-everything-x86_64
+    pngquant-2.17.0-2.el9 \
+    # renovate: datasource=yum repo=rocky-9-appstream-x86_64
+    libjpeg-turbo-utils-2.0.90-6.el9_1 \
+    # renovate: datasource=yum repo=rocky-9-appstream-x86_64
+    libjpeg-turbo-2.0.90-6.el9_1 \
+    && yum -y clean all \
+    && rm -rf /var/cache/yum
+
+# uses ldd to get all deps of imagick, remove anything thats /usr/bin
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN ldd \
+    /usr/bin/mogrify \
+    /usr/bin/convert \
+    /usr/bin/pngcrush \
+    /usr/bin/jpegoptim \
+    /usr/lib64/libMagickCore-6.Q16.so.7 \
+    /usr/lib64/libmagic.so.1 \
+    # /usr/bin/libjpeg-turbo \
+    # /usr/bin/libjpeg-turbo-utils \
+    | tr -s "[:blank:]" "\n" | grep "^/" | sed "/\/usr\/bin\//d" | sed "/:/d"  | \
+    xargs -I % sh -c "mkdir -p /\$(dirname deps%); cp % /deps%;"
+
+USER app
+
+FROM base as dependencies
+USER root
+
+RUN yum -y update \
+    && yum -y install \
+    # renovate: datasource=yum repo=rocky-9-extras-x86_64
+    epel-release-9-7.el9 \
+    && yum install -y \
+    --enablerepo=devel \
+    # renovate: datasource=yum repo=epel-9-everything-x86_64
+    chromium-118.0.5993.70-1.el9 \
+    # renovate: datasource=yum repo=rocky-9-appstream-x86_64
+    libtool-2.4.6-45.el9 \
+    # renovate: datasource=yum repo=rocky-9-baseos-x86_64
+    make-4.3-7.el9 \
+    # renovate: datasource=yum repo=rocky-9-appstream-x86_64
+    automake-1.16.2-6.el9 \
+    # renovate: datasource=yum repo=rocky-9-appstream-x86_64
+    gcc-11.3.1-4.3.el9 \
+    # renovate: datasource=yum repo=rocky-9-appstream-x86_64
+    gcc-c++-11.3.1-4.3.el9 \
+    # renovate: datasource=yum repo=rocky-9-baseos-x86_64
+    xz-5.2.5-8.el9_0 \
+    # renovate: datasource=yum repo=rocky-9-appstream-x86_64
+    kernel-devel-5.14.0-284.30.1.el9_2 \
+    # renovate: datasource=yum repo=rocky-9-crb-x86_64
+    mysql-devel-8.0.32-1.el9_2 \
+    # renovate: datasource=yum repo=rocky-9-baseos-x86_64
+    procps-ng-3.3.17-11.el9 \
+    && yum -y clean all \
+    && rm -rf /var/cache/yum
+
+
+##  Copy yarn, node for linting
+COPY --from=js-dependencies /usr/bin/node /usr/lib/node_modules/npm/bin/npm /usr/bin/
+COPY --from=js-dependencies /usr/lib/node_modules /usr/bin/node_modules
+RUN ln -s /usr/bin/node_modules/yarn/bin/yarn /usr/bin/yarn
+# TODO: we could save some space by being selective here
+COPY --from=js-dependencies /app/node_modules/ ./node_modules/
+COPY --from=js-dependencies /deps/lib64 /usr/lib64/
+
+## Copy imagick deps
+COPY --from=imagick-dependencies /usr/bin/convert \
+    /usr/bin/mogrify \
+    /usr/bin/
+COPY --from=imagick-dependencies \
+    /usr/lib64/libMagickCore-6.Q16.so \
+    /usr/lib64/libMagickWand-6.Q16.so \
+    /usr/lib64/
+COPY --from=imagick-dependencies /usr/lib64/pkgconfig /usr/lib64/pkgconfig
+COPY --from=imagick-dependencies /usr/include/ImageMagick-6 /usr/include/ImageMagick-6
+COPY --from=imagick-dependencies /usr/lib64/ImageMagick-6.9.12 /usr/lib64/ImageMagick-6.9.12
+COPY --from=imagick-dependencies /etc/ImageMagick-6 /etc/ImageMagick-6
+COPY --from=imagick-dependencies /deps/lib64 /usr/lib64/
+
+USER app
+
+COPY --chown=app ./Gemfile ./Gemfile.lock ./Torbafile ./
 
 ## is installing production gems
 RUN bundle install \
     && rbenv rehash
-
-COPY --from=geckodriver /usr/local/bin/geckodriver /usr/local/bin/geckodriver
-
-COPY --chown=app  ./Torbafile ./
 
 RUN secret_key_base=1 bundle exec torba pack
 
@@ -97,7 +194,7 @@ USER root
 
 RUN bundle config set --local without "non_docker"
 
-RUN [ "${LOCAL_BUILD}" == "true" ] && bundle config set --local force_ruby_platform true || echo "not local"
+RUN [ "${LOCAL_BUILD}" = "true" ] && bundle config set --local force_ruby_platform true || echo "not local"
 
 USER app
 
@@ -115,51 +212,38 @@ USER app
 
 COPY --from=dependencies /opt/.rbenv /opt/.rbenv
 COPY --from=dependencies ${APP_DIR}/public ${APP_DIR}/public
-COPY --from=dependencies /usr/lib64/mysql \
+COPY --from=dependencies /usr/bin/node /usr/bin/
+
+## Copy imagick deps
+COPY --from=imagick-dependencies /usr/bin/convert \
+    /usr/bin/mogrify \
+    /usr/bin/
+
+## Copy imagick deps
+COPY --from=imagick-dependencies /usr/bin/convert \
+    /usr/bin/mogrify \
+    /usr/bin/
+COPY --from=imagick-dependencies \
+    /usr/lib64/libMagickCore-6.Q16.so \
+    /usr/lib64/libMagickWand-6.Q16.so \
+    /usr/lib64/
+COPY --from=imagick-dependencies /usr/lib64/pkgconfig /usr/lib64/pkgconfig
+COPY --from=imagick-dependencies /usr/include/ImageMagick-6 /usr/include/ImageMagick-6
+COPY --from=imagick-dependencies /usr/lib64/ImageMagick-6.9.12 /usr/lib64/ImageMagick-6.9.12
+COPY --from=imagick-dependencies /etc/ImageMagick-6 /etc/ImageMagick-6
+COPY --from=imagick-dependencies /deps/lib64 /usr/lib64/
+
+COPY --from=dependencies \
+    /usr/lib64/mysql \
     /usr/lib64/libprocps.so.8 \
-    /usr/lib64/libm.so.6 \
-    /usr/lib64/liblz4.so.1 \
-    /usr/lib64/liblzma.so.5 \
-    /usr/lib64/libjpeg.so.62 \
-    /usr/lib64/libIlmThread-3_1.so.30 \
-    /usr/lib64/libMagickCore-6.Q16.so.7 \
-    /usr/lib64/liblcms2.so.2 \
-    /usr/lib64/libraqm.so.0 \
-    /usr/lib64/liblqr-1.so.0 \
-    /usr/lib64/libglib-2.0.so.0 \
-    /usr/lib64/libxml2.so.2 \
-    /usr/lib64/libfontconfig.so.1 \
-    /usr/lib64/libfreetype.so.6 \
-    /usr/lib64/libXext.so.6 \
-    /usr/lib64/libSM.so.6 \
-    /usr/lib64/libICE.so.6 \
-    /usr/lib64/libX11.so.6 \
-    /usr/lib64/libXt.so.6 \
-    /usr/lib64/libbz2.so.1 \
-    /usr/lib64/libz.so.1  \
-    /usr/lib64/libltdl.so.7 \
-    /usr/lib64/libgomp.so.1  \
-    /usr/lib64/libgcc_s.so.1 \
-    /usr/lib64/libcrypt.so.2  \
-    /usr/lib64/libharfbuzz.so.0\
-    /usr/lib64/libfribidi.so.0 \
-    /usr/lib64/libpcre.so.1 \
-    /usr/lib64/liblzma.so.5 \
-    /usr/lib64/libpng16.so.16 \
-    /usr/lib64/libbrotlidec.so.1 \
-    /usr/lib64/libuuid.so.1 \
-    /usr/lib64/libxcb.so.1 \
-    /usr/lib64/libgraphite2.so.3 \
-    /usr/lib64/libbrotlicommon.so.1 \
-    /usr/lib64/libXau.so.6 \
-    /usr/lib64/libMagickWand-6.Q16.so.7 \
     /usr/lib64/
 COPY --from=dependencies /usr/local/bundle /usr/local/bundle
 COPY --from=dependencies /usr/sbin/pidof /usr/sbin/pidof
 COPY --from=dependencies ${APP_DIR}/.torba ${APP_DIR}/.torba
-COPY --from=dependencies /usr/bin/node /usr/bin/
 
 COPY --chown=app . .
+
+USER root
 
 RUN rm -rf spec \
     node_modules \
@@ -169,7 +253,12 @@ RUN rm -rf spec \
     /usr/local/bundle/cache/*.gem \
     tmp/cache \
     vendor/assets \
-    lib/assets
+    lib/assets \
+    && find /opt/.rbenv/ -type f -regextype egrep -regex ".*(Dockerfile|docker-compose\.yml|\.vimrc)" -exec rm -f {} + \
+    && find /opt/.rbenv/ -type d -regextype egrep -regex ".*(\.git|spec|dummy_rails|test\/rails_app)" -exec rm -rf {} + \
+    # Fix for https://github.com/goodwithtech/dockle/blob/master/CHECKPOINT.md#cis-di-0008
+    && find / -path /proc -prune -o -perm /u=s,g=s -type f -print -exec rm {} \;
+USER app
 
 ARG RELEASE_VERSION="VERSION_PROVIDED_ON_BUILD"
 ENV RELEASE_VERSION $RELEASE_VERSION
