@@ -1,4 +1,5 @@
 Your report has been generated and a you can view the report now
+
 <p>
   Report type: <strong>%{report_class}</strong>.
 </p>

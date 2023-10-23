@@ -34,8 +34,12 @@ group :development, :test do
   gem 'fakeredis'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
-  gem 'rubocop'
-  gem 'rubocop-rails'
+  gem 'rubocop', require: false
+  gem 'rubocop-capybara', require: false
+  gem 'rubocop-factory_bot', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'webmock', require: false
@@ -46,11 +50,9 @@ group :development, :test do
   gem 'pry', require: false
 
   gem 'capybara'
-  gem 'capybara-selenium'
+  gem 'cuprite'
   gem 'launchy', require: false
   gem 'rspec'
-
-  gem 'selenium-webdriver'
 
   gem 'brakeman', require: false
   gem 'guard', require: false
@@ -61,6 +63,8 @@ group :development, :test do
   gem 'rack-test', require: false
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false
+  gem 'syntax_tree', require: false
+
   gem 'terminal-notifier-guard', require: false
 end
 # rubocop:enable Metrics/BlockLength

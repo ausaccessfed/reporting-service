@@ -1,5 +1,12 @@
 inherit_gem:
-  aaf-gumboot: aaf-rubocop.yml
+  syntax_tree: config/rubocop.yml
+
+require:
+  - rubocop-capybara
+  - rubocop-factory_bot
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
 
 AllCops:
   NewCops: enable
@@ -29,3 +36,15 @@ Rails/InverseOf:
 
 Lint/MissingSuper:
   Enabled: false
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: single_quotes
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+  EnforcedStyle: single_quotes
+
+Style/QuotedSymbols:
+  Enabled: true
+  EnforcedStyle: single_quotes
