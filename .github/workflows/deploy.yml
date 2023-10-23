@@ -31,3 +31,9 @@ jobs:
       extra_task_2: docker run app:cache bundle exec rubocop -P
       extra_task_3_name: brakeman
       extra_task_3: docker run app:cache bundle exec brakeman
+      # extra_task_6_name: lint ruby
+      # extra_task_6: docker run app:cache bundle exec rake lint_rb
+      extra_task_4_name: lint js
+      extra_task_4: docker run app:cache bundle exec rake lint_js
+      extra_task_5_name: lint md
+      extra_task_5: docker run app:cache bundle exec rake lint_md
