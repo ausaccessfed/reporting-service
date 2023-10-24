@@ -1,7 +1,7 @@
 //= require_self
 //= require_tree ./reporting
 
-var reporting = {
+const reporting = {
   barGraph: {},
   graph: {}
-};
+}

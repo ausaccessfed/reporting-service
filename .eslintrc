@@ -9,12 +9,8 @@
     "jquery": true
   },
   "globals": {
-    // "$": true,
-    // "jQuery": true,
-    "Turbo": true,
-    "ClipboardJS": true,
-    "createEditor": true,
-    "ace": true
+    "d3": true,
+    "reporting": true
   },
   "parserOptions": {
     "sourceType": "module"
