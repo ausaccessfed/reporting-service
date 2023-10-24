@@ -3,10 +3,11 @@
 require 'simplecov'
 require 'fakeredis'
 require 'simplecov-console'
+require 'support/capybara_setup'
 
 SimpleCov.formatter = SimpleCov::Formatter::Console
 RSpec.configure do |config|
-  config.before(:example) { Redis::Connection::Memory.reset_all_databases }
+  config.before { Redis::Connection::Memory.reset_all_databases }
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
