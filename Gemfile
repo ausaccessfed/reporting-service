@@ -8,7 +8,7 @@ gem 'sass-rails'
 gem 'jbuilder'
 gem 'mysql2'
 gem 'slim'
-gem 'uglifier'
+gem 'terser'
 
 gem 'accession'
 gem 'activerecord-session_store'

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+gem 'terser' # add gem in Gemfile
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -26,7 +27,7 @@ Rails.application.configure do
   config.public_file_server.headers = { 'Cache-Control' => "public, max-age=#{1.day.to_i}" }
 
   # Compress CSS using a preprocessor.
-  config.assets.js_compressor = Uglifier.new(harmony: true)
+  config.assets.js_compressor = :terser
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
