@@ -6,18 +6,19 @@ RSpec.describe 'Administrator Reports' do
   let(:user) { create(:subject) }
 
   describe 'when subject is administrator' do
-    let(:classes) { %w[identity_providers service_providers organizations rapid_connect_services services] }
-    let(:types) { %w[monthly quarterly yearly] }
-
-    classes.each do |identifier|
-      types.each do |interval|
-        let!("auto_report_#{identifier}_#{interval}".to_sym) do
-          create(:automated_report, interval:, target: identifier, report_class: 'SubscriberRegistrationsReport')
+    let(:class_types) do
+      %w[identity_providers service_providers organizations rapid_connect_services services].each do |identifier|
+        types.each do |interval|
+          let!("auto_report_#{identifier}_#{interval}".to_sym) do
+            create(:automated_report, interval:, target: identifier, report_class: 'SubscriberRegistrationsReport')
+          end
         end
       end
     end
+    let(:types) { %w[monthly quarterly yearly] }
 
     before do
+      class_types
       entitlements = ['urn:mace:aaf.edu.au:ide:internal:aaf-admin']
       admins = Rails.application.config.reporting_service.admins
       admins[user.shared_token.to_sym] = entitlements
