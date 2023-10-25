@@ -1,64 +1,48 @@
 -include .env # Applies to every target in the file!
+-include ../aaf-terraform/app.Makefile
 
-#
-## Standalone Docker Tasks
-#
-LOCAL_IP=$(shell ipconfig getifaddr en0)
-docker-login:
-	@if [ "${DOCKER_ECR}" != "" ]; then \
-		aws-vault exec shared_services -- aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin ${DOCKER_ECR}; \
-	else \
-	  echo "Please set the DOCKER_ECR env var in the .env file to authenticate docker to ECR."; \
-	fi
-## Note to build for production remove --target flag
-BUILD_TARGET=development
-version := $(shell cat .ruby-version)
-BASE_IMAGE="${DOCKER_ECR}ruby-base:${version}"
-build-image: docker-login
-	docker build . -t ${DOCKER_ECR}reporting-service:${BUILD_TARGET} \
-	--build-arg LOCAL_BUILD=true \
-	--target ${BUILD_TARGET} --build-arg BASE_IMAGE=${BASE_IMAGE}
+BUILD_TARGET=production
+VERSION := $(shell cat .ruby-version)
+ADDITIONAL_BUILD_ARGS=--build-arg BASE_IMAGE=${DOCKER_ECR}ruby-base:${VERSION}
+APP_NAME=reporting-service
 
-## use this to connect to a running container
-connect-image:
-	docker container exec -it ${DOCKER_ECR}reporting-service /bin/bash
+COMMON_ARGS=\
+--env-file=.env \
+-v ${PWD}/app:/app/app \
+-v ${PWD}/config:/app/config \
+-v ${PWD}/lib:/app/lib \
+-v ${PWD}/log:/app/log \
+-v ${PWD}/db:/app/db \
+-v ${PWD}/Gemfile.lock:/app/Gemfile.lock \
+-e REPORTING_DB_HOST=${LOCAL_IP}
 
-run-image-bash:
-	docker run -it --rm --name reporting-service \
-	--entrypoint=/bin/bash \
-	--env-file=.env ${DOCKER_ECR}reporting-service:${BUILD_TARGET}
-
+RUN_ARGS=\
+--read-only \
+-p ${PORT}:${PORT}
 
 run-image:
-	docker run --rm -p ${PORT}:${PORT} \
-	--name reporting-service --env-file=.env \
-	-v ${PWD}/db:/app/db \
-	-v ${PWD}/lib:/app/lib \
-	-v ${PWD}/app:/app/app \
-	-v ${PWD}/config:/app/config \
-	-e REPORTING_DB_HOST=${LOCAL_IP} \
-	-v ${PWD}/log:/app/log \
-	${DOCKER_ECR}reporting-service:${BUILD_TARGET}
+	make run-generic-image-command ADDITIONAL_ARGS="${RUN_ARGS}"
 FILE=
+
+TESTS_ARGS=\
+-p 12347:12347 \
+-e RUBY_DEBUG_OPEN=true \
+-e RUBY_DEBUG_HOST=0.0.0.0 \
+-e RUBY_DEBUG_PORT=12347 \
+-v ${PWD}/coverage:/app/coverage \
+-v ${PWD}/spec:/app/spec \
+-v ${PWD}/tmp:/app/tmp \
+-e RAILS_ENV=test \
+-e REPORTING_DB_HOST=${LOCAL_IP} \
+-e REPORTING_DB_USERNAME=root \
+-e REPORTING_DB_PASSWORD='' \
+-e COVERAGE=true \
+-e CI=true 
+
 run-image-tests:
-	docker run -it --rm  \
-	-v ${PWD}/app:/app/app \
-	-v ${PWD}/db:/app/db \
-	-v ${PWD}/bin:/app/bin \
-	-v ${PWD}/lib:/app/lib \
-	-v ${PWD}/config:/app/config \
-	-v ${PWD}/log:/app/log \
-	-v ${PWD}/coverage:/app/coverage \
-	-v ${PWD}/spec:/app/spec \
-	-v ${PWD}/tmp:/app/tmp \
-	-e REPORTING_DB_HOST=${LOCAL_IP} \
-	-e REPORTING_DB_USERNAME=root \
-	-e REPORTING_DB_PASSWORD='' \
-	-e COVERAGE=true \
-	-e CI=true \
-	-e RAILS_ENV=test \
-	--name reporting-service-test \
-	${DOCKER_ECR}reporting-service:${BUILD_TARGET} \
-	"bundle exec rspec -fd ${FILE}"
+	@make run-generic-image-command \
+		APP_NAME_POSTFIX="-tests" \
+		ADDITIONAL_ARGS="${TESTS_ARGS}" \
+		COMMAND="rspec -fd ${FILE}"
 
 

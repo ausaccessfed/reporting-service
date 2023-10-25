@@ -1,18 +1,20 @@
-(function () {
-  var validRangeLteq = function(value, element){
-    var end_date = $("#report-form input[name='end']").attr('value');
+const jqValidations = () => {
+  const validRangeLteq = (value, _element) => {
+    const endDate = $("#report-form input[name='end']").attr('value')
 
-    if(end_date === '') return true;
-    return (Date.parse(value) <= Date.parse(end_date));
-  };
+    if (endDate === '') return true
+    return Date.parse(value) <= Date.parse(endDate)
+  }
 
-  var validRangeGteq = function(value, element){
-    var start_date = $("#report-form input[name='start']").attr('value');
+  const validRangeGteq = (value, _element) => {
+    const startDate = $("#report-form input[name='start']").attr('value')
 
-    if(start_date === '') return true;
-    return (Date.parse(value) >= Date.parse(start_date));
-  };
+    if (startDate === '') return true
+    return Date.parse(value) >= Date.parse(startDate)
+  }
 
-  jQuery.validator.addMethod('validRangeLteq', validRangeLteq, null);
-  jQuery.validator.addMethod('validRangeGteq', validRangeGteq, null);
-}());
+  jQuery.validator.addMethod('validRangeLteq', validRangeLteq, null)
+  jQuery.validator.addMethod('validRangeGteq', validRangeGteq, null)
+}
+
+jqValidations()

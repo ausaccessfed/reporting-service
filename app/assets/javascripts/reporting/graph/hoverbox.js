@@ -1,75 +1,76 @@
-reporting.graph.hoverbox = function(report, scale, range, sizing, timeformat) {
-  return function(selection) {
-    var timeOnly = timeformat;
-    var translate = reporting.translate;
-    var graph = sizing.graph;
-    var margin = graph.margin;
-    var g = selection.append('g')
-      .call(translate(margin.left, margin.top));
+reporting.graph.hoverbox = (report, scale, range, sizing, timeformat) => {
+  return (selection) => {
+    const timeOnly = timeformat
+    const { translate } = reporting
+    const { graph } = sizing
+    const { margin } = graph
+    const g = selection.append('g').call(translate(margin.left, margin.top))
 
-    var hoverbar = g.append('line')
+    const hoverbar = g
+      .append('line')
       .attr('class', 'hover-bar')
       .attr('x1', 400)
       .attr('x2', 400)
       .attr('y1', 0)
       .attr('y2', graph.height + 20)
-      .style('display', 'none');
+      .style('display', 'none')
 
-    var timeText = selection.select('.x-text');
+    const timeText = selection.select('.x-text')
 
-    var bisectDate = d3.bisector(function(d) { return d[0]; }).left;
+    const bisectDate = d3.bisector((d) => {
+      return d[0]
+    }).left
 
-    var update = reporting.throttle(function(mouse) {
+    const update = reporting.throttle((mouse) => {
       if (!mouse) {
-        report.series.forEach(function(k) {
-          selection.select('.legend .' + k + '-text').text('');
-        });
-        selection.select('.x-text').text('');
-        return;
+        report.series.forEach((k) => {
+          selection.select(`.legend .${k}-text`).text('')
+        })
+        selection.select('.x-text').text('')
+        return
       }
 
-      var date = 0;
-      var x0 = (scale.x.invert(mouse[0]) - range.start) / 1000;
+      let date = 0
+      const x0 = (scale.x.invert(mouse[0]) - range.start) / 1000
 
-      report.series.forEach(function(k) {
-        var data = report.data[k];
-        var i = bisectDate(data, x0, 1);
-        var d0 = data[i - 1];
-        var d1 = i < data.length ? data[i] : d0;
-        var d = x0 - d0[0] > d1[0] - x0 ? d1 : d0;
+      report.series.forEach((k) => {
+        const data = report.data[k]
+        const i = bisectDate(data, x0, 1)
+        const d0 = data[i - 1]
+        const d1 = i < data.length ? data[i] : d0
+        const d = x0 - d0[0] > d1[0] - x0 ? d1 : d0
 
-        date = Math.abs(x0 - d[0]) > Math.abs(x0 - date) ? date : d[0];
+        date = Math.abs(x0 - d[0]) > Math.abs(x0 - date) ? date : d[0]
 
-        var value = d[1];
-        if (d.length > 2) value = d[2];
+        // eslint-disable-next-line no-unused-vars
+        const [_, value2, value3] = d
+        let value = value2
+        if (d.length > 2) value = value3
 
-        selection.select('.legend .' + k + '-text')
-          .text(d3.round(value, 2) + report.units);
-      });
+        selection.select(`.legend .${k}-text`).text(d3.round(value, 2) + report.units)
+      })
 
-      selection.select('.x-text').text(
-        timeOnly(d3.time.second.offset(range.start, date))
-      );
-    }, 50);
+      selection.select('.x-text').text(timeOnly(d3.time.second.offset(range.start, date)))
+    }, 50)
 
     g.append('rect')
       .attr('class', 'hover-box')
       .attr('width', graph.width)
       .attr('height', graph.height)
-      .on('mouseover', function() {
-        hoverbar.style('display', null);
+      .on('mouseover', () => {
+        hoverbar.style('display', null)
       })
-      .on('mouseout', function() {
-        hoverbar.style('display', 'none');
-        update(null);
+      .on('mouseout', () => {
+        hoverbar.style('display', 'none')
+        update(null)
       })
-      .on('mousemove', function() {
-        var mouse = d3.mouse(this);
-        update(mouse);
+      .on('mousemove', () => {
+        const mouse = d3.mouse(this)
+        update(mouse)
 
-        var pos = mouse[0];
-        hoverbar.attr('x1', pos).attr('x2', pos);
-        timeText.attr('x', pos);
-      });
-  };
-};
+        const pos = mouse[0]
+        hoverbar.attr('x1', pos).attr('x2', pos)
+        timeText.attr('x', pos)
+      })
+  }
+}

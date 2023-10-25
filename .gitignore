@@ -18,3 +18,4 @@ dump.rdb
 reporting-service.iml
 .env
 .vscode
+node_modules

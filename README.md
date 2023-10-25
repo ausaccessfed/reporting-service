@@ -18,10 +18,10 @@ limitations under the License.
 
 AAF Reporting Service generates reports and graphs from data sourced from:
 
-* Federation Registry
-* Rapid Connect
-* Discovery Service
-* Other AAF infrastructure, as needed
+- Federation Registry
+- Rapid Connect
+- Discovery Service
+- Other AAF infrastructure, as needed
 
 ## Setting up a development environment
 
@@ -31,5 +31,6 @@ AAF Reporting Service generates reports and graphs from data sourced from:
 4. `guard`
 
 ## Running tests in development environment
+
 1. `RAILS_ENV=test bundle exec rake db:reset` to reset the database
 2. `RAILS_ENV=test bundle exec rake` to run test suite

@@ -1,21 +1,25 @@
-reporting.throttle = function (func, timeout) {
-  var next = null, timer = null;
+reporting.throttle = function throttle(func, timeout) {
+  let next = null
+  let timer = null
 
-  return function() {
-    var context = this, args = arguments;
+  return function theThrottle() {
+    const context = this
+    // eslint-disable-next-line prefer-rest-params
+    const args = arguments
 
-    var invoke = function() {
-      if (next) next();
-      timer = null;
-      next = null;
-    };
-
-    if (!timer) {
-      timer = setTimeout(invoke, timeout);
-      func.apply(context, args);
-      return;
+    function invoke() {
+      if (next) next()
+      timer = null
+      next = null
     }
 
-    next = function() { func.apply(context, args); };
-  };
-};
+    if (!timer) {
+      timer = setTimeout(invoke, timeout)
+      func.apply(context, args)
+    }
+
+    next = () => {
+      func.apply(context, args)
+    }
+  }
+}

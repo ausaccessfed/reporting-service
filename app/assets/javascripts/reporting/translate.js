@@ -1,5 +1,5 @@
-reporting.translate = function(x, y) {
-  return function(selection) {
-    selection.attr('transform', 'translate(' + x + ',' + y + ')');
-  };
-};
+reporting.translate = function (x, y) {
+  return function (selection) {
+    selection.attr('transform', `translate(${x},${y})`)
+  }
+}
