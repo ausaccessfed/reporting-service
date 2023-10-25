@@ -5,10 +5,10 @@ require 'rails_helper'
 RSpec.describe 'Administrator Reports' do
   let(:user) { create(:subject) }
 
-  let(:classes) { %w[identity_providers service_providers organizations rapid_connect_services services] }
-  let(:types) { %w[monthly quarterly yearly] }
-
   describe 'when subject is administrator' do
+    let(:classes) { %w[identity_providers service_providers organizations rapid_connect_services services] }
+    let(:types) { %w[monthly quarterly yearly] }
+
     classes.each do |identifier|
       types.each do |interval|
         let!("auto_report_#{identifier}_#{interval}".to_sym) do
