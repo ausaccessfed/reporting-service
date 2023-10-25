@@ -2,11 +2,11 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Federation Reports' do
-  given(:user) { create(:subject) }
-  given(:controller) { 'federation_reports' }
+RSpec.describe 'Federation Reports' do
+  let(:user) { create(:subject) }
+  let(:controller) { 'federation_reports' }
 
-  background do
+  before do
     attrs = create(:aaf_attributes, :from_subject, subject: user)
     RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
@@ -14,36 +14,36 @@ RSpec.feature 'Federation Reports' do
     click_button 'Login'
   end
 
-  scenario 'users will be redirected to dashboard after login' do
-    expect(current_path).to eq('/dashboard')
+  it 'users will be redirected to dashboard after login' do
+    expect(page).to have_current_path('/dashboard', ignore_query: true)
   end
 
   context 'Federation Growth Report' do
-    given(:button) { 'Federation Growth Report' }
-    given(:path) { 'federation_growth_report' }
-    given(:report_class) { 'FederationGrowthReport' }
-    given(:source) { nil }
-    given(:template) { 'svg.federation-growth' }
+    let(:button) { 'Federation Growth Report' }
+    let(:path) { 'federation_growth_report' }
+    let(:report_class) { 'FederationGrowthReport' }
+    let(:source) { nil }
+    let(:template) { 'svg.federation-growth' }
 
     it_behaves_like 'Subscribing to a nil class report'
   end
 
   context 'Federated Sessions Report' do
-    given(:button) { 'Federated Sessions Report' }
-    given(:report_class) { 'FederatedSessionsReport' }
-    given(:source) { 'DS' }
-    given(:path) { 'federated_sessions_report' }
-    given(:template) { 'svg.federated-sessions' }
+    let(:button) { 'Federated Sessions Report' }
+    let(:report_class) { 'FederatedSessionsReport' }
+    let(:source) { 'DS' }
+    let(:path) { 'federated_sessions_report' }
+    let(:template) { 'svg.federated-sessions' }
 
     it_behaves_like 'Subscribing to a nil class report'
   end
 
   context 'Daily Demand Report' do
-    given(:button) { 'Daily Demand Report' }
-    given(:report_class) { 'DailyDemandReport' }
-    given(:source) { 'DS' }
-    given(:path) { 'daily_demand_report' }
-    given(:template) { 'svg.daily-demand' }
+    let(:button) { 'Daily Demand Report' }
+    let(:report_class) { 'DailyDemandReport' }
+    let(:source) { 'DS' }
+    let(:path) { 'daily_demand_report' }
+    let(:template) { 'svg.daily-demand' }
 
     it_behaves_like 'Subscribing to a nil class report'
   end

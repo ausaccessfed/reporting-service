@@ -3,25 +3,24 @@
 require 'rails_helper'
 
 RSpec.describe ServiceProviderSourceIdentityProvidersReport do
+  subject { described_class.new(sp.entity_id, start, finish, source) }
+
   around { |spec| Timecop.freeze { spec.run } }
 
   let(:type) { 'service-provider-source-identity-providers' }
+  let(:report) { subject.generate }
   let(:header) { [['IdP Name', 'Total']] }
   let(:title) { 'SP Source Identity Providers Report for' }
 
   let(:start) { 11.days.ago.beginning_of_day }
   let(:finish) { Time.zone.now.end_of_day }
 
-  let(:sp) { create :service_provider }
-  let(:sp2) { create :service_provider }
-  let(:idp1) { create :identity_provider }
-  let(:idp2) { create :identity_provider }
-  let(:idp3) { create :identity_provider }
-  let(:idp4) { create :identity_provider }
-
-  subject { ServiceProviderSourceIdentityProvidersReport.new(sp.entity_id, start, finish, source) }
-
-  let(:report) { subject.generate }
+  let(:sp) { create(:service_provider) }
+  let(:sp2) { create(:service_provider) }
+  let(:idp1) { create(:identity_provider) }
+  let(:idp2) { create(:identity_provider) }
+  let(:idp3) { create(:identity_provider) }
+  let(:idp4) { create(:identity_provider) }
 
   shared_examples 'SP Source IdPs Report' do
     it 'output should include :type, :title, :header and :footer' do
@@ -57,9 +56,11 @@ RSpec.describe ServiceProviderSourceIdentityProvidersReport do
 
   context 'when sessions are Discovery Service sessions' do
     def create_event(idp_entity_id, sp_entity_id = nil, timestamp = nil)
-      create :discovery_service_event,
-             :response,
-             { selected_idp: idp_entity_id, initiating_sp: sp_entity_id, timestamp: }.compact
+      create(
+        :discovery_service_event,
+        :response,
+        { selected_idp: idp_entity_id, initiating_sp: sp_entity_id, timestamp: }.compact
+      )
     end
 
     let(:source) { 'DS' }
@@ -71,9 +72,11 @@ RSpec.describe ServiceProviderSourceIdentityProvidersReport do
 
   context 'when events are IdP sessions' do
     def create_event(idp_entity_id, sp_entity_id = nil, timestamp = nil)
-      create :federated_login_event,
-             :OK,
-             { asserting_party: idp_entity_id, relying_party: sp_entity_id, timestamp: }.compact
+      create(
+        :federated_login_event,
+        :OK,
+        { asserting_party: idp_entity_id, relying_party: sp_entity_id, timestamp: }.compact
+      )
     end
 
     let(:source) { 'IdP' }

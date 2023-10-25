@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Activation, type: :model do
+RSpec.describe Activation do
   context 'validations' do
     subject { build(:activation) }
 

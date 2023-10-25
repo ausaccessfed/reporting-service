@@ -2,18 +2,19 @@
 
 require 'rails_helper'
 
-RSpec.describe Organization, type: :model do
+RSpec.describe Organization do
   context 'validations' do
-    let(:factory) { :organization }
-
     subject { build(:organization) }
+
+    let(:factory) { :organization }
 
     it { is_expected.to validate_presence_of(:identifier) }
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_uniqueness_of(:identifier) }
 
-    context '#identifier' do
+    describe '#identifier' do
       let(:field) { :identifier }
+
       it_behaves_like 'a field accepting the urlsafe base64 alphabet'
     end
 

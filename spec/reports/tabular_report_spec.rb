@@ -50,8 +50,9 @@ RSpec.describe TabularReport do
     end
   end
 
-  context '#generate' do
+  describe '#generate' do
     subject { report.generate }
+
     let(:header) { [['Column 1', 'Column 2', 'Column 3']] }
     let(:footer) { [['Footer 1', 'Footer 2', 'Footer 3']] }
 

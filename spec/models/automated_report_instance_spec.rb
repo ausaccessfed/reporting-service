@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe AutomatedReportInstance, type: :model do
-  around { |spec| Timecop.freeze { spec.run } }
-
+RSpec.describe AutomatedReportInstance do
   subject { build(:automated_report_instance) }
+
+  around { |spec| Timecop.freeze { spec.run } }
 
   it { is_expected.to validate_uniqueness_of(:identifier) }
 
@@ -34,14 +34,13 @@ RSpec.describe AutomatedReportInstance, type: :model do
   end
 
   describe '#materialize' do
-    let(:range_end) { Time.zone.now.beginning_of_month }
-
-    let(:automated_report) { create(:automated_report, report_class:, source:, target:, interval:) }
-
     subject { create(:automated_report_instance, automated_report:, range_end:) }
 
+    let(:range_end) { Time.zone.now.beginning_of_month }
     let(:report) { subject.materialize }
     let(:target) { nil }
+
+    let(:automated_report) { create(:automated_report, report_class:, source:, target:, interval:) }
 
     shared_examples 'an instantiated report' do |kind, range: false|
       context "a #{kind} report" do

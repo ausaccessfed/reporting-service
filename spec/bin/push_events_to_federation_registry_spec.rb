@@ -2,9 +2,11 @@
 
 require 'rails_helper'
 
-load Rails.root.join('bin', 'push_events_to_federation_registry.rb').to_s
+load Rails.root.join('bin/push_events_to_federation_registry.rb').to_s
 
 RSpec.describe PushEventsToFederationRegistry do
+  subject { described_class.new(ds_host) }
+
   let(:config) { Rails.application.config.database_configuration[Rails.env] }
   let(:client) { subject.mysql_client }
   let(:redis) { Redis.new }
@@ -13,8 +15,6 @@ RSpec.describe PushEventsToFederationRegistry do
   let(:selected_idp) { "https://idp.#{Faker::Internet.domain_name}/idp/shibboleth" }
 
   let(:initiating_sp) { "https://sp.#{Faker::Internet.domain_name}/shibboleth" }
-
-  subject { described_class.new(ds_host) }
 
   context 'establish connection when @config exists' do
     before do
@@ -133,6 +133,20 @@ RSpec.describe PushEventsToFederationRegistry do
 
     context 'when an item is pending' do
       let(:selection_method) { 'manual' }
+      let(:expected_attrs) do
+        {
+          version: 0,
+          date_created: event[:timestamp],
+          ds_host:,
+          idp_entity: selected_idp,
+          idpid: idp_fr_id,
+          request_type: 'DS Request',
+          robot: "\x00".b,
+          source: event[:ip],
+          sp_endpoint: initiating_sp,
+          spid: sp_fr_id
+        }
+      end
 
       let(:event) do
         attributes_for(:discovery_service_event, :response, selection_method:, initiating_sp:, selected_idp:)
@@ -149,23 +163,8 @@ RSpec.describe PushEventsToFederationRegistry do
         nil
       end
 
-      let(:expected_attrs) do
-        {
-          version: 0,
-          date_created: event[:timestamp],
-          ds_host:,
-          idp_entity: selected_idp,
-          idpid: idp_fr_id,
-          request_type: 'DS Request',
-          robot: "\x00".b,
-          source: event[:ip],
-          sp_endpoint: initiating_sp,
-          spid: sp_fr_id
-        }
-      end
-
       it 'stores the record in the database' do
-        expect { run }.to change { items.count }.by(1)
+        expect { run }.to change(items, :count).by(1)
         expect(items.last.except(:id)).to eq(expected_attrs)
       end
 
@@ -186,7 +185,7 @@ RSpec.describe PushEventsToFederationRegistry do
         before { client.query('DELETE FROM idpssodescriptor') }
 
         it 'inserts the record with a idpid of -1' do
-          expect { run }.to change { items.count }.by(1)
+          expect { run }.to change(items, :count).by(1)
           expect(items.last.except(:id)).to eq(expected_attrs.merge(idpid: -1))
         end
 
@@ -199,7 +198,7 @@ RSpec.describe PushEventsToFederationRegistry do
         before { client.query('DELETE FROM spssodescriptor') }
 
         it 'inserts the record with a spid of -1' do
-          expect { run }.to change { items.count }.by(1)
+          expect { run }.to change(items, :count).by(1)
           expect(items.last.except(:id)).to eq(expected_attrs.merge(spid: -1))
         end
 
@@ -214,7 +213,7 @@ RSpec.describe PushEventsToFederationRegistry do
         end
 
         it 'skips the record' do
-          expect { run }.not_to(change { items.count })
+          expect { run }.not_to(change(items, :count))
         end
 
         it 'dequeues the item' do
@@ -228,7 +227,7 @@ RSpec.describe PushEventsToFederationRegistry do
         end
 
         it 'skips the record' do
-          expect { run }.not_to(change { items.count })
+          expect { run }.not_to(change(items, :count))
         end
 
         it 'dequeues the item' do
@@ -259,7 +258,7 @@ RSpec.describe PushEventsToFederationRegistry do
       before { events.each { |e| enqueue_event(e) } }
 
       it 'stores the records' do
-        expect { run }.to change { items.count }.by(100).and change { redis.llen('wayf_access_record') }.to(0)
+        expect { run }.to change(items, :count).by(100).and change { redis.llen('wayf_access_record') }.to(0)
       end
     end
   end

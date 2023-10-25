@@ -2,15 +2,15 @@
 
 require 'rails_helper'
 
-RSpec.describe AutomatedReportInstancesController, type: :controller do
-  let(:organization) { create :organization }
-  let(:attribute) { create :saml_attribute }
-  let(:sp) { create :service_provider, organization: }
-  let(:unknown_sp) { create :service_provider }
-  let(:idp) { create :identity_provider, organization: }
-  let(:unknown_idp) { create :identity_provider }
+RSpec.describe AutomatedReportInstancesController do
+  let(:organization) { create(:organization) }
+  let(:attribute) { create(:saml_attribute) }
+  let(:sp) { create(:service_provider, organization:) }
+  let(:unknown_sp) { create(:service_provider) }
+  let(:idp) { create(:identity_provider, organization:) }
+  let(:unknown_idp) { create(:identity_provider) }
 
-  let(:user) { create :subject, :authorized, permission: "objects:organization:#{organization.identifier}:report" }
+  let(:user) { create(:subject, :authorized, permission: "objects:organization:#{organization.identifier}:report") }
 
   def get_tamplate_name(type)
     type.chomp('Report').underscore.tr('_', '-')
@@ -23,11 +23,11 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   before { session[:subject_id] = user.try(:id) }
 
   shared_examples 'Automated Public Report' do
-    let(:user) { create :subject }
+    let(:user) { create(:subject) }
 
-    let(:auto_report) { create :automated_report, target:, report_class:, source: }
+    let(:auto_report) { create(:automated_report, target:, report_class:, source:) }
 
-    let!(:instance) { create :automated_report_instance, automated_report: auto_report }
+    let!(:instance) { create(:automated_report_instance, automated_report: auto_report) }
 
     it 'all subjects can view public reports' do
       run(instance.identifier)
@@ -99,15 +99,15 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   end
 
   shared_examples 'Automated Subscriber Report' do
-    let(:auto_report) { create :automated_report, target: object.entity_id, report_class:, source: }
+    let(:auto_report) { create(:automated_report, target: object.entity_id, report_class:, source:) }
 
-    let!(:instance) { create :automated_report_instance, automated_report: auto_report }
+    let!(:instance) { create(:automated_report_instance, automated_report: auto_report) }
 
-    let!(:unknown_auto_report) { create :automated_report, target: unknown_object.entity_id, report_class:, source: }
+    let!(:unknown_auto_report) { create(:automated_report, target: unknown_object.entity_id, report_class:, source:) }
 
-    let!(:unknown_instance) { create :automated_report_instance, automated_report: unknown_auto_report }
+    let!(:unknown_instance) { create(:automated_report_instance, automated_report: unknown_auto_report) }
 
-    it 'should render the template' do
+    it 'renders the template' do
       run(instance.identifier)
 
       data = JSON.parse(assigns[:data], symbolize_names: true)
@@ -120,7 +120,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     end
 
     context 'subject with no permissions' do
-      it 'should not be able to view the report' do
+      it 'is not able to view the report' do
         run(unknown_instance.identifier)
 
         expect(assigns[:instance]).to be_nil
@@ -128,7 +128,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     end
 
     context 'subject with subscriber access level' do
-      it 'should be able to view the report' do
+      it 'is able to view the report' do
         run(instance.identifier)
 
         expect(assigns[:instance]).to eq(instance)
@@ -136,9 +136,9 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     end
 
     context 'subject with admin access level' do
-      let(:user) { create :subject, :authorized, permission: '*' }
+      let(:user) { create(:subject, :authorized, permission: '*') }
 
-      it 'should be able to view all types of reports' do
+      it 'is able to view all types of reports' do
         run(instance.identifier)
         expect(assigns[:instance]).to eq(instance)
 
@@ -203,16 +203,16 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   end
 
   shared_examples 'Automated Subscriber Registrations Report' do
-    let(:auto_report) { create :automated_report, target:, report_class: 'SubscriberRegistrationsReport' }
+    let(:auto_report) { create(:automated_report, target:, report_class: 'SubscriberRegistrationsReport') }
 
-    let!(:instance) { create :automated_report_instance, automated_report: auto_report }
+    let!(:instance) { create(:automated_report_instance, automated_report: auto_report) }
 
     before { run(instance.identifier) }
 
     context 'only subject with admin access level' do
-      let(:user) { create :subject, :authorized, permission: '*' }
+      let(:user) { create(:subject, :authorized, permission: '*') }
 
-      it 'should render the template' do
+      it 'renders the template' do
         run(instance.identifier)
 
         data = JSON.parse(assigns[:data], symbolize_names: true)

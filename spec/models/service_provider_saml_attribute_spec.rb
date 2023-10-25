@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ServiceProviderSAMLAttribute, type: :model do
+RSpec.describe ServiceProviderSAMLAttribute do
   context 'validations' do
     subject { build(:service_provider_saml_attribute) }
 

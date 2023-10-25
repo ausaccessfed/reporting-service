@@ -26,7 +26,6 @@ gem 'rmagick'
 gem 'sentry-rails'
 gem 'sentry-ruby'
 gem 'torba-rails'
-# rubocop:disable Metrics/BlockLength
 group :development, :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails', '~> 4.11'
@@ -67,4 +66,3 @@ group :development, :test do
 
   gem 'terminal-notifier-guard', require: false
 end
-# rubocop:enable Metrics/BlockLength

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AdministratorReportsController, type: :routing do
+RSpec.describe AdministratorReportsController do
   shared_examples 'get request' do
     subject { { get: "admin_reports#{path}" } }
 

@@ -3,9 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe DailyDemandReport do
+  subject { described_class.new(start, finish, source) }
+
   around { |spec| Timecop.freeze { spec.run } }
 
   let(:type) { 'daily-demand' }
+  let(:report) { subject.generate }
+  let(:data) { report[:data] }
   let(:title) { 'Daily Demand' }
   let(:units) { '' }
   let(:labels) { { y: 'Sessions / hour (average)', sessions: 'Sessions' } }
@@ -17,23 +21,19 @@ RSpec.describe DailyDemandReport do
 
   let(:range) { { start: start.strftime('%FT%H:%M:%S%z'), end: finish.strftime('%FT%H:%M:%S%z') } }
 
-  let(:identity_provider) { create :identity_provider }
-  let(:service_provider) { create :service_provider }
-
-  subject { DailyDemandReport.new(start, finish, source) }
-
-  let(:report) { subject.generate }
-  let(:data) { report[:data] }
+  let(:identity_provider) { create(:identity_provider) }
+  let(:service_provider) { create(:service_provider) }
 
   def expect_in_range
-    (0..86_340).step(300).each_with_index { |t, index| expect(data[:sessions][index]).to match_array([t, value]) }
+    (0..86_340).step(300).each_with_index { |t, index| expect(data[:sessions][index]).to contain_exactly(t, value) }
   end
 
   shared_examples 'a report procesing events from the selected source' do
     before { 5.times { create_event } }
+
     let(:value) { anything }
 
-    it 'should include title, units and labels' do
+    it 'includes title, units and labels' do
       output_title = "#{title} (#{source_name})"
       expect(report).to include(title: output_title, units:, labels:, range:)
     end
@@ -45,38 +45,42 @@ RSpec.describe DailyDemandReport do
 
   context 'when events are not responded' do
     before do
-      create_list :discovery_service_event,
-                  20,
-                  initiating_sp: service_provider.entity_id,
-                  timestamp: 1.day.ago.beginning_of_day
+      create_list(
+        :discovery_service_event,
+        20,
+        initiating_sp: service_provider.entity_id,
+        timestamp: 1.day.ago.beginning_of_day
+      )
     end
 
     let(:value) { 0.00 }
     let(:source) { 'DS' }
 
-    it 'should not count any sessions' do
+    it 'does not count any sessions' do
       expect_in_range
     end
   end
 
   context 'when IdP events are failed' do
     before do
-      create_list :federated_login_event,
-                  20,
-                  relying_party: service_provider.entity_id,
-                  timestamp: 1.day.ago.beginning_of_day
+      create_list(
+        :federated_login_event,
+        20,
+        relying_party: service_provider.entity_id,
+        timestamp: 1.day.ago.beginning_of_day
+      )
     end
 
     let(:value) { 0.00 }
     let(:source) { 'IdP' }
 
-    it 'should not count any sessions' do
+    it 'does not count any sessions' do
       expect_in_range
     end
   end
 
   shared_examples 'when events timestamps are specified manually' do
-    before :example do
+    before do
       [*1..5].each do |n|
         create_event(n.days.ago.beginning_of_day)
         create_event(n.days.ago.beginning_of_day + 10.minutes)
@@ -103,13 +107,11 @@ RSpec.describe DailyDemandReport do
 
   context 'when events are sessions with response' do
     def create_event(timestamp = nil)
-      create :discovery_service_event,
-             :response,
-             {
-               selected_idp: identity_provider.entity_id,
-               initiating_sp: service_provider.entity_id,
-               timestamp:
-             }.compact
+      create(
+        :discovery_service_event,
+        :response,
+        { selected_idp: identity_provider.entity_id, initiating_sp: service_provider.entity_id, timestamp: }.compact
+      )
     end
 
     let(:source) { 'DS' }
@@ -121,13 +123,11 @@ RSpec.describe DailyDemandReport do
 
   context 'when events are IdP sessions' do
     def create_event(timestamp = nil)
-      create :federated_login_event,
-             :OK,
-             {
-               asserting_party: identity_provider.entity_id,
-               relying_party: service_provider.entity_id,
-               timestamp:
-             }.compact
+      create(
+        :federated_login_event,
+        :OK,
+        { asserting_party: identity_provider.entity_id, relying_party: service_provider.entity_id, timestamp: }.compact
+      )
     end
 
     let(:source) { 'IdP' }

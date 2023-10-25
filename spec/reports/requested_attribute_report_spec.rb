@@ -6,33 +6,37 @@ RSpec.describe RequestedAttributeReport do
   let(:type) { 'requested-attribute' }
   let(:header) { [%w[Name Status]] }
 
-  let(:required_attribute) { create :saml_attribute }
-  let(:optional_attribute) { create :saml_attribute }
-  let(:none_requested_attribute) { create :saml_attribute }
+  let(:required_attribute) { create(:saml_attribute) }
+  let(:optional_attribute) { create(:saml_attribute) }
+  let(:none_requested_attribute) { create(:saml_attribute) }
 
-  let(:service_provider_01) { create :service_provider }
-  let(:service_provider_02) { create :service_provider }
+  let(:service_provider_01) { create(:service_provider) }
+  let(:service_provider_02) { create(:service_provider) }
 
   let(:active_service_providers) { [service_provider_01, service_provider_02] }
 
   before do
     [service_provider_01, service_provider_02].each do |object|
-      create :service_provider_saml_attribute,
-             optional: false,
-             saml_attribute: required_attribute,
-             service_provider: object
+      create(
+        :service_provider_saml_attribute,
+        optional: false,
+        saml_attribute: required_attribute,
+        service_provider: object
+      )
 
-      create :service_provider_saml_attribute,
-             optional: true,
-             saml_attribute: optional_attribute,
-             service_provider: object
+      create(
+        :service_provider_saml_attribute,
+        optional: true,
+        saml_attribute: optional_attribute,
+        service_provider: object
+      )
     end
 
-    active_service_providers.each { |object| create :activation, federation_object: object }
+    active_service_providers.each { |object| create(:activation, federation_object: object) }
   end
 
   shared_examples 'a tabular report for requested attributes' do
-    subject { RequestedAttributeReport.new(attribute.name) }
+    subject { described_class.new(attribute.name) }
 
     let(:report) { subject.generate }
 
@@ -58,7 +62,7 @@ RSpec.describe RequestedAttributeReport do
     end
   end
 
-  context '#generate' do
+  describe '#generate' do
     context 'for required attributes' do
       let(:attribute) { required_attribute }
       let(:status) { 'required' }
@@ -81,19 +85,21 @@ RSpec.describe RequestedAttributeReport do
     end
 
     context 'report rows' do
+      subject { described_class.new(required_attribute.name) }
+
       let(:report) { subject.generate }
-      let(:inactive_service_provider) { create :service_provider }
+      let(:inactive_service_provider) { create(:service_provider) }
 
       before do
-        create :service_provider_saml_attribute,
-               optional: false,
-               saml_attribute: required_attribute,
-               service_provider: inactive_service_provider
+        create(
+          :service_provider_saml_attribute,
+          optional: false,
+          saml_attribute: required_attribute,
+          service_provider: inactive_service_provider
+        )
       end
 
-      subject { RequestedAttributeReport.new(required_attribute.name) }
-
-      it 'should never include inactive SPs' do
+      it 'nevers include inactive SPs' do
         sp_name = inactive_service_provider.name
 
         expect(report[:rows]).not_to include([sp_name, anything])

@@ -8,7 +8,7 @@ RSpec.describe Authentication::SubjectReceiver do
 
   before { allow(subject).to receive(:update_roles) }
 
-  context '#map_attributes' do
+  describe '#map_attributes' do
     let(:attrs) do
       keys = %w[edupersontargetedid auedupersonsharedtoken displayname mail]
       keys.reduce({}) { |a, e| a.merge(e => e) }
@@ -24,7 +24,7 @@ RSpec.describe Authentication::SubjectReceiver do
     end
   end
 
-  context '#subject' do
+  describe '#subject' do
     let(:attrs) { attributes_for(:subject) }
 
     def run
@@ -75,7 +75,7 @@ RSpec.describe Authentication::SubjectReceiver do
       end
     end
 
-    context '#finish' do
+    describe '#finish' do
       context 'when request url is available' do
         let(:session) { { 'return_url' => 'url' } }
         let(:env) { { 'rack.session' => session } }
@@ -84,7 +84,7 @@ RSpec.describe Authentication::SubjectReceiver do
           subject.finish(env)
         end
 
-        it 'should redirect to request url' do
+        it 'redirects to request url' do
           expect(run).to eq([302, { 'Location' => 'url' }, []])
         end
       end
@@ -97,7 +97,7 @@ RSpec.describe Authentication::SubjectReceiver do
           subject.finish(env)
         end
 
-        it 'should redirect to request url' do
+        it 'redirects to request url' do
           expect(run).to eq([302, { 'Location' => '/' }, []])
         end
       end

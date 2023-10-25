@@ -2,19 +2,22 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Administrator Reports' do
-  given(:user) { create :subject }
+RSpec.describe 'Administrator Reports' do
+  let(:user) { create(:subject) }
+
+  let(:classes) { %w[identity_providers service_providers organizations rapid_connect_services services] }
+  let(:types) { %w[monthly quarterly yearly] }
 
   describe 'when subject is administrator' do
-    %w[identity_providers service_providers organizations rapid_connect_services services].each do |identifier|
-      %w[monthly quarterly yearly].each do |interval|
-        given!("auto_report_#{identifier}_#{interval}".to_sym) do
-          create :automated_report, interval:, target: identifier, report_class: 'SubscriberRegistrationsReport'
+    classes.each do |identifier|
+      types.each do |interval|
+        let!("auto_report_#{identifier}_#{interval}".to_sym) do
+          create(:automated_report, interval:, target: identifier, report_class: 'SubscriberRegistrationsReport')
         end
       end
     end
 
-    background do
+    before do
       entitlements = ['urn:mace:aaf.edu.au:ide:internal:aaf-admin']
       admins = Rails.application.config.reporting_service.admins
       admins[user.shared_token.to_sym] = entitlements
@@ -27,15 +30,15 @@ RSpec.feature 'Administrator Reports' do
       visit '/admin_reports'
     end
 
-    scenario 'viewing the Administrator Reports Dashboard' do
-      expect(current_path).to eq('/admin_reports')
+    it 'viewing the Administrator Reports Dashboard' do
+      expect(page).to have_current_path('/admin_reports', ignore_query: true)
       expect(page).to have_css('.list-group')
     end
 
     context 'Subscriber Registrations' do
-      given(:identifiers) { %w[organizations identity_providers service_providers rapid_connect_services services] }
+      let(:identifiers) { %w[organizations identity_providers service_providers rapid_connect_services services] }
 
-      scenario 'viewing Report' do
+      it 'viewing Report' do
         message1 = 'You have successfully subscribed to this report'
         message2 = 'You have already subscribed to this report'
 
@@ -48,23 +51,23 @@ RSpec.feature 'Administrator Reports' do
             expect(page).to have_css('table.subscriber-registrations')
             click_button('Subscribe')
             click_link(interval)
-            expect(page).to have_selector('p', text: message1)
+            expect(page).to have_css('p', text: message1)
 
             select(identifier.titleize, from: 'Subscriber Identifiers')
             click_button('Generate')
             expect(page).to have_css('table.subscriber-registrations')
             click_button('Subscribe')
             click_link(interval)
-            expect(page).to have_selector('p', text: message2)
+            expect(page).to have_css('p', text: message2)
 
-            expect(current_path).to eq('/admin_reports/subscriber_registrations_report')
+            expect(page).to have_current_path('/admin_reports/subscriber_registrations_report', ignore_query: true)
           end
         end
       end
     end
 
     context 'Federation Growth Report' do
-      scenario 'viewing Report' do
+      it 'viewing Report' do
         click_link 'Federation Growth Report'
 
         page.execute_script("$('input').removeAttr('readonly')")
@@ -75,13 +78,13 @@ RSpec.feature 'Administrator Reports' do
         page.find_button('Generate').execute_script('this.click()')
         sleep(2)
 
-        expect(current_path).to eq('/admin_reports/federation_growth_report')
+        expect(page).to have_current_path('/admin_reports/federation_growth_report', ignore_query: true)
         expect(page).to have_css('svg.federation-growth')
       end
     end
 
     shared_examples 'Daily Demand Report' do
-      scenario 'viewing Report' do
+      it 'viewing Report' do
         click_link 'Daily Demand Report'
 
         page.execute_script("$('input').removeAttr('readonly')")
@@ -93,14 +96,14 @@ RSpec.feature 'Administrator Reports' do
         page.find_button('Generate').execute_script('this.click()')
         sleep(2)
 
-        expect(current_path).to eq('/admin_reports/daily_demand_report')
+        expect(page).to have_current_path('/admin_reports/daily_demand_report', ignore_query: true)
         expect(page).to have_css('svg.daily-demand')
         expect(page).to have_content("(#{data_source_name})")
       end
     end
 
     shared_examples 'Federated Sessions Report' do
-      scenario 'viewing Report' do
+      it 'viewing Report' do
         click_link 'Federated Sessions Report'
 
         page.execute_script("$('input').removeAttr('readonly')")
@@ -112,14 +115,14 @@ RSpec.feature 'Administrator Reports' do
         page.find_button('Generate').execute_script('this.click()')
         sleep(2)
 
-        expect(current_path).to eq('/admin_reports/federated_sessions_report')
+        expect(page).to have_current_path('/admin_reports/federated_sessions_report', ignore_query: true)
         expect(page).to have_css('svg.federated-sessions')
         expect(page).to have_content("(#{data_source_name})")
       end
     end
 
     shared_examples 'Identity Provider Utilization Report' do
-      scenario 'viewing Report' do
+      it 'viewing Report' do
         click_link 'Identity Provider Utilization Report'
 
         page.execute_script("$('input').removeAttr('readonly')")
@@ -131,7 +134,7 @@ RSpec.feature 'Administrator Reports' do
         page.find_button('Generate').execute_script('this.click()')
         sleep(2)
 
-        expect(current_path).to eq('/admin_reports/identity_provider_utilization_report')
+        expect(page).to have_current_path('/admin_reports/identity_provider_utilization_report', ignore_query: true)
         expect(page).to have_css('table.identity-provider-utilization')
         # Tabular reports do not render report title - see #178
         # So instead just confirm the report-data JSON contains the title.
@@ -141,7 +144,7 @@ RSpec.feature 'Administrator Reports' do
     end
 
     shared_examples 'Service Provider Utilization Report' do
-      scenario 'viewing Report' do
+      it 'viewing Report' do
         click_link 'Service Provider Utilization Report'
 
         page.execute_script("$('input').removeAttr('readonly')")
@@ -153,7 +156,7 @@ RSpec.feature 'Administrator Reports' do
         page.find_button('Generate').execute_script('this.click()')
         sleep(2)
 
-        expect(current_path).to eq('/admin_reports/service_provider_utilization_report')
+        expect(page).to have_current_path('/admin_reports/service_provider_utilization_report', ignore_query: true)
         expect(page).to have_css('table.service-provider-utilization')
         # Tabular reports do not render report title - see #178
         # So instead just confirm the report-data JSON contains the title.

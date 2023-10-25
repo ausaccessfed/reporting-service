@@ -25,7 +25,7 @@ class Role < ApplicationRecord
   private
 
   def admin_entitlements?
-    return unless config[:admin_entitlements]
+    return false unless config[:admin_entitlements]
 
     config[:admin_entitlements].include? entitlement
   end

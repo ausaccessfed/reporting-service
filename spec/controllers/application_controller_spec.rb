@@ -6,7 +6,14 @@ require 'gumboot/shared_examples/application_controller'
 class SomeReportsController < ApplicationController
 end
 
-RSpec.describe ApplicationController, type: :controller do
+RSpec.describe ApplicationController do
+  before do
+    @routes.draw do
+      match 'some_reports/report_action/:id' => 'some_reports#report_action', :via => %i[get post]
+      match 'anonymous/federation_growth' => 'anonymous#federation_growth', :via => %i[get post]
+    end
+  end
+
   include_examples 'Application controller'
 
   controller do
@@ -15,13 +22,6 @@ RSpec.describe ApplicationController, type: :controller do
     def federation_growth
       public_action
       render nothing: true
-    end
-  end
-
-  before do
-    @routes.draw do
-      match 'some_reports/report_action/:id' => 'some_reports#report_action', :via => %i[get post]
-      match 'anonymous/federation_growth' => 'anonymous#federation_growth', :via => %i[get post]
     end
   end
 
@@ -50,7 +50,7 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   context 'use time zone around filter' do
-    let(:user) { create :subject, :authorized }
+    let(:user) { create(:subject, :authorized) }
     let!(:zone) { Faker::Address.time_zone }
 
     controller SomeReportsController do

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe UpdateFromFederationRegistry, type: :job do
+RSpec.describe UpdateFromFederationRegistry do
   before(:all) { DatabaseCleaner.clean_with(:truncation) }
 
   around { |spec| Timecop.freeze { spec.run } }
@@ -385,15 +385,6 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
 
     describe 'complete federation example' do
       let(:entity_ids) { Set.new }
-
-      def unique_entity_id
-        entity_id = Faker::Internet.url
-        entity_id = Faker::Internet.url while entity_ids.include?(entity_id)
-
-        entity_ids << entity_id
-        entity_id
-      end
-
       let(:organizations) do
         i = rand(9999)
         Array.new(10) do
@@ -408,7 +399,6 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
           }
         end
       end
-
       let(:attributes) do
         i = rand(9999)
         oid_tail_pattern = Array.new(rand(6)) { %w[# # # ## #####].sample }.join('.')
@@ -425,7 +415,6 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
           }
         end
       end
-
       let(:identity_providers) do
         i = rand(9999)
         Array.new(20) do
@@ -449,11 +438,12 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
           }
         end
       end
+      let(:cases) { [true, false].sample }
 
       let(:service_providers) do
         i = rand(9999)
         Array.new(30) do
-          attrs = attributes.sample(rand(10)).map { |a| a.slice(:name, :id).merge(is_required: [true, false].sample) }
+          attrs = attributes.sample(rand(10)).map { |a| a.slice(:name, :id).merge(is_required: cases) }
 
           {
             id: (i += 1),
@@ -473,14 +463,18 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
           }
         end
       end
-
       let(:organizations_response) { JSON.pretty_generate(organizations:) }
-
       let(:identityproviders_response) { JSON.pretty_generate(identity_providers:) }
-
       let(:serviceproviders_response) { JSON.pretty_generate(service_providers:) }
-
       let(:attributes_response) { JSON.pretty_generate(attributes:) }
+
+      def unique_entity_id
+        entity_id = Faker::Internet.url
+        entity_id = Faker::Internet.url while entity_ids.include?(entity_id)
+
+        entity_ids << entity_id
+        entity_id
+      end
 
       it 'syncs the objects' do
         idp_attrs = identity_providers.flat_map { |o| o[:saml][:attributes] }
@@ -497,13 +491,13 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
             .and(change(ServiceProviderSAMLAttribute, :count).by(sp_attrs.count))
         )
 
-        expect(Organization.all.map(&:name)).to contain_exactly(*organizations.pluck(:display_name))
+        expect(Organization.all.map(&:name)).to match_array(organizations.pluck(:display_name))
 
-        expect(IdentityProvider.all.map(&:name)).to contain_exactly(*identity_providers.pluck(:display_name))
+        expect(IdentityProvider.all.map(&:name)).to match_array(identity_providers.pluck(:display_name))
 
-        expect(ServiceProvider.all.map(&:name)).to contain_exactly(*service_providers.pluck(:display_name))
+        expect(ServiceProvider.all.map(&:name)).to match_array(service_providers.pluck(:display_name))
 
-        expect(SAMLAttribute.all.map(&:name)).to contain_exactly(*attributes.pluck(:name))
+        expect(SAMLAttribute.all.map(&:name)).to match_array(attributes.pluck(:name))
 
         expect { run }.to not_change(Organization, :count).and not_change(IdentityProvider, :count).and not_change(
                       ServiceProvider,

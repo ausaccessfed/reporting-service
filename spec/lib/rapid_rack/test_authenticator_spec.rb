@@ -36,13 +36,14 @@ module RapidRack
 
       context 'with a JWT' do
         around do |example|
-          TestAuthenticator.jwt = 'the jwt'
+          described_class.jwt = 'the jwt'
           example.run
         ensure
-          TestAuthenticator.jwt = nil
+          described_class.jwt = nil
         end
 
         before { run }
+
         it { is_expected.to be_successful }
 
         context 'login form' do
@@ -54,7 +55,7 @@ module RapidRack
       end
 
       context 'with no JWT' do
-        before { TestAuthenticator.jwt = nil }
+        before { described_class.jwt = nil }
 
         it 'raises an error' do
           expect { run }.to raise_error('No login JWT was set')

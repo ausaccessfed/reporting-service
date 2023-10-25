@@ -2,9 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe AutomatedReportsController, type: :routing do
+RSpec.describe AutomatedReportsController do
   describe 'route to /automated_reports/index' do
     subject { { get: '/automated_reports' } }
+
     it { is_expected.to route_to 'automated_reports#index' }
   end
 

@@ -13,38 +13,91 @@ AllCops:
   Exclude:
     - bin/**
     - db/**/*
-
+Style/Documentation:
+  Enabled: false
 Layout/LineLength:
   Max: 120
-
-Style/StderrPuts:
-  Enabled: false
 
 Rails/DynamicFindBy:
   Whitelist:
     - find_by_sql
     - find_by_identifying_attribute
 
-Naming/MethodParameterName:
-  Enabled: false
-
-Naming/VariableNumber:
-  Enabled: false
-
-Rails/InverseOf:
-  Enabled: false
-
-Lint/MissingSuper:
-  Enabled: false
-
 Style/StringLiterals:
-  Enabled: true
   EnforcedStyle: single_quotes
 
 Style/StringLiteralsInInterpolation:
-  Enabled: true
   EnforcedStyle: single_quotes
 
 Style/QuotedSymbols:
-  Enabled: true
   EnforcedStyle: single_quotes
+
+Metrics/BlockLength:
+  CountAsOne: ['heredoc', 'hash', 'array']
+  Max: 50
+
+Metrics/ClassLength:
+  CountAsOne: ['heredoc', 'hash', 'array']
+
+Metrics/ModuleLength:
+  CountAsOne: ['heredoc', 'hash', 'array']
+
+# Rely on ABC complexity for deciding whether a method is too long, not the
+# amount of text.
+Metrics/MethodLength:
+  CountAsOne: ['heredoc', 'hash', 'array']
+
+#TODO:
+RSpec/MultipleExpectations:
+  Max: 35
+RSpec/ExampleLength:
+  CountAsOne: ['heredoc', 'hash', 'array']
+  Max: 60
+RSpec/NestedGroups:
+  Max: 6
+RSpec/MultipleMemoizedHelpers:
+  Max: 30
+RSpec/NamedSubject:
+  Enabled: false
+RSpec/RepeatedExampleGroupDescription:
+  Enabled: false
+RSpec/ContextWording:
+  Enabled: false
+RSpec/LetSetup:
+  Enabled: false
+Naming/MethodParameterName:
+  Enabled: false
+RSpec/IndexedLet:
+  Enabled: false
+Style/StderrPuts:
+  Enabled: false
+Naming/VariableNumber:
+  Enabled: false
+Rails/InverseOf:
+  Enabled: false
+Lint/MissingSuper:
+  Enabled: false
+RSpec/AnyInstance:
+  Enabled: false
+RSpec/LetBeforeExamples:
+  Enabled: false
+RSpec/MessageChain:
+  Enabled: false
+RSpec/MessageSpies:
+  Enabled: false
+RSpec/SubjectStub:
+  Enabled: false
+RSpec/VerifiedDoubles:
+  Enabled: false
+RSpec/StubbedMock:
+  Enabled: false
+Capybara/SpecificMatcher:
+  Enabled: false
+RSpec/InstanceVariable:
+  Enabled: false
+RSpec/BeforeAfterAll:
+  Enabled: false
+RSpec/ImplicitBlockExpectation:
+  Enabled: false
+RSpec/DescribeClass:
+  Enabled: false

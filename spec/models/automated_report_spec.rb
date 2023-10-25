@@ -2,7 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe AutomatedReport, type: :model do
+RSpec.describe AutomatedReport do
+  before do
+    allow(Rails.application.config).to receive_message_chain(:reporting_service, :default_session_source).and_return(
+      nil
+    )
+  end
+
   describe 'validations' do
     let(:idp) { create(:identity_provider) }
     let(:sp) { create(:service_provider) }
@@ -127,12 +133,6 @@ RSpec.describe AutomatedReport, type: :model do
       subject.interval = nil
       expect(subject.interval).to be_nil
     end
-  end
-
-  before do
-    allow(Rails.application.config).to receive_message_chain(:reporting_service, :default_session_source).and_return(
-      nil
-    )
   end
 
   describe '#source_if_needed' do

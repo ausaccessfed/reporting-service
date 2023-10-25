@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ServiceProviderReportsController, type: :controller do
+RSpec.describe ServiceProviderReportsController do
   let(:prefix) { 'service' }
 
   include_examples 'a Subscriber Report'

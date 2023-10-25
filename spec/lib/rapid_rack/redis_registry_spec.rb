@@ -13,7 +13,7 @@ module RapidRack
       klass.send(:extend, overrides)
     end
 
-    context '#register_jti' do
+    describe '#register_jti' do
       let(:value) { 'abcd' }
 
       it 'returns true for a new jti' do

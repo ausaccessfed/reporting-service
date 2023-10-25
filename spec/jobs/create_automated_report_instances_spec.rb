@@ -5,48 +5,50 @@ require 'rails_helper'
 RSpec.describe CreateAutomatedReportInstances do
   include Mail::Matchers
 
+  subject { described_class.new }
+
   around { |spec| Timecop.freeze { spec.run } }
 
   %w[january february march april may june july august september october november december].each do |month|
     let(month.to_sym) { Time.zone.parse("2016-#{month}-01") }
   end
 
-  let(:user_01) { create :subject }
-  let(:user_02) { create :subject }
-  let(:idp) { create :identity_provider }
+  let(:user_01) { create(:subject) }
+  let(:user_02) { create(:subject) }
+  let(:idp) { create(:identity_provider) }
 
   %w[monthly quarterly yearly].each do |i|
     let!("auto_report_#{i}_01".to_sym) do
-      create :automated_report, interval: i, report_class: 'DailyDemandReport', source: 'DS'
+      create(:automated_report, interval: i, report_class: 'DailyDemandReport', source: 'DS')
     end
 
     let!("auto_report_#{i}_02".to_sym) do
-      create :automated_report,
-             interval: i,
-             report_class: 'IdentityProviderDailyDemandReport',
-             source: 'DS',
-             target: idp.entity_id
+      create(
+        :automated_report,
+        interval: i,
+        report_class: 'IdentityProviderDailyDemandReport',
+        source: 'DS',
+        target: idp.entity_id
+      )
     end
   end
 
   before do
-    create :automated_report_subscription, automated_report: auto_report_monthly_01, subject: user_01
+    create(:automated_report_subscription, automated_report: auto_report_monthly_01, subject: user_01)
 
-    create :automated_report_subscription, automated_report: auto_report_quarterly_01, subject: user_01
+    create(:automated_report_subscription, automated_report: auto_report_quarterly_01, subject: user_01)
 
-    create :automated_report_subscription, automated_report: auto_report_yearly_01, subject: user_01
+    create(:automated_report_subscription, automated_report: auto_report_yearly_01, subject: user_01)
 
-    create :automated_report_subscription, automated_report: auto_report_monthly_02, subject: user_02
+    create(:automated_report_subscription, automated_report: auto_report_monthly_02, subject: user_02)
 
-    create :automated_report_subscription, automated_report: auto_report_quarterly_02, subject: user_02
+    create(:automated_report_subscription, automated_report: auto_report_quarterly_02, subject: user_02)
 
-    create :automated_report_subscription, automated_report: auto_report_yearly_02, subject: user_02
+    create(:automated_report_subscription, automated_report: auto_report_yearly_02, subject: user_02)
   end
 
-  subject { CreateAutomatedReportInstances.new }
-
   context 'update :instances_timestamp' do
-    it 'should be equal to begging of correct month' do
+    it 'is equal to begging of correct month' do
       [january, february, march, april, may, june, july, august, september, october, november, december].each do |month|
         Timecop.travel(month) do
           subject.perform
@@ -76,8 +78,9 @@ RSpec.describe CreateAutomatedReportInstances do
       end
     end
   end
+
   context 'send email' do
-    it 'should send email with subject' do
+    it 'sends email with subject' do
       email_subject = 'AAF Reporting Service - New Report Generated'
 
       Timecop.travel(january) do
@@ -96,30 +99,31 @@ RSpec.describe CreateAutomatedReportInstances do
       Timecop.travel(january) { expect { subject.perform }.to change(AutomatedReportInstance, :count).by(6) }
 
       5.times do |i|
-        Timecop.travel(january + i.hours) do
-          expect { subject.perform }.not_to(change { AutomatedReportInstance.count })
-        end
+        Timecop.travel(january + i.hours) { expect { subject.perform }.not_to(change(AutomatedReportInstance, :count)) }
       end
     end
+
+    let(:time_times) { [50, 10, 30].sample }
+    let(:the_days) { [*1..28].sample }
 
     it 'creates monthly and quarterly instances on
         April, July and October' do
       [april, july, october].each do |time|
-        time_pass = [50, 10, 30].sample.minutes
+        time_pass = time_times.minutes
 
         Timecop.travel(time) { expect { subject.perform }.to change(AutomatedReportInstance, :count).by(4) }
 
-        Timecop.travel(time + time_pass) { expect { subject.perform }.not_to(change { AutomatedReportInstance.count }) }
+        Timecop.travel(time + time_pass) { expect { subject.perform }.not_to(change(AutomatedReportInstance, :count)) }
       end
     end
 
     it 'creates only monthly instances' do
       [february, march, may, june, august, september, november, december].each do |time|
-        time_pass = [*1..28].sample.days
+        time_pass = the_days.days
 
         Timecop.travel(time) { expect { subject.perform }.to change(AutomatedReportInstance, :count).by(2) }
 
-        Timecop.travel(time + time_pass) { expect { subject.perform }.not_to(change { AutomatedReportInstance.count }) }
+        Timecop.travel(time + time_pass) { expect { subject.perform }.not_to(change(AutomatedReportInstance, :count)) }
       end
     end
   end

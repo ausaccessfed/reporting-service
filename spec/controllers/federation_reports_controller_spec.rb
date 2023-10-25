@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe FederationReportsController, type: :controller do
+RSpec.describe FederationReportsController do
   let(:user) { create(:subject) }
 
   before { session[:subject_id] = user.try(:id) }

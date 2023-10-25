@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ComplianceReportsController, type: :routing do
+RSpec.describe ComplianceReportsController do
   shared_examples 'get request' do
     subject { { get: "compliance_reports#{path}" } }
 

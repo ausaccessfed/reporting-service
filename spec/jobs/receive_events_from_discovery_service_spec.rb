@@ -2,9 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
+RSpec.describe ReceiveEventsFromDiscoveryService do
   describe '#perform' do
     let(:client) { double(Aws::SQS::Client) }
+    let(:empty_result) { double(Aws::SQS::Types::ReceiveMessageResult, messages: []) }
     let(:rsa_key_string) { <<~RAWCERT }
         -----BEGIN RSA PRIVATE KEY-----
         MIIBOwIBAAJBANXI+YMTbremHgVLuc/AbaZTKeqvXgs32Em6OOCbE7P+flb3qAMO
@@ -36,14 +37,12 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
       allow(Aws::SQS::Client).to receive(:new).with(sqs_config.slice(:endpoint, :region)).and_return(client)
     end
 
-    let(:empty_result) { double(Aws::SQS::Types::ReceiveMessageResult, messages: []) }
-
     def run
       subject.perform
     end
 
     context 'when the queue contains many SQS messages' do
-      let(:events_attrs) { Array.new(5) { FactoryBot.attributes_for(:discovery_service_event) } }
+      let(:events_attrs) { Array.new(5) { attributes_for(:discovery_service_event) } }
 
       let(:events) { events_attrs }
 
@@ -100,7 +99,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
     end
 
     context 'when a message is in the queue' do
-      let(:event_attrs) { FactoryBot.attributes_for(:discovery_service_event) }
+      let(:event_attrs) { attributes_for(:discovery_service_event) }
 
       let(:event) { event_attrs }
 
@@ -135,7 +134,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
       end
 
       context 'when the event is a response' do
-        let(:event_attrs) { FactoryBot.attributes_for(:discovery_service_event, :response) }
+        let(:event_attrs) { attributes_for(:discovery_service_event, :response) }
 
         it 'writes the event to a secondary local queue' do
           redis = Redis.new
@@ -144,7 +143,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
       end
 
       context 'when the event is a request' do
-        let(:event_attrs) { FactoryBot.attributes_for(:discovery_service_event, phase: 'request') }
+        let(:event_attrs) { attributes_for(:discovery_service_event, phase: 'request') }
 
         it 'does not write the event to the secondary queue' do
           redis = Redis.new
