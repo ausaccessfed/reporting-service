@@ -68,5 +68,5 @@ task rubocop_fix: :environment do
   sh 'rubocop -A', verbose: false
 end
 
-task default: %i[brakeman lint_rb rubocop lint_md lint_js parallel:spec]
+task default: %i[brakeman lint_rb rubocop lint_md lint_js rspec]
 task lint: %i[lint_rb_fix lint_md_fix rubocop_fix lint_js_fix]

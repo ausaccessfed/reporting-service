@@ -1,7 +1,7 @@
 -include .env # Applies to every target in the file!
 -include ../aaf-terraform/app.Makefile
 
-BUILD_TARGET=production
+BUILD_TARGET=development
 VERSION := $(shell cat .ruby-version)
 ADDITIONAL_BUILD_ARGS=--build-arg BASE_IMAGE=${DOCKER_ECR}ruby-base:${VERSION}
 APP_NAME=reporting-service
@@ -35,7 +35,7 @@ TESTS_ARGS=\
 -e RAILS_ENV=test \
 -e REPORTING_DB_HOST=${LOCAL_IP} \
 -e REPORTING_DB_USERNAME=root \
--e REPORTING_DB_PASSWORD='' \
+-e REPORTING_DB_PASSWORD= \
 -e COVERAGE=true \
 -e CI=true 
 
@@ -43,6 +43,6 @@ run-image-tests:
 	@make run-generic-image-command \
 		APP_NAME_POSTFIX="-tests" \
 		ADDITIONAL_ARGS="${TESTS_ARGS}" \
-		COMMAND="rspec -fd ${FILE}"
+		COMMAND="bundle exec rspec -fd ${FILE}"
 
 
