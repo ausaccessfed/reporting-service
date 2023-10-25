@@ -11,9 +11,7 @@ RSpec.describe TimeSeriesReport do
 
       y_label 'Y Label'
 
-      series a: 'The letter A',
-             b: 'The letter B',
-             c: 'The letter C'
+      series a: 'The letter A', b: 'The letter B', c: 'The letter C'
 
       units ' Hz'
 
@@ -29,25 +27,7 @@ RSpec.describe TimeSeriesReport do
   let(:finish) { Time.zone.now.beginning_of_day }
   let(:report) { klass.new(title, start, finish, report_data) }
 
-  let(:report_data) do
-    {
-      a: [
-        [0, 0],
-        [1, 0],
-        [2, 0]
-      ],
-      b: [
-        [0, 1],
-        [1, 1],
-        [2, 1]
-      ],
-      c: [
-        [0, 2],
-        [1, 2],
-        [2, 2]
-      ]
-    }
-  end
+  let(:report_data) { { a: [[0, 0], [1, 0], [2, 0]], b: [[0, 1], [1, 1], [2, 1]], c: [[0, 2], [1, 2], [2, 2]] } }
 
   context '::options' do
     context 'when subclassed' do
@@ -59,9 +39,7 @@ RSpec.describe TimeSeriesReport do
         end
       end
 
-      let(:subclass_report) do
-        subclass.new(title, start, finish, subclass_report_data)
-      end
+      let(:subclass_report) { subclass.new(title, start, finish, subclass_report_data) }
 
       let(:subclass_report_data) { { d: [[0, 3], [1, 3], [2, 3]] } }
 

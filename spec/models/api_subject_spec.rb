@@ -7,9 +7,7 @@ RSpec.describe APISubject, type: :model do
   include_examples 'API Subjects'
 
   context 'permissions' do
-    RSpec::Matchers.define(:be_permitted) do |action|
-      match { |subject| subject.permits?(action) }
-    end
+    RSpec::Matchers.define(:be_permitted) { |action| match { |subject| subject.permits?(action) } }
 
     context 'super admin' do
       subject! { create(:api_subject, :authorized, permission: '*') }

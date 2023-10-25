@@ -30,7 +30,9 @@ module RapidRack
 
     def handle(_env, _exception)
       [
-        400, { 'Content-Type' => 'text/plain' }, [
+        400,
+        { 'Content-Type' => 'text/plain' },
+        [
           'Sorry, your attempt to log in to this service was not successful. ',
           'Please contact the service owner for assistance, and include the ',
           'link you used to access this service.'
@@ -40,19 +42,11 @@ module RapidRack
 
     private
 
-    DISPATCH = {
-      '/login' => :initiate,
-      '/jwt' => :callback,
-      '/logout' => :terminate
-    }.freeze
+    DISPATCH = { '/login' => :initiate, '/jwt' => :callback, '/logout' => :terminate }.freeze
     private_constant :DISPATCH
 
     def get_error_handler(opts)
-      if opts[:error_handler].nil?
-        self
-      else
-        opts[:error_handler].constantize.new
-      end
+      opts[:error_handler].nil? ? self : opts[:error_handler].constantize.new
     end
 
     def initiate(env)
@@ -65,9 +59,7 @@ module RapidRack
       return method_not_allowed unless method?(env, 'POST')
 
       params = Rack::Utils.parse_query(env['rack.input'].read)
-      with_claims(env, params['assertion']) do |claims|
-        receiver.receive(env, claims)
-      end
+      with_claims(env, params['assertion']) { |claims| receiver.receive(env, claims) }
     end
 
     def terminate(env)

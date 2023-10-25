@@ -12,10 +12,10 @@ RSpec.feature 'automated report instances' do
   given(:unknown_sp) { create :service_provider }
 
   given(:svg_templates) do
-    %(ServiceProviderDailyDemandReport ServiceProviderSessionsReport
+    'ServiceProviderDailyDemandReport ServiceProviderSessionsReport
       IdentityProviderDailyDemandReport IdentityProviderSessionsReport
       IdentityProviderAttributesReport DailyDemandReport
-      FederatedSessionsReport FederationGrowthReport)
+      FederatedSessionsReport FederationGrowthReport'
   end
 
   def get_tamplate_name(type)
@@ -23,17 +23,9 @@ RSpec.feature 'automated report instances' do
   end
 
   shared_examples 'Automated Public Report' do
-    given(:auto_report) do
-      create :automated_report,
-             target:,
-             report_class:,
-             source:
-    end
+    given(:auto_report) { create :automated_report, target:, report_class:, source: }
 
-    given!(:instance) do
-      create :automated_report_instance,
-             automated_report: auto_report
-    end
+    given!(:instance) { create :automated_report_instance, automated_report: auto_report }
 
     background do
       attrs = create(:aaf_attributes, :from_subject, subject: user)
@@ -51,7 +43,7 @@ RSpec.feature 'automated report instances' do
       expect(current_path).to eq("/automated_report/#{instance.identifier}")
       expect(page).to have_css("#output #{prefix}.#{template}")
       # For reports that depend on session source, check the right one was used.
-      expect(page).to have_content("(#{source_name})") if defined? source_name
+      expect(page).to have_content("(#{source_name})") if defined?(source_name)
     end
   end
 
@@ -110,37 +102,20 @@ RSpec.feature 'automated report instances' do
   end
 
   shared_examples 'Automated Subscriber Report' do
-    given(:auto_report) do
-      create :automated_report,
-             target: object.entity_id,
-             report_class:,
-             source:
-    end
+    given(:auto_report) { create :automated_report, target: object.entity_id, report_class:, source: }
 
-    given!(:instance) do
-      create :automated_report_instance,
-             automated_report: auto_report
-    end
+    given!(:instance) { create :automated_report_instance, automated_report: auto_report }
 
-    given!(:unknown_auto_report) do
-      create :automated_report,
-             target: unknown_object.entity_id,
-             report_class:,
-             source:
-    end
+    given!(:unknown_auto_report) { create :automated_report, target: unknown_object.entity_id, report_class:, source: }
 
-    given!(:unknown_instance) do
-      create :automated_report_instance,
-             automated_report: unknown_auto_report
-    end
+    given!(:unknown_instance) { create :automated_report_instance, automated_report: unknown_auto_report }
 
     background do
       attrs = create(:aaf_attributes, :from_subject, subject: user)
       RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
       identifier = organization.identifier
-      entitlements =
-        ["urn:mace:aaf.edu.au:ide:internal:organization:#{identifier}"]
+      entitlements = ["urn:mace:aaf.edu.au:ide:internal:organization:#{identifier}"]
 
       admins = Rails.application.config.reporting_service.admins
       admins[user.shared_token.to_sym] = entitlements
@@ -159,12 +134,10 @@ RSpec.feature 'automated report instances' do
       expect(page).to have_css("#output #{prefix}.#{template}")
 
       # For reports that depend on session source, check the right one was used.
-      if defined? source_name
+      if defined?(source_name)
         # Tabular reports do not render report title - see #178
         # So instead just confirm the report-data JSON contains the title.
-        report_data = page.evaluate_script(
-          'document.getElementsByClassName("report-data")[0].innerHTML'
-        )
+        report_data = page.evaluate_script('document.getElementsByClassName("report-data")[0].innerHTML')
         expect(report_data).to have_text("(#{source_name})")
       end
 
@@ -254,16 +227,9 @@ RSpec.feature 'automated report instances' do
   end
 
   shared_examples 'Automated Subscriber Registrations Report' do
-    given(:auto_report) do
-      create :automated_report,
-             target:,
-             report_class: 'SubscriberRegistrationsReport'
-    end
+    given(:auto_report) { create :automated_report, target:, report_class: 'SubscriberRegistrationsReport' }
 
-    given!(:instance) do
-      create :automated_report_instance,
-             automated_report: auto_report
-    end
+    given!(:instance) { create :automated_report_instance, automated_report: auto_report }
 
     describe 'none admin subject' do
       background do
@@ -271,8 +237,7 @@ RSpec.feature 'automated report instances' do
         RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
         identifier = organization.identifier
-        entitlements =
-          ["urn:mace:aaf.edu.au:ide:internal:organization:#{identifier}"]
+        entitlements = ["urn:mace:aaf.edu.au:ide:internal:organization:#{identifier}"]
         admins = Rails.application.config.reporting_service.admins
         admins[user.shared_token.to_sym] = entitlements
 
@@ -312,8 +277,7 @@ RSpec.feature 'automated report instances' do
   end
 
   context 'Subscriber Registrations Reports' do
-    targets = %w[identity_providers service_providers
-                 organizations rapid_connect_services services]
+    targets = %w[identity_providers service_providers organizations rapid_connect_services services]
 
     targets.each do |target|
       given(:target) { target }

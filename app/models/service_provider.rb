@@ -7,8 +7,7 @@ class ServiceProvider < ApplicationRecord
 
   has_many :activations, as: :federation_object, dependent: :destroy
   has_many :service_provider_saml_attributes, dependent: :destroy
-  has_many :saml_attributes,
-           through: :service_provider_saml_attributes, dependent: :destroy
+  has_many :saml_attributes, through: :service_provider_saml_attributes, dependent: :destroy
 
   valhammer
 

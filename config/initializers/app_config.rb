@@ -10,7 +10,9 @@ Rails.application.configure do
     config.reporting_service.federation_registry[:host] = 'manager.example.edu'
     config.reporting_service.federation_registry[:secret] = 'abcdef'
 
-    config.reporting_service.rapid_connect[:rack][:url] = 'https://rapid.example.com/jwt/authnrequest/research/0vs2aoAbd5bH6HRK'
+    config.reporting_service.rapid_connect[:rack][
+      :url
+    ] = 'https://rapid.example.com/jwt/authnrequest/research/0vs2aoAbd5bH6HRK'
     config.reporting_service.rapid_connect[:rack][:secret] = '5>O+`=2x%`\=.""f,6KDxV2p|MEE*P<]'
     config.reporting_service.rapid_connect[:rack][:issuer] = 'https://rapid.example.com'
     config.reporting_service.rapid_connect[:rack][:audience] = 'https://service.example.com'
@@ -35,9 +37,7 @@ Rails.application.configure do
     RAWCERT
     config.reporting_service.sqs[:encryption_key] = Base64.encode64(rsa_key_string)
 
-    config.reporting_service.sqs[:queues] = {
-      discovery: 'https://dummy.sqs.example.edu/queue/discovery-service-test'
-    }
+    config.reporting_service.sqs[:queues] = { discovery: 'https://dummy.sqs.example.edu/queue/discovery-service-test' }
 
     config.reporting_service.url_options[:base_url] = 'example.com'
     Aws.config.update(stub_responses: true)
@@ -51,8 +51,7 @@ Rails.application.configure do
   sqs_config = config.reporting_service[:sqs]
   if sqs_config[:fake]
     begin
-      sqs_client = Aws::SQS::Client.new(region: sqs_config[:region],
-                                        endpoint: sqs_config[:endpoint])
+      sqs_client = Aws::SQS::Client.new(region: sqs_config[:region], endpoint: sqs_config[:endpoint])
 
       sqs_config[:queues].each_value do |url|
         queue_name = url.split('/').last

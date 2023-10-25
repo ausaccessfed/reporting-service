@@ -29,10 +29,9 @@ RSpec.describe ApplicationHelper, type: :helper do
     let(:string) { Faker::Lorem.sentence }
 
     it 'returns the configured string' do
-      expect(Rails.application)
-        .to receive_message_chain(:config, :reporting_service,
-                                  :environment_string)
-        .and_return(string)
+      expect(Rails.application).to receive_message_chain(:config, :reporting_service, :environment_string).and_return(
+        string
+      )
 
       expect(helper.environment_string).to eq(string)
     end

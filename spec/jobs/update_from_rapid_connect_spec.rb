@@ -27,9 +27,11 @@ RSpec.describe UpdateFromRapidConnect do
   let(:response) { JSON.generate(services: service_list) }
 
   before do
-    stub_request(:get, 'https://rapid.example.edu/export/basic')
-      .with(headers: { 'Authorization' => /AAF-RAPID-EXPORT .+/ })
-      .to_return(status: 200, body: response)
+    stub_request(:get, 'https://rapid.example.edu/export/basic').with(
+      headers: {
+        'Authorization' => /AAF-RAPID-EXPORT .+/
+      }
+    ).to_return(status: 200, body: response)
   end
 
   def run
@@ -38,16 +40,16 @@ RSpec.describe UpdateFromRapidConnect do
 
   it 'creates the service' do
     expect { run }.to change(RapidConnectService, :count).by(1)
-    expect(RapidConnectService.last)
-      .to have_attributes(identifier: service[:id],
-                          name: service[:name],
-                          service_type: service[:rapidconnect][:type])
+    expect(RapidConnectService.last).to have_attributes(
+      identifier: service[:id],
+      name: service[:name],
+      service_type: service[:rapidconnect][:type]
+    )
   end
 
   it 'creates an activation' do
     expect { run }.to change(Activation, :count).by(1)
-    expect(RapidConnectService.last.activations.first)
-      .to have_attributes(activated_at: created_at)
+    expect(RapidConnectService.last.activations.first).to have_attributes(activated_at: created_at)
   end
 
   context 'when the type is missing' do
@@ -55,10 +57,11 @@ RSpec.describe UpdateFromRapidConnect do
 
     it 'uses the default service type' do
       expect { run }.to change(RapidConnectService, :count).by(1)
-      expect(RapidConnectService.last)
-        .to have_attributes(identifier: service[:id],
-                            name: service[:name],
-                            service_type: 'research')
+      expect(RapidConnectService.last).to have_attributes(
+        identifier: service[:id],
+        name: service[:name],
+        service_type: 'research'
+      )
     end
   end
 
@@ -71,20 +74,17 @@ RSpec.describe UpdateFromRapidConnect do
   end
 
   context 'with an existing record' do
-    let!(:rapid_connect_service) do
-      create(:rapid_connect_service, identifier: service[:id])
-    end
+    let!(:rapid_connect_service) { create(:rapid_connect_service, identifier: service[:id]) }
 
-    let!(:activation) do
-      create(:activation, federation_object: rapid_connect_service)
-    end
+    let!(:activation) { create(:activation, federation_object: rapid_connect_service) }
 
     it 'updates the service' do
       expect { run }.not_to change(RapidConnectService, :count)
-      expect(rapid_connect_service.reload)
-        .to have_attributes(identifier: service[:id],
-                            name: service[:name],
-                            service_type: service[:rapidconnect][:type])
+      expect(rapid_connect_service.reload).to have_attributes(
+        identifier: service[:id],
+        name: service[:name],
+        service_type: service[:rapidconnect][:type]
+      )
     end
 
     it 'updates the activation' do
@@ -97,14 +97,12 @@ RSpec.describe UpdateFromRapidConnect do
 
       it 'deletes the service' do
         expect { run }.to change(RapidConnectService, :count).by(-1)
-        expect { rapid_connect_service.reload }
-          .to raise_error(ActiveRecord::RecordNotFound)
+        expect { rapid_connect_service.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
 
       it 'deletes the activation' do
         expect { run }.to change(Activation, :count).by(-1)
-        expect { activation.reload }
-          .to raise_error(ActiveRecord::RecordNotFound)
+        expect { activation.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
@@ -113,8 +111,7 @@ RSpec.describe UpdateFromRapidConnect do
 
       it 'deletes the service' do
         expect { run }.to change(RapidConnectService, :count).by(-1)
-        expect { rapid_connect_service.reload }
-          .to raise_error(ActiveRecord::RecordNotFound)
+        expect { rapid_connect_service.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
@@ -125,8 +122,7 @@ RSpec.describe UpdateFromRapidConnect do
 
     it 'associates the service with the organization' do
       run
-      expect(RapidConnectService.last)
-        .to have_attributes(organization:)
+      expect(RapidConnectService.last).to have_attributes(organization:)
     end
   end
 
@@ -135,8 +131,7 @@ RSpec.describe UpdateFromRapidConnect do
 
     it 'associates the service with no organization' do
       run
-      expect(RapidConnectService.last)
-        .to have_attributes(organization: nil)
+      expect(RapidConnectService.last).to have_attributes(organization: nil)
     end
   end
 end

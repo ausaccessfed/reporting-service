@@ -13,34 +13,19 @@ RSpec.describe AutomatedReportsController, type: :controller do
   def subscribe(interval)
     request.env['HTTP_REFERER'] = "federation_reports/#{path}"
 
-    post :subscribe, params: {
-      report_class:, interval:,
-      source:,
-      back_path: request.env['HTTP_REFERER']
-    }.compact
+    post :subscribe, params: { report_class:, interval:, source:, back_path: request.env['HTTP_REFERER'] }.compact
   end
 
-  before do
-    session[:subject_id] = user.try(:id)
-  end
+  before { session[:subject_id] = user.try(:id) }
 
   describe '#index' do
-    let(:subscription) do
-      create :automated_report_subscription,
-             automated_report: auto_report,
-             subject: user
-    end
+    let(:subscription) { create :automated_report_subscription, automated_report: auto_report, subject: user }
 
     let(:auto_report) do
-      create :automated_report,
-             report_class: 'IdentityProviderSessionsReport',
-             source: 'DS',
-             target: idp.entity_id
+      create :automated_report, report_class: 'IdentityProviderSessionsReport', source: 'DS', target: idp.entity_id
     end
 
-    before do
-      get :index
-    end
+    before { get :index }
 
     context 'get on /automated_reports' do
       it 'should response with 200' do
@@ -70,11 +55,7 @@ RSpec.describe AutomatedReportsController, type: :controller do
   end
 
   shared_examples 'Automated Report Subscription' do
-    before do
-      %w[monthly quarterly yearly].each do |interval|
-        subscribe interval
-      end
-    end
+    before { %w[monthly quarterly yearly].each { |interval| subscribe interval } }
 
     it 'should redirect to report page with (302)' do
       expect(response).to redirect_to("federation_reports/#{path}")

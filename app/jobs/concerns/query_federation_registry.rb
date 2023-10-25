@@ -18,18 +18,14 @@ module QueryFederationRegistry
 
   def fr_data(endpoint)
     req = Net::HTTP::Get.new(endpoint)
-    req['Authorization'] =
-      %(AAF-FR-EXPORT service="reporting-service", key="#{fr_config[:secret]}")
+    req['Authorization'] = %(AAF-FR-EXPORT service="reporting-service", key="#{fr_config[:secret]}")
     response = fr_client.request(req)
     response.value
     ImplicitSchema.new(JSON.parse(response.body.to_s, symbolize_names: true))
   end
 
   def fr_client
-    @fr_client ||=
-      Net::HTTP.new(fr_config[:host], 443).tap do |http|
-        http.use_ssl = true
-      end
+    @fr_client ||= Net::HTTP.new(fr_config[:host], 443).tap { |http| http.use_ssl = true }
   end
 
   def fr_config

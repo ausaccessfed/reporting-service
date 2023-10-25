@@ -4,17 +4,11 @@ FactoryBot.define do
   factory :federated_login_event do
     hashed_principal_name { Faker::Internet.password(min_length: 10) }
     result { 'FAIL' }
-    relying_party do
-      "https://sp.#{Faker::Internet.domain_name}/shibboleth"
-    end
+    relying_party { "https://sp.#{Faker::Internet.domain_name}/shibboleth" }
 
-    asserting_party do
-      "https://idp.#{Faker::Internet.domain_name}/idp/shibboleth"
-    end
+    asserting_party { "https://idp.#{Faker::Internet.domain_name}/idp/shibboleth" }
 
-    timestamp do
-      Faker::Time.between(from: 10.days.ago, to: Time.zone.today).round
-    end
+    timestamp { Faker::Time.between(from: 10.days.ago, to: Time.zone.today).round }
 
     trait :OK do
       result { 'OK' }

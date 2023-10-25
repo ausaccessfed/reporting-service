@@ -7,18 +7,12 @@ FactoryBot.define do
     group { Faker::Lorem.word }
     unique_id { Faker::Internet.password(min_length: 10) }
     phase { 'request' }
-    initiating_sp do
-      "https://sp.#{Faker::Internet.domain_name}/shibboleth"
-    end
+    initiating_sp { "https://sp.#{Faker::Internet.domain_name}/shibboleth" }
 
-    timestamp do
-      Faker::Time.between(from: 10.days.ago, to: Time.zone.today).round
-    end
+    timestamp { Faker::Time.between(from: 10.days.ago, to: Time.zone.today).round }
 
     trait :response do
-      selected_idp do
-        "https://idp.#{Faker::Internet.domain_name}/idp/shibboleth"
-      end
+      selected_idp { "https://idp.#{Faker::Internet.domain_name}/idp/shibboleth" }
 
       phase { 'response' }
       selection_method { %w[manual cookie].sample }

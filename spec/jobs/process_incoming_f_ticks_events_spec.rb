@@ -21,26 +21,17 @@ RSpec.describe ProcessIncomingFTicksEvents do
 
   context 'Process IncomingFTicksEvents' do
     it 'should create an instance of FederatedLoginEvent' \
-       'and delete IncomingFTicksEvent' do
-      expect { run }.to(
-        change(FederatedLoginEvent, :count).by(10)
-        .and(change(IncomingFTicksEvent, :count).by(-10))
-      )
+         'and delete IncomingFTicksEvent' do
+      expect { run }.to(change(FederatedLoginEvent, :count).by(10).and(change(IncomingFTicksEvent, :count).by(-10)))
     end
 
     context 'when there are incoming after or during #perform' do
       around(:example) do |example|
-        Timecop.travel(now + 1) do
-          create_list :incoming_f_ticks_event, 2
-        end
+        Timecop.travel(now + 1) { create_list :incoming_f_ticks_event, 2 }
 
-        Timecop.travel(now) do
-          example.run
-        end
+        Timecop.travel(now) { example.run }
 
-        Timecop.travel(now + 1) do
-          create_list :incoming_f_ticks_event, 2
-        end
+        Timecop.travel(now + 1) { create_list :incoming_f_ticks_event, 2 }
       end
 
       it 'Should perform against events came before running the job only' do

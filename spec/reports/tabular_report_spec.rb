@@ -34,9 +34,7 @@ RSpec.describe TabularReport do
         end
       end
 
-      let(:subclass_report) do
-        subclass.new(title, subclass_report_rows)
-      end
+      let(:subclass_report) { subclass.new(title, subclass_report_rows) }
 
       let(:subclass_report_rows) { (1..20).to_a.map { Faker::Lorem.words(number: 2) } }
 
@@ -46,10 +44,8 @@ RSpec.describe TabularReport do
       end
 
       it 'overrides options in the build' do
-        expect(subclass_report.generate[:header])
-          .to contain_exactly(['Column A', 'Column B'])
-        expect(report.generate[:header])
-          .to contain_exactly(['Column 1', 'Column 2', 'Column 3'])
+        expect(subclass_report.generate[:header]).to contain_exactly(['Column A', 'Column B'])
+        expect(report.generate[:header]).to contain_exactly(['Column 1', 'Column 2', 'Column 3'])
       end
     end
   end

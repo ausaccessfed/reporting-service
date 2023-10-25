@@ -6,8 +6,7 @@ class ReceiveEventsFromDiscoveryService
       result.messages.each do |message|
         process_message(message)
 
-        sqs_client.delete_message(queue_url:,
-                                  receipt_handle: message.receipt_handle)
+        sqs_client.delete_message(queue_url:, receipt_handle: message.receipt_handle)
       end
     end
   end
@@ -33,9 +32,7 @@ class ReceiveEventsFromDiscoveryService
       data['events'].each do |event|
         push_to_fr_queue(event) if Rails.application.config.reporting_service.federation_registry[:enable_sync]
 
-        DiscoveryServiceEvent
-          .create_with(event)
-          .find_or_create_by(event.slice(:unique_id, :phase))
+        DiscoveryServiceEvent.create_with(event).find_or_create_by(event.slice(:unique_id, :phase))
       end
     end
   end
@@ -48,8 +45,7 @@ class ReceiveEventsFromDiscoveryService
   end
 
   def sqs_client
-    @sqs_client ||= Aws::SQS::Client.new(endpoint: sqs_config[:endpoint],
-                                         region: sqs_config[:region])
+    @sqs_client ||= Aws::SQS::Client.new(endpoint: sqs_config[:endpoint], region: sqs_config[:region])
   end
 
   def sqs_config

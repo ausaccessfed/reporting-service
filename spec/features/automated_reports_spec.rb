@@ -9,41 +9,20 @@ RSpec.feature 'automated report' do
   given(:saml) { create :saml_attribute }
 
   given!(:auto_report_idp) do
-    create :automated_report,
-           report_class: 'IdentityProviderSessionsReport',
-           source: data_source,
-           target: idp.entity_id
+    create :automated_report, report_class: 'IdentityProviderSessionsReport', source: data_source, target: idp.entity_id
   end
 
   given(:auto_report_org) do
-    create :automated_report,
-           report_class: 'SubscriberRegistrationsReport',
-           target: 'organizations'
+    create :automated_report, report_class: 'SubscriberRegistrationsReport', target: 'organizations'
   end
 
-  given(:auto_report_saml) do
-    create :automated_report,
-           report_class: 'RequestedAttributeReport',
-           target: saml.name
-  end
+  given(:auto_report_saml) { create :automated_report, report_class: 'RequestedAttributeReport', target: saml.name }
 
-  given!(:subscription_1) do
-    create :automated_report_subscription,
-           automated_report: auto_report_idp,
-           subject: user
-  end
+  given!(:subscription_1) { create :automated_report_subscription, automated_report: auto_report_idp, subject: user }
 
-  given!(:subscription_2) do
-    create :automated_report_subscription,
-           automated_report: auto_report_org,
-           subject: user
-  end
+  given!(:subscription_2) { create :automated_report_subscription, automated_report: auto_report_org, subject: user }
 
-  given!(:subscription_3) do
-    create :automated_report_subscription,
-           automated_report: auto_report_saml,
-           subject: user
-  end
+  given!(:subscription_3) { create :automated_report_subscription, automated_report: auto_report_saml, subject: user }
 
   shared_examples 'automated reports tests' do
     describe 'when user has subscriptions' do
@@ -94,9 +73,10 @@ RSpec.feature 'automated report' do
       scenario 'should unsubscribe and redirect to index' do
         expect(current_path).to eq('/automated_reports')
 
-        message = 'You can subscribe to an automated report by ' \
-                  'clicking on the `Subscribe` button in report page ' \
-                  'and choosing a report interval'
+        message =
+          'You can subscribe to an automated report by ' \
+            'clicking on the `Subscribe` button in report page ' \
+            'and choosing a report interval'
 
         expect(page).to have_selector('p', text: message)
       end

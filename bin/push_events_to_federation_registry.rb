@@ -48,7 +48,8 @@ class PushEventsToFederationRegistry
     @redis ||= Rails.application.config.redis_client
   end
 
-  INSERT_SQL = squeeze_sql %(
+  INSERT_SQL =
+    squeeze_sql %(
     INSERT INTO wayf_access_record
     SET version = 0,
         robot = 0,
@@ -82,7 +83,8 @@ class PushEventsToFederationRegistry
     }
   end
 
-  RESOLVE_IDPID_SQL = squeeze_sql %(
+  RESOLVE_IDPID_SQL =
+    squeeze_sql %(
     SELECT idp.id
     FROM idpssodescriptor idp
     JOIN entity_descriptor ed
@@ -98,7 +100,8 @@ class PushEventsToFederationRegistry
     -1
   end
 
-  RESOLVE_SPID_SQL = squeeze_sql %(
+  RESOLVE_SPID_SQL =
+    squeeze_sql %(
     SELECT sp.id
     FROM spssodescriptor sp
     JOIN entity_descriptor ed

@@ -7,9 +7,7 @@ RSpec.describe Subject, type: :model do
   include_examples 'Subjects'
 
   context 'permissions' do
-    RSpec::Matchers.define(:be_permitted) do |action|
-      match { |subject| subject.permits?(action) }
-    end
+    RSpec::Matchers.define(:be_permitted) { |action| match { |subject| subject.permits?(action) } }
 
     context 'super admin' do
       subject! { create(:subject, :authorized, permission: '*') }
@@ -62,8 +60,7 @@ RSpec.describe Subject, type: :model do
       end
 
       it 'assigns the new role to the subject' do
-        expect { run }.to change { roles }
-          .to contain_exactly(an_instance_of(Role))
+        expect { run }.to change { roles }.to contain_exactly(an_instance_of(Role))
         expect(roles).to include(Role.last)
       end
     end

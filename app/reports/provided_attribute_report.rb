@@ -14,9 +14,7 @@ class ProvidedAttributeReport < TabularReport
   private
 
   def rows
-    sorted_idps = identity_providers.sort_by do |idp|
-      idp.name.downcase
-    end
+    sorted_idps = identity_providers.sort_by { |idp| idp.name.downcase }
 
     sorted_idps.map do |idp|
       yes_or_no = supported idp

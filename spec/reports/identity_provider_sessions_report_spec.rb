@@ -14,33 +14,23 @@ RSpec.describe IdentityProviderSessionsReport do
   let(:start) { 10.days.ago.beginning_of_day }
   let(:finish) { 1.day.ago.end_of_day }
 
-  let(:range) do
-    { start: start.strftime('%FT%H:%M:%S%z'),
-      end: finish.strftime('%FT%H:%M:%S%z') }
-  end
+  let(:range) { { start: start.strftime('%FT%H:%M:%S%z'), end: finish.strftime('%FT%H:%M:%S%z') } }
 
   let(:steps) { 5 }
 
-  let(:scope_range) do
-    (0..(finish - start).to_i).step(steps.hours.to_i)
-  end
+  let(:scope_range) { (0..(finish - start).to_i).step(steps.hours.to_i) }
 
   let(:idp) { create :identity_provider }
   let(:idp_2) { create :identity_provider }
   let(:sp) { create :service_provider }
 
-  subject do
-    IdentityProviderSessionsReport.new(idp.entity_id, start, finish, steps,
-                                       source)
-  end
+  subject { IdentityProviderSessionsReport.new(idp.entity_id, start, finish, steps, source) }
 
   let(:report) { subject.generate }
   let(:data) { report[:data] }
 
   def expect_in_range
-    [*scope_range].each_with_index do |t, index|
-      expect(data[:sessions][index]).to match_array([t, value])
-    end
+    [*scope_range].each_with_index { |t, index| expect(data[:sessions][index]).to match_array([t, value]) }
   end
 
   shared_examples 'a report procesing events from the selected source' do
@@ -50,8 +40,7 @@ RSpec.describe IdentityProviderSessionsReport do
 
     it 'should include title, units, labels and range' do
       output_title = "#{title} #{idp.name} (#{source_name})"
-      expect(report).to include(title: output_title, units:,
-                                labels:, range:)
+      expect(report).to include(title: output_title, units:, labels:, range:)
     end
 
     it 'sessions should be generated within given range' do
@@ -60,10 +49,7 @@ RSpec.describe IdentityProviderSessionsReport do
   end
 
   context 'when IdP sessions from DS are not yet completed' do
-    before do
-      create_list :discovery_service_event, 2,
-                  initiating_sp: sp.entity_id
-    end
+    before { create_list :discovery_service_event, 2, initiating_sp: sp.entity_id }
 
     let(:value) { 0.0 }
     let(:source) { 'DS' }
@@ -74,10 +60,7 @@ RSpec.describe IdentityProviderSessionsReport do
   end
 
   context 'when IdP sessions from IdP are failed' do
-    before do
-      create_list :federated_login_event, 2,
-                  relying_party: sp.entity_id
-    end
+    before { create_list :federated_login_event, 2, relying_party: sp.entity_id }
 
     let(:value) { 0.0 }
     let(:source) { 'IdP' }
@@ -117,10 +100,7 @@ RSpec.describe IdentityProviderSessionsReport do
 
   context 'when events are sessions with response' do
     def create_event(idp, sp, timestamp = nil)
-      create :discovery_service_event, :response,
-             { selected_idp: idp,
-               initiating_sp: sp,
-               timestamp: }.compact
+      create :discovery_service_event, :response, { selected_idp: idp, initiating_sp: sp, timestamp: }.compact
     end
 
     let(:source) { 'DS' }
@@ -132,10 +112,7 @@ RSpec.describe IdentityProviderSessionsReport do
 
   context 'when events are IdP sessions' do
     def create_event(idp, sp, timestamp = nil)
-      create :federated_login_event, :OK,
-             { asserting_party: idp,
-               relying_party: sp,
-               timestamp: }.compact
+      create :federated_login_event, :OK, { asserting_party: idp, relying_party: sp, timestamp: }.compact
     end
 
     let(:source) { 'IdP' }

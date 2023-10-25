@@ -36,17 +36,9 @@ RSpec.describe AutomatedReportInstance, type: :model do
   describe '#materialize' do
     let(:range_end) { Time.zone.now.beginning_of_month }
 
-    let(:automated_report) do
-      create(:automated_report,
-             report_class:, source:,
-             target:, interval:)
-    end
+    let(:automated_report) { create(:automated_report, report_class:, source:, target:, interval:) }
 
-    subject do
-      create(:automated_report_instance,
-             automated_report:,
-             range_end:)
-    end
+    subject { create(:automated_report_instance, automated_report:, range_end:) }
 
     let(:report) { subject.materialize }
     let(:target) { nil }
@@ -104,22 +96,19 @@ RSpec.describe AutomatedReportInstance, type: :model do
       end
     end
 
-    it_behaves_like 'an instantiated report', 'federation-growth',
-                    range: true do
+    it_behaves_like 'an instantiated report', 'federation-growth', range: true do
       let(:target_name) { 'Federation' }
       let(:report_class) { 'FederationGrowthReport' }
       let(:source) { nil }
     end
 
-    it_behaves_like 'an instantiated report', 'daily-demand',
-                    range: true do
+    it_behaves_like 'an instantiated report', 'daily-demand', range: true do
       let(:target_name) { 'Federation' }
       let(:report_class) { 'DailyDemandReport' }
       let(:source) { 'DS' }
     end
 
-    it_behaves_like 'an instantiated report', 'federated-sessions',
-                    range: true do
+    it_behaves_like 'an instantiated report', 'federated-sessions', range: true do
       let(:target_name) { 'Federation' }
       let(:report_class) { 'FederatedSessionsReport' }
       let(:source) { 'DS' }
@@ -138,8 +127,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
       let(:source) { nil }
     end
 
-    it_behaves_like 'an instantiated report',
-                    'identity-provider-daily-demand', range: true do
+    it_behaves_like 'an instantiated report', 'identity-provider-daily-demand', range: true do
       let(:instance_target) { create(:identity_provider) }
       let(:target) { instance_target.entity_id }
       let(:target_name) { instance_target.name }
@@ -147,8 +135,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
       let(:source) { 'DS' }
     end
 
-    it_behaves_like 'an instantiated report',
-                    'identity-provider-destination-services' do
+    it_behaves_like 'an instantiated report', 'identity-provider-destination-services' do
       let(:instance_target) { create(:identity_provider) }
       let(:target) { instance_target.entity_id }
       let(:target_name) { instance_target.name }
@@ -156,8 +143,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
       let(:source) { 'DS' }
     end
 
-    it_behaves_like 'an instantiated report', 'identity-provider-sessions',
-                    range: true do
+    it_behaves_like 'an instantiated report', 'identity-provider-sessions', range: true do
       let(:instance_target) { create(:identity_provider) }
       let(:target) { instance_target.entity_id }
       let(:target_name) { instance_target.name }
@@ -189,8 +175,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
       let(:source) { nil }
     end
 
-    it_behaves_like 'an instantiated report', 'service-provider-daily-demand',
-                    range: true do
+    it_behaves_like 'an instantiated report', 'service-provider-daily-demand', range: true do
       let(:instance_target) { create(:service_provider) }
       let(:target) { instance_target.entity_id }
       let(:target_name) { instance_target.name }
@@ -198,8 +183,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
       let(:source) { 'DS' }
     end
 
-    it_behaves_like 'an instantiated report', 'service-provider-sessions',
-                    range: true do
+    it_behaves_like 'an instantiated report', 'service-provider-sessions', range: true do
       let(:instance_target) { create(:service_provider) }
       let(:target) { instance_target.entity_id }
       let(:target_name) { instance_target.name }
@@ -207,8 +191,7 @@ RSpec.describe AutomatedReportInstance, type: :model do
       let(:source) { 'DS' }
     end
 
-    it_behaves_like 'an instantiated report',
-                    'service-provider-source-identity-providers' do
+    it_behaves_like 'an instantiated report', 'service-provider-source-identity-providers' do
       let(:instance_target) { create(:service_provider) }
       let(:target) { instance_target.entity_id }
       let(:target_name) { instance_target.name }
@@ -216,15 +199,13 @@ RSpec.describe AutomatedReportInstance, type: :model do
       let(:source) { 'DS' }
     end
 
-    it_behaves_like 'an instantiated report',
-                    'identity-provider-utilization' do
+    it_behaves_like 'an instantiated report', 'identity-provider-utilization' do
       let(:target_name) { 'Identity Providers' }
       let(:report_class) { 'IdentityProviderUtilizationReport' }
       let(:source) { 'DS' }
     end
 
-    it_behaves_like 'an instantiated report',
-                    'service-provider-utilization' do
+    it_behaves_like 'an instantiated report', 'service-provider-utilization' do
       let(:target_name) { 'Service Providers' }
       let(:report_class) { 'ServiceProviderUtilizationReport' }
       let(:source) { 'DS' }

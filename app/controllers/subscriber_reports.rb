@@ -14,9 +14,7 @@ class SubscriberReports < ApplicationController
   def requested_entity
     return if params[:entity_id].blank?
 
-    @entity = @entities.detect do |entity|
-      entity.entity_id == params[:entity_id]
-    end
+    @entity = @entities.detect { |entity| entity.entity_id == params[:entity_id] }
   end
 
   def output(report_type, steps = nil)
@@ -45,9 +43,7 @@ class SubscriberReports < ApplicationController
   def permitted_objects(model)
     active_objects = model.preload(:organization).active
 
-    @entities = active_objects.select do |sp|
-      subject.permits? permission_string(sp)
-    end
+    @entities = active_objects.select { |sp| subject.permits? permission_string(sp) }
   end
 
   def set_source

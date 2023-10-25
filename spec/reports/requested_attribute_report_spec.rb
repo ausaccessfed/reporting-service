@@ -13,9 +13,7 @@ RSpec.describe RequestedAttributeReport do
   let(:service_provider_01) { create :service_provider }
   let(:service_provider_02) { create :service_provider }
 
-  let(:active_service_providers) do
-    [service_provider_01, service_provider_02]
-  end
+  let(:active_service_providers) { [service_provider_01, service_provider_02] }
 
   before do
     [service_provider_01, service_provider_02].each do |object|
@@ -30,9 +28,7 @@ RSpec.describe RequestedAttributeReport do
              service_provider: object
     end
 
-    active_service_providers.each do |object|
-      create :activation, federation_object: object
-    end
+    active_service_providers.each { |object| create :activation, federation_object: object }
   end
 
   shared_examples 'a tabular report for requested attributes' do
@@ -57,9 +53,7 @@ RSpec.describe RequestedAttributeReport do
       active_service_providers.map do |k|
         expect(report[:rows]).to include([k.name, status])
 
-        status_flags.each do |flag|
-          expect(report[:rows]).not_to include([k.name, flag])
-        end
+        status_flags.each { |flag| expect(report[:rows]).not_to include([k.name, flag]) }
       end
     end
   end
@@ -88,9 +82,7 @@ RSpec.describe RequestedAttributeReport do
 
     context 'report rows' do
       let(:report) { subject.generate }
-      let(:inactive_service_provider) do
-        create :service_provider
-      end
+      let(:inactive_service_provider) { create :service_provider }
 
       before do
         create :service_provider_saml_attribute,
