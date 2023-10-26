@@ -74,8 +74,6 @@ RSpec.configure do |config|
   config.around(:each, type: :feature) do |spec|
     WebMock.allow_net_connect!
 
-    visit '/'
-
     spec.run
   ensure
     WebMock.disable_net_connect!(allow_localhost: true)

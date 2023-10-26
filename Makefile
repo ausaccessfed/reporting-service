@@ -21,7 +21,7 @@ RUN_ARGS=\
 -p ${PORT}:${PORT}
 
 run-image:
-	make run-generic-image-command ADDITIONAL_ARGS="${RUN_ARGS}"
+	@make run-generic-image-command ADDITIONAL_ARGS="${RUN_ARGS}"
 FILE=
 
 TESTS_ARGS=\
