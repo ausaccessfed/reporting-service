@@ -45,7 +45,7 @@ group :development, :test do
 
   gem 'aaf-gumboot'
 
-  gem 'byebug'
+  gem 'debug'
   gem 'pry', require: false
 
   gem 'capybara'

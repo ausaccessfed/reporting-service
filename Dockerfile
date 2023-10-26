@@ -122,6 +122,8 @@ RUN yum -y update \
     --enablerepo=devel \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
     chromium-118.0.5993.70-1.el9 \
+    # renovate: datasource=yum repo=rocky-9-crb-x86_64
+    libyaml-devel-0.2.5-7.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
     libtool-2.4.6-45.el9 \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64

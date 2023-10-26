@@ -13,6 +13,7 @@ Capybara.default_normalize_ws = true
 Capybara.save_path = 'tmp/capybara'
 
 Capybara.server = :puma, { Silent: true }
+Capybara.server_host = '0.0.0.0'
 
 # Allows failure screenshots to work correctly with multi-session setup
 Capybara.singleton_class.prepend(

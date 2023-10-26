@@ -55,6 +55,8 @@ module ReportingService
       config.lograge.enabled = true
       config.lograge.ignore_actions = %w[HealthController#show WelcomeController#index]
     end
+
+    config.log_level = :error
   end
 end
 

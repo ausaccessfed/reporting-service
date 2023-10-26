@@ -131,11 +131,108 @@ RSpec.describe TimeSeriesReport::Lint do
     end
   end
 
+  context 'when the range is missing a start time' do
+    let(:output) { valid_output.merge(range: valid_output[:range].except(:start)) }
+
+    it_behaves_like 'fails_with', 'time range is missing start'
+  end
+
+  context 'when the start time is invalid' do
+    let(:output) { valid_output.merge(range: valid_output[:range].merge(start: 'f')) }
+
+    it_behaves_like 'fails_with', 'start of time range is invalid'
+  end
+
+  context 'when the start time is a Time object' do
+    let(:output) { valid_output.merge(range: valid_output[:range].merge(start: Time.zone.now)) }
+
+    it_behaves_like 'fails_with', 'start of time range is invalid'
+  end
+
+  context 'when the range is missing an end time' do
+    let(:output) { valid_output.merge(range: valid_output[:range].except(:end)) }
+
+    it_behaves_like 'fails_with', 'time range is missing end'
+  end
+
+  context 'when the end time is invalid' do
+    let(:output) { valid_output.merge(range: valid_output[:range].merge(end: 'f')) }
+
+    it_behaves_like 'fails_with', 'end of time range is invalid'
+  end
+
+  context 'when the end time is a Time object' do
+    let(:output) { valid_output.merge(range: valid_output[:range].merge(end: 'f')) }
+
+    it_behaves_like 'fails_with', 'end of time range is invalid'
+  end
+
   context 'when range is null' do
     let(:output) { valid_output.except(:range) }
 
     it 'is valid' do
       expect { subject.generate }.not_to raise_error
     end
+  end
+
+  context 'when data for a series is missing' do
+    let(:output) { valid_output.merge(data: valid_output[:data].except(:series_a)) }
+
+    it_behaves_like 'fails_with', 'missing data for series_a'
+  end
+
+  context 'when extra series data is present' do
+    let(:output) { valid_output.merge(data: valid_output[:data].merge(series_d: [])) }
+
+    it_behaves_like 'fails_with', 'extra data present for series_d'
+  end
+
+  context 'when the data is empty' do
+    let(:output) { valid_output.merge(data: valid_output[:data].merge(series_a: [])) }
+
+    it_behaves_like 'fails_with', 'data for series_a is blank'
+  end
+
+  context 'when the data is array' do
+    let(:output) { valid_output.merge(data: valid_output[:data].merge(series_a: '')) }
+
+    it_behaves_like 'fails_with', 'data for series_a is not an Array'
+  end
+
+  context 'when the data precedes the start of the time range' do
+    let(:output) do
+      data = valid_output[:data].merge(series_a: [[-1, 0]])
+      valid_output.merge(data:)
+    end
+
+    it_behaves_like 'fails_with', 'data for series_a is outside time range'
+  end
+
+  context 'when the data exceeds the end of the time range' do
+    let(:output) do
+      t = 14 * 24 * 3600
+      data = valid_output[:data].merge(series_a: [[t, 0]])
+      valid_output.merge(data:)
+    end
+
+    it_behaves_like 'fails_with', 'data for series_a is outside time range'
+  end
+
+  context 'when the data is unsorted' do
+    let(:output) do
+      data = valid_output[:data].merge(series_a: [[60, 1], [30, 2], [0, 3]])
+      valid_output.merge(data:)
+    end
+
+    it_behaves_like 'fails_with', 'data for series_a is unsorted'
+  end
+
+  context 'when a data point is non-numeric' do
+    let(:output) do
+      data = valid_output[:data].merge(series_a: [0, 'a'])
+      valid_output.merge(data:)
+    end
+
+    it_behaves_like 'fails_with', 'data for series_a is not numeric'
   end
 end
