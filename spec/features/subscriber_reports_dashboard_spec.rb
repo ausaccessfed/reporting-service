@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Subscriber Reports' do
-  given(:user) { create :subject }
+RSpec.describe 'Subscriber Reports' do
+  let(:user) { create(:subject) }
 
-  background do
+  before do
     attrs = create(:aaf_attributes, :from_subject, subject: user)
     RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
@@ -14,7 +14,7 @@ RSpec.feature 'Subscriber Reports' do
     visit '/subscriber_reports'
   end
 
-  scenario 'viewing the Subscriber Reports #index' do
-    expect(current_path).to eq('/subscriber_reports')
+  it 'viewing the Subscriber Reports #index' do
+    expect(page).to have_current_path('/subscriber_reports', ignore_query: true)
   end
 end

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe IncomingFTicksEvent, type: :model do
+RSpec.describe IncomingFTicksEvent do
   subject { build(:incoming_f_ticks_event) }
 
   it { is_expected.to be_valid }
@@ -13,7 +13,7 @@ RSpec.describe IncomingFTicksEvent, type: :model do
   context '::discard!' do
     let!(:incoming_event) { create(:incoming_f_ticks_event) }
 
-    it 'should set :discarded to true' do
+    it 'sets :discarded to true' do
       expect { incoming_event.discard! }.to change(incoming_event, :discarded).from(false).to(true)
     end
   end

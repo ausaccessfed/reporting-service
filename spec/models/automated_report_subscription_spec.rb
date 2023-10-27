@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AutomatedReportSubscription, type: :model do
+RSpec.describe AutomatedReportSubscription do
   subject { build(:automated_report_subscription) }
 
   it { is_expected.to validate_presence_of(:automated_report) }

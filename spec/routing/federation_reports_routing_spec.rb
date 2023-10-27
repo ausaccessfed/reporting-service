@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe FederationReportsController, type: :routing do
+RSpec.describe FederationReportsController do
   describe 'GET /federation_reports/federation_growth_report' do
     subject { { get: '/federation_reports/federation_growth_report' } }
 

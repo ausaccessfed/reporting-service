@@ -3,7 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe SubscriberRegistrationsReport do
+  subject { described_class.new(report_type) }
+
   let(:header) { [['Name', 'Registration Date']] }
+  let(:report) { subject.generate }
   let(:type) { 'subscriber-registrations' }
 
   let(:organization) { create(:organization) }
@@ -11,8 +14,7 @@ RSpec.describe SubscriberRegistrationsReport do
   let(:service_provider) { create(:service_provider) }
   let(:rapid_connect_service) { create(:rapid_connect_service) }
 
-  subject { SubscriberRegistrationsReport.new(report_type) }
-  let(:report) { subject.generate }
+
 
   shared_examples 'a report which lists federation objects' do
     it 'returns an array' do
@@ -57,10 +59,12 @@ RSpec.describe SubscriberRegistrationsReport do
   context 'report generation' do
     context 'invalid indetifier' do
       let(:report_type) { 'asdsad' }
+
       it 'thows an error' do
         expect { report }.to raise_error('Identifier is not valid!')
       end
     end
+
     context 'for an Organization' do
       let(:report_type) { 'organizations' }
       let(:title) { 'Registered Organizations' }

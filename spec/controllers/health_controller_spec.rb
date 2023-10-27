@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe HealthController, type: :controller do
+RSpec.describe HealthController do
   describe 'GET #show' do
     subject(:show) { get :show }
 
@@ -27,7 +27,7 @@ RSpec.describe HealthController, type: :controller do
     end
 
     context 'when redis is inaccessible' do
-      before { allow(HealthController).to receive(:redis).and_throw(StandardError) }
+      before { allow(described_class).to receive(:redis).and_throw(StandardError) }
 
       it 'returns http 503' do
         show

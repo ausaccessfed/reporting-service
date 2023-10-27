@@ -2,16 +2,18 @@
 
 require 'rails_helper'
 
-RSpec.describe WelcomeController, type: :controller do
-  let(:user) { nil }
+RSpec.describe WelcomeController do
   subject { response }
+
+  let(:user) { nil }
+
 
   before do
     session[:subject_id] = user.try(:id)
     run
   end
 
-  context '#index' do
+  describe '#index' do
     def run
       get :index
     end

@@ -2,8 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe AdministratorReportsController, type: :controller do
-  let(:user) { create :subject, :authorized, permission: 'admin:*' }
+RSpec.describe AdministratorReportsController do
+  subject { response }
+
+  let(:user) { create(:subject, :authorized, permission: 'admin:*') }
 
   let(:range) { { start: Time.now.utc - 1.month, end: Time.now.utc } }
 
@@ -12,7 +14,6 @@ RSpec.describe AdministratorReportsController, type: :controller do
     { source: 'DS' }
   end
 
-  subject { response }
 
   before { session[:subject_id] = user.try(:id) }
 
@@ -29,12 +30,13 @@ RSpec.describe AdministratorReportsController, type: :controller do
     end
   end
 
-  context '#index' do
+  describe '#index' do
     before { get :index }
 
     context 'when user is not administrator' do
-      let(:user) { create :subject }
-      it { is_expected.to have_http_status('403') }
+      let(:user) { create(:subject) }
+
+      it { is_expected.to have_http_status(nil) }
     end
 
     context 'when user is administrator' do

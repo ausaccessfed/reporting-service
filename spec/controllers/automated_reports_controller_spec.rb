@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe AutomatedReportsController, type: :controller do
-  let(:idp) { create :identity_provider }
-  let(:user) { create :subject }
+RSpec.describe AutomatedReportsController do
+  let(:idp) { create(:identity_provider) }
+  let(:user) { create(:subject) }
 
   def destroy
     delete :destroy, params: { identifier: subscription.identifier }
@@ -19,24 +19,24 @@ RSpec.describe AutomatedReportsController, type: :controller do
   before { session[:subject_id] = user.try(:id) }
 
   describe '#index' do
-    let(:subscription) { create :automated_report_subscription, automated_report: auto_report, subject: user }
+    let(:subscription) { create(:automated_report_subscription, automated_report: auto_report, subject: user) }
 
     let(:auto_report) do
-      create :automated_report, report_class: 'IdentityProviderSessionsReport', source: 'DS', target: idp.entity_id
+      create(:automated_report, report_class: 'IdentityProviderSessionsReport', source: 'DS', target: idp.entity_id)
     end
 
     before { get :index }
 
     context 'get on /automated_reports' do
-      it 'should response with 200' do
+      it 'responses with 200' do
         expect(response).to have_http_status(:ok)
       end
 
-      it 'should render the index template' do
+      it 'renders the index template' do
         expect(response).to render_template('index')
       end
 
-      it 'should assign subject\'t automated report subscriptions' do
+      it 'assigns subject't automated report subscriptions' do
         expect(assigns[:subscriptions]).to include(subscription)
       end
     end
@@ -44,11 +44,11 @@ RSpec.describe AutomatedReportsController, type: :controller do
     context 'delete on /automated_reports/destroy' do
       before { destroy }
 
-      it 'should response with redirect (302)' do
+      it 'responses with redirect (302)' do
         expect(response).to redirect_to('/automated_reports')
       end
 
-      it 'should destroy automated report subscription' do
+      it 'destroys automated report subscription' do
         expect(assigns[:subscriptions]).not_to include(subscription)
       end
     end
@@ -57,7 +57,7 @@ RSpec.describe AutomatedReportsController, type: :controller do
   shared_examples 'Automated Report Subscription' do
     before { %w[monthly quarterly yearly].each { |interval| subscribe interval } }
 
-    it 'should redirect to report page with (302)' do
+    it 'redirects to report page with (302)' do
       expect(response).to redirect_to("federation_reports/#{path}")
       expect(user.automated_report_subscriptions.count).to eq(3)
     end

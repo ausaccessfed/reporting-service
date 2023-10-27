@@ -3,9 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe ServiceProviderSessionsReport do
+  subject { described_class.new(sp_01.entity_id, start, finish, steps, source) }
+
   around { |spec| Timecop.freeze { spec.run } }
 
   let(:type) { 'service-provider-sessions' }
+  let(:report) { subject.generate }
+  let(:data) { report[:data] }
   let(:title) { 'Service Provider Sessions for' }
 
   let(:labels) { { y: 'Sessions / hour (average)', sessions: 'Sessions' } }
@@ -20,17 +24,14 @@ RSpec.describe ServiceProviderSessionsReport do
 
   let(:scope_range) { (0..(finish - start).to_i).step(steps.hours.to_i) }
 
-  let(:idp) { create :identity_provider }
-  let(:sp_01) { create :service_provider }
-  let(:sp_02) { create :service_provider }
+  let(:idp) { create(:identity_provider) }
+  let(:sp_01) { create(:service_provider) }
+  let(:sp_02) { create(:service_provider) }
 
-  subject { ServiceProviderSessionsReport.new(sp_01.entity_id, start, finish, steps, source) }
 
-  let(:report) { subject.generate }
-  let(:data) { report[:data] }
 
   def expect_in_range
-    [*scope_range].each_with_index { |t, index| expect(data[:sessions][index]).to match_array([t, value]) }
+    [*scope_range].each_with_index { |t, index| expect(data[:sessions][index]).to contain_exactly(t, value) }
   end
 
   shared_examples 'sessions' do
@@ -38,7 +39,7 @@ RSpec.describe ServiceProviderSessionsReport do
 
     let(:value) { anything }
 
-    it 'should include title, units, labels and range' do
+    it 'includes title, units, labels and range' do
       output_title = "#{title} #{sp_01.name} (#{source_name})"
       expect(report).to include(title: output_title, units:, labels:, range:)
     end
@@ -49,29 +50,29 @@ RSpec.describe ServiceProviderSessionsReport do
   end
 
   context 'when SP sessions are not yet responded' do
-    before { create_list :discovery_service_event, 2, initiating_sp: sp_01.entity_id }
+    before { create_list(:discovery_service_event, 2, initiating_sp: sp_01.entity_id) }
 
     let(:value) { 0.0 }
     let(:source) { 'DS' }
 
-    it 'should not count SP sessions' do
+    it 'does not count SP sessions' do
       expect_in_range
     end
   end
 
   context 'when SP sessions are failed at IdP' do
-    before { create_list :federated_login_event, 2, relying_party: sp_01.entity_id }
+    before { create_list(:federated_login_event, 2, relying_party: sp_01.entity_id) }
 
     let(:value) { 0.0 }
     let(:source) { 'IdP' }
 
-    it 'should not count SP sessions' do
+    it 'does not count SP sessions' do
       expect_in_range
     end
   end
 
   shared_examples 'SPs with sessions' do
-    before :example do
+    before do
       5.times { create_event(idp.entity_id, sp_01.entity_id, start) }
       10.times { create_event(idp.entity_id, sp_01.entity_id, finish - 2.days) }
       9.times { create_event(idp.entity_id, sp_01.entity_id, finish) }
@@ -83,7 +84,7 @@ RSpec.describe ServiceProviderSessionsReport do
       expect(data[:sessions]).to include([time, 1.0])
     end
 
-    it 'should contain 2.0 SP sessions/h during first 5 hours of 2 days ago' do
+    it 'contains 2.0 SP sessions/h during first 5 hours of 2 days ago' do
       expect(data[:sessions]).to include([684_000, 2.0])
     end
 
@@ -100,7 +101,7 @@ RSpec.describe ServiceProviderSessionsReport do
 
   context 'when events are sessions with response' do
     def create_event(idp, sp, timestamp = nil)
-      create :discovery_service_event, :response, { selected_idp: idp, initiating_sp: sp, timestamp: }.compact
+      create(:discovery_service_event, :response, { selected_idp: idp, initiating_sp: sp, timestamp: }.compact)
     end
 
     let(:source) { 'DS' }
@@ -112,7 +113,7 @@ RSpec.describe ServiceProviderSessionsReport do
 
   context 'when events are IdP sessions' do
     def create_event(idp, sp, timestamp = nil)
-      create :federated_login_event, :OK, { asserting_party: idp, relying_party: sp, timestamp: }.compact
+      create(:federated_login_event, :OK, { asserting_party: idp, relying_party: sp, timestamp: }.compact)
     end
 
     let(:source) { 'IdP' }

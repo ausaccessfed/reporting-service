@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe IdentityProviderSAMLAttribute, type: :model do
+RSpec.describe IdentityProviderSAMLAttribute do
   context 'validations' do
     subject { create(:identity_provider_saml_attribute) }
 

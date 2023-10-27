@@ -59,7 +59,7 @@ RSpec.describe TimeSeriesReport do
     end
   end
 
-  context '#generate' do
+  describe '#generate' do
     subject { report.generate }
 
     it { is_expected.to include(title:) }

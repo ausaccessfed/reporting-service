@@ -3,7 +3,9 @@
 require 'rails_helper'
 require 'gumboot/shared_examples/roles'
 
-RSpec.describe Role, type: :model do
+RSpec.describe Role do
+  before { allow(Rails.application.config.reporting_service).to receive(:ide).and_return(config) }
+
   include_examples 'Roles'
 
   let(:admin) { 'a:b:c:admin' }
@@ -12,63 +14,65 @@ RSpec.describe Role, type: :model do
   let(:admin_entitlements) { [admin, admin_reporting] }
   let(:config) { { admin_entitlements:, federation_object_entitlement_prefix: prefix } }
 
-  before { allow(Rails.application.config.reporting_service).to receive(:ide).and_return(config) }
 
   context '::for_entitlement' do
+    subject { -> { run } }
+
     let(:entitlement) { 'a:b:c' }
 
     def run
       Role.for_entitlement(entitlement)
     end
 
-    subject { -> { run } }
 
-    context 'when admin_entitlements is missing ' do
+    context 'when admin_entitlements is missing' do
       let(:admin_entitlements) { nil }
       let!(:role) { create(:role, entitlement:) }
-      it { is_expected.not_to change(Role, :count) }
+
+      it { is_expected.not_to change(described_class, :count) }
 
       it 'returns the existing role' do
         expect(run).to eq(role)
       end
 
       it 'updates the permissions' do
-        expect_any_instance_of(Role).to receive(:update_permissions).and_call_original
+        expect_any_instance_of(described_class).to receive(:update_permissions).and_call_original
         run
       end
     end
 
     context 'when the role exists' do
       let!(:role) { create(:role, entitlement:) }
-      it { is_expected.not_to change(Role, :count) }
+
+      it { is_expected.not_to change(described_class, :count) }
 
       it 'returns the existing role' do
         expect(run).to eq(role)
       end
 
       it 'updates the permissions' do
-        expect_any_instance_of(Role).to receive(:update_permissions).and_call_original
+        expect_any_instance_of(described_class).to receive(:update_permissions).and_call_original
         run
       end
     end
 
     context 'when the role does not exist' do
-      it { is_expected.to change(Role, :count).by(1) }
+      it { is_expected.to change(described_class, :count).by(1) }
 
       it 'returns the new role' do
         result = run
-        expect(result).to eq(Role.last)
+        expect(result).to eq(described_class.last)
         expect(result).to have_attributes(name: 'auto', entitlement:)
       end
 
       it 'updates the permissions' do
-        expect_any_instance_of(Role).to receive(:update_permissions).and_call_original
+        expect_any_instance_of(described_class).to receive(:update_permissions).and_call_original
         run
       end
     end
   end
 
-  context '#update_permissions' do
+  describe '#update_permissions' do
     def run
       subject.update_permissions
     end
@@ -118,11 +122,12 @@ RSpec.describe Role, type: :model do
     end
 
     context 'for a federation object admin entitlement' do
+      # e.g. $prefix:organization:da39a3ee5e6b4b0d3255bfef95601890afd80709:admin
+      subject { create(:role, entitlement: "#{prefix}:#{type}:#{sha1}:admin") }
+
       let(:type) { SecureRandom.urlsafe_base64 }
       let(:sha1) { SecureRandom.hex(20) }
 
-      # e.g. $prefix:organization:da39a3ee5e6b4b0d3255bfef95601890afd80709:admin
-      subject { create(:role, entitlement: "#{prefix}:#{type}:#{sha1}:admin") }
 
       it 'creates the object admin permission' do
         expect { run }.to change { permission_values }.to contain_exactly("objects:#{type}:#{sha1}:*")
@@ -142,11 +147,12 @@ RSpec.describe Role, type: :model do
     end
 
     context 'for a federation object entitlement' do
+      # e.g. $prefix:organization:da39a3ee5e6b4b0d3255bfef95601890afd80709
+      subject { create(:role, entitlement: "#{prefix}:#{type}:#{sha1}") }
+
       let(:type) { SecureRandom.urlsafe_base64 }
       let(:sha1) { SecureRandom.hex(20) }
 
-      # e.g. $prefix:organization:da39a3ee5e6b4b0d3255bfef95601890afd80709
-      subject { create(:role, entitlement: "#{prefix}:#{type}:#{sha1}") }
 
       it 'creates the object permission' do
         expect { run }.to change { permission_values }.to contain_exactly(
@@ -172,10 +178,11 @@ RSpec.describe Role, type: :model do
     end
 
     context 'for an unrecognised entitlement' do
+      subject { create(:role, entitlement: 'a:b:c') }
+
       let(:type) { SecureRandom.urlsafe_base64 }
       let(:sha1) { SecureRandom.hex(20) }
 
-      subject { create(:role, entitlement: 'a:b:c') }
 
       it 'creates no permissions' do
         run

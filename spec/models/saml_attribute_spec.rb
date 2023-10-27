@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SAMLAttribute, type: :model do
+RSpec.describe SAMLAttribute do
   context 'validations' do
     subject { build(:saml_attribute) }
 

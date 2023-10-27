@@ -3,12 +3,12 @@
 RSpec.configure do |config|
   config.before(:suite) { DatabaseCleaner.clean_with(:truncation) }
 
-  config.before(:each) do |spec|
+  config.before do |spec|
     type = spec.metadata[:type]
     DatabaseCleaner.strategy = (type == :feature ? :truncation : :transaction)
   end
 
-  config.before(:each) { DatabaseCleaner.start }
+  config.before { DatabaseCleaner.start }
 
-  config.after(:each) { DatabaseCleaner.clean }
+  config.after { DatabaseCleaner.clean }
 end

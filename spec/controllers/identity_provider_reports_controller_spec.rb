@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe IdentityProviderReportsController, type: :controller do
+RSpec.describe IdentityProviderReportsController do
   let(:prefix) { 'identity' }
 
   include_examples 'a Subscriber Report'

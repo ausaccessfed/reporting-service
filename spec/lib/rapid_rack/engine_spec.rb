@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe RapidRack::Engine, type: :feature do
+  subject { response }
+
   let(:opts) { Rails.application.config.reporting_service.rapid_connect[:rack] }
 
   let(:issuer) { opts[:issuer] }
@@ -12,9 +14,8 @@ RSpec.describe RapidRack::Engine, type: :feature do
 
   # Unfortunately the neatest way to get access to a routed application in
   # the engine.
-  let(:engine_app) { RapidRack::Engine.routes.routes.routes[0].app }
+  let(:engine_app) { described_class.routes.routes.routes[0].app }
 
-  subject { response }
 
   before do
     error_handler = handler.try(:constantize).try(:new) || engine_app
@@ -77,7 +78,7 @@ RSpec.describe RapidRack::Engine, type: :feature do
       expect(request.session[:subject_id]).to eq(Subject.last.id)
     end
 
-    context '#logout' do
+    describe '#logout' do
       def run
         get '/auth/logout'
       end
@@ -87,18 +88,18 @@ RSpec.describe RapidRack::Engine, type: :feature do
           post '/auth/jwt', params: { assertion: }
           get '/auth/logout'
         end
-        it 'should redirect to / and reset session' do
+        it 'redirects to / and reset session' do
           expect(run).to eq(302)
           expect(response['Location']).to eq('/')
-          expect(request.session[:subject_id]).to eq(nil)
+          expect(request.session[:subject_id]).to be_nil
         end
       end
 
       context 'when no sesssion' do
-        it 'should redirect to / and reset session' do
+        it 'redirects to / and reset session' do
           expect(run).to eq(302)
           expect(response['Location']).to eq('/')
-          expect(request.session[:subject_id]).to eq(nil)
+          expect(request.session[:subject_id]).to be_nil
         end
       end
     end

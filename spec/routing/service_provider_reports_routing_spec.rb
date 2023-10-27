@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ServiceProviderReportsController, type: :routing do
+RSpec.describe ServiceProviderReportsController do
   shared_examples 'get request' do
     subject { { get: "/subscriber_reports#{path}" } }
 

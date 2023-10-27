@@ -11,6 +11,8 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
     end
   end
 
+  subject { response }
+
   before do
     config = Rails.application.config.reporting_service.rapid_connect
     config[:rack][:receiver] = receiver
@@ -20,14 +22,6 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
   end
 
   let(:prefix) { '/auth' }
-  let(:issuer) { 'https://rapid.example.com' }
-  let(:audience) { 'https://service.example.com' }
-  let(:url) { 'https://rapid.example.com/jwt/authnrequest/research/abcd1234' }
-  let(:secret) { '1234abcd' }
-  let(:app) { build_app(prefix) }
-
-  subject { response }
-
   let(:handler) { nil }
   let(:receiver) do
     TemporaryTestClass.build_class do
@@ -44,15 +38,26 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
       end
     end
   end
+  let(:issuer) { 'https://rapid.example.com' }
+  let(:audience) { 'https://service.example.com' }
+  let(:url) { 'https://rapid.example.com/jwt/authnrequest/research/abcd1234' }
+  let(:secret) { '1234abcd' }
+  let(:app) { build_app(prefix) }
+
+
 
   context 'test initiliser' do
-    let(:receiver) { nil }
     subject { get '/auth/login' }
+
+    let(:receiver) { nil }
+
+
     it { expect { subject }.to raise_error('A receiver must be configured for rapid_rack') }
   end
 
   context 'get /nonexistent' do
     before { get '/auth/nonexistent' }
+
     it { is_expected.to be_not_found }
   end
 
@@ -67,11 +72,13 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
 
   context 'post /login' do
     before { post '/auth/login' }
+
     it { is_expected.to be_method_not_allowed }
   end
 
   context 'get /logout' do
     before { get '/auth/logout' }
+
     it 'responds using the receiver' do
       expect(response).to be_successful
       expect(response.body).to have_content('Logged Out!')
@@ -80,11 +87,13 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
 
   context 'post /logout' do
     before { post '/auth/logout' }
+
     it { is_expected.to be_method_not_allowed }
   end
 
   context 'get /jwt' do
     before { get '/auth/jwt' }
+
     it { is_expected.to be_method_not_allowed }
   end
 
@@ -123,6 +132,7 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
 
     context 'with an invalid assertion' do
       let(:assertion) { 'x.y.z' }
+
       it { is_expected.to be_bad_request }
     end
 
@@ -163,36 +173,43 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
 
     context 'with a nil audience' do
       let(:claims) { valid_claims.merge(aud: nil) }
+
       it_behaves_like 'an invalid claims set', :aud
     end
 
     context 'with an invalid audience' do
       let(:claims) { valid_claims.merge(aud: 'invalid') }
+
       it_behaves_like 'an invalid claims set', :aud
     end
 
     context 'with a nil issuer' do
       let(:claims) { valid_claims.merge(iss: nil) }
+
       it_behaves_like 'an invalid claims set', :iss
     end
 
     context 'with an invalid issuer' do
       let(:claims) { valid_claims.merge(iss: 'invalid') }
+
       it_behaves_like 'an invalid claims set', :iss
     end
 
     context 'with a nil type' do
       let(:claims) { valid_claims.merge(typ: nil) }
+
       it_behaves_like 'an invalid claims set', :typ
     end
 
     context 'with an invalid type' do
       let(:claims) { valid_claims.merge(typ: 'blarghn') }
+
       it_behaves_like 'an invalid claims set', :typ
     end
 
     context 'with a nil jti' do
       let(:claims) { valid_claims.merge(jti: nil) }
+
       it_behaves_like 'an invalid claims set', :jti
     end
 
@@ -206,51 +223,61 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
       end
 
       let(:claims) { valid_claims.merge(jti: 'blarghn') }
+
       it_behaves_like 'an invalid claims set', :jti
     end
 
     context 'with a nil nbf' do
       let(:claims) { valid_claims.merge(nbf: nil) }
+
       it_behaves_like 'an invalid claims set', :nbf
     end
 
     context 'with an invalid nbf' do
       let(:claims) { valid_claims.merge(nbf: 2.minutes.from_now) }
+
       it_behaves_like 'an invalid claims set', :nbf
     end
 
     context 'with a non-numeric nbf' do
       let(:claims) { valid_claims.merge(nbf: 'a') }
+
       it_behaves_like 'an invalid claims set', :nbf
     end
 
     context 'with a nil exp' do
       let(:claims) { valid_claims.merge(exp: nil) }
+
       it_behaves_like 'an invalid claims set', :exp
     end
 
     context 'with an invalid exp' do
       let(:claims) { valid_claims.merge(exp: 1.minute.ago) }
+
       it_behaves_like 'an invalid claims set', :exp
     end
 
     context 'with a non-numeric exp' do
       let(:claims) { valid_claims.merge(exp: 'a') }
+
       it_behaves_like 'an invalid claims set', :exp
     end
 
     context 'with a nil iat' do
       let(:claims) { valid_claims.merge(iat: nil) }
+
       it_behaves_like 'an invalid claims set', :iat
     end
 
     context 'with an invalid iat' do
       let(:claims) { valid_claims.merge(iat: 10.minutes.ago) }
+
       it_behaves_like 'an invalid claims set', :iat
     end
 
     context 'with a non-numeric iat' do
       let(:claims) { valid_claims.merge(iat: 'a') }
+
       it_behaves_like 'an invalid claims set', :iat
     end
   end

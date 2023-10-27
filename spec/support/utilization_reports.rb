@@ -19,8 +19,11 @@ RSpec.shared_context 'Utilization Report' do
     end
   end
 
-  context '#Generate' do
+  describe '#Generate' do
     let(:counts) { objects.each_with_object({}) { |e, a| e[a.id] = rand(1..10) } }
+    let!(:included_object_event_counts) { create_events(included_objects, start, finish) }
+    let!(:before_object_event_counts) { create_events(before_objects, 1.week.until(start), start) }
+    let!(:after_object_event_counts) { create_events(after_objects, finish, 1.week.since(finish)) }
 
     def create_events(objects, start, finish)
       objects.each_with_object({}) do |o, a|
@@ -34,13 +37,10 @@ RSpec.shared_context 'Utilization Report' do
       end
     end
 
-    let!(:included_object_event_counts) { create_events(included_objects, start, finish) }
 
-    let!(:before_object_event_counts) { create_events(before_objects, 1.week.until(start), start) }
 
-    let!(:after_object_event_counts) { create_events(after_objects, finish, 1.week.since(finish)) }
 
-    it 'should render a report row' do
+    it 'renders a report row' do
       expected = included_objects.map { |o| [o.name, included_object_event_counts[o.id].to_s] }
 
       expect(report[:rows]).to match_array(expected)

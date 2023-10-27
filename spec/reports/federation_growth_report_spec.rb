@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe FederationGrowthReport do
+  subject { described_class.new(start, finish) }
+
   around { |spec| Timecop.freeze { spec.run } }
 
   let(:title) { 'Federation Growth' }
@@ -28,7 +30,7 @@ RSpec.describe FederationGrowthReport do
   def expect_in_range(start_point = 0)
     scope_range.each_with_index do |time, index|
       type_count.each do |k, val|
-        expect(data[k].slice((mod_range start_point)..range_count)[index]).to match_array([time, type_total[k], val])
+        expect(data[k].slice((mod_range start_point)..range_count)[index]).to contain_exactly(time, type_total[k], val)
       end
     end
   end
@@ -38,8 +40,8 @@ RSpec.describe FederationGrowthReport do
   end
 
   %i[organization identity_provider rapid_connect_service service_provider].each do |type|
-    let(type) { create type }
-    let("#{type}_02") { create type }
+    let(type) { create(type) }
+    let("#{type}_02") { create(type) }
   end
 
   before do
@@ -48,11 +50,10 @@ RSpec.describe FederationGrowthReport do
     end
   end
 
-  subject { FederationGrowthReport.new(start, finish) }
 
   shared_examples 'a report which generates growth analytics' do
     context 'growth report when some objects are not included' do
-      before :example do
+      before do
         included_objects.each { |o| create(:activation, federation_object: o) }
       end
 
@@ -88,8 +89,9 @@ RSpec.describe FederationGrowthReport do
     end
   end
 
-  context '#generate report' do
+  describe '#generate report' do
     let(:report) { subject.generate }
+
     it 'output structure should match stacked_report' do
       %i[organizations identity_providers services].each do |type|
         report[:data][type].each { |i| expect(i.count).to eq(3) }
@@ -101,19 +103,19 @@ RSpec.describe FederationGrowthReport do
     end
 
     context 'with objects deactivated before start' do
-      before :example do
+      before do
         [organization_02, identity_provider_02, service_provider_02, rapid_connect_service_02].each do |o|
           create(:activation, federation_object: o, deactivated_at: (start - 1.day))
         end
       end
 
-      it 'should not count objects if deactivated before starting point' do
+      it 'does not count objects if deactivated before starting point' do
         expect_in_range
       end
     end
 
     context 'with duplicate objects' do
-      before :example do
+      before do
         [organization, identity_provider, rapid_connect_service, service_provider].each do |o|
           create(:activation, federation_object: o)
         end
@@ -131,7 +133,7 @@ RSpec.describe FederationGrowthReport do
 
       let(:range_after_midtime) { ((finish - midtime).to_i..(finish - start).to_i).step(1.day) }
 
-      before :example do
+      before do
         [organization_02, identity_provider_02, service_provider_02, rapid_connect_service_02].each do |o|
           create(:activation, federation_object: o, deactivated_at: midtime)
         end
@@ -143,7 +145,7 @@ RSpec.describe FederationGrowthReport do
 
         let(:type_total) { { organizations: 2, identity_providers: 4, services: 8 } }
 
-        it 'should count objects before deactivation' do
+        it 'counts objects before deactivation' do
           expect_in_range
         end
       end
@@ -151,7 +153,7 @@ RSpec.describe FederationGrowthReport do
       context 'when objects are deactivated' do
         let(:scope_range) { range_after_midtime }
 
-        it 'should not count objects after deactivation' do
+        it 'does not count objects after deactivation' do
           expect_in_range scope_range.count
         end
       end
