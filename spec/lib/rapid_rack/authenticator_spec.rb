@@ -44,13 +44,10 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
   let(:secret) { '1234abcd' }
   let(:app) { build_app(prefix) }
 
-
-
   context 'test initiliser' do
     subject { get '/auth/login' }
 
     let(:receiver) { nil }
-
 
     it { expect { subject }.to raise_error('A receiver must be configured for rapid_rack') }
   end

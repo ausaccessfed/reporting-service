@@ -14,7 +14,6 @@ RSpec.describe Role do
   let(:admin_entitlements) { [admin, admin_reporting] }
   let(:config) { { admin_entitlements:, federation_object_entitlement_prefix: prefix } }
 
-
   context '::for_entitlement' do
     subject { -> { run } }
 
@@ -23,7 +22,6 @@ RSpec.describe Role do
     def run
       Role.for_entitlement(entitlement)
     end
-
 
     context 'when admin_entitlements is missing' do
       let(:admin_entitlements) { nil }
@@ -128,7 +126,6 @@ RSpec.describe Role do
       let(:type) { SecureRandom.urlsafe_base64 }
       let(:sha1) { SecureRandom.hex(20) }
 
-
       it 'creates the object admin permission' do
         expect { run }.to change { permission_values }.to contain_exactly("objects:#{type}:#{sha1}:*")
       end
@@ -152,7 +149,6 @@ RSpec.describe Role do
 
       let(:type) { SecureRandom.urlsafe_base64 }
       let(:sha1) { SecureRandom.hex(20) }
-
 
       it 'creates the object permission' do
         expect { run }.to change { permission_values }.to contain_exactly(
@@ -182,7 +178,6 @@ RSpec.describe Role do
 
       let(:type) { SecureRandom.urlsafe_base64 }
       let(:sha1) { SecureRandom.hex(20) }
-
 
       it 'creates no permissions' do
         run

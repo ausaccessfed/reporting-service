@@ -49,8 +49,10 @@ RSpec.describe 'Identity Provider Reports' do
       it 'viewing the IdP Daily Demand Report' do
         click_link('Identity Provider Daily Demand Report')
 
-        expect(page).to have_current_path('/subscriber_reports/identity_provider_daily_demand_report', 
-ignore_query: true)
+        expect(page).to have_current_path(
+          '/subscriber_reports/identity_provider_daily_demand_report',
+          ignore_query: true
+        )
 
         select idp.name, from: 'Identity Providers'
 
@@ -65,7 +67,8 @@ ignore_query: true)
 
         expect(page).to have_current_path(
           '/subscriber_reports/identity_provider_' \
-            'daily_demand_report', ignore_query: true
+            'daily_demand_report',
+          ignore_query: true
         )
         expect(page).to have_css('svg.identity-provider-daily-demand')
         expect(page).to have_content("(#{data_source_name})")
@@ -76,7 +79,8 @@ ignore_query: true)
 
         expect(page).to have_current_path(
           '/subscriber_reports/identity_provider_' \
-            'destination_services_report', ignore_query: true
+            'destination_services_report',
+          ignore_query: true
         )
 
         select idp.name, from: 'Identity Providers'
@@ -92,7 +96,8 @@ ignore_query: true)
 
         expect(page).to have_current_path(
           '/subscriber_reports/identity_provider_' \
-            'destination_services_report', ignore_query: true
+            'destination_services_report',
+          ignore_query: true
         )
         # Tabular reports do not render report title - see #178
         # So instead just confirm the report-data JSON contains the title.

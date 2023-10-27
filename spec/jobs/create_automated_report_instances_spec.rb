@@ -23,11 +23,13 @@ RSpec.describe CreateAutomatedReportInstances do
     end
 
     let!("auto_report_#{i}_02".to_sym) do
-      create(:automated_report,
-             interval: i,
-             report_class: 'IdentityProviderDailyDemandReport',
-             source: 'DS',
-             target: idp.entity_id)
+      create(
+        :automated_report,
+        interval: i,
+        report_class: 'IdentityProviderDailyDemandReport',
+        source: 'DS',
+        target: idp.entity_id
+      )
     end
   end
 
@@ -44,7 +46,6 @@ RSpec.describe CreateAutomatedReportInstances do
 
     create(:automated_report_subscription, automated_report: auto_report_yearly_02, subject: user_02)
   end
-
 
   context 'update :instances_timestamp' do
     it 'is equal to begging of correct month' do
@@ -98,16 +99,15 @@ RSpec.describe CreateAutomatedReportInstances do
       Timecop.travel(january) { expect { subject.perform }.to change(AutomatedReportInstance, :count).by(6) }
 
       5.times do |i|
-        Timecop.travel(january + i.hours) do
-          expect { subject.perform }.not_to(change(AutomatedReportInstance, :count))
-        end
+        Timecop.travel(january + i.hours) { expect { subject.perform }.not_to(change(AutomatedReportInstance, :count)) }
       end
     end
 
     it 'creates monthly and quarterly instances on
         April, July and October' do
       [april, july, october].each do |time|
-        time_pass = [50, 10, 30].sample.minutes
+        samples = [50, 10, 30]
+        time_pass = samples.sample.minutes
 
         Timecop.travel(time) { expect { subject.perform }.to change(AutomatedReportInstance, :count).by(4) }
 

@@ -7,7 +7,6 @@ RSpec.describe AutomatedReportInstance do
 
   around { |spec| Timecop.freeze { spec.run } }
 
-
   it { is_expected.to validate_uniqueness_of(:identifier) }
 
   it 'requires a valid identifier' do
@@ -42,8 +41,6 @@ RSpec.describe AutomatedReportInstance do
     let(:target) { nil }
 
     let(:automated_report) { create(:automated_report, report_class:, source:, target:, interval:) }
-
-
 
     shared_examples 'an instantiated report' do |kind, range: false|
       context "a #{kind} report" do

@@ -17,15 +17,19 @@ RSpec.describe RequestedAttributeReport do
 
   before do
     [service_provider_01, service_provider_02].each do |object|
-      create(:service_provider_saml_attribute,
-             optional: false,
-             saml_attribute: required_attribute,
-             service_provider: object)
+      create(
+        :service_provider_saml_attribute,
+        optional: false,
+        saml_attribute: required_attribute,
+        service_provider: object
+      )
 
-      create(:service_provider_saml_attribute,
-             optional: true,
-             saml_attribute: optional_attribute,
-             service_provider: object)
+      create(
+        :service_provider_saml_attribute,
+        optional: true,
+        saml_attribute: optional_attribute,
+        service_provider: object
+      )
     end
 
     active_service_providers.each { |object| create(:activation, federation_object: object) }
@@ -87,12 +91,13 @@ RSpec.describe RequestedAttributeReport do
       let(:inactive_service_provider) { create(:service_provider) }
 
       before do
-        create(:service_provider_saml_attribute,
-               optional: false,
-               saml_attribute: required_attribute,
-               service_provider: inactive_service_provider)
+        create(
+          :service_provider_saml_attribute,
+          optional: false,
+          saml_attribute: required_attribute,
+          service_provider: inactive_service_provider
+        )
       end
-
 
       it 'nevers include inactive SPs' do
         sp_name = inactive_service_provider.name

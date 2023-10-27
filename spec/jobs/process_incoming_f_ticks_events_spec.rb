@@ -7,7 +7,6 @@ RSpec.describe ProcessIncomingFTicksEvents do
 
   around { |spec| Timecop.freeze { spec.run } }
 
-
   let(:now) { Time.zone.now.beginning_of_day }
 
   def run

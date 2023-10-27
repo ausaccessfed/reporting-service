@@ -7,7 +7,8 @@ RSpec.describe 'Administrator Reports' do
 
   describe 'when subject is administrator' do
     %w[identity_providers service_providers organizations rapid_connect_services services].each do |identifier|
-      %w[monthly quarterly yearly].each do |interval|
+      months = %w[monthly quarterly yearly]
+      months.each do |interval|
         let!("auto_report_#{identifier}_#{interval}".to_sym) do
           create(:automated_report, interval:, target: identifier, report_class: 'SubscriberRegistrationsReport')
         end

@@ -9,8 +9,12 @@ RSpec.describe 'automated report' do
   let(:saml) { create(:saml_attribute) }
 
   let!(:auto_report_idp) do
-    create(:automated_report, report_class: 'IdentityProviderSessionsReport', source: data_source, 
-target: idp.entity_id)
+    create(
+      :automated_report,
+      report_class: 'IdentityProviderSessionsReport',
+      source: data_source,
+      target: idp.entity_id
+    )
   end
 
   let(:auto_report_org) do

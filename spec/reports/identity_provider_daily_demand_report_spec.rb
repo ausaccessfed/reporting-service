@@ -23,8 +23,6 @@ RSpec.describe IdentityProviderDailyDemandReport do
   let(:identity_provider_02) { create(:identity_provider) }
   let(:service_provider) { create(:service_provider) }
 
-
-
   def expect_in_range
     (0..86_340).step(300).each_with_index { |t, index| expect(data[:sessions][index]).to contain_exactly(t, value) }
   end
@@ -46,10 +44,12 @@ RSpec.describe IdentityProviderDailyDemandReport do
 
   context 'when without response' do
     before do
-      create_list(:discovery_service_event,
-                  10,
-                  initiating_sp: service_provider.entity_id,
-                  timestamp: 1.day.ago.beginning_of_day)
+      create_list(
+        :discovery_service_event,
+        10,
+        initiating_sp: service_provider.entity_id,
+        timestamp: 1.day.ago.beginning_of_day
+      )
     end
 
     let(:value) { 0.00 }
@@ -62,10 +62,12 @@ RSpec.describe IdentityProviderDailyDemandReport do
 
   context 'when failed event' do
     before do
-      create_list(:federated_login_event,
-                  10,
-                  relying_party: service_provider.entity_id,
-                  timestamp: 1.day.ago.beginning_of_day)
+      create_list(
+        :federated_login_event,
+        10,
+        relying_party: service_provider.entity_id,
+        timestamp: 1.day.ago.beginning_of_day
+      )
     end
 
     let(:value) { 0.00 }

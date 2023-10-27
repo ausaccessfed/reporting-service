@@ -8,7 +8,6 @@ RSpec.describe IdentityProvider do
 
     let(:factory) { :identity_provider }
 
-
     it { is_expected.to validate_presence_of(:entity_id) }
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_uniqueness_of(:entity_id) }

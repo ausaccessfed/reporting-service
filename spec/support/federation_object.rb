@@ -18,9 +18,10 @@ RSpec.shared_examples 'a federation object' do
     end
 
     context 'when some objects are inactive' do
-      before do 2.times { create(:activation, federation_object: subject) }
-create_list(:activation, 2, :deactivated, federation_object: object) end
-
+      before do
+        2.times { create(:activation, federation_object: subject) }
+        create_list(:activation, 2, :deactivated, federation_object: object)
+      end
 
       it 'includes only active objects' do
         expect(described_class.active.all).to contain_exactly(subject)

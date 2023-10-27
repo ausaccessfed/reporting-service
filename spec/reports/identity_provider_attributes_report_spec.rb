@@ -18,8 +18,6 @@ RSpec.describe IdentityProviderAttributesReport do
 
   let(:identity_provider_02) { create(:identity_provider, saml_attributes: all_attributes) }
 
-
-
   context 'a tabular report which lists IdPs attributes' do
     let!(:activation) { create(:activation, federation_object: identity_provider) }
 

@@ -10,7 +10,6 @@ RSpec.describe ServiceProviderUtilizationReport do
   let(:title) { 'Service Provider Utilization Report' }
   let(:output_title) { "#{title} (#{source_name})" }
 
-
   shared_examples 'Service Provider Utilization report #Generate' do
     let(:object_type) { :service_provider }
 
@@ -26,7 +25,6 @@ RSpec.describe ServiceProviderUtilizationReport do
       create(:discovery_service_event, :response, target => eid, :timestamp => timestamp)
     end
 
-
     it_behaves_like 'Service Provider Utilization report #Generate'
   end
 
@@ -38,7 +36,6 @@ RSpec.describe ServiceProviderUtilizationReport do
     def create_event(timestamp, eid)
       create(:federated_login_event, :OK, target => eid, :timestamp => timestamp)
     end
-
 
     it_behaves_like 'Service Provider Utilization report #Generate'
   end

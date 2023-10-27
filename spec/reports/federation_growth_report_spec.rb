@@ -50,12 +50,9 @@ RSpec.describe FederationGrowthReport do
     end
   end
 
-
   shared_examples 'a report which generates growth analytics' do
     context 'growth report when some objects are not included' do
-      before do
-        included_objects.each { |o| create(:activation, federation_object: o) }
-      end
+      before { included_objects.each { |o| create(:activation, federation_object: o) } }
 
       it 'will not fail if some object types are not existing' do
         expect { subject.generate }.not_to raise_error

@@ -16,7 +16,6 @@ RSpec.describe RapidRack::Engine, type: :feature do
   # the engine.
   let(:engine_app) { described_class.routes.routes.routes[0].app }
 
-
   before do
     error_handler = handler.try(:constantize).try(:new) || engine_app
 

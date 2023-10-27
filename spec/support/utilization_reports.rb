@@ -37,9 +37,6 @@ RSpec.shared_context 'Utilization Report' do
       end
     end
 
-
-
-
     it 'renders a report row' do
       expected = included_objects.map { |o| [o.name, included_object_event_counts[o.id].to_s] }
 
@@ -52,7 +49,10 @@ RSpec.shared_context 'Utilization Report' do
     end
 
     context 'with random case permutations' do
-      before { objects.each { |o| o.update!(name: o.name.send(%i[upcase downcase].sample)) } }
+      before do
+        cases = %i[upcase downcase]
+        objects.each { |o| o.update!(name: o.name.send(cases.sample)) }
+      end
 
       it 'sorts the rows in name order' do
         names = report[:rows].map(&:first)

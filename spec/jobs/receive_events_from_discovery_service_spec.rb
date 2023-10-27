@@ -37,7 +37,6 @@ RSpec.describe ReceiveEventsFromDiscoveryService do
       allow(Aws::SQS::Client).to receive(:new).with(sqs_config.slice(:endpoint, :region)).and_return(client)
     end
 
-
     def run
       subject.perform
     end

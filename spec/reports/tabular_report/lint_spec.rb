@@ -26,8 +26,6 @@ RSpec.describe TabularReport::Lint do
 
   let(:klass) { Class.new(base) { include TabularReport::Lint } }
 
-
-
   def self.fails_with(message)
     it "fails with the message '#{message}'" do
       expect { subject.generate }.to raise_error("Invalid tabular data: #{message}")
@@ -42,13 +40,6 @@ RSpec.describe TabularReport::Lint do
     end
   end
 
-
-
-
-
-
-
-
   context 'when the footer is blank' do
     let(:output) { valid_output.merge(footer: []) }
 
@@ -57,10 +48,6 @@ RSpec.describe TabularReport::Lint do
     end
   end
 
-
-
-
-
   context 'when the row data is blank' do
     let(:output) { valid_output.merge(rows: []) }
 
@@ -68,7 +55,4 @@ RSpec.describe TabularReport::Lint do
       expect { subject.generate }.not_to raise_error
     end
   end
-
-
-
 end

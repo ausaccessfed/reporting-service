@@ -441,7 +441,8 @@ RSpec.describe UpdateFromFederationRegistry do
       let(:service_providers) do
         i = rand(9999)
         Array.new(30) do
-          attrs = attributes.sample(rand(10)).map { |a| a.slice(:name, :id).merge(is_required: [true, false].sample) }
+          truths = [true, false]
+          attrs = attributes.sample(rand(10)).map { |a| a.slice(:name, :id).merge(is_required: truths.sample) }
 
           {
             id: (i += 1),
@@ -473,14 +474,6 @@ RSpec.describe UpdateFromFederationRegistry do
         entity_ids << entity_id
         entity_id
       end
-
-
-
-
-
-
-
-
 
       it 'syncs the objects' do
         idp_attrs = identity_providers.flat_map { |o| o[:saml][:attributes] }

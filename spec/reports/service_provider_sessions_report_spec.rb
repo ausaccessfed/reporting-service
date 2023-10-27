@@ -28,8 +28,6 @@ RSpec.describe ServiceProviderSessionsReport do
   let(:sp_01) { create(:service_provider) }
   let(:sp_02) { create(:service_provider) }
 
-
-
   def expect_in_range
     [*scope_range].each_with_index { |t, index| expect(data[:sessions][index]).to contain_exactly(t, value) }
   end

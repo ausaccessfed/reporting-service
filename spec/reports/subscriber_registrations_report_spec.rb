@@ -14,8 +14,6 @@ RSpec.describe SubscriberRegistrationsReport do
   let(:service_provider) { create(:service_provider) }
   let(:rapid_connect_service) { create(:rapid_connect_service) }
 
-
-
   shared_examples 'a report which lists federation objects' do
     it 'returns an array' do
       expect(report[:rows]).to be_an(Array)

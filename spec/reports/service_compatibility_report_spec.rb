@@ -17,21 +17,26 @@ RSpec.describe ServiceCompatibilityReport do
   let(:incompatible_identity_provider) { create(:identity_provider, saml_attributes: core_attributes[0..2]) }
 
   let(:inactive_identity_provider) do
- create(:identity_provider, saml_attributes: [*core_attributes, *other_attributes]) end
+    create(:identity_provider, saml_attributes: [*core_attributes, *other_attributes])
+  end
 
   before do
     core_attributes.each do |attribute|
-      create(:service_provider_saml_attribute,
-             optional: false,
-             saml_attribute: attribute,
-             service_provider: service_provider_01)
+      create(
+        :service_provider_saml_attribute,
+        optional: false,
+        saml_attribute: attribute,
+        service_provider: service_provider_01
+      )
     end
 
     other_attributes.each do |attribute|
-      create(:service_provider_saml_attribute,
-             optional: true,
-             saml_attribute: attribute,
-             service_provider: service_provider_01)
+      create(
+        :service_provider_saml_attribute,
+        optional: true,
+        saml_attribute: attribute,
+        service_provider: service_provider_01
+      )
     end
 
     create(:activation, federation_object: identity_provider_01)
@@ -39,33 +44,15 @@ RSpec.describe ServiceCompatibilityReport do
     create(:activation, federation_object: service_provider_01)
   end
 
-
   context 'a service compatibility report' do
     let(:report) { subject.generate }
 
     it 'must contain type, header, title' do
-      title = "Service Compatibility for #{service_provider_01.name}"
-      expect(report).to include(type:, title:, header:)
-    end
-
-    it 'counts required and optional attributes provider by IdP' do
-      name = identity_provider_01.name
-      expect(report[:rows]).to include([name, '8', '5', 'yes'])
-    end
-
-    it 'does not include inactive IdPs' do
-      name = inactive_identity_provider.name
-      expect(report[:rows]).not_to include([name, anything, anything, anything])
-    end
-
-    it 'determines whether IdP is compatible or not' do
-      name = identity_provider_01.name
-      expect(report[:rows]).to include([name, anything, anything, 'yes'])
-    end
-
-    it 'determines whether IdP is compatible or not' do
-      name = incompatible_identity_provider.name
-      expect(report[:rows]).to include([name, anything, anything, 'no'])
+      expect(report).to include(type:, title: "Service Compatibility for #{service_provider_01.name}", header:)
+      expect(report[:rows]).to include([identity_provider_01.name, '8', '5', 'yes'])
+      expect(report[:rows]).not_to include([inactive_identity_provider.name, anything, anything, anything])
+      expect(report[:rows]).to include([identity_provider_01.name, anything, anything, 'yes'])
+      expect(report[:rows]).to include([incompatible_identity_provider.name, anything, anything, 'no'])
     end
   end
 end

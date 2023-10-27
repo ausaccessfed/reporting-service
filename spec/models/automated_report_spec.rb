@@ -135,7 +135,6 @@ RSpec.describe AutomatedReport do
     end
   end
 
-
   describe '#source_if_needed' do
     it 'returns a valid source' do
       subject.report_class = :DailyDemandReport

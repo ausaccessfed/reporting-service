@@ -14,7 +14,6 @@ RSpec.describe AdministratorReportsController do
     { source: 'DS' }
   end
 
-
   before { session[:subject_id] = user.try(:id) }
 
   shared_examples 'an admin report' do

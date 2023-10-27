@@ -36,7 +36,7 @@ RSpec.describe AutomatedReportsController do
         expect(response).to render_template('index')
       end
 
-      it 'assigns subject't automated report subscriptions' do
+      it 'assigns subject automated report subscriptions' do
         expect(assigns[:subscriptions]).to include(subscription)
       end
     end

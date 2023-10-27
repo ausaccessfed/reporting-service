@@ -7,7 +7,6 @@ RSpec.describe DashboardController do
 
   let(:user) { nil }
 
-
   before do
     session[:subject_id] = user.try(:id)
     run

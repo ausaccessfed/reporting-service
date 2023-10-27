@@ -26,8 +26,6 @@ RSpec.describe FederatedSessionsReport do
   let(:identity_provider) { create(:identity_provider) }
   let(:service_provider) { create(:service_provider) }
 
-
-
   def expect_in_range
     scope_range.each_with_index { |t, index| expect(data[:sessions][index]).to contain_exactly(t, value) }
   end
@@ -49,10 +47,12 @@ RSpec.describe FederatedSessionsReport do
 
   context 'when events are not responded' do
     before do
-      create_list(:discovery_service_event,
-                  20,
-                  initiating_sp: service_provider.entity_id,
-                  timestamp: 1.day.ago.beginning_of_day)
+      create_list(
+        :discovery_service_event,
+        20,
+        initiating_sp: service_provider.entity_id,
+        timestamp: 1.day.ago.beginning_of_day
+      )
     end
 
     let(:value) { 0.0 }
@@ -65,10 +65,12 @@ RSpec.describe FederatedSessionsReport do
 
   context 'when IdP events are failed' do
     before do
-      create_list(:federated_login_event,
-                  20,
-                  relying_party: service_provider.entity_id,
-                  timestamp: 1.day.ago.beginning_of_day)
+      create_list(
+        :federated_login_event,
+        20,
+        relying_party: service_provider.entity_id,
+        timestamp: 1.day.ago.beginning_of_day
+      )
     end
 
     let(:value) { 0.0 }
@@ -108,13 +110,11 @@ RSpec.describe FederatedSessionsReport do
 
   context 'when events are sessions with response' do
     def create_event(timestamp = nil)
-      create(:discovery_service_event,
-             :response,
-             {
-               selected_idp: identity_provider.entity_id,
-               initiating_sp: service_provider.entity_id,
-               timestamp:
-             }.compact)
+      create(
+        :discovery_service_event,
+        :response,
+        { selected_idp: identity_provider.entity_id, initiating_sp: service_provider.entity_id, timestamp: }.compact
+      )
     end
 
     let(:source) { 'DS' }
@@ -126,13 +126,11 @@ RSpec.describe FederatedSessionsReport do
 
   context 'when events are IdP sessions' do
     def create_event(timestamp = nil)
-      create(:federated_login_event,
-             :OK,
-             {
-               asserting_party: identity_provider.entity_id,
-               relying_party: service_provider.entity_id,
-               timestamp:
-             }.compact)
+      create(
+        :federated_login_event,
+        :OK,
+        { asserting_party: identity_provider.entity_id, relying_party: service_provider.entity_id, timestamp: }.compact
+      )
     end
 
     let(:source) { 'IdP' }

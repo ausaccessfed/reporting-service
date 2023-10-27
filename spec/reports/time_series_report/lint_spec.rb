@@ -40,9 +40,7 @@ RSpec.describe TimeSeriesReport::Lint do
 
   let(:klass) { Class.new(base) { include TimeSeriesReport::Lint } }
 
-
-
-  def self.fails_with(message)
+  shared_examples 'fails_with' do |message|
     it "fails with the message '#{message}'" do
       expect { subject.generate }.to raise_error("Invalid time series data: #{message}")
     end
@@ -56,10 +54,31 @@ RSpec.describe TimeSeriesReport::Lint do
     end
   end
 
+  context 'with nil output' do
+    let(:output) { nil }
+
+    it_behaves_like 'fails_with', 'output is blank'
+  end
 
   shared_context 'required field' do |field, type|
+    context "with no #{field}" do
+      let(:output) { valid_output.except(field) }
 
+      it_behaves_like 'fails_with', "#{field} is nil"
+    end
 
+    context "with blank #{field}" do
+      let(:output) { valid_output.merge(field => type.new) }
+
+      it_behaves_like 'fails_with', "#{field} is blank"
+    end
+
+    context "with incorrect type for #{field}" do
+      let(:wrong) { { String => Array, Array => Hash, Hash => String }[type] }
+      let(:output) { valid_output.merge(field => wrong.new) }
+
+      it_behaves_like 'fails_with', "incorrect type for #{field}"
+    end
   end
 
   include_context 'required field', :type, String
@@ -68,11 +87,41 @@ RSpec.describe TimeSeriesReport::Lint do
   include_context 'required field', :title, String
   include_context 'required field', :data, Hash
 
+  context 'when a label is missing' do
+    let(:output) { valid_output.dup.tap { |o| o[:labels].delete(:series_c) } }
 
+    it_behaves_like 'fails_with', 'missing label for series_c'
+  end
 
+  context 'when the y axis label is missing' do
+    let(:output) { valid_output.dup.tap { |o| o[:labels].delete(:y) } }
 
+    it_behaves_like 'fails_with', 'missing label for y axis'
+  end
 
+  context 'when an extra label is present' do
+    let(:output) { valid_output.merge(labels: valid_output[:labels].merge(series_d: 'x')) }
 
+    it_behaves_like 'fails_with', 'extra label present for series_d'
+  end
+
+  context 'when a label is not a string' do
+    let(:output) { valid_output.merge(labels: valid_output[:labels].merge(series_a: 1234)) }
+
+    it_behaves_like 'fails_with', 'label for series_a is not a String'
+  end
+
+  context 'when a series is named "y"' do
+    let(:output) { valid_output.merge(series: valid_output[:series] + %w[y]) }
+
+    it_behaves_like 'fails_with', 'series name "y" is not permitted'
+  end
+
+  context 'when units are missing' do
+    let(:output) { valid_output.except(:units) }
+
+    it_behaves_like 'fails_with', 'units is nil'
+  end
 
   context 'when units are blank' do
     let(:output) { valid_output.merge(units: '') }
@@ -82,11 +131,35 @@ RSpec.describe TimeSeriesReport::Lint do
     end
   end
 
+  context 'when the range is missing a start time' do
+    let(:output) { valid_output.merge(range: valid_output[:range].except(:start)) }
 
+    it_behaves_like 'fails_with', 'time range is missing start'
+  end
 
+  context 'when the start time is invalid' do
+    let(:output) { valid_output.merge(range: valid_output[:range].merge(start: 'f')) }
 
+    it_behaves_like 'fails_with', 'start of time range is invalid'
+  end
 
+  context 'when the start time is a Time object' do
+    let(:output) { valid_output.merge(range: valid_output[:range].merge(start: Time.zone.now)) }
 
+    it_behaves_like 'fails_with', 'start of time range is invalid'
+  end
+
+  context 'when the range is missing an end time' do
+    let(:output) { valid_output.merge(range: valid_output[:range].except(:end)) }
+
+    it_behaves_like 'fails_with', 'time range is missing end'
+  end
+
+  context 'when the end time is invalid' do
+    let(:output) { valid_output.merge(range: valid_output[:range].merge(end: 'f')) }
+
+    it_behaves_like 'fails_with', 'end of time range is invalid'
+  end
 
   context 'when range is null' do
     let(:output) { valid_output.except(:range) }
@@ -96,11 +169,64 @@ RSpec.describe TimeSeriesReport::Lint do
     end
   end
 
+  context 'when data for a series is missing' do
+    let(:output) { valid_output.merge(data: valid_output[:data].except(:series_a)) }
 
+    it_behaves_like 'fails_with', 'missing data for series_a'
+  end
 
+  context 'when extra series data is present' do
+    let(:output) { valid_output.merge(data: valid_output[:data].merge(series_d: [])) }
 
+    it_behaves_like 'fails_with', 'extra data present for series_d'
+  end
 
+  context 'when the data is empty' do
+    let(:output) { valid_output.merge(data: valid_output[:data].merge(series_a: [])) }
 
+    it_behaves_like 'fails_with', 'data for series_a is blank'
+  end
 
+  context 'when the data is array' do
+    let(:output) { valid_output.merge(data: valid_output[:data].merge(series_a: '')) }
 
+    it_behaves_like 'fails_with', 'data for series_a is not an Array'
+  end
+
+  context 'when the data precedes the start of the time range' do
+    let(:output) do
+      data = valid_output[:data].merge(series_a: [[-1, 0]])
+      valid_output.merge(data:)
+    end
+
+    it_behaves_like 'fails_with', 'data for series_a is outside time range'
+  end
+
+  context 'when the data exceeds the end of the time range' do
+    let(:output) do
+      t = 14 * 24 * 3600
+      data = valid_output[:data].merge(series_a: [[t, 0]])
+      valid_output.merge(data:)
+    end
+
+    it_behaves_like 'fails_with', 'data for series_a is outside time range'
+  end
+
+  context 'when the data is unsorted' do
+    let(:output) do
+      data = valid_output[:data].merge(series_a: [[60, 1], [30, 2], [0, 3]])
+      valid_output.merge(data:)
+    end
+
+    it_behaves_like 'fails_with', 'data for series_a is unsorted'
+  end
+
+  context 'when a data point is non-numeric' do
+    let(:output) do
+      data = valid_output[:data].merge(series_a: [0, 'a'])
+      valid_output.merge(data:)
+    end
+
+    it_behaves_like 'fails_with', 'data for series_a is not numeric'
+  end
 end

@@ -48,8 +48,10 @@ RSpec.describe 'Service Provider Reports' do
       it 'viewing the SP Daily Demand Report' do
         click_link('Service Provider Daily Demand Report')
 
-        expect(page).to have_current_path('/subscriber_reports/service_provider_daily_demand_report', 
-ignore_query: true)
+        expect(page).to have_current_path(
+          '/subscriber_reports/service_provider_daily_demand_report',
+          ignore_query: true
+        )
 
         select sp.name, from: 'Service Providers'
 
@@ -64,7 +66,8 @@ ignore_query: true)
 
         expect(page).to have_current_path(
           '/subscriber_reports/service_provider_' \
-            'daily_demand_report', ignore_query: true
+            'daily_demand_report',
+          ignore_query: true
         )
         expect(page).to have_css('svg.service-provider-daily-demand')
         expect(page).to have_content("(#{data_source_name})")
@@ -75,7 +78,8 @@ ignore_query: true)
 
         expect(page).to have_current_path(
           '/subscriber_reports/service_provider_' \
-            'source_identity_providers_report', ignore_query: true
+            'source_identity_providers_report',
+          ignore_query: true
         )
 
         select sp.name, from: 'Service Providers'
@@ -90,7 +94,8 @@ ignore_query: true)
 
         expect(page).to have_current_path(
           '/subscriber_reports/service_provider_' \
-            'source_identity_providers_report', ignore_query: true
+            'source_identity_providers_report',
+          ignore_query: true
         )
         # Tabular reports do not render report title - see #178
         # So instead just confirm the report-data JSON contains the title.

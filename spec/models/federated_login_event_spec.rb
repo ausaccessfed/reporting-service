@@ -17,7 +17,6 @@ RSpec.describe FederatedLoginEvent do
 
     let!(:incoming_event) { create(:incoming_f_ticks_event, data:) }
 
-
     context 'validations' do
       it { is_expected.to validate_presence_of(:relying_party) }
       it { is_expected.to validate_presence_of(:asserting_party) }

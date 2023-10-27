@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-load Rails.root.join('bin', 'push_events_to_federation_registry.rb').to_s
+load Rails.root.join('bin/push_events_to_federation_registry.rb').to_s
 
 RSpec.describe PushEventsToFederationRegistry do
   subject { described_class.new(ds_host) }
@@ -15,7 +15,6 @@ RSpec.describe PushEventsToFederationRegistry do
   let(:selected_idp) { "https://idp.#{Faker::Internet.domain_name}/idp/shibboleth" }
 
   let(:initiating_sp) { "https://sp.#{Faker::Internet.domain_name}/shibboleth" }
-
 
   context 'establish connection when @config exists' do
     before do
@@ -163,7 +162,6 @@ RSpec.describe PushEventsToFederationRegistry do
       rescue StandardError
         nil
       end
-
 
       it 'stores the record in the database' do
         expect { run }.to change(items, :count).by(1)

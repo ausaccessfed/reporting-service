@@ -25,7 +25,6 @@ RSpec.describe ApplicationController do
     end
   end
 
-
   context 'when request is session' do
     it 'POST request should not create a uri session' do
       post :federation_growth
