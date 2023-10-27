@@ -28,9 +28,12 @@ RSpec.describe AutomatedReport, type: :model do
 
     it 'requires no target for targetless reports' do
       targetless_reports = %w[
-        DailyDemandReport FederatedSessionsReport FederationGrowthReport
+        DailyDemandReport
+        FederatedSessionsReport
+        FederationGrowthReport
         IdentityProviderAttributesReport
-        IdentityProviderUtilizationReport ServiceProviderUtilizationReport
+        IdentityProviderUtilizationReport
+        ServiceProviderUtilizationReport
       ]
       targetless_reports.each do |klass|
         subject.report_class = klass
@@ -43,17 +46,15 @@ RSpec.describe AutomatedReport, type: :model do
 
     it 'requires an object type identifier for object reports' do
       subject.report_class = 'SubscriberRegistrationsReport'
-      types = %w[identity_providers service_providers organizations
-                 rapid_connect_services services]
-      types.each do |type|
-        expect(subject).to allow_value(type).for(:target)
-      end
+      types = %w[identity_providers service_providers organizations rapid_connect_services services]
+      types.each { |type| expect(subject).to allow_value(type).for(:target) }
       expect(subject).not_to allow_value(:object).for(:target)
     end
 
     it 'requires an IdP entity_id for IdP reports' do
       idp_reports = %w[
-        IdentityProviderSessionsReport IdentityProviderDailyDemandReport
+        IdentityProviderSessionsReport
+        IdentityProviderDailyDemandReport
         IdentityProviderDestinationServicesReport
       ]
 
@@ -68,8 +69,10 @@ RSpec.describe AutomatedReport, type: :model do
 
     it 'requires an SP entity_id for SP reports' do
       sp_reports = %w[
-        ServiceProviderSessionsReport ServiceProviderDailyDemandReport
-        ServiceProviderSourceIdentityProvidersReport ServiceCompatibilityReport
+        ServiceProviderSessionsReport
+        ServiceProviderDailyDemandReport
+        ServiceProviderSourceIdentityProvidersReport
+        ServiceCompatibilityReport
       ]
       sp_reports.each do |klass|
         subject.report_class = klass
@@ -82,12 +85,16 @@ RSpec.describe AutomatedReport, type: :model do
 
     it 'requires a source for reports that need it' do
       reports_that_need_source = %w[
-        DailyDemandReport FederatedSessionsReport
+        DailyDemandReport
+        FederatedSessionsReport
         IdentityProviderDailyDemandReport
-        IdentityProviderDestinationServicesReport IdentityProviderSessionsReport
-        ServiceProviderDailyDemandReport ServiceProviderSessionsReport
+        IdentityProviderDestinationServicesReport
+        IdentityProviderSessionsReport
+        ServiceProviderDailyDemandReport
+        ServiceProviderSessionsReport
         ServiceProviderSourceIdentityProvidersReport
-        IdentityProviderUtilizationReport ServiceProviderUtilizationReport
+        IdentityProviderUtilizationReport
+        ServiceProviderUtilizationReport
       ]
       reports_that_need_source.each do |klass|
         subject.report_class = klass
@@ -123,9 +130,9 @@ RSpec.describe AutomatedReport, type: :model do
   end
 
   before do
-    allow(Rails.application.config)
-      .to receive_message_chain(:reporting_service, :default_session_source)
-      .and_return(nil)
+    allow(Rails.application.config).to receive_message_chain(:reporting_service, :default_session_source).and_return(
+      nil
+    )
   end
 
   describe '#source_if_needed' do
@@ -135,11 +142,7 @@ RSpec.describe AutomatedReport, type: :model do
     end
 
     context 'with env set' do
-      before do
-        allow(Rails.application.config.reporting_service)
-          .to receive(:default_session_source)
-          .and_return('DS')
-      end
+      before { allow(Rails.application.config.reporting_service).to receive(:default_session_source).and_return('DS') }
 
       it 'returns a valid source' do
         subject.report_class = :DailyDemandReport

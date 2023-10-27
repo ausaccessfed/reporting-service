@@ -5,10 +5,7 @@ require 'rails_helper'
 RSpec.describe AdministratorReportsController, type: :controller do
   let(:user) { create :subject, :authorized, permission: 'admin:*' }
 
-  let(:range) do
-    { start: Time.now.utc - 1.month,
-      end: Time.now.utc }
-  end
+  let(:range) { { start: Time.now.utc - 1.month, end: Time.now.utc } }
 
   let(:source) do
     # TODO: test with other sources?

@@ -13,11 +13,7 @@ RSpec.describe TabularReport::Lint do
     end
   end
 
-  let(:klass) do
-    Class.new(base) do
-      include TabularReport::Lint
-    end
-  end
+  let(:klass) { Class.new(base) { include TabularReport::Lint } }
 
   subject { klass.new(output) }
 
@@ -33,8 +29,7 @@ RSpec.describe TabularReport::Lint do
 
   def self.fails_with(message)
     it "fails with the message '#{message}'" do
-      expect { subject.generate }
-        .to raise_error("Invalid tabular data: #{message}")
+      expect { subject.generate }.to raise_error("Invalid tabular data: #{message}")
     end
   end
 

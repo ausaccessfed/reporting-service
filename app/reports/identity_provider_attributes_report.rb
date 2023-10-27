@@ -12,16 +12,12 @@ class IdentityProviderAttributesReport < TabularReport
   private
 
   def rows
-    sorted_idps = active_identity_providers.sort_by do |idp|
-      idp.name.downcase
-    end
+    sorted_idps = active_identity_providers.sort_by { |idp| idp.name.downcase }
 
     sorted_idps.map do |idp|
-      core_attributes, optional_attributes =
-        idp.saml_attributes.partition(&:core?)
+      core_attributes, optional_attributes = idp.saml_attributes.partition(&:core?)
 
-      [idp.name, core_attributes.count.to_s,
-       optional_attributes.count.to_s]
+      [idp.name, core_attributes.count.to_s, optional_attributes.count.to_s]
     end
   end
 

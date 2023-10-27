@@ -25,16 +25,16 @@ class SubscriberRegistrationsReport < TabularReport
   end
 
   def select_activated_subscribers
-    objects = { 'organizations' => [Organization],
-                'identity_providers' => [IdentityProvider],
-                'service_providers' => [ServiceProvider],
-                'rapid_connect_services' => [RapidConnectService],
-                'services' => [ServiceProvider, RapidConnectService] }
+    objects = {
+      'organizations' => [Organization],
+      'identity_providers' => [IdentityProvider],
+      'service_providers' => [ServiceProvider],
+      'rapid_connect_services' => [RapidConnectService],
+      'services' => [ServiceProvider, RapidConnectService]
+    }
     raise('Identifier is not valid!') unless objects.key?(@identifier)
 
-    objects[@identifier].flat_map do |object|
-      object.preload(:activations).active
-    end
+    objects[@identifier].flat_map { |object| object.preload(:activations).active }
   end
 
   def standard_title(prefix)

@@ -31,13 +31,11 @@ RSpec.describe FederatedLoginEvent, type: :model do
       let(:event) { FederatedLoginEvent.first }
 
       it 'should find :relying_party in :data_string' do
-        expect(event.relying_party)
-          .to eq('https://sp.example.edu/shibboleth')
+        expect(event.relying_party).to eq('https://sp.example.edu/shibboleth')
       end
 
       it 'should find :asserting_party in :data_string' do
-        expect(event.asserting_party)
-          .to eq('https://idp.example.edu/idp/shibboleth')
+        expect(event.asserting_party).to eq('https://idp.example.edu/idp/shibboleth')
       end
 
       it 'should find :hashed_principal_name in :data_string' do

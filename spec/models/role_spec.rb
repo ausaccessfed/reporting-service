@@ -10,15 +10,9 @@ RSpec.describe Role, type: :model do
   let(:admin_reporting) { 'a:b:c:reporting' }
   let(:prefix) { 'a:b:c' }
   let(:admin_entitlements) { [admin, admin_reporting] }
-  let(:config) do
-    { admin_entitlements:,
-      federation_object_entitlement_prefix: prefix }
-  end
+  let(:config) { { admin_entitlements:, federation_object_entitlement_prefix: prefix } }
 
-  before do
-    allow(Rails.application.config.reporting_service).to receive(:ide)
-      .and_return(config)
-  end
+  before { allow(Rails.application.config.reporting_service).to receive(:ide).and_return(config) }
 
   context '::for_entitlement' do
     let(:entitlement) { 'a:b:c' }
@@ -39,8 +33,7 @@ RSpec.describe Role, type: :model do
       end
 
       it 'updates the permissions' do
-        expect_any_instance_of(Role)
-          .to receive(:update_permissions).and_call_original
+        expect_any_instance_of(Role).to receive(:update_permissions).and_call_original
         run
       end
     end
@@ -54,8 +47,7 @@ RSpec.describe Role, type: :model do
       end
 
       it 'updates the permissions' do
-        expect_any_instance_of(Role)
-          .to receive(:update_permissions).and_call_original
+        expect_any_instance_of(Role).to receive(:update_permissions).and_call_original
         run
       end
     end
@@ -66,13 +58,11 @@ RSpec.describe Role, type: :model do
       it 'returns the new role' do
         result = run
         expect(result).to eq(Role.last)
-        expect(result).to have_attributes(name: 'auto',
-                                          entitlement:)
+        expect(result).to have_attributes(name: 'auto', entitlement:)
       end
 
       it 'updates the permissions' do
-        expect_any_instance_of(Role)
-          .to receive(:update_permissions).and_call_original
+        expect_any_instance_of(Role).to receive(:update_permissions).and_call_original
         run
       end
     end
@@ -135,16 +125,14 @@ RSpec.describe Role, type: :model do
       subject { create(:role, entitlement: "#{prefix}:#{type}:#{sha1}:admin") }
 
       it 'creates the object admin permission' do
-        expect { run }.to change { permission_values }
-          .to contain_exactly("objects:#{type}:#{sha1}:*")
+        expect { run }.to change { permission_values }.to contain_exactly("objects:#{type}:#{sha1}:*")
       end
 
       it 'removes extra permissions' do
         subject.permissions.create!(value: 'unnecessary')
         subject.reload
 
-        expect { run }.to change { permission_values }
-          .to contain_exactly("objects:#{type}:#{sha1}:*")
+        expect { run }.to change { permission_values }.to contain_exactly("objects:#{type}:#{sha1}:*")
       end
 
       it 'creates no duplicate permissions' do
@@ -161,18 +149,20 @@ RSpec.describe Role, type: :model do
       subject { create(:role, entitlement: "#{prefix}:#{type}:#{sha1}") }
 
       it 'creates the object permission' do
-        expect { run }.to change { permission_values }
-          .to contain_exactly("objects:#{type}:#{sha1}:read",
-                              "objects:#{type}:#{sha1}:report")
+        expect { run }.to change { permission_values }.to contain_exactly(
+          "objects:#{type}:#{sha1}:read",
+          "objects:#{type}:#{sha1}:report"
+        )
       end
 
       it 'removes extra permissions' do
         subject.permissions.create!(value: 'unnecessary')
         subject.reload
 
-        expect { run }.to change { permission_values }
-          .to contain_exactly("objects:#{type}:#{sha1}:read",
-                              "objects:#{type}:#{sha1}:report")
+        expect { run }.to change { permission_values }.to contain_exactly(
+          "objects:#{type}:#{sha1}:read",
+          "objects:#{type}:#{sha1}:report"
+        )
       end
 
       it 'creates no duplicate permissions' do

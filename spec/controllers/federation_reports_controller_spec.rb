@@ -11,8 +11,7 @@ RSpec.describe FederationReportsController, type: :controller do
     let(:data) { { a: 1 } }
 
     def run
-      expect_any_instance_of(report_class).to receive(:generate)
-        .and_return(data)
+      expect_any_instance_of(report_class).to receive(:generate).and_return(data)
       get route_value.to_sym
     end
 
@@ -20,8 +19,7 @@ RSpec.describe FederationReportsController, type: :controller do
 
     it 'renders the page successfully' do
       expect(response).to have_http_status(:ok)
-      expect(response)
-        .to render_template("federation_reports/#{route_value}")
+      expect(response).to render_template("federation_reports/#{route_value}")
     end
 
     it 'assigns the report data' do
@@ -48,8 +46,7 @@ RSpec.describe FederationReportsController, type: :controller do
       def run
         allow(Rails.application.config.reporting_service).to receive(:default_session_source).and_return(nil)
 
-        expect_any_instance_of(report_class).to receive(:generate)
-          .and_return(data)
+        expect_any_instance_of(report_class).to receive(:generate).and_return(data)
         get route_value.to_sym
       end
 
@@ -60,8 +57,7 @@ RSpec.describe FederationReportsController, type: :controller do
 
     context 'without source set' do
       def run
-        expect_any_instance_of(report_class).to receive(:generate)
-          .and_return(data)
+        expect_any_instance_of(report_class).to receive(:generate).and_return(data)
         get route_value.to_sym, params: { source: Rails.application.config.reporting_service.default_session_source }
       end
 

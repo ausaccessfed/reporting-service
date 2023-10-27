@@ -5,8 +5,7 @@ require 'rails_helper'
 RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
   describe '#perform' do
     let(:client) { double(Aws::SQS::Client) }
-    let(:rsa_key_string) do
-      <<~RAWCERT
+    let(:rsa_key_string) { <<~RAWCERT }
         -----BEGIN RSA PRIVATE KEY-----
         MIIBOwIBAAJBANXI+YMTbremHgVLuc/AbaZTKeqvXgs32Em6OOCbE7P+flb3qAMO
         t2SgUCSFYZAOGk8SUoO3ffj6n30cfRA/weUCAwEAAQJAJ+eYs1/INd17Ew/8ggvw
@@ -17,7 +16,6 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
         GGUfLfsFNdNhxp69xipHXoL6od4h/fWWrjZhu1/aiQ==
         -----END RSA PRIVATE KEY-----
       RAWCERT
-    end
     let(:key) { OpenSSL::PKey::RSA.new(rsa_key_string) }
 
     let(:sqs_config) do
@@ -33,116 +31,94 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
     end
 
     before do
-      allow(Rails.application.config.reporting_service).to receive(:sqs)
-        .and_return(sqs_config)
+      allow(Rails.application.config.reporting_service).to receive(:sqs).and_return(sqs_config)
 
-      allow(Aws::SQS::Client).to receive(:new)
-        .with(sqs_config.slice(:endpoint, :region))
-        .and_return(client)
+      allow(Aws::SQS::Client).to receive(:new).with(sqs_config.slice(:endpoint, :region)).and_return(client)
     end
 
-    let(:empty_result) do
-      double(Aws::SQS::Types::ReceiveMessageResult, messages: [])
-    end
+    let(:empty_result) { double(Aws::SQS::Types::ReceiveMessageResult, messages: []) }
 
     def run
       subject.perform
     end
 
     context 'when the queue contains many SQS messages' do
-      let(:events_attrs) do
-        Array.new(5) { FactoryBot.attributes_for(:discovery_service_event) }
-      end
+      let(:events_attrs) { Array.new(5) { FactoryBot.attributes_for(:discovery_service_event) } }
 
       let(:events) { events_attrs }
 
       let(:message_bodies) do
         events.map do |event|
-          JSON::JWT.new(iss: 'discovery-service', events: [event])
-                   .sign(key, :RS256).encrypt(key).to_s
+          JSON::JWT.new(iss: 'discovery-service', events: [event]).sign(key, :RS256).encrypt(key).to_s
         end
       end
 
       let(:receipt_handles) { message_bodies.map { SecureRandom.base64 } }
 
       let(:messages) do
-        message_bodies.zip(receipt_handles).map do |(body, receipt_handle)|
-          double(Aws::SQS::Types::Message,
-                 receipt_handle:, body:)
-        end
+        message_bodies
+          .zip(receipt_handles)
+          .map { |(body, receipt_handle)| double(Aws::SQS::Types::Message, receipt_handle:, body:) }
       end
 
       let(:receive_message_results) do
-        messages.map do |message|
-          double(Aws::SQS::Types::ReceiveMessageResult, messages: [message])
-        end
+        messages.map { |message| double(Aws::SQS::Types::ReceiveMessageResult, messages: [message]) }
       end
 
       before do
-        allow(client).to receive(:receive_message)
-          .with({ queue_url: sqs_config[:queues][:discovery] })
-          .and_return(*receive_message_results, empty_result)
+        allow(client).to receive(:receive_message).with({ queue_url: sqs_config[:queues][:discovery] }).and_return(
+          *receive_message_results,
+          empty_result
+        )
 
         allow(client).to receive(:delete_message).with(any_args)
       end
 
       it 'creates the events' do
-        expect { run }
-          .to change(DiscoveryServiceEvent, :count).by(events.length)
+        expect { run }.to change(DiscoveryServiceEvent, :count).by(events.length)
 
         events_attrs.each do |attrs|
-          expect(DiscoveryServiceEvent.find_by(attrs.slice(:unique_id)))
-            .to have_attributes(attrs)
+          expect(DiscoveryServiceEvent.find_by(attrs.slice(:unique_id))).to have_attributes(attrs)
         end
       end
 
       context 'when not syncing fr' do
         before do
-          allow(Rails.application.config.reporting_service).to receive(:federation_registry)
-            .and_return(Rails.application.config.reporting_service.federation_registry.merge(enable_sync: false))
+          allow(Rails.application.config.reporting_service).to receive(:federation_registry).and_return(
+            Rails.application.config.reporting_service.federation_registry.merge(enable_sync: false)
+          )
         end
 
         it 'creates the events' do
-          expect { run }
-            .to change(DiscoveryServiceEvent, :count).by(events.length)
+          expect { run }.to change(DiscoveryServiceEvent, :count).by(events.length)
 
           events_attrs.each do |attrs|
-            expect(DiscoveryServiceEvent.find_by(attrs.slice(:unique_id)))
-              .to have_attributes(attrs)
+            expect(DiscoveryServiceEvent.find_by(attrs.slice(:unique_id))).to have_attributes(attrs)
           end
         end
       end
     end
 
     context 'when a message is in the queue' do
-      let(:event_attrs) do
-        FactoryBot.attributes_for(:discovery_service_event)
-      end
+      let(:event_attrs) { FactoryBot.attributes_for(:discovery_service_event) }
 
       let(:event) { event_attrs }
 
       let(:message_body) do
-        JSON::JWT.new(iss: 'discovery-service', events: [event])
-                 .sign(key, :RS256).encrypt(key).to_s
+        JSON::JWT.new(iss: 'discovery-service', events: [event]).sign(key, :RS256).encrypt(key).to_s
       end
 
       let(:receipt_handle) { SecureRandom.base64 }
 
-      let(:messages) do
-        [
-          double(Aws::SQS::Types::Message,
-                 receipt_handle:, body: message_body)
-        ]
-      end
+      let(:messages) { [double(Aws::SQS::Types::Message, receipt_handle:, body: message_body)] }
 
-      let(:receive_message_result) do
-        double(Aws::SQS::Types::ReceiveMessageResult, messages:)
-      end
+      let(:receive_message_result) { double(Aws::SQS::Types::ReceiveMessageResult, messages:) }
 
       before do
-        allow(client).to receive(:receive_message)
-          .with({ queue_url: sqs_config[:queues][:discovery] })
-          .and_return(receive_message_result, empty_result)
+        allow(client).to receive(:receive_message).with({ queue_url: sqs_config[:queues][:discovery] }).and_return(
+          receive_message_result,
+          empty_result
+        )
 
         allow(client).to receive(:delete_message).with(any_args)
       end
@@ -153,17 +129,13 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
       end
 
       it 'removes the SQS message' do
-        expect(client).to receive(:delete_message)
-          .with(queue_url: sqs_config[:queues][:discovery],
-                receipt_handle:)
+        expect(client).to receive(:delete_message).with(queue_url: sqs_config[:queues][:discovery], receipt_handle:)
 
         run
       end
 
       context 'when the event is a response' do
-        let(:event_attrs) do
-          FactoryBot.attributes_for(:discovery_service_event, :response)
-        end
+        let(:event_attrs) { FactoryBot.attributes_for(:discovery_service_event, :response) }
 
         it 'writes the event to a secondary local queue' do
           redis = Redis.new
@@ -172,9 +144,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
       end
 
       context 'when the event is a request' do
-        let(:event_attrs) do
-          FactoryBot.attributes_for(:discovery_service_event, phase: 'request')
-        end
+        let(:event_attrs) { FactoryBot.attributes_for(:discovery_service_event, phase: 'request') }
 
         it 'does not write the event to the secondary queue' do
           redis = Redis.new
@@ -191,13 +161,9 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
       end
 
       context 'when a request phase already exists' do
-        let(:event_attrs) do
-          attributes_for(:discovery_service_event, :response)
-        end
+        let(:event_attrs) { attributes_for(:discovery_service_event, :response) }
 
-        let!(:existing_event) do
-          create(:discovery_service_event, event_attrs.merge(phase: 'request'))
-        end
+        let!(:existing_event) { create(:discovery_service_event, event_attrs.merge(phase: 'request')) }
 
         it 'creates the response phase event' do
           expect { run }.to change(DiscoveryServiceEvent, :count).by(1)
@@ -206,13 +172,9 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
       end
 
       context 'when a response phase already exists' do
-        let(:event_attrs) do
-          attributes_for(:discovery_service_event)
-        end
+        let(:event_attrs) { attributes_for(:discovery_service_event) }
 
-        let!(:existing_event) do
-          create(:discovery_service_event, event_attrs.merge(phase: 'response'))
-        end
+        let!(:existing_event) { create(:discovery_service_event, event_attrs.merge(phase: 'response')) }
 
         it 'creates the request phase event' do
           expect { run }.to change(DiscoveryServiceEvent, :count).by(1)

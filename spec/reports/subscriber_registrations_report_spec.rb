@@ -20,20 +20,17 @@ RSpec.describe SubscriberRegistrationsReport do
     end
 
     it 'produces title, header and type' do
-      expect(report).to include(title:,
-                                header:, type:)
+      expect(report).to include(title:, header:, type:)
     end
 
     context 'when all objects are activated' do
       let!(:activations) do
-        [*reported_objects, *excluded_objects]
-          .each { |o| create(:activation, federation_object: o) }
+        [*reported_objects, *excluded_objects].each { |o| create(:activation, federation_object: o) }
       end
 
       it 'includes reported objects' do
         reported_objects.each do |o|
-          activated_date = o.activations.reload
-                            .flat_map(&:activated_at).min
+          activated_date = o.activations.reload.flat_map(&:activated_at).min
 
           expect(report[:rows]).to include([o.name, activated_date])
         end
@@ -42,22 +39,17 @@ RSpec.describe SubscriberRegistrationsReport do
 
     context 'when all objects are deactivated' do
       let!(:activations) do
-        [*reported_objects, *excluded_objects]
-          .each { |o| create(:activation, :deactivated, federation_object: o) }
+        [*reported_objects, *excluded_objects].each { |o| create(:activation, :deactivated, federation_object: o) }
       end
 
       it 'excludes all objects' do
-        [*reported_objects, *excluded_objects].each do |o|
-          expect(report[:rows]).not_to include([o.name, anything])
-        end
+        [*reported_objects, *excluded_objects].each { |o| expect(report[:rows]).not_to include([o.name, anything]) }
       end
     end
 
     context 'when objects have no activations' do
       it 'excludes object without activations' do
-        [*reported_objects, *excluded_objects].each do |o|
-          expect(report[:rows]).not_to include([o.name, anything])
-        end
+        [*reported_objects, *excluded_objects].each { |o| expect(report[:rows]).not_to include([o.name, anything]) }
       end
     end
   end
@@ -73,9 +65,7 @@ RSpec.describe SubscriberRegistrationsReport do
       let(:report_type) { 'organizations' }
       let(:title) { 'Registered Organizations' }
       let(:reported_objects) { [organization] }
-      let(:excluded_objects) do
-        [identity_provider, service_provider, rapid_connect_service]
-      end
+      let(:excluded_objects) { [identity_provider, service_provider, rapid_connect_service] }
 
       it_behaves_like 'a report which lists federation objects'
     end
@@ -84,9 +74,7 @@ RSpec.describe SubscriberRegistrationsReport do
       let(:report_type) { 'identity_providers' }
       let(:title) { 'Registered Identity Providers' }
       let(:reported_objects) { [identity_provider] }
-      let(:excluded_objects) do
-        [organization, service_provider, rapid_connect_service]
-      end
+      let(:excluded_objects) { [organization, service_provider, rapid_connect_service] }
 
       it_behaves_like 'a report which lists federation objects'
     end
@@ -95,9 +83,7 @@ RSpec.describe SubscriberRegistrationsReport do
       let(:report_type) { 'service_providers' }
       let(:title) { 'Registered Service Providers' }
       let(:reported_objects) { [service_provider] }
-      let(:excluded_objects) do
-        [organization, identity_provider, rapid_connect_service]
-      end
+      let(:excluded_objects) { [organization, identity_provider, rapid_connect_service] }
 
       it_behaves_like 'a report which lists federation objects'
     end
@@ -106,9 +92,7 @@ RSpec.describe SubscriberRegistrationsReport do
       let(:report_type) { 'rapid_connect_services' }
       let(:title) { 'Registered Rapid Connect Services' }
       let(:reported_objects) { [rapid_connect_service] }
-      let(:excluded_objects) do
-        [organization, identity_provider, service_provider]
-      end
+      let(:excluded_objects) { [organization, identity_provider, service_provider] }
 
       it_behaves_like 'a report which lists federation objects'
     end

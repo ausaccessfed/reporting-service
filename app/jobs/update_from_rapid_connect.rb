@@ -21,30 +21,24 @@ class UpdateFromRapidConnect
 
   private
 
-  AUTHORIZATION_HEADER_VALUE =
-    'AAF-RAPID-EXPORT service="reporting-service", key="%s"'
+  AUTHORIZATION_HEADER_VALUE = 'AAF-RAPID-EXPORT service="reporting-service", key="%s"'
 
   def sync_service(service_data)
     org = Organization.find_by(name: service_data[:organization])
     rapid_data = service_data[:rapidconnect]
 
-    attrs = { name: service_data[:name],
-              service_type: rapid_data.fetch(:type, 'research'),
-              organization: org }
+    attrs = { name: service_data[:name], service_type: rapid_data.fetch(:type, 'research'), organization: org }
 
-    RapidConnectService.find_or_initialize_by(identifier: service_data[:id])
-                       .tap { |s| s.update!(attrs) }
+    RapidConnectService.find_or_initialize_by(identifier: service_data[:id]).tap { |s| s.update!(attrs) }
   end
 
   def sync_activations(service, service_data)
-    service.activations.find_or_initialize_by({})
-           .update!(activated_at: Time.zone.parse(service_data[:created_at]))
+    service.activations.find_or_initialize_by({}).update!(activated_at: Time.zone.parse(service_data[:created_at]))
   end
 
   def rapid_data
     req = Net::HTTP::Get.new('/export/basic')
-    req['Authorization'] = format(AUTHORIZATION_HEADER_VALUE,
-                                  rapid_config[:secret])
+    req['Authorization'] = format(AUTHORIZATION_HEADER_VALUE, rapid_config[:secret])
 
     response = rapid_client.request(req)
     response.value
@@ -52,9 +46,7 @@ class UpdateFromRapidConnect
   end
 
   def rapid_client
-    Net::HTTP.new(rapid_config[:host], 443).tap do |http|
-      http.use_ssl = true
-    end
+    Net::HTTP.new(rapid_config[:host], 443).tap { |http| http.use_ssl = true }
   end
 
   def rapid_config

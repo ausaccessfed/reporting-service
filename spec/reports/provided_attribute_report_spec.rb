@@ -9,28 +9,18 @@ RSpec.describe ProvidedAttributeReport do
   let(:first_attribute) { create :saml_attribute }
   let(:second_attribute) { create :saml_attribute }
 
-  let(:identity_provider_01) do
-    create :identity_provider, saml_attributes: [first_attribute]
-  end
+  let(:identity_provider_01) { create :identity_provider, saml_attributes: [first_attribute] }
 
-  let(:identity_provider_02) do
-    create :identity_provider, saml_attributes: [second_attribute]
-  end
+  let(:identity_provider_02) { create :identity_provider, saml_attributes: [second_attribute] }
 
-  let(:identity_provider_03) do
-    create :identity_provider,
-           saml_attributes: [first_attribute, second_attribute]
-  end
+  let(:identity_provider_03) { create :identity_provider, saml_attributes: [first_attribute, second_attribute] }
 
-  let(:active_identity_providers) do
-    { identity_provider_01:,
-      identity_provider_02:,
-      identity_provider_03: }
-  end
+  let(:active_identity_providers) { { identity_provider_01:, identity_provider_02:, identity_provider_03: } }
 
   before do
-    [identity_provider_01, identity_provider_02, identity_provider_03]
-      .each { |o| create(:activation, federation_object: o) }
+    [identity_provider_01, identity_provider_02, identity_provider_03].each do |o|
+      create(:activation, federation_object: o)
+    end
   end
 
   shared_examples 'an attribute report' do
@@ -40,8 +30,7 @@ RSpec.describe ProvidedAttributeReport do
 
     it 'produces title, header and type' do
       title = "Identity Providers supporting #{name}"
-      expect(report).to include(header:,
-                                type:, title:)
+      expect(report).to include(header:, type:, title:)
     end
 
     it 'determines whether IdP is supported or not' do
@@ -56,22 +45,14 @@ RSpec.describe ProvidedAttributeReport do
   context '#generate' do
     context 'first attribute' do
       let(:name) { first_attribute.name }
-      let(:supported_idps) do
-        { identity_provider_01: 'yes',
-          identity_provider_02: 'no',
-          identity_provider_03: 'yes' }
-      end
+      let(:supported_idps) { { identity_provider_01: 'yes', identity_provider_02: 'no', identity_provider_03: 'yes' } }
 
       it_behaves_like 'an attribute report'
     end
 
     context 'second attribute' do
       let(:name) { second_attribute.name }
-      let(:supported_idps) do
-        { identity_provider_01: 'no',
-          identity_provider_02: 'yes',
-          identity_provider_03: 'yes' }
-      end
+      let(:supported_idps) { { identity_provider_01: 'no', identity_provider_02: 'yes', identity_provider_03: 'yes' } }
 
       it_behaves_like 'an attribute report'
     end
@@ -81,8 +62,7 @@ RSpec.describe ProvidedAttributeReport do
 
       let(:report) { subject.generate }
       let(:inactive_identity_provider) do
-        create :identity_provider,
-               saml_attributes: [first_attribute, second_attribute]
+        create :identity_provider, saml_attributes: [first_attribute, second_attribute]
       end
 
       it 'should never include inactive IdP' do
@@ -92,9 +72,7 @@ RSpec.describe ProvidedAttributeReport do
       end
 
       it 'should generate an array of report rows' do
-        active_identity_providers.each_value do |v|
-          expect(report[:rows]).to include([v.name, anything])
-        end
+        active_identity_providers.each_value { |v| expect(report[:rows]).to include([v.name, anything]) }
       end
     end
   end

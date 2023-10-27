@@ -4,17 +4,13 @@ require 'rails_helper'
 
 RSpec.describe ServiceProviderReportsController, type: :routing do
   shared_examples 'get request' do
-    subject do
-      { get: "/subscriber_reports#{path}" }
-    end
+    subject { { get: "/subscriber_reports#{path}" } }
 
     it { is_expected.to route_to(action) }
   end
 
   shared_examples 'post request' do
-    subject do
-      { post: "/subscriber_reports#{path}" }
-    end
+    subject { { post: "/subscriber_reports#{path}" } }
 
     it { is_expected.to route_to(action) }
   end
@@ -48,9 +44,7 @@ RSpec.describe ServiceProviderReportsController, type: :routing do
   end
 
   describe 'get service_provider_source_identity_providers_report' do
-    let(:action) do
-      'service_provider_reports#source_identity_providers_report'
-    end
+    let(:action) { 'service_provider_reports#source_identity_providers_report' }
 
     let(:path) { '/service_provider_source_identity_providers_report' }
 
@@ -58,9 +52,7 @@ RSpec.describe ServiceProviderReportsController, type: :routing do
   end
 
   describe 'get service_provider_source_identity_providers_report' do
-    let(:action) do
-      'service_provider_reports#source_identity_providers_report'
-    end
+    let(:action) { 'service_provider_reports#source_identity_providers_report' }
 
     let(:path) { '/service_provider_source_identity_providers_report' }
 

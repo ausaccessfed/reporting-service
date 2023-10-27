@@ -3,28 +3,25 @@
 RSpec.shared_examples 'a Subscriber Report' do
   let(:organization) { create :organization }
 
-  let(:object) do
-    create "#{prefix}_provider".to_sym, organization:
-  end
+  let(:object) { create "#{prefix}_provider".to_sym, organization: }
 
   let(:bad_object) { create "#{prefix}_provider".to_sym }
 
-  let(:user) do
-    create :subject, :authorized,
-           permission:
-           "objects:organization:#{organization.identifier}:report"
-  end
+  let(:user) { create :subject, :authorized, permission: "objects:organization:#{organization.identifier}:report" }
 
   def run_get
     get report_path
   end
 
   def run_post
-    post report_path, params: {
-      entity_id: object.entity_id, start: 1.year.ago.utc, end: Time.now.utc,
-      source: 'DS'
-      # TODO: test also other sources
-    }
+    post report_path,
+         params: {
+           entity_id: object.entity_id,
+           start: 1.year.ago.utc,
+           end: Time.now.utc,
+           source: 'DS'
+           # TODO: test also other sources
+         }
   end
 
   before do

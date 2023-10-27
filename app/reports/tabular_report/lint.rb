@@ -45,16 +45,12 @@ class TabularReport
       output[key].each do |row|
         fail_with("#{name} must be an array of arrays") unless row.is_a?(Array)
 
-        row.each do |field|
-          fail_with("#{name} fields must be strings") unless field.is_a?(String)
-        end
+        row.each { |field| fail_with("#{name} fields must be strings") unless field.is_a?(String) }
       end
     end
 
     def ensure_width(output, key, width, error)
-      output[key].each do |row|
-        fail_with(error) unless row.length == width
-      end
+      output[key].each { |row| fail_with(error) unless row.length == width }
     end
 
     def fail_with(message)

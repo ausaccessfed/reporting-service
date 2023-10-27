@@ -8,9 +8,7 @@ class AutomatedReport < ApplicationRecord
 
   validates :interval, inclusion: { in: %w[monthly quarterly yearly] }
 
-  validate :target_must_be_valid_for_report_type,
-           :report_class_must_be_known,
-           :source_must_be_valid_for_report_type
+  validate :target_must_be_valid_for_report_type, :report_class_must_be_known, :source_must_be_valid_for_report_type
 
   def interval
     value = super
@@ -47,8 +45,9 @@ class AutomatedReport < ApplicationRecord
   def source_if_needed
     return nil unless needs_source?
     return source if source.present?
-    return Rails.application.config.reporting_service.default_session_source if
-      Rails.application.config.reporting_service.default_session_source.present?
+    if Rails.application.config.reporting_service.default_session_source.present?
+      return Rails.application.config.reporting_service.default_session_source
+    end
 
     # Complete fall back: default to DS if source is not set in params
     # and not in app_config.
@@ -100,11 +99,16 @@ class AutomatedReport < ApplicationRecord
   end
 
   REPORTS_THAT_NEED_SOURCE = %w[
-    DailyDemandReport FederatedSessionsReport IdentityProviderDailyDemandReport
-    IdentityProviderDestinationServicesReport IdentityProviderSessionsReport
-    ServiceProviderDailyDemandReport ServiceProviderSessionsReport
+    DailyDemandReport
+    FederatedSessionsReport
+    IdentityProviderDailyDemandReport
+    IdentityProviderDestinationServicesReport
+    IdentityProviderSessionsReport
+    ServiceProviderDailyDemandReport
+    ServiceProviderSessionsReport
     ServiceProviderSourceIdentityProvidersReport
-    IdentityProviderUtilizationReport ServiceProviderUtilizationReport
+    IdentityProviderUtilizationReport
+    ServiceProviderUtilizationReport
   ].freeze
 
   def source_must_be_valid_for_report_type
@@ -121,9 +125,13 @@ class AutomatedReport < ApplicationRecord
     errors.add(:target, 'must be omitted for the report type')
   end
 
-  OBJECT_TYPE_IDENTIFIERS =
-    %w[identity_providers service_providers organizations
-       rapid_connect_services services].freeze
+  OBJECT_TYPE_IDENTIFIERS = %w[
+    identity_providers
+    service_providers
+    organizations
+    rapid_connect_services
+    services
+  ].freeze
 
   def target_must_be_object_type_identifier
     return if OBJECT_TYPE_IDENTIFIERS.include?(target)

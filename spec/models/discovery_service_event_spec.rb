@@ -27,14 +27,16 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
     let(:service_provider) { create :service_provider }
 
     let(:event_before_start) do
-      create :discovery_service_event, :response,
+      create :discovery_service_event,
+             :response,
              selected_idp: identity_provider.entity_id,
              initiating_sp: service_provider.entity_id,
              timestamp: start - 1.second
     end
 
     let(:event_after_finish) do
-      create :discovery_service_event, :response,
+      create :discovery_service_event,
+             :response,
              selected_idp: identity_provider.entity_id,
              initiating_sp: service_provider.entity_id,
              timestamp: finish + 1.second
@@ -42,22 +44,17 @@ RSpec.describe DiscoveryServiceEvent, type: :model do
 
     let(:events_within_range) do
       [*1..10].map do |t|
-        create :discovery_service_event, :response,
+        create :discovery_service_event,
+               :response,
                selected_idp: identity_provider.entity_id,
                initiating_sp: service_provider.entity_id,
-               timestamp: [t.days.ago.end_of_day,
-                           t.days.ago.beginning_of_day].sample
+               timestamp: [t.days.ago.end_of_day, t.days.ago.beginning_of_day].sample
       end
     end
 
-    let(:none_session_event) do
-      create :discovery_service_event,
-             timestamp: 4.days.ago
-    end
+    let(:none_session_event) { create :discovery_service_event, timestamp: 4.days.ago }
 
-    let(:sessions) do
-      DiscoveryServiceEvent.within_range(start, finish).sessions
-    end
+    let(:sessions) { DiscoveryServiceEvent.within_range(start, finish).sessions }
 
     it 'should not select session out of range' do
       expect(sessions).not_to include(event_before_start)

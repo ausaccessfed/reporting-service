@@ -3,81 +3,45 @@
 RSpec.shared_examples 'report with scalable steps' do
   around { |spec| Timecop.freeze { spec.run } }
 
-  let(:range_less_than_month) do
-    { start: Time.now.utc - 2.weeks, end: Time.now.utc }
-  end
+  let(:range_less_than_month) { { start: Time.now.utc - 2.weeks, end: Time.now.utc } }
 
-  let(:range_less_than_month_02) do
-    { start: Time.now.utc - 2.days, end: Time.now.utc }
-  end
+  let(:range_less_than_month_02) { { start: Time.now.utc - 2.days, end: Time.now.utc } }
 
-  let(:range_1_month) do
-    { start: Time.now.utc - 1.month, end: Time.now.utc }
-  end
+  let(:range_1_month) { { start: Time.now.utc - 1.month, end: Time.now.utc } }
 
   let(:range_1_month_february_exception) do
-    {
-      start: Time.parse('2017-02-09 00:00:00').utc,
-      end: Time.parse('2017-03-09 00:00:00').utc
-    }
+    { start: Time.parse('2017-02-09 00:00:00').utc, end: Time.parse('2017-03-09 00:00:00').utc }
   end
 
   let(:range_2_months_february_exception) do
-    {
-      start: Time.parse('2017-01-09 00:00:00').utc,
-      end: Time.parse('2017-03-09 00:00:00').utc
-    }
+    { start: Time.parse('2017-01-09 00:00:00').utc, end: Time.parse('2017-03-09 00:00:00').utc }
   end
 
   let(:range_3_months_february_exception) do
-    {
-      start: Time.parse('2017-01-09 00:00:00').utc,
-      end: Time.parse('2017-04-09 00:00:00').utc
-    }
+    { start: Time.parse('2017-01-09 00:00:00').utc, end: Time.parse('2017-04-09 00:00:00').utc }
   end
 
   let(:range_3_months_across_year_end_february_exception) do
-    {
-      start: Time.parse('2016-12-09 00:00:00').utc,
-      end: Time.parse('2017-03-09 00:00:00').utc
-    }
+    { start: Time.parse('2016-12-09 00:00:00').utc, end: Time.parse('2017-03-09 00:00:00').utc }
   end
 
-  let(:range_2_months) do
-    { start: Time.now.utc - 2.months, end: Time.now.utc }
-  end
+  let(:range_2_months) { { start: Time.now.utc - 2.months, end: Time.now.utc } }
 
-  let(:range_3_months) do
-    { start: Time.now.utc - 3.months, end: Time.now.utc }
-  end
+  let(:range_3_months) { { start: Time.now.utc - 3.months, end: Time.now.utc } }
 
-  let(:range_4_months) do
-    { start: Time.now.utc - 4.months, end: Time.now.utc }
-  end
+  let(:range_4_months) { { start: Time.now.utc - 4.months, end: Time.now.utc } }
 
-  let(:range_6_months) do
-    { start: Time.now.utc - 6.months, end: Time.now.utc }
-  end
+  let(:range_6_months) { { start: Time.now.utc - 6.months, end: Time.now.utc } }
 
-  let(:range_7_months) do
-    { start: Time.now.utc - 7.months, end: Time.now.utc }
-  end
+  let(:range_7_months) { { start: Time.now.utc - 7.months, end: Time.now.utc } }
 
-  let(:range_9_months) do
-    { start: Time.now.utc - 9.months, end: Time.now.utc }
-  end
+  let(:range_9_months) { { start: Time.now.utc - 9.months, end: Time.now.utc } }
 
-  let(:range_1_year) do
-    { start: Time.now.utc - 1.year, end: Time.now.utc }
-  end
+  let(:range_1_year) { { start: Time.now.utc - 1.year, end: Time.now.utc } }
 
-  let(:range_1_year_3_months) do
-    { start: Time.now.utc - (1.year + 3.months), end: Time.now.utc }
-  end
+  let(:range_1_year_3_months) { { start: Time.now.utc - (1.year + 3.months), end: Time.now.utc } }
 
-  let(:range_2_year_2_months) do
-    { start: Time.now.utc - (2.years + 2.months), end: Time.now.utc }
-  end
+  let(:range_2_year_2_months) { { start: Time.now.utc - (2.years + 2.months), end: Time.now.utc } }
 
   it 'Steps should be 1 hour within less than a month' do
     [range_less_than_month, range_less_than_month_02].each do |rng|
@@ -105,10 +69,7 @@ RSpec.shared_examples 'report with scalable steps' do
     end
 
     it 'behaves correctly when the time range spans February' do
-      [
-        range_1_month_february_exception,
-        range_2_months_february_exception
-      ].each do |rng|
+      [range_1_month_february_exception, range_2_months_february_exception].each do |rng|
         post path, params: params.merge(rng)
 
         data = JSON.parse(assigns[:data], symbolize_names: true)
@@ -134,10 +95,7 @@ RSpec.shared_examples 'report with scalable steps' do
     end
 
     it 'behaves correctly when the time range spans February' do
-      [
-        range_3_months_february_exception,
-        range_3_months_across_year_end_february_exception
-      ].each do |rng|
+      [range_3_months_february_exception, range_3_months_across_year_end_february_exception].each do |rng|
         post path, params: params.merge(rng)
 
         data = JSON.parse(assigns[:data], symbolize_names: true)
@@ -162,8 +120,7 @@ RSpec.shared_examples 'report with scalable steps' do
   end
 
   it 'Steps should be 24 hours within 1 year or more' do
-    [range_1_year,
-     range_1_year_3_months, range_2_year_2_months].each do |rng|
+    [range_1_year, range_1_year_3_months, range_2_year_2_months].each do |rng|
       post path, params: params.merge(rng)
 
       data = JSON.parse(assigns[:data], symbolize_names: true)

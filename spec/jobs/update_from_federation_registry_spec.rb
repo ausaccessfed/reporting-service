@@ -25,7 +25,9 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         id: default_org_data[:id]
       },
       saml: {
-        entity: { entity_id: idp_entity_id },
+        entity: {
+          entity_id: idp_entity_id
+        },
         attributes: []
       },
       functioning: true,
@@ -42,10 +44,10 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         id: default_org_data[:id]
       },
       saml: {
-        entity: { entity_id: sp_entity_id },
-        attribute_consuming_services: [
-          { attributes: [] }
-        ]
+        entity: {
+          entity_id: sp_entity_id
+        },
+        attribute_consuming_services: [{ attributes: [] }]
       },
       functioning: true,
       created_at: 2.years.ago.utc.xmlschema,
@@ -54,8 +56,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
   end
 
   let(:default_attr_data) do
-    oid_tail_pattern = Array.new(rand(6)) { %w[# # # ## #####].sample }
-                            .join('.')
+    oid_tail_pattern = Array.new(rand(6)) { %w[# # # ## #####].sample }.join('.')
     {
       id: 1,
       name: Faker::Lorem.words.join('_').camelize(:lower),
@@ -77,21 +78,13 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
   let(:extra_obj_attrs) { {} }
   let(:base_url) { 'https://manager.example.edu/federationregistry' }
 
-  let(:organizations_response) do
-    JSON.pretty_generate(organizations: [org_data].compact)
-  end
+  let(:organizations_response) { JSON.pretty_generate(organizations: [org_data].compact) }
 
-  let(:identityproviders_response) do
-    JSON.pretty_generate(identity_providers: [idp_data].compact)
-  end
+  let(:identityproviders_response) { JSON.pretty_generate(identity_providers: [idp_data].compact) }
 
-  let(:serviceproviders_response) do
-    JSON.pretty_generate(service_providers: [sp_data].compact)
-  end
+  let(:serviceproviders_response) { JSON.pretty_generate(service_providers: [sp_data].compact) }
 
-  let(:attributes_response) do
-    JSON.pretty_generate(attributes: [attr_data].compact)
-  end
+  let(:attributes_response) { JSON.pretty_generate(attributes: [attr_data].compact) }
 
   let(:org_identifier) do
     hash = OpenSSL::Digest.new('SHA256').digest("aaf:subscriber:#{org_fr_id}")
@@ -108,7 +101,8 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
       stub_request(:get, "#{base_url}/export/#{endpoint}")
         .with(headers: { 'Authorization' => /AAF-FR-EXPORT .+/ })
         .to_return(status: 200, body:)
-        .then.to_return { raise('endpoint should only be called once') }
+        .then
+        .to_return { raise('endpoint should only be called once') }
     end
   end
 
@@ -151,8 +145,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
 
       it 'updates the object' do
         expect { run }.not_to change(scope, :count)
-        expect { object.reload }.to change { object.attributes.symbolize_keys }
-          .to include(expected_attrs)
+        expect { object.reload }.to change { object.attributes.symbolize_keys }.to include(expected_attrs)
       end
 
       it 'activates the object' do
@@ -200,20 +193,16 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         it 'adds the attribute' do
           expect { run }.to change(attribute_scope, :count).by(1)
           expect(attribute_scope.last.saml_attribute).to have_attributes(
-            name: attr_data[:name], description: attr_data[:description]
+            name: attr_data[:name],
+            description: attr_data[:description]
           )
         end
       end
 
       context 'with an existing attribute' do
-        let!(:attr) do
-          create(:saml_attribute, name: attr_data[:name],
-                                  core: false)
-        end
+        let!(:attr) { create(:saml_attribute, name: attr_data[:name], core: false) }
 
-        let!(:attr_assoc) do
-          attribute_scope.create!(extra_assoc_attrs.merge(saml_attribute: attr))
-        end
+        let!(:attr_assoc) { attribute_scope.create!(extra_assoc_attrs.merge(saml_attribute: attr)) }
 
         it 'does not create a new object' do
           expect { run }.not_to change(attribute_scope, :count)
@@ -223,14 +212,9 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
       context 'with a removed attribute' do
         let(:object_attribute_list) { [] }
 
-        let!(:attr) do
-          create(:saml_attribute, name: attr_data[:name],
-                                  core: false)
-        end
+        let!(:attr) { create(:saml_attribute, name: attr_data[:name], core: false) }
 
-        let!(:attr_assoc) do
-          attribute_scope.create!(extra_assoc_attrs.merge(saml_attribute: attr))
-        end
+        let!(:attr_assoc) { attribute_scope.create!(extra_assoc_attrs.merge(saml_attribute: attr)) }
 
         it 'removes the association object' do
           expect { run }.to change(attribute_scope, :count).by(-1)
@@ -267,20 +251,11 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
     end
 
     describe 'SAML entities' do
-      let!(:organization) do
-        create(:organization, identifier: org_identifier)
-      end
+      let!(:organization) { create(:organization, identifier: org_identifier) }
 
-      let!(:org_activation) do
-        create(:activation, federation_object: organization)
-      end
+      let!(:org_activation) { create(:activation, federation_object: organization) }
 
-      let(:expected_attrs) do
-        {
-          name: obj_data[:display_name],
-          entity_id: obj_data[:saml][:entity][:entity_id]
-        }
-      end
+      let(:expected_attrs) { { name: obj_data[:display_name], entity_id: obj_data[:saml][:entity][:entity_id] } }
 
       describe 'IdentityProvider sync' do
         let(:idp_data) { default_idp_data.merge(extra_obj_attrs) }
@@ -291,11 +266,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
           it_behaves_like 'sync of a new object'
 
           context 'with the wrong organization' do
-            let(:idp_data) do
-              default_idp_data.merge(
-                organization: { id: (default_org_data[:id] + 1) }
-              )
-            end
+            let(:idp_data) { default_idp_data.merge(organization: { id: (default_org_data[:id] + 1) }) }
 
             it 'ignores the identity provider' do
               expect { run }.not_to change(scope, :count)
@@ -304,10 +275,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         end
 
         context 'for an existing identity provider' do
-          let!(:object) do
-            create(:identity_provider, entity_id: idp_entity_id,
-                                       organization:)
-          end
+          let!(:object) { create(:identity_provider, entity_id: idp_entity_id, organization:) }
 
           it_behaves_like 'sync of an existing object'
         end
@@ -315,19 +283,13 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         context 'for a removed identity provider' do
           let(:idp_data) { nil }
 
-          let!(:object) do
-            create(:identity_provider, entity_id: idp_entity_id,
-                                       organization:)
-          end
+          let!(:object) { create(:identity_provider, entity_id: idp_entity_id, organization:) }
 
           it_behaves_like 'sync of a removed object'
         end
 
         context 'provided attributes' do
-          let!(:object) do
-            create(:identity_provider, entity_id: idp_entity_id,
-                                       organization:)
-          end
+          let!(:object) { create(:identity_provider, entity_id: idp_entity_id, organization:) }
 
           let(:attribute_scope) { object.identity_provider_saml_attributes }
           let(:object_attribute_list) { [attr_data.slice(:id, :name)] }
@@ -335,13 +297,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
           let(:expected_assoc_attrs) { {} }
           let(:extra_assoc_attrs) { {} }
 
-          let(:idp_data) do
-            default_idp_data.deep_merge(
-              saml: {
-                attributes: object_attribute_list
-              }
-            )
-          end
+          let(:idp_data) { default_idp_data.deep_merge(saml: { attributes: object_attribute_list }) }
 
           it_behaves_like 'sync of an object with attributes'
         end
@@ -356,11 +312,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
           it_behaves_like 'sync of a new object'
 
           context 'with the wrong organization' do
-            let(:sp_data) do
-              default_sp_data.merge(
-                organization: { id: (default_org_data[:id] + 1) }
-              )
-            end
+            let(:sp_data) { default_sp_data.merge(organization: { id: (default_org_data[:id] + 1) }) }
 
             it 'ignores the service provider' do
               expect { run }.not_to change(scope, :count)
@@ -369,10 +321,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         end
 
         context 'for an existing service provider' do
-          let!(:object) do
-            create(:service_provider, entity_id: sp_entity_id,
-                                      organization:)
-          end
+          let!(:object) { create(:service_provider, entity_id: sp_entity_id, organization:) }
 
           it_behaves_like 'sync of an existing object'
         end
@@ -380,36 +329,22 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         context 'for a removed service provider' do
           let(:sp_data) { nil }
 
-          let!(:object) do
-            create(:service_provider, entity_id: sp_entity_id,
-                                      organization:)
-          end
+          let!(:object) { create(:service_provider, entity_id: sp_entity_id, organization:) }
 
           it_behaves_like 'sync of a removed object'
         end
 
         context 'requested attributes' do
-          let!(:object) do
-            create(:service_provider, entity_id: sp_entity_id,
-                                      organization:)
-          end
+          let!(:object) { create(:service_provider, entity_id: sp_entity_id, organization:) }
 
           let(:attribute_scope) { object.service_provider_saml_attributes }
-          let(:object_attribute_list) do
-            [attr_data.slice(:id, :name).merge(is_required: true)]
-          end
+          let(:object_attribute_list) { [attr_data.slice(:id, :name).merge(is_required: true)] }
 
           let(:expected_assoc_attrs) { { optional: false } }
           let(:extra_assoc_attrs) { { optional: true } }
 
           let(:sp_data) do
-            default_sp_data.deep_merge(
-              saml: {
-                attribute_consuming_services: [
-                  { attributes: object_attribute_list }
-                ]
-              }
-            )
+            default_sp_data.deep_merge(saml: { attribute_consuming_services: [{ attributes: object_attribute_list }] })
           end
 
           it_behaves_like 'sync of an object with attributes'
@@ -428,19 +363,12 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
       end
 
       context 'for an existing attribute' do
-        let!(:attr) do
-          create(:saml_attribute, name: attr_data[:name],
-                                  core: false)
-        end
+        let!(:attr) { create(:saml_attribute, name: attr_data[:name], core: false) }
 
         it 'updates the object' do
           expect { run }.not_to change(SAMLAttribute, :count)
-          expected_attrs = {
-            core: true,
-            description: attr_data[:description]
-          }
-          expect { attr.reload }.to change { attr.attributes.symbolize_keys }
-            .to include(expected_attrs)
+          expected_attrs = { core: true, description: attr_data[:description] }
+          expect { attr.reload }.to change { attr.attributes.symbolize_keys }.to include(expected_attrs)
         end
       end
 
@@ -483,8 +411,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
 
       let(:attributes) do
         i = rand(9999)
-        oid_tail_pattern = Array.new(rand(6)) { %w[# # # ## #####].sample }
-                                .join('.')
+        oid_tail_pattern = Array.new(rand(6)) { %w[# # # ## #####].sample }.join('.')
 
         Array.new(20) do
           {
@@ -502,9 +429,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
       let(:identity_providers) do
         i = rand(9999)
         Array.new(20) do
-          attrs = attributes.sample(rand(10)).map do |a|
-            a.slice(:name, :id)
-          end
+          attrs = attributes.sample(rand(10)).map { |a| a.slice(:name, :id) }
 
           {
             id: (i += 1),
@@ -513,7 +438,9 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
               id: organizations.sample[:id]
             },
             saml: {
-              entity: { entity_id: unique_entity_id },
+              entity: {
+                entity_id: unique_entity_id
+              },
               attributes: attrs
             },
             functioning: true,
@@ -526,9 +453,7 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
       let(:service_providers) do
         i = rand(9999)
         Array.new(30) do
-          attrs = attributes.sample(rand(10)).map do |a|
-            a.slice(:name, :id).merge(is_required: [true, false].sample)
-          end
+          attrs = attributes.sample(rand(10)).map { |a| a.slice(:name, :id).merge(is_required: [true, false].sample) }
 
           {
             id: (i += 1),
@@ -537,10 +462,10 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
               id: organizations.sample[:id]
             },
             saml: {
-              entity: { entity_id: unique_entity_id },
-              attribute_consuming_services: [
-                { attributes: attrs }
-              ]
+              entity: {
+                entity_id: unique_entity_id
+              },
+              attribute_consuming_services: [{ attributes: attrs }]
             },
             functioning: true,
             created_at: 2.years.ago.utc.xmlschema,
@@ -549,62 +474,44 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
         end
       end
 
-      let(:organizations_response) do
-        JSON.pretty_generate(organizations:)
-      end
+      let(:organizations_response) { JSON.pretty_generate(organizations:) }
 
-      let(:identityproviders_response) do
-        JSON.pretty_generate(identity_providers:)
-      end
+      let(:identityproviders_response) { JSON.pretty_generate(identity_providers:) }
 
-      let(:serviceproviders_response) do
-        JSON.pretty_generate(service_providers:)
-      end
+      let(:serviceproviders_response) { JSON.pretty_generate(service_providers:) }
 
-      let(:attributes_response) do
-        JSON.pretty_generate(attributes:)
-      end
+      let(:attributes_response) { JSON.pretty_generate(attributes:) }
 
       it 'syncs the objects' do
         idp_attrs = identity_providers.flat_map { |o| o[:saml][:attributes] }
-        sp_attrs = service_providers.flat_map do |o|
-          o[:saml][:attribute_consuming_services]
-            .flat_map { |s| s[:attributes] }
-        end
+        sp_attrs =
+          service_providers.flat_map { |o| o[:saml][:attribute_consuming_services].flat_map { |s| s[:attributes] } }
 
         expect { run }.to(
-          change(Organization, :count).by(organizations.count)
-          .and(
-            change(IdentityProvider, :count).by(identity_providers.count)
-          ).and(
-            change(ServiceProvider, :count).by(service_providers.count)
-          ).and(
-            change(SAMLAttribute, :count).by(attributes.count)
-          ).and(
-            change(IdentityProviderSAMLAttribute, :count).by(idp_attrs.count)
-          ).and(
-            change(ServiceProviderSAMLAttribute, :count).by(sp_attrs.count)
-          )
+          change(Organization, :count)
+            .by(organizations.count)
+            .and(change(IdentityProvider, :count).by(identity_providers.count))
+            .and(change(ServiceProvider, :count).by(service_providers.count))
+            .and(change(SAMLAttribute, :count).by(attributes.count))
+            .and(change(IdentityProviderSAMLAttribute, :count).by(idp_attrs.count))
+            .and(change(ServiceProviderSAMLAttribute, :count).by(sp_attrs.count))
         )
 
-        expect(Organization.all.map(&:name))
-          .to contain_exactly(*organizations.pluck(:display_name))
+        expect(Organization.all.map(&:name)).to contain_exactly(*organizations.pluck(:display_name))
 
-        expect(IdentityProvider.all.map(&:name))
-          .to contain_exactly(*identity_providers.pluck(:display_name))
+        expect(IdentityProvider.all.map(&:name)).to contain_exactly(*identity_providers.pluck(:display_name))
 
-        expect(ServiceProvider.all.map(&:name))
-          .to contain_exactly(*service_providers.pluck(:display_name))
+        expect(ServiceProvider.all.map(&:name)).to contain_exactly(*service_providers.pluck(:display_name))
 
-        expect(SAMLAttribute.all.map(&:name))
-          .to contain_exactly(*attributes.pluck(:name))
+        expect(SAMLAttribute.all.map(&:name)).to contain_exactly(*attributes.pluck(:name))
 
-        expect { run }.to not_change(Organization, :count)
-          .and not_change(IdentityProvider, :count)
-          .and not_change(ServiceProvider, :count)
-          .and not_change(SAMLAttribute, :count)
-          .and not_change(IdentityProviderSAMLAttribute, :count)
-          .and not_change(ServiceProviderSAMLAttribute, :count)
+        expect { run }.to not_change(Organization, :count).and not_change(IdentityProvider, :count).and not_change(
+                      ServiceProvider,
+                      :count
+                    ).and not_change(SAMLAttribute, :count).and not_change(
+                                  IdentityProviderSAMLAttribute,
+                                  :count
+                                ).and not_change(ServiceProviderSAMLAttribute, :count)
       end
     end
   end

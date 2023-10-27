@@ -15,16 +15,13 @@ class ServiceCompatibilityReport < TabularReport
   private
 
   def rows
-    sorted_idps = active_identity_providers.sort_by do |idp|
-      idp.name.downcase
-    end
+    sorted_idps = active_identity_providers.sort_by { |idp| idp.name.downcase }
 
     sorted_idps.map do |idp|
       attributes = report idp
       compatible = attributes[:compatible] ? 'yes' : 'no'
 
-      [idp.name, attributes[:required].to_s,
-       attributes[:optional].to_s, compatible]
+      [idp.name, attributes[:required].to_s, attributes[:optional].to_s, compatible]
     end
   end
 
@@ -39,9 +36,8 @@ class ServiceCompatibilityReport < TabularReport
   def report(idp)
     idp_saml_attribute_ids = idp.saml_attributes.map(&:id)
 
-    data = grouped_attributes.transform_values do |attrs|
-      (attrs.map(&:saml_attribute_id) & idp_saml_attribute_ids).count
-    end
+    data =
+      grouped_attributes.transform_values { |attrs| (attrs.map(&:saml_attribute_id) & idp_saml_attribute_ids).count }
 
     data.merge(compatible: compatibility(idp_saml_attribute_ids))
   end

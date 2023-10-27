@@ -10,11 +10,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   let(:idp) { create :identity_provider, organization: }
   let(:unknown_idp) { create :identity_provider }
 
-  let(:user) do
-    create :subject, :authorized,
-           permission:
-           "objects:organization:#{organization.identifier}:report"
-  end
+  let(:user) { create :subject, :authorized, permission: "objects:organization:#{organization.identifier}:report" }
 
   def get_tamplate_name(type)
     type.chomp('Report').underscore.tr('_', '-')
@@ -24,24 +20,14 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
     get :show, params: { identifier: }
   end
 
-  before do
-    session[:subject_id] = user.try(:id)
-  end
+  before { session[:subject_id] = user.try(:id) }
 
   shared_examples 'Automated Public Report' do
     let(:user) { create :subject }
 
-    let(:auto_report) do
-      create :automated_report,
-             target:,
-             report_class:,
-             source:
-    end
+    let(:auto_report) { create :automated_report, target:, report_class:, source: }
 
-    let!(:instance) do
-      create :automated_report_instance,
-             automated_report: auto_report
-    end
+    let!(:instance) { create :automated_report_instance, automated_report: auto_report }
 
     it 'all subjects can view public reports' do
       run(instance.identifier)
@@ -113,29 +99,13 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   end
 
   shared_examples 'Automated Subscriber Report' do
-    let(:auto_report) do
-      create :automated_report,
-             target: object.entity_id,
-             report_class:,
-             source:
-    end
+    let(:auto_report) { create :automated_report, target: object.entity_id, report_class:, source: }
 
-    let!(:instance) do
-      create :automated_report_instance,
-             automated_report: auto_report
-    end
+    let!(:instance) { create :automated_report_instance, automated_report: auto_report }
 
-    let!(:unknown_auto_report) do
-      create :automated_report,
-             target: unknown_object.entity_id,
-             report_class:,
-             source:
-    end
+    let!(:unknown_auto_report) { create :automated_report, target: unknown_object.entity_id, report_class:, source: }
 
-    let!(:unknown_instance) do
-      create :automated_report_instance,
-             automated_report: unknown_auto_report
-    end
+    let!(:unknown_instance) { create :automated_report_instance, automated_report: unknown_auto_report }
 
     it 'should render the template' do
       run(instance.identifier)
@@ -233,16 +203,9 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   end
 
   shared_examples 'Automated Subscriber Registrations Report' do
-    let(:auto_report) do
-      create :automated_report,
-             target:,
-             report_class: 'SubscriberRegistrationsReport'
-    end
+    let(:auto_report) { create :automated_report, target:, report_class: 'SubscriberRegistrationsReport' }
 
-    let!(:instance) do
-      create :automated_report_instance,
-             automated_report: auto_report
-    end
+    let!(:instance) { create :automated_report_instance, automated_report: auto_report }
 
     before { run(instance.identifier) }
 
@@ -273,8 +236,7 @@ RSpec.describe AutomatedReportInstancesController, type: :controller do
   end
 
   context 'Subscriber Registrations Reports' do
-    targets = %w[identity_providers service_providers
-                 organizations rapid_connect_services services]
+    targets = %w[identity_providers service_providers organizations rapid_connect_services services]
 
     targets.each do |target|
       let(:target) { target }

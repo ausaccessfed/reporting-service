@@ -4,17 +4,13 @@ require 'rails_helper'
 
 RSpec.describe ComplianceReportsController, type: :routing do
   shared_examples 'get request' do
-    subject do
-      { get: "compliance_reports#{path}" }
-    end
+    subject { { get: "compliance_reports#{path}" } }
 
     it { is_expected.to route_to("compliance_reports#{action}") }
   end
 
   shared_examples 'post request' do
-    subject do
-      { post: "compliance_reports#{path}" }
-    end
+    subject { { post: "compliance_reports#{path}" } }
 
     it { is_expected.to route_to("compliance_reports#{action}") }
   end

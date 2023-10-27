@@ -19,8 +19,7 @@ RSpec.describe IdentityProviderUtilizationReport do
   context 'IdentityProviderUtilizationReport with DS sessions' do
     let(:target) { :selected_idp }
     def create_event(timestamp, eid)
-      create :discovery_service_event, :response,
-             target => eid, timestamp:
+      create :discovery_service_event, :response, target => eid, :timestamp => timestamp
     end
 
     let(:source) { 'DS' }
@@ -32,7 +31,7 @@ RSpec.describe IdentityProviderUtilizationReport do
   context 'IdentityProviderUtilizationReport with IdP sessions' do
     let(:target) { :asserting_party }
     def create_event(timestamp, eid)
-      create :federated_login_event, :OK, target => eid, timestamp:
+      create :federated_login_event, :OK, target => eid, :timestamp => timestamp
     end
 
     let(:source) { 'IdP' }

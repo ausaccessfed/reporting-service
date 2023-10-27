@@ -19,13 +19,11 @@ RSpec.describe IdentityProvider, type: :model do
     let!(:idp) { create(:identity_provider) }
 
     it 'finds by entity id' do
-      expect(described_class.find_by_identifying_attribute(idp.entity_id))
-        .to eq(idp)
+      expect(described_class.find_by_identifying_attribute(idp.entity_id)).to eq(idp)
     end
 
     it 'returns nil when not found' do
-      expect(described_class.find_by_identifying_attribute('urn:nonexistent'))
-        .to be_nil
+      expect(described_class.find_by_identifying_attribute('urn:nonexistent')).to be_nil
     end
   end
 end

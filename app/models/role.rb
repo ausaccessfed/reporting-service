@@ -12,8 +12,7 @@ class Role < ApplicationRecord
   valhammer
 
   def self.for_entitlement(entitlement)
-    create_with(name: 'auto').find_or_create_by!(entitlement:)
-                             .tap(&:update_permissions)
+    create_with(name: 'auto').find_or_create_by!(entitlement:).tap(&:update_permissions)
   end
 
   def update_permissions
@@ -40,8 +39,7 @@ class Role < ApplicationRecord
 
     return update_object_admin_permissions(parts) if parts[2] == 'admin'
 
-    values = ["objects:#{parts[0]}:#{parts[1]}:read",
-              "objects:#{parts[0]}:#{parts[1]}:report"]
+    values = ["objects:#{parts[0]}:#{parts[1]}:read", "objects:#{parts[0]}:#{parts[1]}:report"]
     ensure_permission_values(values)
   end
 

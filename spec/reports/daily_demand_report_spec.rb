@@ -15,10 +15,7 @@ RSpec.describe DailyDemandReport do
 
   let(:days_count) { ((finish - start).to_i / 86_400).to_i }
 
-  let(:range) do
-    { start: start.strftime('%FT%H:%M:%S%z'),
-      end: finish.strftime('%FT%H:%M:%S%z') }
-  end
+  let(:range) { { start: start.strftime('%FT%H:%M:%S%z'), end: finish.strftime('%FT%H:%M:%S%z') } }
 
   let(:identity_provider) { create :identity_provider }
   let(:service_provider) { create :service_provider }
@@ -29,9 +26,7 @@ RSpec.describe DailyDemandReport do
   let(:data) { report[:data] }
 
   def expect_in_range
-    (0..86_340).step(300).each_with_index do |t, index|
-      expect(data[:sessions][index]).to match_array([t, value])
-    end
+    (0..86_340).step(300).each_with_index { |t, index| expect(data[:sessions][index]).to match_array([t, value]) }
   end
 
   shared_examples 'a report procesing events from the selected source' do
@@ -40,8 +35,7 @@ RSpec.describe DailyDemandReport do
 
     it 'should include title, units and labels' do
       output_title = "#{title} (#{source_name})"
-      expect(report).to include(title: output_title, units:,
-                                labels:, range:)
+      expect(report).to include(title: output_title, units:, labels:, range:)
     end
 
     it 'sessions are response types generated within given range' do
@@ -51,7 +45,8 @@ RSpec.describe DailyDemandReport do
 
   context 'when events are not responded' do
     before do
-      create_list :discovery_service_event, 20,
+      create_list :discovery_service_event,
+                  20,
                   initiating_sp: service_provider.entity_id,
                   timestamp: 1.day.ago.beginning_of_day
     end
@@ -66,7 +61,8 @@ RSpec.describe DailyDemandReport do
 
   context 'when IdP events are failed' do
     before do
-      create_list :federated_login_event, 20,
+      create_list :federated_login_event,
+                  20,
                   relying_party: service_provider.entity_id,
                   timestamp: 1.day.ago.beginning_of_day
     end
@@ -107,10 +103,13 @@ RSpec.describe DailyDemandReport do
 
   context 'when events are sessions with response' do
     def create_event(timestamp = nil)
-      create :discovery_service_event, :response,
-             { selected_idp: identity_provider.entity_id,
+      create :discovery_service_event,
+             :response,
+             {
+               selected_idp: identity_provider.entity_id,
                initiating_sp: service_provider.entity_id,
-               timestamp: }.compact
+               timestamp:
+             }.compact
     end
 
     let(:source) { 'DS' }
@@ -122,10 +121,13 @@ RSpec.describe DailyDemandReport do
 
   context 'when events are IdP sessions' do
     def create_event(timestamp = nil)
-      create :federated_login_event, :OK,
-             { asserting_party: identity_provider.entity_id,
+      create :federated_login_event,
+             :OK,
+             {
+               asserting_party: identity_provider.entity_id,
                relying_party: service_provider.entity_id,
-               timestamp: }.compact
+               timestamp:
+             }.compact
     end
 
     let(:source) { 'IdP' }

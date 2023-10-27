@@ -11,7 +11,7 @@ if [ "${PREPARE_DB-}" != "" ]; then
   . bin/database.sh
 fi
 
-if [ "${TMPDIR-}" != "" ]; then
+if [ "${TMPDIR-}" != "" ] && [ ! -d $TMPDIR ]; then
   mkdir $TMPDIR
 fi
 

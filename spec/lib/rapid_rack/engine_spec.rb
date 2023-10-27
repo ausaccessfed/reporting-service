@@ -22,15 +22,18 @@ RSpec.describe RapidRack::Engine, type: :feature do
     config = Rails.application.config.reporting_service.rapid_connect
     config[:rack][:error_handler] = error_handler
 
-    allow(Rails.application.config.reporting_service).to receive(:rapid_connect)
-      .and_return(config)
+    allow(Rails.application.config.reporting_service).to receive(:rapid_connect).and_return(config)
   end
 
   context 'full integration' do
     let(:attrs) do
       {
-        cn: 'Test User', displayname: 'Test User X', surname: 'User',
-        givenname: 'Test', mail: 'testuser@example.com', o: 'Test Org',
+        cn: 'Test User',
+        displayname: 'Test User X',
+        surname: 'User',
+        givenname: 'Test',
+        mail: 'testuser@example.com',
+        o: 'Test Org',
         edupersonscopedaffiliation: 'member@example.com',
         edupersonprincipalname: 'testuser@example.com',
         auedupersonsharedtoken: 'somesecret',
@@ -40,15 +43,18 @@ RSpec.describe RapidRack::Engine, type: :feature do
 
     let(:valid_claims) do
       {
-        aud: audience, iss: issuer, iat: Time.zone.now, typ: 'authnresponse',
-        nbf: 1.minute.ago, exp: 2.minutes.from_now,
-        jti: 'accept', 'https://aaf.edu.au/attributes' => attrs
+        :aud => audience,
+        :iss => issuer,
+        :iat => Time.zone.now,
+        :typ => 'authnresponse',
+        :nbf => 1.minute.ago,
+        :exp => 2.minutes.from_now,
+        :jti => 'accept',
+        'https://aaf.edu.au/attributes' => attrs
       }
     end
 
-    let(:assertion) do
-      JSON::JWT.new(claims).sign(secret).to_s
-    end
+    let(:assertion) { JSON::JWT.new(claims).sign(secret).to_s }
     let(:claims) { valid_claims }
     let(:session) { {} }
 
