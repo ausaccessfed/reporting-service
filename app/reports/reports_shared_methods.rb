@@ -17,27 +17,31 @@ module ReportsSharedMethods
   private
 
   def output_data(range, report, step_width, divider, decimal_places = 1)
-    range.step(step_width).each_with_object(sessions: []) do |t, data|
-      average = average report, t, divider, decimal_places
+    range
+      .step(step_width)
+      .each_with_object(sessions: []) do |t, data|
+        average = average report, t, divider, decimal_places
 
-      data[:sessions] << [t, average]
-    end
+        data[:sessions] << [t, average]
+      end
   end
 
   def per_hour_output(default_sessions = sessions)
-    report = sessions_count(default_sessions) do |session|
-      offset = session - @start
-      offset - (offset % @steps.hour.to_i)
-    end
+    report =
+      sessions_count(default_sessions) do |session|
+        offset = session - @start
+        offset - (offset % @steps.hour.to_i)
+      end
 
     output_data range, report, @steps.hours, @steps
   end
 
   def daily_demand_output(default_sessions = sessions)
-    report = sessions_count(default_sessions) do |session|
-      offset = (session - session.beginning_of_day).to_i
-      offset - (offset % 5.minutes)
-    end
+    report =
+      sessions_count(default_sessions) do |session|
+        offset = (session - session.beginning_of_day).to_i
+        offset - (offset % 5.minutes)
+      end
 
     output_data 0..86_340, report, 5.minutes, days_count, 2
   end
@@ -47,10 +51,12 @@ module ReportsSharedMethods
   end
 
   def sessions_count(sessions)
-    sessions.pluck(:timestamp).each_with_object({}) do |session, data|
-      point = yield session
-      (data[point.to_i] ||= 0) << data[point.to_i] += 1
-    end
+    sessions
+      .pluck(:timestamp)
+      .each_with_object({}) do |session, data|
+        point = yield session
+        (data[point.to_i] ||= 0) << data[point.to_i] += 1
+      end
   end
 
   def days_count
@@ -62,17 +68,22 @@ module ReportsSharedMethods
   end
 
   SESSION_SOURCES = {
-    'DS' => { klass: DiscoveryServiceEvent,
-              name: 'Discovery Service',
-              idp: 'selected_idp', sp: 'initiating_sp' },
-    'IdP' => { klass: FederatedLoginEvent,
-               name: 'IdP Event Log',
-               idp: 'asserting_party', sp: 'relying_party' }
+    'DS' => {
+      klass: DiscoveryServiceEvent,
+      name: 'Discovery Service',
+      idp: 'selected_idp',
+      sp: 'initiating_sp'
+    },
+    'IdP' => {
+      klass: FederatedLoginEvent,
+      name: 'IdP Event Log',
+      idp: 'asserting_party',
+      sp: 'relying_party'
+    }
   }.freeze
 
   def sessions(where_args = {})
-    SESSION_SOURCES[@source][:klass]
-      .within_range(@start, @finish).where(where_args).sessions
+    SESSION_SOURCES[@source][:klass].within_range(@start, @finish).where(where_args).sessions
   end
 
   def idp_sessions
@@ -86,9 +97,7 @@ module ReportsSharedMethods
   def tabular_sessions(target, session_objects = sessions)
     sql = tabular_sessions_query(target, session_objects)
 
-    target.connection.execute(sql)
-          .map { |a| a.map(&:to_s) }
-          .sort_by { |a| a[0].downcase }
+    target.connection.execute(sql).map { |a| a.map(&:to_s) }.sort_by { |a| a[0].downcase }
   end
 
   TARGET_OPTS = {

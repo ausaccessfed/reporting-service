@@ -14,8 +14,7 @@ RSpec.describe IncomingFTicksEvent, type: :model do
     let!(:incoming_event) { create(:incoming_f_ticks_event) }
 
     it 'should set :discarded to true' do
-      expect { incoming_event.discard! }
-        .to change(incoming_event, :discarded).from(false).to(true)
+      expect { incoming_event.discard! }.to change(incoming_event, :discarded).from(false).to(true)
     end
   end
 end

@@ -15,18 +15,17 @@ RSpec.describe Authentication::SubjectReceiver do
     end
 
     it 'maps the attributes' do
-      expect(subject.map_attributes(env, attrs))
-        .to eq(name: 'displayname',
-               mail: 'mail',
-               shared_token: 'auedupersonsharedtoken',
-               targeted_id: 'edupersontargetedid')
+      expect(subject.map_attributes(env, attrs)).to eq(
+        name: 'displayname',
+        mail: 'mail',
+        shared_token: 'auedupersonsharedtoken',
+        targeted_id: 'edupersontargetedid'
+      )
     end
   end
 
   context '#subject' do
-    let(:attrs) do
-      attributes_for(:subject)
-    end
+    let(:attrs) { attributes_for(:subject) }
 
     def run
       subject.subject(env, attrs)
@@ -34,8 +33,7 @@ RSpec.describe Authentication::SubjectReceiver do
 
     context 'for an unknown subject' do
       it 'creates the subject' do
-        expect { run }
-          .to change(Subject, :count).by(1)
+        expect { run }.to change(Subject, :count).by(1)
       end
 
       it 'returns the new subject' do

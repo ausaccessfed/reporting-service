@@ -18,11 +18,7 @@ class Subject < ApplicationRecord
   end
 
   def entitlements=(values)
-    assigned = values.map do |value|
-      Role.for_entitlement(value).tap do |r|
-        roles << r unless roles.include?(r)
-      end
-    end
+    assigned = values.map { |value| Role.for_entitlement(value).tap { |r| roles << r unless roles.include?(r) } }
 
     subject_roles.where.not(role: assigned).destroy_all
   end

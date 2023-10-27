@@ -10,13 +10,9 @@ RSpec.describe PushEventsToFederationRegistry do
   let(:redis) { Redis.new }
   let(:ds_host) { "ds.#{Faker::Internet.domain_name}" }
 
-  let(:selected_idp) do
-    "https://idp.#{Faker::Internet.domain_name}/idp/shibboleth"
-  end
+  let(:selected_idp) { "https://idp.#{Faker::Internet.domain_name}/idp/shibboleth" }
 
-  let(:initiating_sp) do
-    "https://sp.#{Faker::Internet.domain_name}/shibboleth"
-  end
+  let(:initiating_sp) { "https://sp.#{Faker::Internet.domain_name}/shibboleth" }
 
   subject { described_class.new(ds_host) }
 
@@ -24,7 +20,7 @@ RSpec.describe PushEventsToFederationRegistry do
     before do
       allow(subject).to receive(:config).and_return(config)
 
-      client.query %(
+      client.query '
         CREATE TEMPORARY TABLE IF NOT EXISTS wayf_access_record (
           `id` bigint(20) NOT NULL AUTO_INCREMENT,
           `version` bigint(20) NOT NULL,
@@ -39,9 +35,9 @@ RSpec.describe PushEventsToFederationRegistry do
           `spid` bigint(20) NOT NULL,
           PRIMARY KEY (`id`)
         ) AUTO_INCREMENT=10000
-      )
+      '
 
-      client.query %(
+      client.query '
         CREATE TEMPORARY TABLE IF NOT EXISTS spssodescriptor (
           `id` bigint(20) NOT NULL AUTO_INCREMENT,
           `authn_requests_signed` bit(1) NOT NULL,
@@ -51,9 +47,9 @@ RSpec.describe PushEventsToFederationRegistry do
           `force_attributes_in_filter` bit(1) NOT NULL,
           PRIMARY KEY (`id`)
         ) AUTO_INCREMENT=20000
-      )
+      '
 
-      client.query %(
+      client.query '
         CREATE TEMPORARY TABLE IF NOT EXISTS idpssodescriptor (
           `id` bigint(20) NOT NULL AUTO_INCREMENT,
           `auto_accept_services` bit(1) NOT NULL,
@@ -64,9 +60,9 @@ RSpec.describe PushEventsToFederationRegistry do
           `attribute_authority_only` bit(1) NOT NULL,
           PRIMARY KEY (`id`)
         ) AUTO_INCREMENT=30000
-      )
+      '
 
-      client.query %(
+      client.query '
         CREATE TEMPORARY TABLE IF NOT EXISTS entity_descriptor (
           `id` bigint(20) NOT NULL AUTO_INCREMENT,
           `active` bit(1) NOT NULL,
@@ -80,12 +76,11 @@ RSpec.describe PushEventsToFederationRegistry do
           PRIMARY KEY (`id`),
           UNIQUE KEY `entityid` (`entityid`)
         ) AUTO_INCREMENT=40000
-      )
+      '
     end
 
     def items
-      client
-        .query('select * from wayf_access_record').to_a.map(&:symbolize_keys)
+      client.query('select * from wayf_access_record').to_a.map(&:symbolize_keys)
     end
 
     def run
@@ -140,10 +135,7 @@ RSpec.describe PushEventsToFederationRegistry do
       let(:selection_method) { 'manual' }
 
       let(:event) do
-        attributes_for(:discovery_service_event, :response,
-                       selection_method:,
-                       initiating_sp:,
-                       selected_idp:)
+        attributes_for(:discovery_service_event, :response, selection_method:, initiating_sp:, selected_idp:)
       end
 
       let!(:idp_fr_id) { create_fr_idp(selected_idp) }
@@ -191,9 +183,7 @@ RSpec.describe PushEventsToFederationRegistry do
       end
 
       context 'when the idp is unknown' do
-        before do
-          client.query('DELETE FROM idpssodescriptor')
-        end
+        before { client.query('DELETE FROM idpssodescriptor') }
 
         it 'inserts the record with a idpid of -1' do
           expect { run }.to change { items.count }.by(1)
@@ -206,9 +196,7 @@ RSpec.describe PushEventsToFederationRegistry do
       end
 
       context 'when the sp is unknown' do
-        before do
-          client.query('DELETE FROM spssodescriptor')
-        end
+        before { client.query('DELETE FROM spssodescriptor') }
 
         it 'inserts the record with a spid of -1' do
           expect { run }.to change { items.count }.by(1)
@@ -222,10 +210,7 @@ RSpec.describe PushEventsToFederationRegistry do
 
       context 'when the idp entity_id is missing' do
         let(:event) do
-          attributes_for(:discovery_service_event, :response,
-                         selection_method:,
-                         initiating_sp:,
-                         selected_idp: nil)
+          attributes_for(:discovery_service_event, :response, selection_method:, initiating_sp:, selected_idp: nil)
         end
 
         it 'skips the record' do
@@ -239,10 +224,7 @@ RSpec.describe PushEventsToFederationRegistry do
 
       context 'when the idp entity_id is missing' do
         let(:event) do
-          attributes_for(:discovery_service_event, :response,
-                         selection_method:,
-                         initiating_sp: nil,
-                         selected_idp:)
+          attributes_for(:discovery_service_event, :response, selection_method:, initiating_sp: nil, selected_idp:)
         end
 
         it 'skips the record' do
@@ -258,32 +240,26 @@ RSpec.describe PushEventsToFederationRegistry do
     context 'when multiple items are pending' do
       let!(:idps) do
         Array.new(10) do |i|
-          "https://idp#{i}.#{Faker::Internet.domain_name}/idp/shibboleth"
-            .tap { |entity_id| create_fr_idp(entity_id) }
+          "https://idp#{i}.#{Faker::Internet.domain_name}/idp/shibboleth".tap { |entity_id| create_fr_idp(entity_id) }
         end
       end
 
       let!(:sps) do
         Array.new(10) do |i|
-          "https://sp#{i}.#{Faker::Internet.domain_name}/shibboleth"
-            .tap { |entity_id| create_fr_sp(entity_id) }
+          "https://sp#{i}.#{Faker::Internet.domain_name}/shibboleth".tap { |entity_id| create_fr_sp(entity_id) }
         end
       end
 
       let(:events) do
         Array.new(100) do
-          attributes_for(:discovery_service_event, :response,
-                         initiating_sp: sps.sample,
-                         selected_idp: idps.sample)
+          attributes_for(:discovery_service_event, :response, initiating_sp: sps.sample, selected_idp: idps.sample)
         end
       end
 
       before { events.each { |e| enqueue_event(e) } }
 
       it 'stores the records' do
-        expect { run }.to change { items.count }
-          .by(100)
-          .and change { redis.llen('wayf_access_record') }.to(0)
+        expect { run }.to change { items.count }.by(100).and change { redis.llen('wayf_access_record') }.to(0)
       end
     end
   end

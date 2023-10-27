@@ -11,8 +11,7 @@ class AutomatedReportInstance < ApplicationRecord
   delegate :interval, to: :automated_report
 
   def materialize
-    args = [automated_report.target, *report_range, step_width,
-            automated_report.source_if_needed].compact
+    args = [automated_report.target, *report_range, step_width, automated_report.source_if_needed].compact
     automated_report.report_class.constantize.new(*args)
   end
 
@@ -43,12 +42,17 @@ class AutomatedReportInstance < ApplicationRecord
   end
 
   REPORTS_THAT_NEED_RANGE = %w[
-    FederationGrowthReport DailyDemandReport FederatedSessionsReport
-    IdentityProviderDailyDemandReport IdentityProviderDestinationServicesReport
+    FederationGrowthReport
+    DailyDemandReport
+    FederatedSessionsReport
+    IdentityProviderDailyDemandReport
+    IdentityProviderDestinationServicesReport
     IdentityProviderSessionsReport
-    ServiceProviderDailyDemandReport ServiceProviderSessionsReport
+    ServiceProviderDailyDemandReport
+    ServiceProviderSessionsReport
     ServiceProviderSourceIdentityProvidersReport
-    IdentityProviderUtilizationReport ServiceProviderUtilizationReport
+    IdentityProviderUtilizationReport
+    ServiceProviderUtilizationReport
   ].freeze
 
   def needs_range?
@@ -56,7 +60,8 @@ class AutomatedReportInstance < ApplicationRecord
   end
 
   REPORTS_THAT_NEED_STEP_WIDTH = %w[
-    FederatedSessionsReport IdentityProviderSessionsReport
+    FederatedSessionsReport
+    IdentityProviderSessionsReport
     ServiceProviderSessionsReport
   ].freeze
 

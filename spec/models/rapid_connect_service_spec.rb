@@ -20,13 +20,11 @@ RSpec.describe RapidConnectService, type: :model do
     let!(:service) { create(:rapid_connect_service) }
 
     it 'finds by entity id' do
-      expect(described_class.find_by_identifying_attribute(service.identifier))
-        .to eq(service)
+      expect(described_class.find_by_identifying_attribute(service.identifier)).to eq(service)
     end
 
     it 'returns nil when not found' do
-      expect(described_class.find_by_identifying_attribute('urn:nonexistent'))
-        .to be_nil
+      expect(described_class.find_by_identifying_attribute('urn:nonexistent')).to be_nil
     end
   end
 end

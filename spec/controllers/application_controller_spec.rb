@@ -3,7 +3,8 @@
 require 'rails_helper'
 require 'gumboot/shared_examples/application_controller'
 
-class SomeReportsController < ApplicationController; end
+class SomeReportsController < ApplicationController
+end
 
 RSpec.describe ApplicationController, type: :controller do
   include_examples 'Application controller'
@@ -19,10 +20,8 @@ RSpec.describe ApplicationController, type: :controller do
 
   before do
     @routes.draw do
-      match 'some_reports/report_action/:id' => 'some_reports#report_action',
-            via: %i[get post]
-      match 'anonymous/federation_growth' => 'anonymous#federation_growth',
-            via: %i[get post]
+      match 'some_reports/report_action/:id' => 'some_reports#report_action', :via => %i[get post]
+      match 'anonymous/federation_growth' => 'anonymous#federation_growth', :via => %i[get post]
     end
   end
 

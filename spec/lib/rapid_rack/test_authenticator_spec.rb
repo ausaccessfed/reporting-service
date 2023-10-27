@@ -6,8 +6,7 @@ require 'rack/test'
 module RapidRack
   RSpec.describe TestAuthenticator, type: :feature do
     def build_app(prefix)
-      opts = { receiver:, secret:,
-               issuer:, audience: }
+      opts = { receiver:, secret:, issuer:, audience: }
       Rack::Builder.new do
         map(prefix) { run TestAuthenticator.new(opts) }
         run Rack::Lobster.new
@@ -18,8 +17,7 @@ module RapidRack
       config = Rails.application.config.reporting_service.rapid_connect
       config[:rack][:receiver] = receiver
 
-      allow(Rails.application.config.reporting_service).to receive(:rapid_connect)
-        .and_return(config)
+      allow(Rails.application.config.reporting_service).to receive(:rapid_connect).and_return(config)
     end
 
     let(:prefix) { '/auth' }
@@ -27,9 +25,7 @@ module RapidRack
     let(:audience) { 'https://service.example.com' }
     let(:secret) { '1234abcd' }
     let(:app) { build_app(prefix) }
-    let(:receiver) do
-      TemporaryTestClass.build_class
-    end
+    let(:receiver) { TemporaryTestClass.build_class }
 
     subject { response }
 
@@ -50,9 +46,7 @@ module RapidRack
         it { is_expected.to be_successful }
 
         context 'login form' do
-          subject do
-            response.body
-          end
+          subject { response.body }
 
           it { is_expected.to match(%r{form action="/auth/jwt"}) }
           it { is_expected.to match(/input type="hidden" name="assertion" value="the jwt"/) }

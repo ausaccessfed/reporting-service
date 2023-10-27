@@ -20,37 +20,28 @@ RSpec.shared_context 'Utilization Report' do
   end
 
   context '#Generate' do
-    let(:counts) do
-      objects.each_with_object({}) { |e, a| e[a.id] = rand(1..10) }
-    end
+    let(:counts) { objects.each_with_object({}) { |e, a| e[a.id] = rand(1..10) } }
 
     def create_events(objects, start, finish)
       objects.each_with_object({}) do |o, a|
-        events = Array.new(rand(1..5)) do
-          time = Time.at(rand(start.to_i..finish.to_i)).utc
-          create_event(time, o.entity_id)
-        end
+        events =
+          Array.new(rand(1..5)) do
+            time = Time.at(rand(start.to_i..finish.to_i)).utc
+            create_event(time, o.entity_id)
+          end
 
         a[o.id] = events.length
       end
     end
 
-    let!(:included_object_event_counts) do
-      create_events(included_objects, start, finish)
-    end
+    let!(:included_object_event_counts) { create_events(included_objects, start, finish) }
 
-    let!(:before_object_event_counts) do
-      create_events(before_objects, 1.week.until(start), start)
-    end
+    let!(:before_object_event_counts) { create_events(before_objects, 1.week.until(start), start) }
 
-    let!(:after_object_event_counts) do
-      create_events(after_objects, finish, 1.week.since(finish))
-    end
+    let!(:after_object_event_counts) { create_events(after_objects, finish, 1.week.since(finish)) }
 
     it 'should render a report row' do
-      expected = included_objects.map do |o|
-        [o.name, included_object_event_counts[o.id].to_s]
-      end
+      expected = included_objects.map { |o| [o.name, included_object_event_counts[o.id].to_s] }
 
       expect(report[:rows]).to match_array(expected)
     end
@@ -61,11 +52,7 @@ RSpec.shared_context 'Utilization Report' do
     end
 
     context 'with random case permutations' do
-      before do
-        objects.each do |o|
-          o.update!(name: o.name.send(%i[upcase downcase].sample))
-        end
-      end
+      before { objects.each { |o| o.update!(name: o.name.send(%i[upcase downcase].sample)) } }
 
       it 'sorts the rows in name order' do
         names = report[:rows].map(&:first)

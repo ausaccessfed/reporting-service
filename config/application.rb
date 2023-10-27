@@ -29,23 +29,31 @@ module ReportingService
     config.reporting_service = OpenStruct.new(ReportingService::Configuration.build_configuration)
     # rubocop:enable Style/OpenStructUse
 
-    config.cache_store = [:redis_cache_store, {
-      url: config.reporting_service.redis[:url],
-      ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE },
-      namespace: config.reporting_service.redis[:namespace],
-      expires_in: 1.day
-    }]
-    config.redis_client = Redis.new(
-      url: Rails.application.config.reporting_service.redis[:url],
-      ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE }
-    )
+    config.cache_store = [
+      :redis_cache_store,
+      {
+        url: config.reporting_service.redis[:url],
+        ssl_params: {
+          verify_mode: OpenSSL::SSL::VERIFY_NONE
+        },
+        namespace: config.reporting_service.redis[:namespace],
+        expires_in: 1.day
+      }
+    ]
+    config.redis_client =
+      Redis.new(
+        url: Rails.application.config.reporting_service.redis[:url],
+        ssl_params: {
+          verify_mode: OpenSSL::SSL::VERIFY_NONE
+        }
+      )
 
     if ENV['RAILS_LOG_TO_STDOUT'].present?
-      logger           = ActiveSupport::Logger.new(ENV.fetch('STDOUT', $stdout))
+      logger = ActiveSupport::Logger.new(ENV.fetch('STDOUT', $stdout))
       logger.formatter = config.log_formatter
-      config.logger    = ActiveSupport::TaggedLogging.new(logger)
+      config.logger = ActiveSupport::TaggedLogging.new(logger)
       config.lograge.enabled = true
-      config.lograge.ignore_actions = ['HealthController#show', 'WelcomeController#index']
+      config.lograge.ignore_actions = %w[HealthController#show WelcomeController#index]
     end
   end
 end

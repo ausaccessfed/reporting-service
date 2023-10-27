@@ -10,20 +10,11 @@ RSpec.describe ServiceCompatibilityReport do
   let(:core_attributes) { create_list :saml_attribute, 8, :core_attribute }
   let(:other_attributes) { create_list :saml_attribute, 5 }
 
-  let(:identity_provider_01) do
-    create :identity_provider,
-           saml_attributes: [*core_attributes, *other_attributes]
-  end
+  let(:identity_provider_01) { create :identity_provider, saml_attributes: [*core_attributes, *other_attributes] }
 
-  let(:incompatible_identity_provider) do
-    create :identity_provider,
-           saml_attributes: core_attributes[0..2]
-  end
+  let(:incompatible_identity_provider) { create :identity_provider, saml_attributes: core_attributes[0..2] }
 
-  let(:inactive_identity_provider) do
-    create :identity_provider,
-           saml_attributes: [*core_attributes, *other_attributes]
-  end
+  let(:inactive_identity_provider) { create :identity_provider, saml_attributes: [*core_attributes, *other_attributes] }
 
   before do
     core_attributes.each do |attribute|

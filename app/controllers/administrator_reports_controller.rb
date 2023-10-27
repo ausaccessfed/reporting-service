@@ -4,13 +4,11 @@ class AdministratorReportsController < ApplicationController
   include Steps
 
   before_action { check_access! 'admin:report' }
-  before_action :set_range_params,
-                except: %i[subscriber_registrations_report index]
-  before_action :set_source,
-                except: %i[subscriber_registrations_report
-                           federation_growth_report index]
+  before_action :set_range_params, except: %i[subscriber_registrations_report index]
+  before_action :set_source, except: %i[subscriber_registrations_report federation_growth_report index]
 
-  def index; end
+  def index
+  end
 
   def subscriber_registrations_report
     return if params[:identifier].blank?

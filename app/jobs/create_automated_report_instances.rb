@@ -4,8 +4,7 @@ class CreateAutomatedReportInstances
   include Rails.application.routes.url_helpers
 
   def initialize
-    @base_url = Rails.application.config
-                     .reporting_service.url_options[:base_url]
+    @base_url = Rails.application.config.reporting_service.url_options[:base_url]
   end
 
   def perform
@@ -18,19 +17,13 @@ class CreateAutomatedReportInstances
   private
 
   def report_instances
-    AutomatedReportInstance.transaction do
-      select_reports.flat_map do |report|
-        perform_create(report)
-      end
-    end
+    AutomatedReportInstance.transaction { select_reports.flat_map { |report| perform_create(report) } }
   end
 
   def perform_create(report)
     report.update!(instances_timestamp: range_end)
 
-    AutomatedReportInstance
-      .create!(identifier: SecureRandom.urlsafe_base64,
-               automated_report: report, range_end:)
+    AutomatedReportInstance.create!(identifier: SecureRandom.urlsafe_base64, automated_report: report, range_end:)
   end
 
   def select_reports
@@ -40,10 +33,10 @@ class CreateAutomatedReportInstances
   def reports_with_intervals
     reports = AutomatedReport.preload(:automated_report_subscriptions)
 
-    reports = reports.select do |r|
-      (r.instances_timestamp.blank? || r.instances_timestamp < range_end) &&
-        r.automated_report_subscriptions.present?
-    end
+    reports =
+      reports.select do |r|
+        (r.instances_timestamp.blank? || r.instances_timestamp < range_end) && r.automated_report_subscriptions.present?
+      end
 
     reports.group_by(&:interval)
   end
@@ -75,19 +68,22 @@ class CreateAutomatedReportInstances
     report_class = report.report_class
 
     subscriptions.each do |subscription|
-      Mail.deliver(to: subscription.subject.mail,
-                   from: Rails.application.config
-                              .reporting_service.mail[:from],
-                   subject: 'AAF Reporting Service - New Report Generated',
-                   body: email_message(identifier, report_class).render,
-                   content_type: 'text/html; charset=UTF-8')
+      Mail.deliver(
+        to: subscription.subject.mail,
+        from: Rails.application.config.reporting_service.mail[:from],
+        subject: 'AAF Reporting Service - New Report Generated',
+        body: email_message(identifier, report_class).render,
+        content_type: 'text/html; charset=UTF-8'
+      )
     end
   end
 
   def email_message(identifier, report_class)
-    Lipstick::EmailMessage.new(title: 'AAF Reporting Service',
-                               image_url: image_url('email_banner.png'),
-                               content: email_body(identifier, report_class))
+    Lipstick::EmailMessage.new(
+      title: 'AAF Reporting Service',
+      image_url: image_url('email_banner.png'),
+      content: email_body(identifier, report_class)
+    )
   end
 
   def email_body(identifier, report_class)

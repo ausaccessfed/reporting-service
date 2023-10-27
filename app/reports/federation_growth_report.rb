@@ -5,9 +5,7 @@ class FederationGrowthReport < TimeSeriesReport
   y_label 'Count'
   units ''
 
-  series services: 'Services',
-         identity_providers: 'Identity Providers',
-         organizations: 'Organizations'
+  series services: 'Services', identity_providers: 'Identity Providers', organizations: 'Organizations'
 
   def initialize(start, finish)
     @start = start
@@ -27,8 +25,7 @@ class FederationGrowthReport < TimeSeriesReport
   def data
     activations = Activation.where('activated_at <= ?', @finish)
 
-    range.each_with_object(organizations: [], identity_providers: [],
-                           services: []) do |time, data|
+    range.each_with_object(organizations: [], identity_providers: [], services: []) do |time, data|
       report = data_report time, activations
       total = 0
 
@@ -40,13 +37,12 @@ class FederationGrowthReport < TimeSeriesReport
   end
 
   def data_report(time, activations)
-    objects = activations.select do |o|
-      o.activated_at <= @start + time &&
-        (o.deactivated_at.nil? || o.deactivated_at > @start + time)
-    end
+    objects =
+      activations.select do |o|
+        o.activated_at <= @start + time && (o.deactivated_at.nil? || o.deactivated_at > @start + time)
+      end
 
-    data = objects.group_by(&:federation_object_type)
-                  .transform_values { |a| a.uniq(&:federation_object_id) }
+    data = objects.group_by(&:federation_object_type).transform_values { |a| a.uniq(&:federation_object_id) }
 
     merged_report data
   end
@@ -54,9 +50,10 @@ class FederationGrowthReport < TimeSeriesReport
   def merged_report(data)
     report = Hash.new([]).merge(data)
 
-    { organizations: report['Organization'].count,
+    {
+      organizations: report['Organization'].count,
       identity_providers: report['IdentityProvider'].count,
-      services: report['RapidConnectService'].count +
-        report['ServiceProvider'].count }
+      services: report['RapidConnectService'].count + report['ServiceProvider'].count
+    }
   end
 end

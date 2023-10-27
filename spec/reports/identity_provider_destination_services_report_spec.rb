@@ -19,18 +19,14 @@ RSpec.describe IdentityProviderDestinationServicesReport do
   let(:sp3) { create :service_provider }
   let(:sp4) { create :service_provider }
 
-  subject do
-    IdentityProviderDestinationServicesReport.new(idp.entity_id, start, finish,
-                                                  source)
-  end
+  subject { IdentityProviderDestinationServicesReport.new(idp.entity_id, start, finish, source) }
 
   let(:report) { subject.generate }
 
   shared_examples 'IdP Destination Report' do
     it 'output should include :type, :title, :header and :footer' do
       output_title = "#{title} #{idp.name} (#{source_name})"
-      expect(report).to include(type:,
-                                title: output_title, header:)
+      expect(report).to include(type:, title: output_title, header:)
     end
   end
 
@@ -61,10 +57,9 @@ RSpec.describe IdentityProviderDestinationServicesReport do
 
   context 'when sessions are Discovery Service sessions' do
     def create_event(idp_entity_id, sp_entity_id = nil, timestamp = nil)
-      create :discovery_service_event, :response,
-             { selected_idp: idp_entity_id,
-               initiating_sp: sp_entity_id,
-               timestamp: }.compact
+      create :discovery_service_event,
+             :response,
+             { selected_idp: idp_entity_id, initiating_sp: sp_entity_id, timestamp: }.compact
     end
 
     let(:source) { 'DS' }
@@ -76,10 +71,9 @@ RSpec.describe IdentityProviderDestinationServicesReport do
 
   context 'when events are IdP sessions' do
     def create_event(idp_entity_id, sp_entity_id = nil, timestamp = nil)
-      create :federated_login_event, :OK,
-             { asserting_party: idp_entity_id,
-               relying_party: sp_entity_id,
-               timestamp: }.compact
+      create :federated_login_event,
+             :OK,
+             { asserting_party: idp_entity_id, relying_party: sp_entity_id, timestamp: }.compact
     end
 
     let(:source) { 'IdP' }

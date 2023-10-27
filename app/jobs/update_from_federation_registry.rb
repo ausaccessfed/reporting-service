@@ -13,9 +13,7 @@ class UpdateFromFederationRegistry
   private
 
   def sync_attributes
-    fr_objects(:attributes, 'attributes').map do |attr_data|
-      sync_attribute(attr_data)
-    end
+    fr_objects(:attributes, 'attributes').map { |attr_data| sync_attribute(attr_data) }
   end
 
   def sync_organizations
@@ -52,37 +50,31 @@ class UpdateFromFederationRegistry
 
   def sync_attribute(attr_data)
     attribute = SAMLAttribute.find_or_initialize_by(name: attr_data[:name])
-    attribute.update!(core: (attr_data[:category][:name] == 'Core'),
-                      description: attr_data[:description])
+    attribute.update!(core: (attr_data[:category][:name] == 'Core'), description: attr_data[:description])
 
     attribute
   end
 
   def sync_organization(org_data)
     identifier = org_identifier(org_data[:id])
-    sync_object(Organization, org_data, { identifier: },
-                name: org_data[:display_name])
+    sync_object(Organization, org_data, { identifier: }, name: org_data[:display_name])
   end
 
   def sync_saml_entity(org, klass, obj_data)
     entity_id = obj_data[:saml][:entity][:entity_id]
-    sync_object(klass, obj_data, { entity_id: },
-                name: obj_data[:display_name], organization: org)
+    sync_object(klass, obj_data, { entity_id: }, name: obj_data[:display_name], organization: org)
   end
 
   def sync_idp_attributes(idp, idp_data)
     idp_data[:saml][:attributes].map do |attr_data|
-      sync_saml_entity_attribute(idp.identity_provider_saml_attributes,
-                                 attr_data)
+      sync_saml_entity_attribute(idp.identity_provider_saml_attributes, attr_data)
     end
   end
 
   def sync_sp_attributes(sp, sp_data)
     sp_data[:saml][:attribute_consuming_services].flat_map do |acs|
       acs[:attributes].map do |attr_data|
-        sync_saml_entity_attribute(sp.service_provider_saml_attributes,
-                                   attr_data,
-                                   optional: !attr_data[:is_required])
+        sync_saml_entity_attribute(sp.service_provider_saml_attributes, attr_data, optional: !attr_data[:is_required])
       end
     end
   end
@@ -106,16 +98,21 @@ class UpdateFromFederationRegistry
   def activate_object(obj, obj_data)
     activation_attrs = { activated_at: obj_data[:created_at] }
 
-    activation_attrs[:deactivated_at] =
-      obj_data[:functioning] ? nil : obj_data[:updated_at]
+    activation_attrs[:deactivated_at] = obj_data[:functioning] ? nil : obj_data[:updated_at]
 
     obj.activations.find_or_initialize_by({}).update!(activation_attrs)
   end
 
   def clean(touched_objs)
     grouped_objs = touched_objs.group_by(&:class)
-    klasses = [IdentityProviderSAMLAttribute, ServiceProviderSAMLAttribute,
-               IdentityProvider, ServiceProvider, SAMLAttribute, Organization]
+    klasses = [
+      IdentityProviderSAMLAttribute,
+      ServiceProviderSAMLAttribute,
+      IdentityProvider,
+      ServiceProvider,
+      SAMLAttribute,
+      Organization
+    ]
     klasses.each do |klass|
       objs = grouped_objs.fetch(klass, [])
       klass.where.not(id: objs.map(&:id)).destroy_all

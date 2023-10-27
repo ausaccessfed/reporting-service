@@ -2,34 +2,42 @@
 
 class FederationReportsController < ApplicationController
   before_action :set_range
-  before_action :set_source, only: %i[federated_sessions_report
-                                      daily_demand_report]
+  before_action :set_source, only: %i[federated_sessions_report daily_demand_report]
 
   def federation_growth_report
     public_action
 
-    @data = Rails.cache.fetch('public/federation-growth') do
-      report = FederationGrowthReport.new(@start, @end)
-      JSON.generate(report.generate)
-    end
+    @data =
+      Rails
+        .cache
+        .fetch('public/federation-growth') do
+          report = FederationGrowthReport.new(@start, @end)
+          JSON.generate(report.generate)
+        end
   end
 
   def federated_sessions_report
     public_action
 
-    @data = Rails.cache.fetch('public/federated-sessions') do
-      report = FederatedSessionsReport.new(@start, @end, 10, @source)
-      JSON.generate(report.generate)
-    end
+    @data =
+      Rails
+        .cache
+        .fetch('public/federated-sessions') do
+          report = FederatedSessionsReport.new(@start, @end, 10, @source)
+          JSON.generate(report.generate)
+        end
   end
 
   def daily_demand_report
     public_action
 
-    @data = Rails.cache.fetch('public/daily-demand') do
-      report = DailyDemandReport.new(@start, @end, @source)
-      JSON.generate(report.generate)
-    end
+    @data =
+      Rails
+        .cache
+        .fetch('public/daily-demand') do
+          report = DailyDemandReport.new(@start, @end, @source)
+          JSON.generate(report.generate)
+        end
   end
 
   private

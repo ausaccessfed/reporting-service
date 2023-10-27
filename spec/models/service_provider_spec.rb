@@ -18,13 +18,11 @@ RSpec.describe ServiceProvider, type: :model do
     let!(:sp) { create(:service_provider) }
 
     it 'finds by entity id' do
-      expect(described_class.find_by_identifying_attribute(sp.entity_id))
-        .to eq(sp)
+      expect(described_class.find_by_identifying_attribute(sp.entity_id)).to eq(sp)
     end
 
     it 'returns nil when not found' do
-      expect(described_class.find_by_identifying_attribute('urn:nonexistent'))
-        .to be_nil
+      expect(described_class.find_by_identifying_attribute('urn:nonexistent')).to be_nil
     end
   end
 end

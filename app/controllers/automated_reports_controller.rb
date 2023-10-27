@@ -42,8 +42,7 @@ class AutomatedReportsController < AutomatedReports
   end
 
   def create_subscription
-    subscriptions.create!(identifier: SecureRandom.urlsafe_base64,
-                          automated_report:)
+    subscriptions.create!(identifier: SecureRandom.urlsafe_base64, automated_report:)
   end
 
   def subscription_exists?
@@ -56,12 +55,8 @@ class AutomatedReportsController < AutomatedReports
 
   def automated_report_params
     params.require(%i[report_class interval])
-    params.require(:source) if AutomatedReport.report_class_needs_source?(
-      params[:report_class]
-    )
-    params.require(:target) if AutomatedReport.report_class_needs_target?(
-      params[:report_class]
-    )
+    params.require(:source) if AutomatedReport.report_class_needs_source?(params[:report_class])
+    params.require(:target) if AutomatedReport.report_class_needs_target?(params[:report_class])
     params.permit(:interval, :target, :report_class, :source)
   end
 end

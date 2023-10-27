@@ -4,8 +4,7 @@ require 'rack/lobster'
 
 RSpec.describe RapidRack::Authenticator, type: :feature do
   def build_app(prefix)
-    opts = { url:, receiver:, secret:,
-             issuer:, audience:, error_handler: handler }
+    opts = { url:, receiver:, secret:, issuer:, audience:, error_handler: handler }
     Rack::Builder.new do
       map(prefix) { run RapidRack::Authenticator.new(opts) }
       run Rack::Lobster.new
@@ -17,8 +16,7 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
     config[:rack][:receiver] = receiver
     config[:rack][:error_handler] = handler
 
-    allow(Rails.application.config.reporting_service).to receive(:rapid_connect)
-      .and_return(config)
+    allow(Rails.application.config.reporting_service).to receive(:rapid_connect).and_return(config)
   end
 
   let(:prefix) { '/auth' }
@@ -95,8 +93,12 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
 
     let(:attrs) do
       {
-        cn: 'Test User', displayname: 'Test User X', surname: 'User',
-        givenname: 'Test', mail: 'testuser@example.com', o: 'Test Org',
+        cn: 'Test User',
+        displayname: 'Test User X',
+        surname: 'User',
+        givenname: 'Test',
+        mail: 'testuser@example.com',
+        o: 'Test Org',
         edupersonscopedaffiliation: 'member@example.com',
         edupersonprincipalname: 'testuser@example.com',
         auedupersonsharedtoken: 'secret',
@@ -106,9 +108,14 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
 
     let(:valid_claims) do
       {
-        aud: audience, iss: issuer, iat: Time.zone.now, typ: 'authnresponse',
-        nbf: 1.minute.ago, exp: 2.minutes.from_now,
-        jti: 'accept', 'https://aaf.edu.au/attributes' => attrs
+        :aud => audience,
+        :iss => issuer,
+        :iat => Time.zone.now,
+        :typ => 'authnresponse',
+        :nbf => 1.minute.ago,
+        :exp => 2.minutes.from_now,
+        :jti => 'accept',
+        'https://aaf.edu.au/attributes' => attrs
       }
     end
 
@@ -147,11 +154,7 @@ RSpec.describe RapidRack::Authenticator, type: :feature do
 
         it 'complains about the invalid field' do
           val = claims[field]
-          expected = if val.nil?
-                       "nil #{field}"
-                     else
-                       "bad #{field}: #{val}"
-                     end
+          expected = (val.nil? ? "nil #{field}" : "bad #{field}: #{val}")
 
           expect(subject.body).to have_content(expected)
         end
