@@ -29,7 +29,7 @@ gem 'torba-rails'
 # rubocop:disable Metrics/BlockLength
 group :development, :test do
   gem 'database_cleaner'
-  gem 'factory_bot_rails', '~> 4.11'
+  gem 'factory_bot_rails', '~> 6.4'
   gem 'faker'
   gem 'fakeredis'
   gem 'rails-controller-testing'
