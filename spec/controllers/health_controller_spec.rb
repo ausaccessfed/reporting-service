@@ -16,13 +16,35 @@ RSpec.describe HealthController do
       end
     end
 
-    context 'when db is inaccessible' do
-      before { allow(ActiveRecord::Base.connection).to receive(:active?).and_throw(StandardError) }
+    context 'when db is inaccessible via error' do
+      before { allow(ActiveRecord::Base.connection).to receive(:current_database).and_throw(StandardError) }
 
       it 'returns http 503' do
         show
         expect(response).to have_http_status(:service_unavailable)
         expect(response.parsed_body.symbolize_keys).to match(hash_including({ db_active: false }))
+      end
+    end
+
+    context 'when db is inaccessible' do
+      before { allow(ActiveRecord::Base.connection).to receive(:current_database).and_return(database_name) }
+
+      let(:database_name) { nil }
+
+      it 'returns http 503' do
+        show
+        expect(response).to have_http_status(:service_unavailable)
+        expect(response.parsed_body.symbolize_keys).to match(hash_including({ db_active: false }))
+      end
+
+      context 'when empty' do
+        let(:database_name) { '' }
+
+        it 'returns http 503' do
+          show
+          expect(response).to have_http_status(:service_unavailable)
+          expect(response.parsed_body.symbolize_keys).to match(hash_including({ db_active: false }))
+        end
       end
     end
 

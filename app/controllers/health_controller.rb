@@ -31,7 +31,7 @@ class HealthController < ApplicationController
   end
 
   def db_active?
-    ActiveRecord::Base.connection.active?
+    ActiveRecord::Base.connection.current_database.present?
   rescue StandardError
     false
   end
