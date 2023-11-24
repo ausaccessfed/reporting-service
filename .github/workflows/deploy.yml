@@ -1,24 +1,26 @@
 name: Build Docker Image
 on:
   push:
+  schedule:
+    - cron: "0 0 1 * *"
   issue_comment:
     types: [created]
-  schedule:
-    - cron: '0 0 1 * *'
 jobs:
   push:
     concurrency:
-      group: ${{ github.event_name }}-${{ github.ref_name == 'master' && github.sha || github.ref_name }}-build
+      group: ${{ github.event.comment.id }}-${{ github.event_name }}-${{ github.ref_name == 'master' && github.sha || github.ref_name }}-build
       cancel-in-progress: true
     name: Test, build and push image
     permissions:
       id-token: write
       contents: read
       statuses: write
+      issues: read
       pull-requests: write
     secrets: inherit
     uses: ausaccessfed/workflows/.github/workflows/deploy-sync.yml@main
     with:
+
       ecr_repository: reporting-service
       dev_url: https://reporting.dev.aaf.edu.au
       event_name: ${{ github.event_name }}
