@@ -3,8 +3,8 @@ on:
   pull_request:
     types: [opened, reopened]
 jobs:
-  auto_approver:
-    name: 'PR Housekeeping'
+  pr_housekeeping:
+    name: "PR Housekeeping"
     permissions:
       contents: write
       issues: write
