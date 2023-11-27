@@ -1,13 +1,12 @@
+# https://github.com/ausaccessfed/workflows/blob/main/.github/workflows/distributions/.dockerignore
 /.git
 /.github
 /.idea
 /.vscode
 /Dockerfile
 /compose.yml
-/copilot
 /coverage
 /docs
-/dump.rdb
 /log
 /public/assets
 /tmp
