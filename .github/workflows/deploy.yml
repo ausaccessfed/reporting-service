@@ -1,3 +1,4 @@
+# https://github.com/ausaccessfed/workflows/blob/main/.github//workflows/distributions/deploy.yml
 name: Build Docker Image
 on:
   push:
@@ -20,6 +21,7 @@ jobs:
     secrets: inherit
     uses: ausaccessfed/workflows/.github/workflows/deploy-sync.yml@main
     with:
+
 
 
       ecr_repository: reporting-service
