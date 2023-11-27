@@ -21,9 +21,6 @@ jobs:
     secrets: inherit
     uses: ausaccessfed/workflows/.github/workflows/deploy-sync.yml@main
     with:
-
-
-
       ecr_repository: reporting-service
       dev_url: https://reporting.dev.aaf.edu.au
       event_name: ${{ github.event_name }}
