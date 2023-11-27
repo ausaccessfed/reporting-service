@@ -1,0 +1,15 @@
+# https://github.com/ausaccessfed/workflows/blob/main/.github/workflows/distributions/.github/workflows/pr-housekeeping.yml
+name: PR Housekeeping
+on:
+  pull_request:
+    types: [opened, reopened]
+jobs:
+  pr_housekeeping:
+    name: "PR Housekeeping"
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    secrets:
+      REPO_SCOPED_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    uses: ausaccessfed/workflows/.github/workflows/pr-housekeeping.yml@main
