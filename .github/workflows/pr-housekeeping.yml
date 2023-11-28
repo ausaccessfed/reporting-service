@@ -1,4 +1,3 @@
-# https://github.com/ausaccessfed/workflows/blob/main/.github/workflows/distributions/.github/workflows/pr-housekeeping.yml
 name: PR Housekeeping
 on:
   pull_request:
