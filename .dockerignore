@@ -12,3 +12,4 @@
 ./coverage
 .env*
 node_modules
+#EOF_DISTRIBUTION
