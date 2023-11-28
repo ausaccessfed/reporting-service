@@ -7,7 +7,9 @@ vendor
 dump.rdb
 .idea
 .env
-.vscode
+!.*env*.dist
+.vscode/*
+!**/*vscode/extensions.json
 node_modules
 #EOF_DISTRIBUTION
 config/rapidconnect.yml
