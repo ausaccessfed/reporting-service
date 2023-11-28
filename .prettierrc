@@ -1,3 +1,4 @@
+# https://github.com/ausaccessfed/workflows/blob/main/.github/workflows/distributions/.prettierrc
 {
   "trailingComma": "none",
   "semi": false,
