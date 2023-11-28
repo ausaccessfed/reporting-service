@@ -1,21 +1,12 @@
-config/rapidconnect.yml
-config/deploy.yml
-config/reporting_service.yml
-config/api-client.*
-config/event_encryption_key.pem
-spec/examples.txt
-
+# https://github.com/ausaccessfed/workflows/blob/main/.github/workflows/distributions/.gitignore
 public/*
-
 coverage
 tmp
 log
 vendor
 .DS_Store
 dump.rdb
-
 .idea
-reporting-service.iml
 .env
 .vscode
 node_modules
