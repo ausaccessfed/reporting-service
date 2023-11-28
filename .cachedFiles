@@ -1,1 +1,14 @@
-.someRandomFile
+workflows/distributions/.dockerignore
+workflows/distributions/.dockleignore
+workflows/distributions/.editorconfig
+workflows/distributions/.eslintignore
+workflows/distributions/.eslintrc
+workflows/distributions/.github/workflows/deploy.yml
+workflows/distributions/.github/workflows/pr-housekeeping.yml
+workflows/distributions/.gitignore
+workflows/distributions/.hadolint.yaml
+workflows/distributions/.prettierignore
+workflows/distributions/.prettierrc
+workflows/distributions/.streerc
+workflows/distributions/package.json
+workflows/distributions/yarn.lock
