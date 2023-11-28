@@ -1,4 +1,3 @@
-# https://github.com/ausaccessfed/workflows/blob/main/.github/workflows/distributions/.eslintignore
 node_modules
 tmp
 coverage
