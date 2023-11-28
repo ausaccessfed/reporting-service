@@ -10,5 +10,6 @@ workflows/distributions/.hadolint.yaml
 workflows/distributions/.prettierignore
 workflows/distributions/.prettierrc
 workflows/distributions/.streerc
+workflows/distributions/.vscode/extensions.json
 workflows/distributions/package.json
 workflows/distributions/yarn.lock
