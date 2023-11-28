@@ -1,4 +1,3 @@
-# https://github.com/ausaccessfed/workflows/blob/main/.github/workflows/distributions/.github/workflows/deploy.yml
 name: Build Docker Image
 on:
   push:
