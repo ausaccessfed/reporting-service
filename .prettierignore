@@ -1,2 +1,3 @@
+# https://github.com/ausaccessfed/workflows/blob/main/.github/workflows/distributions/.prettierignore
 node_modules
 .torba
