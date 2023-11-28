@@ -1,16 +1,15 @@
+# https://github.com/ausaccessfed/workflows/blob/main/.github/workflows/distributions/.eslintignore
 node_modules
 tmp
 coverage
 .vscode
 yarn.lock
 Gemfile.lock
-
 .env*
 !.env*.dist
 coverage
 public/assets
 tmp
-config/event_encryption_key.pem
 .sass-cache
 .idea
 dump.rdb
