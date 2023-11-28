@@ -15,3 +15,4 @@ dump.rdb
 *.iml
 .vscode
 .DS_Store
+#EOF_DISTRIBUTION
