@@ -1,4 +1,15 @@
-config/rapidconnect.yml
+public/*
+coverage
+tmp
+log
+vendor
+.DS_Store
+dump.rdb
+.idea
+.env
+.vscode
+node_modules
+#EOF_DISTRIBUTIONconfig/rapidconnect.yml
 config/deploy.yml
 config/reporting_service.yml
 config/api-client.*
