@@ -1,4 +1,3 @@
-# https://github.com/ausaccessfed/workflows/blob/main/.github/workflows/distributions/.streerc
 --print-width=120
 --plugins=plugin/single_quotes
 --ignore-files='node_modules/*'
