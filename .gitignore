@@ -1,3 +1,15 @@
+public/*
+coverage
+tmp
+log
+vendor
+.DS_Store
+dump.rdb
+.idea
+.env
+.vscode
+node_modules
+#EOF_DISTRIBUTION
 config/rapidconnect.yml
 config/deploy.yml
 config/reporting_service.yml
