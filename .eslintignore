@@ -4,6 +4,24 @@ coverage
 .vscode
 yarn.lock
 Gemfile.lock
+.env*
+!.env*.dist
+coverage
+public/assets
+tmp
+.sass-cache
+.idea
+dump.rdb
+*.iml
+.vscode
+.DS_Store
+#EOF_DISTRIBUTION
+node_modules
+tmp
+coverage
+.vscode
+yarn.lock
+Gemfile.lock
 
 .env*
 !.env*.dist
