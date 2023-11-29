@@ -1,9 +1,1 @@
-# top-most EditorConfig file
-root = true
-
-# Unix-style newlines with a newline ending every file
-[*]
-end_of_line = lf
-insert_final_newline = true
-trim_trailing_whitespace = true
-#EOF_DISTRIBUTION
+IyB0b3AtbW9zdCBFZGl0b3JDb25maWcgZmlsZQpyb290ID0gdHJ1ZQoKIyBVbml4LXN0eWxlIG5ld2xpbmVzIHdpdGggYSBuZXdsaW5lIGVuZGluZyBldmVyeSBmaWxlClsqXQplbmRfb2ZfbGluZSA9IGxmCmluc2VydF9maW5hbF9uZXdsaW5lID0gdHJ1ZQp0cmltX3RyYWlsaW5nX3doaXRlc3BhY2UgPSB0cnVlCiNFT0ZfRElTVFJJQlVUSU9O
