@@ -1,14 +1,1 @@
-name: PR Housekeeping
-on:
-  pull_request:
-    types: [opened, reopened]
-jobs:
-  pr_housekeeping:
-    name: "PR Housekeeping"
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
-    secrets:
-      REPO_SCOPED_TOKEN: ${{secrets.GITHUB_TOKEN}}
-    uses: ausaccessfed/workflows/.github/workflows/pr-housekeeping.yml@main
+bmFtZTogUFIgSG91c2VrZWVwaW5nCm9uOgogIHB1bGxfcmVxdWVzdDoKICAgIHR5cGVzOiBbb3BlbmVkLCByZW9wZW5lZF0Kam9iczoKICBwcl9ob3VzZWtlZXBpbmc6CiAgICBuYW1lOiAiUFIgSG91c2VrZWVwaW5nIgogICAgcGVybWlzc2lvbnM6CiAgICAgIGNvbnRlbnRzOiB3cml0ZQogICAgICBpc3N1ZXM6IHdyaXRlCiAgICAgIHB1bGwtcmVxdWVzdHM6IHdyaXRlCiAgICBzZWNyZXRzOgogICAgICBSRVBPX1NDT1BFRF9UT0tFTjogJHt7c2VjcmV0cy5HSVRIVUJfVE9LRU59fQogICAgdXNlczogYXVzYWNjZXNzZmVkL3dvcmtmbG93cy8uZ2l0aHViL3dvcmtmbG93cy9wci1ob3VzZWtlZXBpbmcueW1sQG1haW4K
