@@ -1,4 +1,9 @@
 --print-width=120
 --plugins=plugin/single_quotes
 --ignore-files='node_modules/*'
+--ignore-files='db/*schema.rb'
+#EOF_DISTRIBUTION
+--print-width=120
+--plugins=plugin/single_quotes
+--ignore-files='node_modules/*'
 --ignore-files='db/*'
