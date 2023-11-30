@@ -4,13 +4,14 @@
 /.vscode
 /Dockerfile
 /compose.yml
-/copilot
 /coverage
 /docs
-/dump.rdb
 /log
 /public/assets
 /tmp
 ./coverage
 .env*
 node_modules
+#EOF_DISTRIBUTION
+/copilot
+/dump.rdb
