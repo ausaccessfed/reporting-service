@@ -7,7 +7,6 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 
 require 'spec_helper'
 require 'rspec/rails'
-require 'webmock/rspec'
 
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
@@ -28,15 +27,6 @@ RSpec.configure do |config|
   config.include RSpec::Rails::RequestExampleGroup, type: :feature
   config.include Capybara::RSpecMatchers, type: :feature
   config.include Capybara::RSpecMatchers, type: :request
-
-  config.around(:each, type: :feature) do |spec|
-    WebMock.allow_net_connect!
-
-    visit '/'
-    spec.run
-  ensure
-    WebMock.disable_net_connect!(allow_localhost: true)
-  end
 end
 
 Shoulda::Matchers.configure do |config|

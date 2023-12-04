@@ -3,6 +3,7 @@
 require 'capybara'
 require 'capybara/rspec'
 require 'capybara/cuprite'
+require 'webmock/rspec'
 
 Capybara.default_max_wait_time = 5
 
@@ -13,20 +14,6 @@ Capybara.default_normalize_ws = true
 Capybara.save_path = 'tmp/capybara'
 
 Capybara.server = :puma, { Silent: true }
-
-# Allows failure screenshots to work correctly with multi-session setup
-Capybara.singleton_class.prepend(
-  Module.new do
-    attr_accessor :last_used_session
-
-    def using_session(name, &)
-      self.last_used_session = name
-      super
-    ensure
-      self.last_used_session = nil
-    end
-  end
-)
 
 browser_options = { 'ignore-certificate-errors' => true }
 browser_options['no-sandbox'] = true
@@ -72,8 +59,6 @@ RSpec.configure do |config|
 
   config.around(:each, type: :feature) do |spec|
     WebMock.allow_net_connect!
-
-    visit '/'
 
     spec.run
   ensure
