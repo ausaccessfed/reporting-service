@@ -52,7 +52,10 @@ RSpec.shared_context 'Utilization Report' do
     end
 
     context 'with random case permutations' do
-      before { objects.each { |o| o.update!(name: o.name.send(%i[upcase downcase].sample)) } }
+      before do
+        types = %i[upcase downcase]
+        objects.each { |o| o.update!(name: o.name.send(types.sample)) }
+      end
 
       it 'sorts the rows in name order' do
         names = report[:rows].map(&:first)

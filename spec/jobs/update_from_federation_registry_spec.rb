@@ -453,7 +453,8 @@ RSpec.describe UpdateFromFederationRegistry, type: :job do
       let(:service_providers) do
         i = rand(9999)
         Array.new(30) do
-          attrs = attributes.sample(rand(10)).map { |a| a.slice(:name, :id).merge(is_required: [true, false].sample) }
+          types = [true, false]
+          attrs = attributes.sample(rand(10)).map { |a| a.slice(:name, :id).merge(is_required: types.sample) }
 
           {
             id: (i += 1),

@@ -1,5 +1,4 @@
 inherit_gem:
-  aaf-gumboot: aaf-rubocop.yml
   syntax_tree: config/rubocop.yml
 
 require:
@@ -7,6 +6,7 @@ require:
   - rubocop-factory_bot
   - rubocop-performance
   - rubocop-rails
+  # TODO: turning this on breaks alot of tests. must be the given -> let change
   # - rubocop-rspec
 
 AllCops:
@@ -18,26 +18,12 @@ AllCops:
 Layout/LineLength:
   Max: 120
 
-Style/StderrPuts:
-  Enabled: false
-
 Rails/DynamicFindBy:
   Whitelist:
     - find_by_sql
     - find_by_identifying_attribute
-
-Naming/MethodParameterName:
+Style/Documentation:
   Enabled: false
-
-Naming/VariableNumber:
-  Enabled: false
-
-Rails/InverseOf:
-  Enabled: false
-
-Lint/MissingSuper:
-  Enabled: false
-
 Style/StringLiterals:
   Enabled: true
   EnforcedStyle: single_quotes
@@ -49,3 +35,31 @@ Style/StringLiteralsInInterpolation:
 Style/QuotedSymbols:
   Enabled: true
   EnforcedStyle: single_quotes
+
+Metrics/ClassLength:
+  CountAsOne: ['heredoc', 'hash', 'array']
+
+Metrics/ModuleLength:
+  CountAsOne: ['heredoc', 'hash', 'array']
+
+# Rely on ABC complexity for deciding whether a method is too long, not the
+# amount of text.
+Metrics/MethodLength:
+  CountAsOne: ['heredoc', 'hash', 'array']
+
+#TODO:
+Metrics/BlockLength:
+  CountAsOne: ['heredoc', 'hash', 'array']
+  Max: 310
+Naming/MethodParameterName:
+  Enabled: false
+Style/StderrPuts:
+  Enabled: false
+Naming/VariableNumber:
+  Enabled: false
+Rails/InverseOf:
+  Enabled: false
+Lint/MissingSuper:
+  Enabled: false
+Capybara/SpecificMatcher:
+  Enabled: false

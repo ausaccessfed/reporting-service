@@ -107,7 +107,9 @@ RSpec.describe CreateAutomatedReportInstances do
     it 'creates monthly and quarterly instances on
         April, July and October' do
       [april, july, october].each do |time|
+        # rubocop:disable Performance/CollectionLiteralInLoop
         time_pass = [50, 10, 30].sample.minutes
+        # rubocop:enable Performance/CollectionLiteralInLoop
 
         Timecop.travel(time) { expect { subject.perform }.to change(AutomatedReportInstance, :count).by(4) }
 
