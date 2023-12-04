@@ -6,6 +6,7 @@ workflows/distributions/.eslintignore
 workflows/distributions/.eslintrc
 workflows/distributions/.github/workflows/deploy.yml
 workflows/distributions/.github/workflows/pr-housekeeping.yml
+workflows/distributions/.github/workflows/sync-development.yml
 workflows/distributions/.gitignore
 workflows/distributions/.hadolint.yaml
 workflows/distributions/.prettierignore
