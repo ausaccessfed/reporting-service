@@ -23,7 +23,7 @@ USER root
 RUN yum -y update \
     && yum install -y \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    jq-1.6-14.el9 \
+    jq-1.6-15.el9 \
     && yum -y clean all \
     && rm -rf /var/cache/yum
 
@@ -85,7 +85,7 @@ RUN yum -y update \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
     pngcrush-1.8.13-9.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
-    optipng-0.7.7-8.el9 \
+    optipng-0.7.8-1.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
     pngquant-2.17.0-2.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
@@ -121,25 +121,25 @@ RUN yum -y update \
     && yum install -y \
     --enablerepo=devel \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
-    chromium-118.0.5993.70-1.el9 \
+    chromium-119.0.6045.159-2.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
     libtool-2.4.6-45.el9 \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
     make-4.3-7.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    automake-1.16.2-6.el9 \
+    automake-1.16.2-8.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    gcc-11.3.1-4.3.el9 \
+    gcc-11.4.1-2.1.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    gcc-c++-11.3.1-4.3.el9 \
+    gcc-c++-11.4.1-2.1.el9 \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
     xz-5.2.5-8.el9_0 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    kernel-devel-5.14.0-284.30.1.el9_2 \
+    kernel-devel-5.14.0-362.8.1.el9_3 \
     # renovate: datasource=yum repo=rocky-9-crb-x86_64
     mysql-devel-8.0.32-1.el9_2 \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
-    procps-ng-3.3.17-11.el9 \
+    procps-ng-3.3.17-13.el9 \
     && yum -y clean all \
     && rm -rf /var/cache/yum
 
