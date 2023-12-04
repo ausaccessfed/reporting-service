@@ -6,29 +6,33 @@ RSpec.describe RequestedAttributeReport do
   let(:type) { 'requested-attribute' }
   let(:header) { [%w[Name Status]] }
 
-  let(:required_attribute) { create :saml_attribute }
-  let(:optional_attribute) { create :saml_attribute }
-  let(:none_requested_attribute) { create :saml_attribute }
+  let(:required_attribute) { create(:saml_attribute) }
+  let(:optional_attribute) { create(:saml_attribute) }
+  let(:none_requested_attribute) { create(:saml_attribute) }
 
-  let(:service_provider_01) { create :service_provider }
-  let(:service_provider_02) { create :service_provider }
+  let(:service_provider_01) { create(:service_provider) }
+  let(:service_provider_02) { create(:service_provider) }
 
   let(:active_service_providers) { [service_provider_01, service_provider_02] }
 
   before do
     [service_provider_01, service_provider_02].each do |object|
-      create :service_provider_saml_attribute,
-             optional: false,
-             saml_attribute: required_attribute,
-             service_provider: object
+      create(
+        :service_provider_saml_attribute,
+        optional: false,
+        saml_attribute: required_attribute,
+        service_provider: object
+      )
 
-      create :service_provider_saml_attribute,
-             optional: true,
-             saml_attribute: optional_attribute,
-             service_provider: object
+      create(
+        :service_provider_saml_attribute,
+        optional: true,
+        saml_attribute: optional_attribute,
+        service_provider: object
+      )
     end
 
-    active_service_providers.each { |object| create :activation, federation_object: object }
+    active_service_providers.each { |object| create(:activation, federation_object: object) }
   end
 
   shared_examples 'a tabular report for requested attributes' do
@@ -82,13 +86,15 @@ RSpec.describe RequestedAttributeReport do
 
     context 'report rows' do
       let(:report) { subject.generate }
-      let(:inactive_service_provider) { create :service_provider }
+      let(:inactive_service_provider) { create(:service_provider) }
 
       before do
-        create :service_provider_saml_attribute,
-               optional: false,
-               saml_attribute: required_attribute,
-               service_provider: inactive_service_provider
+        create(
+          :service_provider_saml_attribute,
+          optional: false,
+          saml_attribute: required_attribute,
+          service_provider: inactive_service_provider
+        )
       end
 
       subject { RequestedAttributeReport.new(required_attribute.name) }

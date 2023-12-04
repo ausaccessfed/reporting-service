@@ -1,4 +1,5 @@
 inherit_gem:
+  aaf-gumboot: aaf-rubocop.yml
   syntax_tree: config/rubocop.yml
 
 require:
@@ -6,7 +7,7 @@ require:
   - rubocop-factory_bot
   - rubocop-performance
   - rubocop-rails
-  - rubocop-rspec
+  # - rubocop-rspec
 
 AllCops:
   NewCops: enable

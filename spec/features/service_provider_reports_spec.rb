@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.feature 'Service Provider Reports' do
-  given(:organization) { create :organization }
-  given(:sp) { create :service_provider, organization: }
-  given(:user) { create :subject }
+  given(:organization) { create(:organization) }
+  given(:sp) { create(:service_provider, organization:) }
+  given(:user) { create(:subject) }
 
   describe 'subject has permissions' do
     background do
-      create :activation, federation_object: sp
+      create(:activation, federation_object: sp)
 
       attrs = create(:aaf_attributes, :from_subject, subject: user)
       RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
@@ -28,7 +28,7 @@ RSpec.feature 'Service Provider Reports' do
       scenario 'viewing the SP Sessions Report' do
         click_link('Service Provider Sessions Report')
 
-        expect(current_path).to eq('/subscriber_reports/service_provider_sessions_report')
+        expect(page).to have_current_path('/subscriber_reports/service_provider_sessions_report', ignore_query: true)
 
         select sp.name, from: 'Service Providers'
 
@@ -40,7 +40,7 @@ RSpec.feature 'Service Provider Reports' do
         page.find_button('Generate').execute_script('this.click()')
         sleep(2)
 
-        expect(current_path).to eq('/subscriber_reports/service_provider_sessions_report')
+        expect(page).to have_current_path('/subscriber_reports/service_provider_sessions_report', ignore_query: true)
         expect(page).to have_css('svg.service-provider-sessions')
         expect(page).to have_content("(#{data_source_name})")
       end
@@ -48,7 +48,10 @@ RSpec.feature 'Service Provider Reports' do
       scenario 'viewing the SP Daily Demand Report' do
         click_link('Service Provider Daily Demand Report')
 
-        expect(current_path).to eq('/subscriber_reports/service_provider_daily_demand_report')
+        expect(page).to have_current_path(
+          '/subscriber_reports/service_provider_daily_demand_report',
+          ignore_query: true
+        )
 
         select sp.name, from: 'Service Providers'
 
@@ -61,9 +64,10 @@ RSpec.feature 'Service Provider Reports' do
         page.find_button('Generate').execute_script('this.click()')
         sleep(2)
 
-        expect(current_path).to eq(
+        expect(page).to have_current_path(
           '/subscriber_reports/service_provider_' \
-            'daily_demand_report'
+            'daily_demand_report',
+          ignore_query: true
         )
         expect(page).to have_css('svg.service-provider-daily-demand')
         expect(page).to have_content("(#{data_source_name})")
@@ -72,9 +76,10 @@ RSpec.feature 'Service Provider Reports' do
       scenario 'viewing the SP Source Identity Providers Report' do
         click_link('Service Provider Source Identity Providers Report')
 
-        expect(current_path).to eq(
+        expect(page).to have_current_path(
           '/subscriber_reports/service_provider_' \
-            'source_identity_providers_report'
+            'source_identity_providers_report',
+          ignore_query: true
         )
 
         select sp.name, from: 'Service Providers'
@@ -87,9 +92,10 @@ RSpec.feature 'Service Provider Reports' do
         page.find_button('Generate').execute_script('this.click()')
         sleep(2)
 
-        expect(current_path).to eq(
+        expect(page).to have_current_path(
           '/subscriber_reports/service_provider_' \
-            'source_identity_providers_report'
+            'source_identity_providers_report',
+          ignore_query: true
         )
         # Tabular reports do not render report title - see #178
         # So instead just confirm the report-data JSON contains the title.
@@ -113,7 +119,7 @@ RSpec.feature 'Service Provider Reports' do
 
   describe 'Subject without permissions' do
     background do
-      create :activation, federation_object: sp
+      create(:activation, federation_object: sp)
 
       attrs = create(:aaf_attributes, :from_subject, subject: user)
       RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
@@ -130,14 +136,14 @@ RSpec.feature 'Service Provider Reports' do
           'reports for any service providers'
 
       visit '/subscriber_reports/service_provider_sessions_report'
-      expect(page).to have_selector('p', text: message)
+      expect(page).to have_css('p', text: message)
 
       visit '/subscriber_reports/service_provider_daily_demand_report'
-      expect(page).to have_selector('p', text: message)
+      expect(page).to have_css('p', text: message)
 
       visit '/subscriber_reports/service_provider_' \
               'source_identity_providers_report'
-      expect(page).to have_selector('p', text: message)
+      expect(page).to have_css('p', text: message)
     end
   end
 end

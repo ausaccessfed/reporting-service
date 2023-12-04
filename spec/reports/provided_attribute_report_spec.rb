@@ -6,14 +6,14 @@ RSpec.describe ProvidedAttributeReport do
   let(:type) { 'provided-attribute' }
   let(:header) { [%w[Name Supported]] }
 
-  let(:first_attribute) { create :saml_attribute }
-  let(:second_attribute) { create :saml_attribute }
+  let(:first_attribute) { create(:saml_attribute) }
+  let(:second_attribute) { create(:saml_attribute) }
 
-  let(:identity_provider_01) { create :identity_provider, saml_attributes: [first_attribute] }
+  let(:identity_provider_01) { create(:identity_provider, saml_attributes: [first_attribute]) }
 
-  let(:identity_provider_02) { create :identity_provider, saml_attributes: [second_attribute] }
+  let(:identity_provider_02) { create(:identity_provider, saml_attributes: [second_attribute]) }
 
-  let(:identity_provider_03) { create :identity_provider, saml_attributes: [first_attribute, second_attribute] }
+  let(:identity_provider_03) { create(:identity_provider, saml_attributes: [first_attribute, second_attribute]) }
 
   let(:active_identity_providers) { { identity_provider_01:, identity_provider_02:, identity_provider_03: } }
 
@@ -62,7 +62,7 @@ RSpec.describe ProvidedAttributeReport do
 
       let(:report) { subject.generate }
       let(:inactive_identity_provider) do
-        create :identity_provider, saml_attributes: [first_attribute, second_attribute]
+        create(:identity_provider, saml_attributes: [first_attribute, second_attribute])
       end
 
       it 'should never include inactive IdP' do

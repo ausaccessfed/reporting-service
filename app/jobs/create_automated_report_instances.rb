@@ -27,7 +27,7 @@ class CreateAutomatedReportInstances
   end
 
   def select_reports
-    [monthly, quarterly, yearly].compact.reduce([], &:+)
+    [monthly, quarterly, yearly].compact.sum([])
   end
 
   def reports_with_intervals

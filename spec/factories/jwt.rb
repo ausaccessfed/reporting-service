@@ -37,7 +37,7 @@ FactoryBot.define do
       association :aaf_attributes
     end
 
-    send('https://aaf.edu.au/attributes') { aaf_attributes }
+    send(:'https://aaf.edu.au/attributes') { aaf_attributes }
 
     initialize_with { new(attributes).sign(secret).to_s }
     skip_create

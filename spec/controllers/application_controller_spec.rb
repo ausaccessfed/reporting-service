@@ -50,7 +50,7 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   context 'use time zone around filter' do
-    let(:user) { create :subject, :authorized }
+    let(:user) { create(:subject, :authorized) }
     let!(:zone) { Faker::Address.time_zone }
 
     controller SomeReportsController do

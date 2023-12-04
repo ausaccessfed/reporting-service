@@ -11,36 +11,38 @@ RSpec.describe CreateAutomatedReportInstances do
     let(month.to_sym) { Time.zone.parse("2016-#{month}-01") }
   end
 
-  let(:user_01) { create :subject }
-  let(:user_02) { create :subject }
-  let(:idp) { create :identity_provider }
+  let(:user_01) { create(:subject) }
+  let(:user_02) { create(:subject) }
+  let(:idp) { create(:identity_provider) }
 
   %w[monthly quarterly yearly].each do |i|
     let!("auto_report_#{i}_01".to_sym) do
-      create :automated_report, interval: i, report_class: 'DailyDemandReport', source: 'DS'
+      create(:automated_report, interval: i, report_class: 'DailyDemandReport', source: 'DS')
     end
 
     let!("auto_report_#{i}_02".to_sym) do
-      create :automated_report,
-             interval: i,
-             report_class: 'IdentityProviderDailyDemandReport',
-             source: 'DS',
-             target: idp.entity_id
+      create(
+        :automated_report,
+        interval: i,
+        report_class: 'IdentityProviderDailyDemandReport',
+        source: 'DS',
+        target: idp.entity_id
+      )
     end
   end
 
   before do
-    create :automated_report_subscription, automated_report: auto_report_monthly_01, subject: user_01
+    create(:automated_report_subscription, automated_report: auto_report_monthly_01, subject: user_01)
 
-    create :automated_report_subscription, automated_report: auto_report_quarterly_01, subject: user_01
+    create(:automated_report_subscription, automated_report: auto_report_quarterly_01, subject: user_01)
 
-    create :automated_report_subscription, automated_report: auto_report_yearly_01, subject: user_01
+    create(:automated_report_subscription, automated_report: auto_report_yearly_01, subject: user_01)
 
-    create :automated_report_subscription, automated_report: auto_report_monthly_02, subject: user_02
+    create(:automated_report_subscription, automated_report: auto_report_monthly_02, subject: user_02)
 
-    create :automated_report_subscription, automated_report: auto_report_quarterly_02, subject: user_02
+    create(:automated_report_subscription, automated_report: auto_report_quarterly_02, subject: user_02)
 
-    create :automated_report_subscription, automated_report: auto_report_yearly_02, subject: user_02
+    create(:automated_report_subscription, automated_report: auto_report_yearly_02, subject: user_02)
   end
 
   subject { CreateAutomatedReportInstances.new }

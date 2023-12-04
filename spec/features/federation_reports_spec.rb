@@ -15,7 +15,7 @@ RSpec.feature 'Federation Reports' do
   end
 
   scenario 'users will be redirected to dashboard after login' do
-    expect(current_path).to eq('/dashboard')
+    expect(page).to have_current_path('/dashboard', ignore_query: true)
   end
 
   context 'Federation Growth Report' do
