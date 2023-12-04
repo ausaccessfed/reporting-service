@@ -9,7 +9,6 @@ module ReportingService
     end
   end
 
-  # rubocop:disable Metrics/ClassLength
   class ConfigurationGenerator
     def build_configuration
       base_config.merge(admins_config, redis, federation_registry, rapid_connect)
@@ -150,4 +149,3 @@ module ReportingService
   end
   private_constant :ConfigurationGenerator
 end
-# rubocop:enable Metrics/ClassLength

@@ -3,7 +3,10 @@
 require 'openssl'
 
 module API
+  # rubocop:disable Rails/ApplicationController
   class APIController < ActionController::Base
+    # rubocop:enable Rails/ApplicationController
+
     Forbidden = Class.new(StandardError)
     private_constant :Forbidden
     rescue_from Forbidden, with: :forbidden

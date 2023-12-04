@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Subscriber Reports' do
-  given(:user) { create :subject }
+  given(:user) { create(:subject) }
 
   background do
     attrs = create(:aaf_attributes, :from_subject, subject: user)
@@ -15,6 +15,6 @@ RSpec.feature 'Subscriber Reports' do
   end
 
   scenario 'viewing the Subscriber Reports #index' do
-    expect(current_path).to eq('/subscriber_reports')
+    expect(page).to have_current_path('/subscriber_reports', ignore_query: true)
   end
 end

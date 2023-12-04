@@ -38,8 +38,8 @@ RSpec.describe FederationGrowthReport do
   end
 
   %i[organization identity_provider rapid_connect_service service_provider].each do |type|
-    let(type) { create type }
-    let("#{type}_02") { create type }
+    let(type) { create(type) }
+    let("#{type}_02") { create(type) }
   end
 
   before do

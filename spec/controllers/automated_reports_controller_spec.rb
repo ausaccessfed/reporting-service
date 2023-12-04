@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe AutomatedReportsController, type: :controller do
-  let(:idp) { create :identity_provider }
-  let(:user) { create :subject }
+  let(:idp) { create(:identity_provider) }
+  let(:user) { create(:subject) }
 
   def destroy
     delete :destroy, params: { identifier: subscription.identifier }
@@ -19,10 +19,10 @@ RSpec.describe AutomatedReportsController, type: :controller do
   before { session[:subject_id] = user.try(:id) }
 
   describe '#index' do
-    let(:subscription) { create :automated_report_subscription, automated_report: auto_report, subject: user }
+    let(:subscription) { create(:automated_report_subscription, automated_report: auto_report, subject: user) }
 
     let(:auto_report) do
-      create :automated_report, report_class: 'IdentityProviderSessionsReport', source: 'DS', target: idp.entity_id
+      create(:automated_report, report_class: 'IdentityProviderSessionsReport', source: 'DS', target: idp.entity_id)
     end
 
     before { get :index }

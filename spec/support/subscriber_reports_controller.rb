@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'a Subscriber Report' do
-  let(:organization) { create :organization }
+  let(:organization) { create(:organization) }
 
-  let(:object) { create "#{prefix}_provider".to_sym, organization: }
+  let(:object) { create("#{prefix}_provider".to_sym, organization:) }
 
-  let(:bad_object) { create "#{prefix}_provider".to_sym }
+  let(:bad_object) { create("#{prefix}_provider".to_sym) }
 
-  let(:user) { create :subject, :authorized, permission: "objects:organization:#{organization.identifier}:report" }
+  let(:user) { create(:subject, :authorized, permission: "objects:organization:#{organization.identifier}:report") }
 
   def run_get
     get report_path
@@ -26,8 +26,8 @@ RSpec.shared_examples 'a Subscriber Report' do
 
   before do
     session[:subject_id] = user.try(:id)
-    create :activation, federation_object: object
-    create :activation, federation_object: bad_object
+    create(:activation, federation_object: object)
+    create(:activation, federation_object: bad_object)
   end
 
   shared_examples 'Report Controller' do

@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.feature 'automated report instances' do
-  given(:user) { create :subject }
-  given(:organization) { create :organization }
-  given(:attribute) { create :saml_attribute }
-  given(:idp) { create :identity_provider, organization: }
-  given(:unknown_idp) { create :identity_provider }
-  given(:sp) { create :service_provider, organization: }
-  given(:unknown_sp) { create :service_provider }
+  given(:user) { create(:subject) }
+  given(:organization) { create(:organization) }
+  given(:attribute) { create(:saml_attribute) }
+  given(:idp) { create(:identity_provider, organization:) }
+  given(:unknown_idp) { create(:identity_provider) }
+  given(:sp) { create(:service_provider, organization:) }
+  given(:unknown_sp) { create(:service_provider) }
 
   given(:svg_templates) do
     'ServiceProviderDailyDemandReport ServiceProviderSessionsReport
@@ -23,9 +23,9 @@ RSpec.feature 'automated report instances' do
   end
 
   shared_examples 'Automated Public Report' do
-    given(:auto_report) { create :automated_report, target:, report_class:, source: }
+    given(:auto_report) { create(:automated_report, target:, report_class:, source:) }
 
-    given!(:instance) { create :automated_report_instance, automated_report: auto_report }
+    given!(:instance) { create(:automated_report_instance, automated_report: auto_report) }
 
     background do
       attrs = create(:aaf_attributes, :from_subject, subject: user)
@@ -40,7 +40,7 @@ RSpec.feature 'automated report instances' do
       prefix = svg_templates.include?(report_class) ? 'svg' : 'table'
 
       visit "/automated_report/#{instance.identifier}"
-      expect(current_path).to eq("/automated_report/#{instance.identifier}")
+      expect(page).to have_current_path("/automated_report/#{instance.identifier}", ignore_query: true)
       expect(page).to have_css("#output #{prefix}.#{template}")
       # For reports that depend on session source, check the right one was used.
       expect(page).to have_content("(#{source_name})") if defined?(source_name)
@@ -102,13 +102,13 @@ RSpec.feature 'automated report instances' do
   end
 
   shared_examples 'Automated Subscriber Report' do
-    given(:auto_report) { create :automated_report, target: object.entity_id, report_class:, source: }
+    given(:auto_report) { create(:automated_report, target: object.entity_id, report_class:, source:) }
 
-    given!(:instance) { create :automated_report_instance, automated_report: auto_report }
+    given!(:instance) { create(:automated_report_instance, automated_report: auto_report) }
 
-    given!(:unknown_auto_report) { create :automated_report, target: unknown_object.entity_id, report_class:, source: }
+    given!(:unknown_auto_report) { create(:automated_report, target: unknown_object.entity_id, report_class:, source:) }
 
-    given!(:unknown_instance) { create :automated_report_instance, automated_report: unknown_auto_report }
+    given!(:unknown_instance) { create(:automated_report_instance, automated_report: unknown_auto_report) }
 
     background do
       attrs = create(:aaf_attributes, :from_subject, subject: user)
@@ -130,7 +130,7 @@ RSpec.feature 'automated report instances' do
       unknown_identifier = unknown_instance.identifier
 
       visit "/automated_report/#{instance.identifier}"
-      expect(current_path).to eq("/automated_report/#{instance.identifier}")
+      expect(page).to have_current_path("/automated_report/#{instance.identifier}", ignore_query: true)
       expect(page).to have_css("#output #{prefix}.#{template}")
 
       # For reports that depend on session source, check the right one was used.
@@ -142,11 +142,11 @@ RSpec.feature 'automated report instances' do
       end
 
       visit "/automated_report/#{unknown_instance.identifier}"
-      expect(current_path).to eq("/automated_report/#{unknown_identifier}")
+      expect(page).to have_current_path("/automated_report/#{unknown_identifier}", ignore_query: true)
 
       message = 'Oops, you clicked something we didn\'t expect you to click'
 
-      expect(page).to have_selector('p', text: message)
+      expect(page).to have_css('p', text: message)
     end
   end
 
@@ -227,9 +227,9 @@ RSpec.feature 'automated report instances' do
   end
 
   shared_examples 'Automated Subscriber Registrations Report' do
-    given(:auto_report) { create :automated_report, target:, report_class: 'SubscriberRegistrationsReport' }
+    given(:auto_report) { create(:automated_report, target:, report_class: 'SubscriberRegistrationsReport') }
 
-    given!(:instance) { create :automated_report_instance, automated_report: auto_report }
+    given!(:instance) { create(:automated_report_instance, automated_report: auto_report) }
 
     describe 'none admin subject' do
       background do
@@ -247,11 +247,11 @@ RSpec.feature 'automated report instances' do
 
       scenario 'can not view Subscriber Registrations Report' do
         visit "/automated_report/#{instance.identifier}"
-        expect(current_path).to eq("/automated_report/#{instance.identifier}")
+        expect(page).to have_current_path("/automated_report/#{instance.identifier}", ignore_query: true)
 
         message = 'Oops, you clicked something we didn\'t expect you to click'
 
-        expect(page).to have_selector('p', text: message)
+        expect(page).to have_css('p', text: message)
       end
     end
 
@@ -270,7 +270,7 @@ RSpec.feature 'automated report instances' do
 
       scenario 'can view Subscriber Registrations Report' do
         visit "/automated_report/#{instance.identifier}"
-        expect(current_path).to eq("/automated_report/#{instance.identifier}")
+        expect(page).to have_current_path("/automated_report/#{instance.identifier}", ignore_query: true)
         expect(page).to have_css('#output table.subscriber-registrations')
       end
     end

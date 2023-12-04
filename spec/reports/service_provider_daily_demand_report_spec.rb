@@ -15,9 +15,9 @@ RSpec.describe ServiceProviderDailyDemandReport do
 
   let(:range) { { start: start.strftime('%FT%H:%M:%S%z'), end: finish.strftime('%FT%H:%M:%S%z') } }
 
-  let(:identity_provider) { create :identity_provider }
-  let(:service_provider_01) { create :service_provider }
-  let(:service_provider_02) { create :service_provider }
+  let(:identity_provider) { create(:identity_provider) }
+  let(:service_provider_01) { create(:service_provider) }
+  let(:service_provider_02) { create(:service_provider) }
 
   subject { ServiceProviderDailyDemandReport.new(service_provider_01.entity_id, start, finish, source) }
 
@@ -45,10 +45,12 @@ RSpec.describe ServiceProviderDailyDemandReport do
 
   context 'sessions without response' do
     before do
-      create_list :discovery_service_event,
-                  10,
-                  initiating_sp: service_provider_01.entity_id,
-                  timestamp: 1.day.ago.beginning_of_day
+      create_list(
+        :discovery_service_event,
+        10,
+        initiating_sp: service_provider_01.entity_id,
+        timestamp: 1.day.ago.beginning_of_day
+      )
     end
 
     let(:value) { 0.00 }
@@ -61,10 +63,12 @@ RSpec.describe ServiceProviderDailyDemandReport do
 
   context 'when failed event' do
     before do
-      create_list :federated_login_event,
-                  10,
-                  relying_party: service_provider_01.entity_id,
-                  timestamp: 1.day.ago.beginning_of_day
+      create_list(
+        :federated_login_event,
+        10,
+        relying_party: service_provider_01.entity_id,
+        timestamp: 1.day.ago.beginning_of_day
+      )
     end
 
     let(:value) { 0.00 }
@@ -111,7 +115,7 @@ RSpec.describe ServiceProviderDailyDemandReport do
 
   context 'sessions with response' do
     def create_event(idp, sp, timestamp = nil)
-      create :discovery_service_event, :response, { selected_idp: idp, initiating_sp: sp, timestamp: }.compact
+      create(:discovery_service_event, :response, { selected_idp: idp, initiating_sp: sp, timestamp: }.compact)
     end
 
     let(:source) { 'DS' }
@@ -123,7 +127,7 @@ RSpec.describe ServiceProviderDailyDemandReport do
 
   context 'IdP sessions' do
     def create_event(idp, sp, timestamp = nil)
-      create :federated_login_event, :OK, { asserting_party: idp, relying_party: sp, timestamp: }.compact
+      create(:federated_login_event, :OK, { asserting_party: idp, relying_party: sp, timestamp: }.compact)
     end
 
     let(:source) { 'IdP' }

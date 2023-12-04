@@ -3,26 +3,31 @@
 require 'rails_helper'
 
 RSpec.feature 'automated report' do
-  given(:user) { create :subject }
-  given(:user_02) { create :subject }
-  given(:idp) { create :identity_provider }
-  given(:saml) { create :saml_attribute }
+  given(:user) { create(:subject) }
+  given(:user_02) { create(:subject) }
+  given(:idp) { create(:identity_provider) }
+  given(:saml) { create(:saml_attribute) }
 
   given!(:auto_report_idp) do
-    create :automated_report, report_class: 'IdentityProviderSessionsReport', source: data_source, target: idp.entity_id
+    create(
+      :automated_report,
+      report_class: 'IdentityProviderSessionsReport',
+      source: data_source,
+      target: idp.entity_id
+    )
   end
 
   given(:auto_report_org) do
-    create :automated_report, report_class: 'SubscriberRegistrationsReport', target: 'organizations'
+    create(:automated_report, report_class: 'SubscriberRegistrationsReport', target: 'organizations')
   end
 
-  given(:auto_report_saml) { create :automated_report, report_class: 'RequestedAttributeReport', target: saml.name }
+  given(:auto_report_saml) { create(:automated_report, report_class: 'RequestedAttributeReport', target: saml.name) }
 
-  given!(:subscription_1) { create :automated_report_subscription, automated_report: auto_report_idp, subject: user }
+  given!(:subscription_1) { create(:automated_report_subscription, automated_report: auto_report_idp, subject: user) }
 
-  given!(:subscription_2) { create :automated_report_subscription, automated_report: auto_report_org, subject: user }
+  given!(:subscription_2) { create(:automated_report_subscription, automated_report: auto_report_org, subject: user) }
 
-  given!(:subscription_3) { create :automated_report_subscription, automated_report: auto_report_saml, subject: user }
+  given!(:subscription_3) { create(:automated_report_subscription, automated_report: auto_report_saml, subject: user) }
 
   shared_examples 'automated reports tests' do
     describe 'when user has subscriptions' do
@@ -37,7 +42,7 @@ RSpec.feature 'automated report' do
       end
 
       scenario 'viewing automated_reports#index' do
-        expect(current_path).to eq('/automated_reports')
+        expect(page).to have_current_path('/automated_reports', ignore_query: true)
 
         expect(page).to have_text(idp.name[0..50])
         expect(page).to have_text('Organizations')
@@ -51,11 +56,11 @@ RSpec.feature 'automated report' do
           click_link('Confirm Unsubscribe')
         end
 
-        expect(current_path).to eq('/automated_reports')
+        expect(page).to have_current_path('/automated_reports', ignore_query: true)
 
         message = 'You have unsubscribed from an automated report'
 
-        expect(page).to have_selector('p', text: message)
+        expect(page).to have_css('p', text: message)
       end
     end
 
@@ -71,14 +76,14 @@ RSpec.feature 'automated report' do
       end
 
       scenario 'should unsubscribe and redirect to index' do
-        expect(current_path).to eq('/automated_reports')
+        expect(page).to have_current_path('/automated_reports', ignore_query: true)
 
         message =
           'You can subscribe to an automated report by ' \
             'clicking on the `Subscribe` button in report page ' \
             'and choosing a report interval'
 
-        expect(page).to have_selector('p', text: message)
+        expect(page).to have_css('p', text: message)
       end
     end
   end

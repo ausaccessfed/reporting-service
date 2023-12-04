@@ -14,9 +14,9 @@ RSpec.describe ProcessIncomingFTicksEvents do
   end
 
   before do
-    create_list :incoming_f_ticks_event, 10
-    create_list :incoming_f_ticks_event, 10, discarded: true
-    create_list :incoming_f_ticks_event, 10, data: 'invalid data'
+    create_list(:incoming_f_ticks_event, 10)
+    create_list(:incoming_f_ticks_event, 10, discarded: true)
+    create_list(:incoming_f_ticks_event, 10, data: 'invalid data')
   end
 
   context 'Process IncomingFTicksEvents' do
@@ -27,11 +27,11 @@ RSpec.describe ProcessIncomingFTicksEvents do
 
     context 'when there are incoming after or during #perform' do
       around(:example) do |example|
-        Timecop.travel(now + 1) { create_list :incoming_f_ticks_event, 2 }
+        Timecop.travel(now + 1) { create_list(:incoming_f_ticks_event, 2) }
 
         Timecop.travel(now) { example.run }
 
-        Timecop.travel(now + 1) { create_list :incoming_f_ticks_event, 2 }
+        Timecop.travel(now + 1) { create_list(:incoming_f_ticks_event, 2) }
       end
 
       it 'Should perform against events came before running the job only' do

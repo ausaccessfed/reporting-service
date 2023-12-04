@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :activation do
     transient { base_time { Time.now.utc } }
 
-    association :federation_object, factory: :identity_provider
+    federation_object factory: %i[identity_provider]
 
     activated_at { (36..52).to_a.sample.weeks.until(base_time) }
 

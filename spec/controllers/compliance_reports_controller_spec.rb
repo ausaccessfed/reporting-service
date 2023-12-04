@@ -15,7 +15,7 @@ RSpec.describe ComplianceReportsController, type: :controller do
   end
 
   shared_examples 'get request for provider object' do
-    let!(:object) { create object_type }
+    let!(:object) { create(object_type) }
     let!(:activation) { create(:activation, federation_object: object) }
 
     context 'with no user' do
@@ -46,7 +46,7 @@ RSpec.describe ComplianceReportsController, type: :controller do
   end
 
   shared_examples 'post request for provider object' do
-    let!(:object) { create object_type }
+    let!(:object) { create(object_type) }
     let!(:activation) { create(:activation, federation_object: object) }
     let(:finder) { :entity_id }
 
@@ -93,7 +93,7 @@ RSpec.describe ComplianceReportsController, type: :controller do
   end
 
   shared_examples 'post request for attribute object' do
-    let!(:object) { create :saml_attribute }
+    let!(:object) { create(:saml_attribute) }
     let(:finder) { :name }
 
     it 'renders the page' do
@@ -121,7 +121,7 @@ RSpec.describe ComplianceReportsController, type: :controller do
   end
 
   shared_examples 'get request for attribute object' do
-    let!(:object) { create :saml_attribute }
+    let!(:object) { create(:saml_attribute) }
     let(:saml_attributes) { SAMLAttribute.all }
     context 'with no user' do
       let(:user) { nil }

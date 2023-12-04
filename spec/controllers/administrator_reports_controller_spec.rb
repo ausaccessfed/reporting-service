@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe AdministratorReportsController, type: :controller do
-  let(:user) { create :subject, :authorized, permission: 'admin:*' }
+  let(:user) { create(:subject, :authorized, permission: 'admin:*') }
 
   let(:range) { { start: Time.now.utc - 1.month, end: Time.now.utc } }
 
@@ -33,7 +33,7 @@ RSpec.describe AdministratorReportsController, type: :controller do
     before { get :index }
 
     context 'when user is not administrator' do
-      let(:user) { create :subject }
+      let(:user) { create(:subject) }
       it { is_expected.to have_http_status('403') }
     end
 

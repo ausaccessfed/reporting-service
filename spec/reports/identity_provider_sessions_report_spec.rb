@@ -20,9 +20,9 @@ RSpec.describe IdentityProviderSessionsReport do
 
   let(:scope_range) { (0..(finish - start).to_i).step(steps.hours.to_i) }
 
-  let(:idp) { create :identity_provider }
-  let(:idp_2) { create :identity_provider }
-  let(:sp) { create :service_provider }
+  let(:idp) { create(:identity_provider) }
+  let(:idp_2) { create(:identity_provider) }
+  let(:sp) { create(:service_provider) }
 
   subject { IdentityProviderSessionsReport.new(idp.entity_id, start, finish, steps, source) }
 
@@ -49,7 +49,7 @@ RSpec.describe IdentityProviderSessionsReport do
   end
 
   context 'when IdP sessions from DS are not yet completed' do
-    before { create_list :discovery_service_event, 2, initiating_sp: sp.entity_id }
+    before { create_list(:discovery_service_event, 2, initiating_sp: sp.entity_id) }
 
     let(:value) { 0.0 }
     let(:source) { 'DS' }
@@ -60,7 +60,7 @@ RSpec.describe IdentityProviderSessionsReport do
   end
 
   context 'when IdP sessions from IdP are failed' do
-    before { create_list :federated_login_event, 2, relying_party: sp.entity_id }
+    before { create_list(:federated_login_event, 2, relying_party: sp.entity_id) }
 
     let(:value) { 0.0 }
     let(:source) { 'IdP' }
@@ -100,7 +100,7 @@ RSpec.describe IdentityProviderSessionsReport do
 
   context 'when events are sessions with response' do
     def create_event(idp, sp, timestamp = nil)
-      create :discovery_service_event, :response, { selected_idp: idp, initiating_sp: sp, timestamp: }.compact
+      create(:discovery_service_event, :response, { selected_idp: idp, initiating_sp: sp, timestamp: }.compact)
     end
 
     let(:source) { 'DS' }
@@ -112,7 +112,7 @@ RSpec.describe IdentityProviderSessionsReport do
 
   context 'when events are IdP sessions' do
     def create_event(idp, sp, timestamp = nil)
-      create :federated_login_event, :OK, { asserting_party: idp, relying_party: sp, timestamp: }.compact
+      create(:federated_login_event, :OK, { asserting_party: idp, relying_party: sp, timestamp: }.compact)
     end
 
     let(:source) { 'IdP' }

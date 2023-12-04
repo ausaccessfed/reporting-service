@@ -3,13 +3,15 @@
 require 'rails_helper'
 
 RSpec.feature 'Administrator Reports' do
-  given(:user) { create :subject }
+  given(:user) { create(:subject) }
 
   describe 'when subject is administrator' do
     %w[identity_providers service_providers organizations rapid_connect_services services].each do |identifier|
+      # rubocop:disable Performance/CollectionLiteralInLoop
       %w[monthly quarterly yearly].each do |interval|
+        # rubocop:enable Performance/CollectionLiteralInLoop
         given!("auto_report_#{identifier}_#{interval}".to_sym) do
-          create :automated_report, interval:, target: identifier, report_class: 'SubscriberRegistrationsReport'
+          create(:automated_report, interval:, target: identifier, report_class: 'SubscriberRegistrationsReport')
         end
       end
     end
@@ -28,7 +30,7 @@ RSpec.feature 'Administrator Reports' do
     end
 
     scenario 'viewing the Administrator Reports Dashboard' do
-      expect(current_path).to eq('/admin_reports')
+      expect(page).to have_current_path('/admin_reports', ignore_query: true)
       expect(page).to have_css('.list-group')
     end
 
@@ -48,16 +50,16 @@ RSpec.feature 'Administrator Reports' do
             expect(page).to have_css('table.subscriber-registrations')
             click_button('Subscribe')
             click_link(interval)
-            expect(page).to have_selector('p', text: message1)
+            expect(page).to have_css('p', text: message1)
 
             select(identifier.titleize, from: 'Subscriber Identifiers')
             click_button('Generate')
             expect(page).to have_css('table.subscriber-registrations')
             click_button('Subscribe')
             click_link(interval)
-            expect(page).to have_selector('p', text: message2)
+            expect(page).to have_css('p', text: message2)
 
-            expect(current_path).to eq('/admin_reports/subscriber_registrations_report')
+            expect(page).to have_current_path('/admin_reports/subscriber_registrations_report', ignore_query: true)
           end
         end
       end
@@ -75,7 +77,7 @@ RSpec.feature 'Administrator Reports' do
         page.find_button('Generate').execute_script('this.click()')
         sleep(2)
 
-        expect(current_path).to eq('/admin_reports/federation_growth_report')
+        expect(page).to have_current_path('/admin_reports/federation_growth_report', ignore_query: true)
         expect(page).to have_css('svg.federation-growth')
       end
     end
@@ -93,7 +95,7 @@ RSpec.feature 'Administrator Reports' do
         page.find_button('Generate').execute_script('this.click()')
         sleep(2)
 
-        expect(current_path).to eq('/admin_reports/daily_demand_report')
+        expect(page).to have_current_path('/admin_reports/daily_demand_report', ignore_query: true)
         expect(page).to have_css('svg.daily-demand')
         expect(page).to have_content("(#{data_source_name})")
       end
@@ -112,7 +114,7 @@ RSpec.feature 'Administrator Reports' do
         page.find_button('Generate').execute_script('this.click()')
         sleep(2)
 
-        expect(current_path).to eq('/admin_reports/federated_sessions_report')
+        expect(page).to have_current_path('/admin_reports/federated_sessions_report', ignore_query: true)
         expect(page).to have_css('svg.federated-sessions')
         expect(page).to have_content("(#{data_source_name})")
       end
@@ -131,7 +133,7 @@ RSpec.feature 'Administrator Reports' do
         page.find_button('Generate').execute_script('this.click()')
         sleep(2)
 
-        expect(current_path).to eq('/admin_reports/identity_provider_utilization_report')
+        expect(page).to have_current_path('/admin_reports/identity_provider_utilization_report', ignore_query: true)
         expect(page).to have_css('table.identity-provider-utilization')
         # Tabular reports do not render report title - see #178
         # So instead just confirm the report-data JSON contains the title.
@@ -153,7 +155,7 @@ RSpec.feature 'Administrator Reports' do
         page.find_button('Generate').execute_script('this.click()')
         sleep(2)
 
-        expect(current_path).to eq('/admin_reports/service_provider_utilization_report')
+        expect(page).to have_current_path('/admin_reports/service_provider_utilization_report', ignore_query: true)
         expect(page).to have_css('table.service-provider-utilization')
         # Tabular reports do not render report title - see #178
         # So instead just confirm the report-data JSON contains the title.

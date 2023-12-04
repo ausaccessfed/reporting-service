@@ -4,13 +4,13 @@ require 'rails_helper'
 
 RSpec.feature 'Compliance Reports' do
   given(:user) { create(:subject) }
-  given(:sp) { create :service_provider }
-  given(:idp) { create :identity_provider }
+  given(:sp) { create(:service_provider) }
+  given(:idp) { create(:identity_provider) }
   given(:controller) { 'compliance_reports' }
 
   background do
-    create_list :service_provider_saml_attribute, 5, service_provider: sp
-    create_list :identity_provider_saml_attribute, 5, identity_provider: idp
+    create_list(:service_provider_saml_attribute, 5, service_provider: sp)
+    create_list(:identity_provider_saml_attribute, 5, identity_provider: idp)
     create(:activation, federation_object: sp)
     create(:activation, federation_object: idp)
 
