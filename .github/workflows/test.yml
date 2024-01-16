@@ -17,4 +17,4 @@ jobs:
         run: |
           echo "${{ contains(fromJSON(vars.ALLOWED_ACTORS), github.event.author.login) }}"
           echo "${{ fromJSON(vars.ALLOWED_ACTORS) }}"
-          echo "${{ github.event.author.login }}"
+          echo "${{ github.event }}"
