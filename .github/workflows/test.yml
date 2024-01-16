@@ -16,5 +16,7 @@ jobs:
       - name: Delete huge unnecessary tools folder
         run: |
           echo "${{ contains(fromJSON(vars.ALLOWED_ACTORS), github.event.author.login) }}"
-          echo "${{ fromJSON(vars.ALLOWED_ACTORS) }}"
-          echo "${{ github.event }}"
+          echo "${{ vars.ALLOWED_ACTORS }}"
+          echo "${{ toJSON(github.event) }}"
+          echo "${{ toJSON(github.event.author) }}"
+          echo "${{ contains('phyzical,ArthurZheng,ritchiey,matthew-puku,rianniello,Kfoster14,waldofouche,Bo', github.event.author.login)) }}"
