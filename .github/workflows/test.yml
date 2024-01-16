@@ -1,4 +1,4 @@
-name: Build Docker Image
+name: Build Docker Image test
 on:
   push:
   schedule:
@@ -7,6 +7,9 @@ on:
     types: [created]
 jobs:
   test:
+    concurrency:
+      group: ${{ github.event.comment.id }}-${{ github.event_name }}-${{ github.ref_name == 'master' && github.sha || github.ref_name }}-build
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     name: test
     steps:
