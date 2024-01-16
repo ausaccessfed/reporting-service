@@ -422,7 +422,7 @@ GEM
       execjs (>= 0.3.0, < 3)
     thor (1.2.2)
     tilt (2.3.0)
-    timecop (0.9.6)
+    timecop (0.9.8)
     timeout (0.3.2)
     torba (1.1.1)
       thor (>= 0.19.1, < 2)
