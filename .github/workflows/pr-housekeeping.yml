@@ -10,5 +10,5 @@ jobs:
       issues: write
       pull-requests: write
     secrets:
-      REPO_SCOPED_TOKEN: ${{secrets.ALL_REPO_SCOPED_TOKEN}}
+      REPO_SCOPED_TOKEN: ${{secrets.ALL_REPO_SCOPED_TOKEN_2}}
     uses: ausaccessfed/workflows/.github/workflows/pr-housekeeping.yml@main
