@@ -18,7 +18,7 @@ jobs:
       issues: read
       pull-requests: write
     secrets: inherit
-    uses: ausaccessfed/workflows/.github/workflows/deploy-sync.yml@main
+    uses: ausaccessfed/workflows/.github/workflows/deploy-sync.yml@feature/switch-to-mysql-8
     with:
       ecr_repository: reporting-service
       dev_url: https://reporting.dev.aaf.edu.au
