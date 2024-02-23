@@ -121,7 +121,7 @@ RUN yum -y update \
     && yum install -y \
     --enablerepo=devel \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
-    chromium-120.0.6099.224-1.el9 \
+    chromium-121.0.6167.160-1.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
     libtool-2.4.6-45.el9 \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
@@ -135,7 +135,7 @@ RUN yum -y update \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
     xz-5.2.5-8.el9_0 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    kernel-devel-5.14.0-362.18.1.el9_3 \
+    kernel-devel-5.14.0-362.18.1.el9_3.0.1 \
     # renovate: datasource=yum repo=rocky-9-crb-x86_64
     mysql-devel-8.0.32-1.el9_2 \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
