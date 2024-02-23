@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_29_024659) do
+ActiveRecord::Schema.define(version: 2024_01_15_042123) do
 
-  create_table "activations", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "activations", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "federation_object_type", null: false
     t.integer "federation_object_id", null: false
     t.datetime "activated_at", null: false
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "api_subject_roles", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "api_subject_roles", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.integer "api_subject_id", null: false
     t.integer "role_id", null: false
     t.datetime "created_at", null: false
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["role_id"], name: "fk_rails_3c99dcce56"
   end
 
-  create_table "api_subjects", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "api_subjects", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "x509_cn", null: false
     t.string "contact_name", null: false
     t.string "contact_mail", null: false
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["x509_cn"], name: "index_api_subjects_on_x509_cn", unique: true
   end
 
-  create_table "automated_report_instances", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "automated_report_instances", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.integer "automated_report_id", null: false
     t.datetime "range_end", null: false
     t.datetime "created_at", null: false
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["range_end", "automated_report_id"], name: "automated_report_instances_start_report", unique: true
   end
 
-  create_table "automated_report_subscriptions", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "automated_report_subscriptions", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.integer "automated_report_id", null: false
     t.integer "subject_id", null: false
     t.string "identifier", null: false
@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["subject_id"], name: "fk_rails_59e1f019b3"
   end
 
-  create_table "automated_reports", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "automated_reports", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "report_class", null: false
     t.string "interval", null: false
     t.string "target"
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.string "source"
   end
 
-  create_table "discovery_service_events", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "discovery_service_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "user_agent", limit: 4096
     t.string "ip", null: false
     t.string "group", null: false
@@ -90,7 +90,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["unique_id", "phase"], name: "index_discovery_service_events_on_unique_id_and_phase", unique: true
   end
 
-  create_table "federated_login_events", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "federated_login_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "relying_party", null: false
     t.string "asserting_party", null: false
     t.string "result", null: false
@@ -102,7 +102,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["result", "timestamp"], name: "index_federated_login_events_on_result_and_timestamp"
   end
 
-  create_table "identity_provider_saml_attributes", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "identity_provider_saml_attributes", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.integer "identity_provider_id", null: false
     t.integer "saml_attribute_id", null: false
     t.datetime "created_at", null: false
@@ -111,7 +111,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["saml_attribute_id"], name: "fk_rails_3afed16ec1"
   end
 
-  create_table "identity_providers", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "identity_providers", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "entity_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -121,7 +121,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["organization_id"], name: "fk_rails_7a44c5f546"
   end
 
-  create_table "incoming_f_ticks_events", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "incoming_f_ticks_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "data", limit: 4096, null: false
     t.string "ip", null: false
     t.boolean "discarded", default: false, null: false
@@ -131,7 +131,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["discarded"], name: "index_incoming_f_ticks_events_on_discarded"
   end
 
-  create_table "organizations", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "organizations", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "identifier", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -139,7 +139,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["identifier"], name: "index_organizations_on_identifier", unique: true
   end
 
-  create_table "permissions", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "permissions", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.integer "role_id", null: false
     t.string "value", null: false
     t.datetime "created_at", null: false
@@ -147,7 +147,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["role_id", "value"], name: "index_permissions_on_role_id_and_value", unique: true
   end
 
-  create_table "rapid_connect_services", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "rapid_connect_services", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "identifier", null: false
     t.string "name", null: false
     t.string "service_type", null: false
@@ -158,7 +158,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["organization_id"], name: "fk_rails_b509da8b0a"
   end
 
-  create_table "roles", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "roles", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
     t.string "entitlement", null: false
     t.datetime "created_at", null: false
@@ -166,7 +166,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["entitlement"], name: "index_roles_on_entitlement", unique: true
   end
 
-  create_table "saml_attributes", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "saml_attributes", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
     t.string "description", null: false
     t.datetime "created_at", null: false
@@ -175,7 +175,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["name"], name: "index_saml_attributes_on_name", unique: true
   end
 
-  create_table "service_provider_saml_attributes", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "service_provider_saml_attributes", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.integer "service_provider_id", null: false
     t.integer "saml_attribute_id", null: false
     t.boolean "optional", null: false
@@ -185,7 +185,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["service_provider_id", "saml_attribute_id"], name: "unique_service_provider_attribute", unique: true
   end
 
-  create_table "service_providers", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "service_providers", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "entity_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -195,7 +195,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["organization_id"], name: "fk_rails_36567d88d4"
   end
 
-  create_table "sessions", charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "session_id", null: false
     t.text "data"
     t.datetime "created_at", precision: 6, null: false
@@ -204,7 +204,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
-  create_table "subject_roles", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "subject_roles", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.integer "subject_id", null: false
     t.integer "role_id", null: false
     t.datetime "created_at", null: false
@@ -213,7 +213,7 @@ ActiveRecord::Schema.define(version: 2023_05_29_024659) do
     t.index ["subject_id", "role_id"], name: "index_subject_roles_on_subject_id_and_role_id", unique: true
   end
 
-  create_table "subjects", id: :integer, charset: "utf8", collation: "utf8_bin", force: :cascade do |t|
+  create_table "subjects", id: :integer, charset: "utf8mb4", collation: "utf8mb4_bin", force: :cascade do |t|
     t.string "targeted_id", null: false
     t.string "shared_token", null: false
     t.string "name", null: false

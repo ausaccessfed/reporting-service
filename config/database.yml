@@ -1,7 +1,7 @@
 default: &default
   adapter: mysql2
-  collation: utf8_bin
-  encoding: utf8
+  collation: utf8mb4_bin
+  encoding: utf8mb4
   host: <%= ENV['REPORTING_DB_HOST'] || '127.0.0.1' %>
   password: "<%= ENV['REPORTING_DB_PASSWORD'] || 'password' %>"
   pool: 5
