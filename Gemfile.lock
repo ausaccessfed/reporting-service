@@ -440,7 +440,7 @@ GEM
     valhammer (1.1.0)
       activerecord (> 4.1)
       activesupport (> 4.1)
-    webmock (3.22.0)
+    webmock (3.23.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
