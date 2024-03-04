@@ -189,7 +189,7 @@ GEM
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
     json (2.6.3)
-    json-jwt (1.16.5)
+    json-jwt (1.16.6)
       activesupport (>= 4.2)
       aes_key_wrap
       base64
