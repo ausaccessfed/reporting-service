@@ -181,7 +181,7 @@ GEM
       guard (~> 2.0)
       rubocop (< 2.0)
     hashdiff (1.1.0)
-    i18n (1.14.1)
+    i18n (1.14.4)
       concurrent-ruby (~> 1.0)
     implicit-schema (0.0.1)
     jbuilder (2.11.5)
@@ -189,7 +189,7 @@ GEM
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
     json (2.6.3)
-    json-jwt (1.16.5)
+    json-jwt (1.16.6)
       activesupport (>= 4.2)
       aes_key_wrap
       base64
@@ -223,7 +223,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.5)
-    minitest (5.22.2)
+    minitest (5.22.3)
     multi_json (1.15.0)
     mysql2 (0.5.6)
     nenv (0.3.0)
