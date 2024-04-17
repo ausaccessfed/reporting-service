@@ -77,7 +77,7 @@ RUN yum -y update \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
     advancecomp-2.5-1.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
-    gifsicle-1.93-1.el9 \
+    gifsicle-1.95-1.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
     jhead-3.06.0.1-5.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
@@ -135,9 +135,9 @@ RUN yum -y update \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
     xz-5.2.5-8.el9_0 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    kernel-devel-5.14.0-362.18.1.el9_3.0.1 \
+    kernel-devel-5.14.0-362.24.1.el9_3.0.1 \
     # renovate: datasource=yum repo=rocky-9-crb-x86_64
-    mysql-devel-8.0.32-1.el9_2 \
+    mysql-devel-8.0.36-1.el9_3 \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
     procps-ng-3.3.17-13.el9 \
     && yum -y clean all \
