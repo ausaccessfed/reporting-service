@@ -73,7 +73,7 @@ RUN yum -y update \
     && yum install -y \
     --enablerepo=devel \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
-    ImageMagick-devel-6.9.12.93-1.el9 \
+    ImageMagick-devel-6.9.12.93-2.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
     advancecomp-2.5-1.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
@@ -89,9 +89,9 @@ RUN yum -y update \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
     pngquant-2.17.0-2.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    libjpeg-turbo-utils-2.0.90-6.el9_1 \
+    libjpeg-turbo-utils-2.0.90-7.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    libjpeg-turbo-2.0.90-6.el9_1 \
+    libjpeg-turbo-2.0.90-7.el9 \
     && yum -y clean all \
     && rm -rf /var/cache/yum
 
@@ -125,21 +125,21 @@ RUN yum -y update \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
     libtool-2.4.6-45.el9 \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
-    make-4.3-7.el9 \
+    make-4.3-8.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
     automake-1.16.2-8.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    gcc-11.4.1-2.1.el9 \
+    gcc-11.4.1-3.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    gcc-c++-11.4.1-2.1.el9 \
+    gcc-c++-11.4.1-3.el9 \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
     xz-5.2.5-8.el9_0 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    kernel-devel-5.14.0-362.24.1.el9_3.0.1 \
+    kernel-devel-5.14.0-427.16.1.el9_4 \
     # renovate: datasource=yum repo=rocky-9-crb-x86_64
     mysql-devel-8.0.36-1.el9_3 \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
-    procps-ng-3.3.17-13.el9 \
+    procps-ng-3.3.17-14.el9 \
     && yum -y clean all \
     && rm -rf /var/cache/yum
 
