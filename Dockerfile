@@ -1,7 +1,7 @@
 ARG BASE_IMAGE=""
 # Version is pinned via .ruby-version
 # hadolint ignore=DL3006
-FROM ${BASE_IMAGE} as base
+FROM --platform=linux/amd64 ${BASE_IMAGE} as base
 
 WORKDIR $APP_DIR
 
