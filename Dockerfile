@@ -53,9 +53,8 @@ RUN yum -y update \
 
 # use ldd to get required libs
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN ldd \
-    /usr/bin/node \
-    | tr -s "[:blank:]" "\n" | grep "^/" | sed "/\/usr\/bin\//d" | \
+RUN objdump -p /usr/bin/node | grep NEEDED | awk '{print $2}' | \
+    xargs -I % sh -c 'ldconfig -p | grep % | tr -s "[:blank:]" "\n" | grep "^/" | sed "/\/usr\/bin\//d"' | \
     xargs -I % sh -c "mkdir -p /\$(dirname deps%); cp % /deps%;"
 
 USER app
@@ -97,6 +96,18 @@ RUN yum -y update \
 
 # uses ldd to get all deps of imagick, remove anything thats /usr/bin
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+# RUN objdump -p \
+#     /usr/bin/mogrify \
+#     /usr/bin/convert \
+#     /usr/bin/pngcrush \
+#     /usr/bin/jpegoptim \
+#     /usr/lib64/libMagickCore-6.Q16.so.7 \
+#     /usr/lib64/libmagic.so.1 | \
+#     # /usr/bin/libjpeg-turbo \
+#     # /usr/bin/libjpeg-turbo-utils \
+#     grep NEEDED | awk '{print $2}'  \
+#     xargs -I % sh -c 'ldconfig -p | grep % | tr -s "[:blank:]" "\n" | grep "^/" | sed "/\/usr\/bin\//d" | sed "/:/d"' | \
+#     xargs -I % sh -c "mkdir -p /\$(dirname deps%); cp % /deps%;"
 RUN ldd \
     /usr/bin/mogrify \
     /usr/bin/convert \
