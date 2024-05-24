@@ -1,9 +1,9 @@
 -include .env # Applies to every target in the file!
 -include ../aaf-terraform/app.Makefile
 
-BUILD_TARGET=development
+BUILD_TARGET=production
 VERSION := $(shell cat .ruby-version)
-ADDITIONAL_BUILD_ARGS=--build-arg BASE_IMAGE=${DOCKER_ECR}ruby-base:${VERSION}
+ADDITIONAL_BUILD_ARGS=--build-arg BASE_IMAGE=${DOCKER_ECR}ruby-base:${VERSION} --platform=linux/arm64 --no-cache
 APP_NAME=reporting-service
 
 COMMON_ARGS=\
@@ -37,7 +37,7 @@ TESTS_ARGS=\
 -e REPORTING_DB_USERNAME=root \
 -e REPORTING_DB_PASSWORD='' \
 -e COVERAGE=true \
--e CI=true 
+-e CI=true
 
 run-image-tests:
 	@make run-generic-image-command \
