@@ -2,5 +2,6 @@
 --plugins=plugin/single_quotes
 --ignore-files='node_modules/*'
 --ignore-files='db/*schema.rb'
+--ignore-files='coverage/*'
 #EOF_DISTRIBUTION
 --ignore-files='db/*'
