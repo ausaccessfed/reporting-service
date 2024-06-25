@@ -28,7 +28,7 @@ gem 'sentry-ruby'
 gem 'torba-rails'
 group :development, :test do
   gem 'database_cleaner'
-  gem 'factory_bot_rails', '~> 4.11'
+  gem 'factory_bot_rails', '~> 6.0'
   gem 'faker'
   gem 'fakeredis'
   gem 'rails-controller-testing'
