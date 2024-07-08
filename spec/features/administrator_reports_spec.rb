@@ -46,17 +46,17 @@ RSpec.feature 'Administrator Reports' do
         %w[Monthly Quarterly Yearly].each do |interval|
           identifiers.each do |identifier|
             select(identifier.titleize, from: 'Subscriber Identifiers')
-            click_button('Generate')
+            click_link_or_button('Generate')
             expect(page).to have_css('table.subscriber-registrations')
-            click_button('Subscribe')
-            click_link(interval)
+            click_link_or_button('Subscribe')
+            click_link_or_button(interval)
             expect(page).to have_css('p', text: message1)
 
             select(identifier.titleize, from: 'Subscriber Identifiers')
-            click_button('Generate')
+            click_link_or_button('Generate')
             expect(page).to have_css('table.subscriber-registrations')
-            click_button('Subscribe')
-            click_link(interval)
+            click_link_or_button('Subscribe')
+            click_link_or_button(interval)
             expect(page).to have_css('p', text: message2)
 
             expect(page).to have_current_path('/admin_reports/subscriber_registrations_report', ignore_query: true)

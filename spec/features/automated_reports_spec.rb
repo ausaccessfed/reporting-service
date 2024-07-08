@@ -53,7 +53,7 @@ RSpec.feature 'automated report' do
       scenario 'should unsubscribe and redirect to index' do
         within 'table' do
           first('button', text: 'Unsubscribe').click
-          click_link('Confirm Unsubscribe')
+          click_link_or_button('Confirm Unsubscribe')
         end
 
         expect(page).to have_current_path('/automated_reports', ignore_query: true)

@@ -21,14 +21,14 @@ RSpec.shared_examples 'Subscribing to an automated report with target' do
     scenario 'viewing' do
       message = 'You have already subscribed to this report'
 
-      click_link(button)
+      click_link_or_button(button)
       expect(page).to have_current_path("/#{controller}/#{path}", ignore_query: true)
 
       %w[Monthly Quarterly Yearly].each do |interval|
         select(object.name, from: list)
-        click_button('Generate')
-        click_button('Subscribe')
-        click_link(interval)
+        click_link_or_button('Generate')
+        click_link_or_button('Subscribe')
+        click_link_or_button(interval)
 
         expect(page).to have_current_path("/#{controller}/#{path}", ignore_query: true)
         expect(page).to have_css('p', text: message)
@@ -40,14 +40,14 @@ RSpec.shared_examples 'Subscribing to an automated report with target' do
     scenario 'viewing' do
       message = 'You have successfully subscribed to this report'
 
-      click_link(button)
+      click_link_or_button(button)
       expect(page).to have_current_path("/#{controller}/#{path}", ignore_query: true)
 
       %w[Monthly Quarterly Yearly].each do |interval|
         select(object.name, from: list)
-        click_button('Generate')
-        click_button('Subscribe')
-        click_link(interval)
+        click_link_or_button('Generate')
+        click_link_or_button('Subscribe')
+        click_link_or_button(interval)
 
         expect(page).to have_current_path("/#{controller}/#{path}", ignore_query: true)
         expect(page).to have_css('p', text: message)

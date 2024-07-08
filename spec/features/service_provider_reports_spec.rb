@@ -26,7 +26,7 @@ RSpec.feature 'Service Provider Reports' do
 
     shared_examples 'viewing reports depending on session source' do
       scenario 'viewing the SP Sessions Report' do
-        click_link('Service Provider Sessions Report')
+        click_link_or_button('Service Provider Sessions Report')
 
         expect(page).to have_current_path('/subscriber_reports/service_provider_sessions_report', ignore_query: true)
 
@@ -46,7 +46,7 @@ RSpec.feature 'Service Provider Reports' do
       end
 
       scenario 'viewing the SP Daily Demand Report' do
-        click_link('Service Provider Daily Demand Report')
+        click_link_or_button('Service Provider Daily Demand Report')
 
         expect(page).to have_current_path(
           '/subscriber_reports/service_provider_daily_demand_report',
@@ -74,7 +74,7 @@ RSpec.feature 'Service Provider Reports' do
       end
 
       scenario 'viewing the SP Source Identity Providers Report' do
-        click_link('Service Provider Source Identity Providers Report')
+        click_link_or_button('Service Provider Source Identity Providers Report')
 
         expect(page).to have_current_path(
           '/subscriber_reports/service_provider_' \
