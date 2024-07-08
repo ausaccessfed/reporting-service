@@ -50,12 +50,12 @@ end
 
 task lint_md: :environment do
   puts 'Running prettier on markdown... '
-  sh "./node_modules/.bin/pprettier --check '**/*.md'", verbose: false
+  sh "./node_modules/.bin/prettier --check '**/*.md'", verbose: false
 end
 
 task lint_md_fix: :environment do
   puts 'Running prettier on markdown... '
-  sh "./node_modules/.bin/pprettier --write '**/*.md'", verbose: false
+  sh "./node_modules/.bin/prettier --write '**/*.md'", verbose: false
 end
 
 task rubocop: :environment do
