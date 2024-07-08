@@ -10,7 +10,7 @@ RSpec.feature 'Administrator Reports' do
       # rubocop:disable Performance/CollectionLiteralInLoop
       %w[monthly quarterly yearly].each do |interval|
         # rubocop:enable Performance/CollectionLiteralInLoop
-        given!("auto_report_#{identifier}_#{interval}".to_sym) do
+        given!(:"auto_report_#{identifier}_#{interval}") do
           create(:automated_report, interval:, target: identifier, report_class: 'SubscriberRegistrationsReport')
         end
       end

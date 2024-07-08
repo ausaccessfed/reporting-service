@@ -2,7 +2,7 @@
 
 RSpec.shared_examples 'Subscribing to an automated report with target' do
   %w[monthly quarterly yearly].each do |interval|
-    given!("auto_report_#{interval}".to_sym) { create(:automated_report, interval:, target:, report_class:, source:) }
+    given!(:"auto_report_#{interval}") { create(:automated_report, interval:, target:, report_class:, source:) }
   end
 
   context 'subject has already subscribed to the report' do
