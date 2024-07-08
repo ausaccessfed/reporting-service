@@ -18,37 +18,37 @@ RSpec.feature 'Compliance Reports' do
     RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
     visit '/auth/login'
-    click_button 'Login'
+    click_link_or_button 'Login'
   end
 
   scenario 'viewing the Service Compatibility Report' do
-    click_link 'Service Compatibility Report'
+    click_link_or_button 'Service Compatibility Report'
 
     select sp.name, from: 'Service Providers'
-    click_button 'Generate'
+    click_link_or_button 'Generate'
 
     expect(page).to have_css('#output table.service-compatibility')
   end
 
   scenario 'viewing the Identity Provider Attributes Report' do
-    click_link 'Identity Provider Attributes'
+    click_link_or_button 'Identity Provider Attributes'
 
     expect(page).to have_css('#output svg.identity-provider-attributes')
   end
 
   scenario 'viewing the Single Attribute Report – Identity Providers Report' do
-    click_link 'Single Attribute Report – Identity Providers'
+    click_link_or_button 'Single Attribute Report – Identity Providers'
 
     select idp.saml_attributes.sample.name, from: 'Attribute'
-    click_button 'Generate'
+    click_link_or_button 'Generate'
     expect(page).to have_css('#output table.provided-attribute')
   end
 
   scenario 'viewing the Single Attribute Report – Service Providers Report' do
-    click_link 'Single Attribute Report – Service Providers'
+    click_link_or_button 'Single Attribute Report – Service Providers'
 
     select sp.saml_attributes.sample.name, from: 'Attribute'
-    click_button 'Generate'
+    click_link_or_button 'Generate'
     expect(page).to have_css('#output table.requested-attribute')
   end
 

@@ -25,7 +25,7 @@ RSpec.feature 'Administrator Reports' do
       RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
       visit '/auth/login'
-      click_button 'Login'
+      click_link_or_button 'Login'
       visit '/admin_reports'
     end
 
@@ -41,7 +41,7 @@ RSpec.feature 'Administrator Reports' do
         message1 = 'You have successfully subscribed to this report'
         message2 = 'You have already subscribed to this report'
 
-        click_link 'Subscriber Registrations Report'
+        click_link_or_button 'Subscriber Registrations Report'
 
         %w[Monthly Quarterly Yearly].each do |interval|
           identifiers.each do |identifier|
@@ -67,7 +67,7 @@ RSpec.feature 'Administrator Reports' do
 
     context 'Federation Growth Report' do
       scenario 'viewing Report' do
-        click_link 'Federation Growth Report'
+        click_link_or_button 'Federation Growth Report'
 
         page.execute_script("$('input').removeAttr('readonly')")
 
@@ -84,7 +84,7 @@ RSpec.feature 'Administrator Reports' do
 
     shared_examples 'Daily Demand Report' do
       scenario 'viewing Report' do
-        click_link 'Daily Demand Report'
+        click_link_or_button 'Daily Demand Report'
 
         page.execute_script("$('input').removeAttr('readonly')")
 
@@ -103,7 +103,7 @@ RSpec.feature 'Administrator Reports' do
 
     shared_examples 'Federated Sessions Report' do
       scenario 'viewing Report' do
-        click_link 'Federated Sessions Report'
+        click_link_or_button 'Federated Sessions Report'
 
         page.execute_script("$('input').removeAttr('readonly')")
 
@@ -122,7 +122,7 @@ RSpec.feature 'Administrator Reports' do
 
     shared_examples 'Identity Provider Utilization Report' do
       scenario 'viewing Report' do
-        click_link 'Identity Provider Utilization Report'
+        click_link_or_button 'Identity Provider Utilization Report'
 
         page.execute_script("$('input').removeAttr('readonly')")
 
@@ -144,7 +144,7 @@ RSpec.feature 'Administrator Reports' do
 
     shared_examples 'Service Provider Utilization Report' do
       scenario 'viewing Report' do
-        click_link 'Service Provider Utilization Report'
+        click_link_or_button 'Service Provider Utilization Report'
 
         page.execute_script("$('input').removeAttr('readonly')")
 

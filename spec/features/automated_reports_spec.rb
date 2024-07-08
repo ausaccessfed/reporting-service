@@ -36,9 +36,9 @@ RSpec.feature 'automated report' do
         RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
         visit '/auth/login'
-        click_button 'Login'
+        click_link_or_button 'Login'
         visit '/subscriber_reports'
-        click_link 'Subscriptions'
+        click_link_or_button 'Subscriptions'
       end
 
       scenario 'viewing automated_reports#index' do
@@ -70,9 +70,9 @@ RSpec.feature 'automated report' do
         RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
         visit '/auth/login'
-        click_button 'Login'
+        click_link_or_button 'Login'
         visit '/subscriber_reports'
-        click_link 'Subscriptions'
+        click_link_or_button 'Subscriptions'
       end
 
       scenario 'should unsubscribe and redirect to index' do
