@@ -2,7 +2,7 @@
 
 RSpec.shared_examples 'Subscribing to a nil class report' do
   %w[monthly quarterly yearly].each do |interval|
-    given!("auto_report_#{interval}".to_sym) { create(:automated_report, interval:, report_class:, source:) }
+    given!(:"auto_report_#{interval}") { create(:automated_report, interval:, report_class:, source:) }
   end
 
   context 'subject has already subscribed to the report' do
@@ -21,13 +21,13 @@ RSpec.shared_examples 'Subscribing to a nil class report' do
     scenario 'viewing' do
       message = 'You have already subscribed to this report'
 
-      click_link(button)
+      click_link_or_button(button)
       expect(page).to have_current_path("/#{controller}/#{path}", ignore_query: true)
       expect(page).to have_css(template)
 
       %w[Monthly Quarterly Yearly].each do |interval|
-        click_button('Subscribe')
-        click_link(interval)
+        click_link_or_button('Subscribe')
+        click_link_or_button(interval)
         expect(page).to have_current_path("/#{controller}/#{path}", ignore_query: true)
         expect(page).to have_css('p', text: message)
       end
@@ -38,13 +38,13 @@ RSpec.shared_examples 'Subscribing to a nil class report' do
     scenario 'viewing' do
       message = 'You have successfully subscribed to this report'
 
-      click_link(button)
+      click_link_or_button(button)
       expect(page).to have_current_path("/#{controller}/#{path}", ignore_query: true)
       expect(page).to have_css(template)
 
       %w[Monthly Quarterly Yearly].each do |interval|
-        click_button('Subscribe')
-        click_link(interval)
+        click_link_or_button('Subscribe')
+        click_link_or_button(interval)
         expect(page).to have_current_path("/#{controller}/#{path}", ignore_query: true)
         expect(page).to have_css('p', text: message)
       end

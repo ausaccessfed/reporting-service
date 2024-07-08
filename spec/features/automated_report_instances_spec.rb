@@ -32,7 +32,7 @@ RSpec.feature 'automated report instances' do
       RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
       visit '/auth/login'
-      click_button 'Login'
+      click_link_or_button 'Login'
     end
 
     scenario 'viewing automated_report_instances#show' do
@@ -121,7 +121,7 @@ RSpec.feature 'automated report instances' do
       admins[user.shared_token.to_sym] = entitlements
 
       visit '/auth/login'
-      click_button 'Login'
+      click_link_or_button 'Login'
     end
 
     scenario 'viewing automated_report_instances#show' do
@@ -242,7 +242,7 @@ RSpec.feature 'automated report instances' do
         admins[user.shared_token.to_sym] = entitlements
 
         visit '/auth/login'
-        click_button 'Login'
+        click_link_or_button 'Login'
       end
 
       scenario 'can not view Subscriber Registrations Report' do
@@ -265,7 +265,7 @@ RSpec.feature 'automated report instances' do
         admins[user.shared_token.to_sym] = entitlements
 
         visit '/auth/login'
-        click_button 'Login'
+        click_link_or_button 'Login'
       end
 
       scenario 'can view Subscriber Registrations Report' do

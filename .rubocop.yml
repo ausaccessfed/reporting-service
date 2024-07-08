@@ -63,3 +63,7 @@ Lint/MissingSuper:
   Enabled: false
 Capybara/SpecificMatcher:
   Enabled: false
+
+FactoryBot/ExcessiveCreateList:
+  Enabled: true
+  MaxAmount: 20

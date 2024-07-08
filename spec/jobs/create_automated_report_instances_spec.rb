@@ -16,11 +16,11 @@ RSpec.describe CreateAutomatedReportInstances do
   let(:idp) { create(:identity_provider) }
 
   %w[monthly quarterly yearly].each do |i|
-    let!("auto_report_#{i}_01".to_sym) do
+    let!(:"auto_report_#{i}_01") do
       create(:automated_report, interval: i, report_class: 'DailyDemandReport', source: 'DS')
     end
 
-    let!("auto_report_#{i}_02".to_sym) do
+    let!(:"auto_report_#{i}_02") do
       create(
         :automated_report,
         interval: i,

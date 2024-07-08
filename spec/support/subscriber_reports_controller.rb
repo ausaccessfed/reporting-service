@@ -3,9 +3,9 @@
 RSpec.shared_examples 'a Subscriber Report' do
   let(:organization) { create(:organization) }
 
-  let(:object) { create("#{prefix}_provider".to_sym, organization:) }
+  let(:object) { create(:"#{prefix}_provider", organization:) }
 
-  let(:bad_object) { create("#{prefix}_provider".to_sym) }
+  let(:bad_object) { create(:"#{prefix}_provider") }
 
   let(:user) { create(:subject, :authorized, permission: "objects:organization:#{organization.identifier}:report") }
 

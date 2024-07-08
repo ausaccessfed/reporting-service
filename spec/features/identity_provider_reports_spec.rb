@@ -20,13 +20,13 @@ RSpec.feature 'Identity Provider Reports' do
       admins[user.shared_token.to_sym] = entitlements
 
       visit '/auth/login'
-      click_button 'Login'
+      click_link_or_button 'Login'
       visit '/subscriber_reports'
     end
 
     shared_examples 'viewing reports depending on session source' do
       scenario 'viewing the IdP Sessions Report' do
-        click_link('Identity Provider Sessions Report')
+        click_link_or_button('Identity Provider Sessions Report')
 
         expect(page).to have_current_path('/subscriber_reports/identity_provider_sessions_report', ignore_query: true)
 
@@ -47,7 +47,7 @@ RSpec.feature 'Identity Provider Reports' do
       end
 
       scenario 'viewing the IdP Daily Demand Report' do
-        click_link('Identity Provider Daily Demand Report')
+        click_link_or_button('Identity Provider Daily Demand Report')
 
         expect(page).to have_current_path(
           '/subscriber_reports/identity_provider_daily_demand_report',
@@ -75,7 +75,7 @@ RSpec.feature 'Identity Provider Reports' do
       end
 
       scenario 'viewing the Destination Services Report' do
-        click_link('Identity Provider Destination Services Report')
+        click_link_or_button('Identity Provider Destination Services Report')
 
         expect(page).to have_current_path(
           '/subscriber_reports/identity_provider_' \
@@ -127,7 +127,7 @@ RSpec.feature 'Identity Provider Reports' do
       RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
       visit '/auth/login'
-      click_button 'Login'
+      click_link_or_button 'Login'
       visit '/subscriber_reports'
     end
 

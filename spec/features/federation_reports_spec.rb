@@ -11,7 +11,7 @@ RSpec.feature 'Federation Reports' do
     RapidRack::TestAuthenticator.jwt = create(:jwt, aaf_attributes: attrs)
 
     visit '/auth/login'
-    click_button 'Login'
+    click_link_or_button 'Login'
   end
 
   scenario 'users will be redirected to dashboard after login' do
