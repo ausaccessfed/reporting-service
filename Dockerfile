@@ -1,7 +1,7 @@
 ARG BASE_IMAGE=""
 # Version is pinned via .ruby-version
 # hadolint ignore=DL3006
-FROM ${BASE_IMAGE} as base
+FROM ${BASE_IMAGE} AS base
 
 WORKDIR $APP_DIR
 
@@ -33,7 +33,7 @@ ENTRYPOINT ["/app/bin/boot.sh"]
 CMD ["bundle exec puma"]
 USER app
 
-FROM base as js-dependencies
+FROM base AS js-dependencies
 USER root
 
 RUN yum -y update \
@@ -62,7 +62,7 @@ USER app
 COPY --chown=app ./package.json ./yarn.lock ./
 RUN yarn install
 
-FROM base as imagick-dependencies
+FROM base AS imagick-dependencies
 USER root
 
 RUN yum -y update \
@@ -110,7 +110,7 @@ RUN ldd \
 
 USER app
 
-FROM base as dependencies
+FROM base AS dependencies
 USER root
 
 RUN yum -y update \
@@ -185,8 +185,8 @@ COPY --chown=app ./app/controllers/application_controller.rb ./app/controllers/a
 
 RUN BUILD=true SECRET_KEY_BASE=TempSecretKey bundle exec rake assets:precompile
 
-FROM dependencies as development
-ENV RAILS_ENV development
+FROM dependencies AS development
+ENV RAILS_ENV=development
 ARG LOCAL_BUILD=false
 
 USER root
@@ -203,10 +203,10 @@ RUN bundle install \
 COPY --chown=app . .
 
 ARG RELEASE_VERSION="VERSION_PROVIDED_ON_BUILD"
-ENV RELEASE_VERSION $RELEASE_VERSION
+ENV RELEASE_VERSION=$RELEASE_VERSION
 
 
-FROM base as production
+FROM base AS production
 USER app
 
 COPY --from=dependencies /opt/.rbenv /opt/.rbenv
@@ -260,4 +260,4 @@ RUN rm -rf spec \
 USER app
 
 ARG RELEASE_VERSION="VERSION_PROVIDED_ON_BUILD"
-ENV RELEASE_VERSION $RELEASE_VERSION
+ENV RELEASE_VERSION=$RELEASE_VERSION
