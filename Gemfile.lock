@@ -330,7 +330,7 @@ GEM
       rack (>= 1.4)
     rexml (3.3.1)
       strscan
-    rmagick (5.5.0)
+    rmagick (6.0.1)
       observer (~> 0.1)
       pkg-config (~> 1.4)
     rspec (3.13.0)
