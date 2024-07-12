@@ -35,6 +35,6 @@ jobs:
           'docker run {0} bundle exec brakeman',
           'docker run {0} bundle exec rake lint_rb',
           'docker run {0} bundle exec rake lint_js',
-          'docker run {0} bundle exec rake lint_md',
+          'docker run {0} bundle exec rake lint_md'
         ]
  
