@@ -76,3 +76,7 @@ const common = [
 ]
 
 //EOF_DISTRIBUTION
+
+module.exports = [
+  ...common
+]
