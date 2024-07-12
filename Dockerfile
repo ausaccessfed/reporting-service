@@ -36,12 +36,13 @@ USER app
 FROM base AS js-dependencies
 USER root
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN yum -y update \
     && update-crypto-policies --set DEFAULT:SHA1 \
-    && yum install https://rpm.nodesource.com/pub_16.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm -y \
+    && curl -fsSL https://rpm.nodesource.com/setup_21.x | bash -  \
     && yum install -y \
-    # renovate: datasource=yum repo=rocky-9-appstream-x86_64/nodejs:16
-    nodejs-16.20.1 \
+    # renovate: datasource=yum repo=rocky-9-appstream-x86_64/nodejs:21
+    nodejs-21.1.0 \
     # renovate: datasource=yum repo=rocky-9-extras-x86_64
     epel-release-9-7.el9 \
     && update-crypto-policies --set DEFAULT \
