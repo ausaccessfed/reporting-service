@@ -1,6 +1,7 @@
 const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended')
 const eslintPluginYml = require('eslint-plugin-yml')
 const eslint = require('@eslint/js')
+const globals = require('globals')
 
 const common = [
   eslintPluginPrettierRecommended,
@@ -10,6 +11,10 @@ const common = [
     languageOptions: {
       parserOptions: {
         sourceType: 'module'
+      },
+      globals: {
+        ...globals.node,
+        ...globals.browser
       }
     },
     rules: {
@@ -78,5 +83,14 @@ const common = [
 //EOF_DISTRIBUTION
 
 module.exports = [
-  ...common
+  ...common,
+  {
+    languageOptions: {
+      globals: {
+        ...globals.jquery,
+        d3: true,
+        reporting: true
+      }
+    }
+  }
 ]
