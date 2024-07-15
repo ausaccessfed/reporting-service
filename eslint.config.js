@@ -75,7 +75,8 @@ const common = [
       '**/templates/',
       '**/values.yaml',
       '**/templates/',
-      '.github/'
+      '.github/',
+      '.torba/'
     ]
   }
 ]
