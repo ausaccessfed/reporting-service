@@ -37,3 +37,4 @@ jobs:
           'docker run {0} bundle exec rake lint_js',
           'docker run {0} bundle exec rake lint_md'
         ]
+
