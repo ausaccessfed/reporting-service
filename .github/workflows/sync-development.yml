@@ -2,7 +2,7 @@ name: Sync development
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * SUN"
+    - cron: '0 0 * * SUN'
 
 jobs:
   call-development-sync:

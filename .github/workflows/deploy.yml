@@ -1,4 +1,4 @@
-name: Build Docker Image
+name: Run
 on:
   push:
   schedule:
@@ -6,37 +6,34 @@ on:
   issue_comment:
     types: [created]
 jobs:
-  push:
+  all:
     concurrency:
       group: ${{ github.event.comment.id }}-${{ github.event_name }}-${{ ( github.ref_name == 'master' || github.ref_name == 'main' ) && github.sha || github.ref_name }}-build
       cancel-in-progress: true
-    name: Test, build and push image
     permissions:
       id-token: write
       contents: read
       statuses: write
       issues: read
       pull-requests: write
+      packages: write
     secrets: inherit
     uses: ausaccessfed/workflows/.github/workflows/deploy-sync.yml@main
     with:
-      ecr_repository: reporting-service
-      dev_url: https://reporting.dev.aaf.edu.au
       event_name: ${{ github.event_name }}
       event_comment_id: ${{ github.event.comment.id }}
       event_comment_body: ${{ github.event.comment.body }}
+      ecr_repository: reporting-service
+      dev_url: https://reporting.dev.aaf.edu.au
       runner: arm64-4core
       production_environments: 'test,production'
-      platforms: 'linux/arm64'
-      extra_task_1_name: Tests
-      extra_task_1: docker run --add-host=host.docker.internal:host-gateway -e REPORTING_DB_HOST=host.docker.internal -e PREPARE_DB=true -e REPORTING_DB_USERNAME=root -e REPORTING_DB_PASSWORD=password -e RAILS_ENV=test app:cache bundle exec rspec
-      extra_task_2_name: rubocop
-      extra_task_2: docker run app:cache bundle exec rubocop -P
-      extra_task_3_name: brakeman
-      extra_task_3: docker run app:cache bundle exec brakeman
-      extra_task_6_name: lint ruby
-      extra_task_6: docker run app:cache bundle exec rake lint_rb
-      extra_task_4_name: lint js
-      extra_task_4: docker run app:cache bundle exec rake lint_js
-      extra_task_5_name: lint md
-      extra_task_5: docker run app:cache bundle exec rake lint_md
+      platforms: "['linux/arm64']"
+      commands: |
+        [
+          'docker run --add-host=host.docker.internal:host-gateway -e REPORTING_DB_HOST=host.docker.internal -e PREPARE_DB=true -e REPORTING_DB_USERNAME=root -e REPORTING_DB_PASSWORD=password -e RAILS_ENV=test {0} bundle exec rspec',
+          'docker run {0} bundle exec rubocop -P',
+          'docker run {0} bundle exec brakeman',
+          'docker run {0} bundle exec rake lint_rb',
+          'docker run {0} bundle exec rake lint_js',
+          'docker run {0} bundle exec rake lint_md'
+        ]

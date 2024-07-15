@@ -19,7 +19,7 @@
         "steoates.autoimport",
         "mgmcdermott.vscode-language-babel",
         "dbaeumer.vscode-eslint",
-        "kavod-io.vscode-jest-test-adapter",
+        "Orta.vscode-jest",
         "leizongmin.node-module-intellisense",
         "christian-kohler.npm-intellisense",
         "esbenp.prettier-vscode",
@@ -77,7 +77,7 @@
         // git
         "codezombiech.gitignore",
         "qezhu.gitlink",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
 
         // terraform
         "hashicorp.terraform",
