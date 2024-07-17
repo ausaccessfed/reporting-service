@@ -18,7 +18,7 @@ jobs:
       pull-requests: write
       packages: write
     secrets: inherit
-    uses: ausaccessfed/workflows/.github/workflows/deploy-sync.yml@main
+    uses: ausaccessfed/workflows/.github/workflows/deploy-sync.yml@feature/use-github-base-image
     with:
       event_name: ${{ github.event_name }}
       event_comment_id: ${{ github.event.comment.id }}
@@ -37,6 +37,3 @@ jobs:
           'docker run {0} bundle exec rake lint_js',
           'docker run {0} bundle exec rake lint_md'
         ]
-
-
-
