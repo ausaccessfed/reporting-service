@@ -54,8 +54,9 @@ RUN yum -y update \
 
 # use ldd to get required libs
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN objdump -p /usr/bin/node | grep NEEDED | awk '{print $2}' | \
-    xargs -I % sh -c 'ldconfig -p | grep % | tr -s "[:blank:]" "\n" | grep "^/" | sed "/\/usr\/bin\//d"' | \
+RUN ldd \
+    /usr/bin/node \
+    | tr -s "[:blank:]" "\n" | grep "^/" | sed "/\/usr\/bin\//d" | \
     xargs -I % sh -c "mkdir -p /\$(dirname deps%); cp % /deps%;"
 
 USER app
