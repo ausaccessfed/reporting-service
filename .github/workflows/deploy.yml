@@ -25,7 +25,6 @@ jobs:
       event_comment_body: ${{ github.event.comment.body }}
       ecr_repository: reporting-service
       dev_url: https://reporting.dev.aaf.edu.au
-      runner: arm64-4core
       production_environments: 'test,production'
       platforms: "['linux/amd64','linux/arm64']"
       commands: |
