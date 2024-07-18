@@ -25,9 +25,8 @@ jobs:
       event_comment_body: ${{ github.event.comment.body }}
       ecr_repository: reporting-service
       dev_url: https://reporting.dev.aaf.edu.au
-      runner: arm64-4core
       production_environments: 'test,production'
-      platforms: "['linux/arm64']"
+      platforms: "['linux/amd64','linux/arm64']"
       commands: |
         [
           'docker run --add-host=host.docker.internal:host-gateway -e REPORTING_DB_HOST=host.docker.internal -e PREPARE_DB=true -e REPORTING_DB_USERNAME=root -e REPORTING_DB_PASSWORD=password -e RAILS_ENV=test {0} bundle exec rspec',
