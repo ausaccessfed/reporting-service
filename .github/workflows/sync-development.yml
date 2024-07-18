@@ -19,6 +19,3 @@ jobs:
       app: reporting-service
       sha: ${{ github.sha }}
     secrets: inherit
-    permissions:
-      id-token: write
-      contents: read
