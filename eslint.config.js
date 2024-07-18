@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended')
 const eslintPluginYml = require('eslint-plugin-yml')
 const eslint = require('@eslint/js')
@@ -13,8 +14,7 @@ const common = [
         sourceType: 'module'
       },
       globals: {
-        ...globals.node,
-        ...globals.browser
+        ...globals.browser, ...globals.node
       }
     },
     rules: {
