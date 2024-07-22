@@ -328,7 +328,7 @@ GEM
     regexp_parser (2.9.2)
     request_store (1.5.1)
       rack (>= 1.4)
-    rexml (3.3.1)
+    rexml (3.3.2)
       strscan
     rmagick (5.5.0)
       observer (~> 0.1)
