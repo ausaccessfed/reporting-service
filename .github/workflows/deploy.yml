@@ -27,9 +27,10 @@ jobs:
       dev_url: https://reporting.dev.aaf.edu.au
       production_environments: 'test,production'
       platforms: "['linux/amd64','linux/arm64']"
+      mysql_image_tag_version: ''
       commands: |
         [
-          'export REPORTING_IMAGE="{0}" && docker compose -f compose.yml run -e REPORTING_DB_HOST=host.docker.internal -e PREPARE_DB=true -e REPORTING_DB_USERNAME=root -e REPORTING_DB_PASSWORD=password -e RAILS_ENV=test reporting bundle exec rspec',
+          'export REPORTING_IMAGE="{0}" && docker compose -f compose.yml run -e RAILS_ENV=test reporting bundle exec rspec',
           'docker run {0} bundle exec rubocop -P',
           'docker run {0} bundle exec brakeman',
           'docker run {0} bundle exec rake lint_rb',

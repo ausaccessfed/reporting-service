@@ -5,12 +5,30 @@ services:
         condition: service_healthy
     environment:
       - REDIS_HOST=redis
+      - DATABASE_HOST=mysql
+      - REPORTING_DB_HOST=mysql
+      - REPORTING_DB_USERNAME=root
+      - REPORTING_DB_PASSWORD=password
+      - PREPARE_DB=true
     healthcheck:
       interval: 10s
       retries: 5
       test: ['CMD', 'curl', '--head', 'http://localhost:3000/health']
       timeout: 5s
     image: ${REPORTING_IMAGE-app:cache}
+  mysql:
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    healthcheck:
+      interval: 10s
+      retries: 5
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '--password=password']
+      timeout: 5s
+    image: mysql:8
+    platform: linux/x86_64
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./compose/mysql/conf.d:/etc/mysql/conf.d
   redis:
     healthcheck:
       interval: 10s
