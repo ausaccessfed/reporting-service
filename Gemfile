@@ -30,7 +30,6 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails', '~> 4.11'
   gem 'faker'
-  gem 'fakeredis'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
   gem 'rubocop', require: false

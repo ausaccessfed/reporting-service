@@ -1,0 +1,20 @@
+services:
+  reporting:
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      - REDIS_HOST=redis
+    healthcheck:
+      interval: 10s
+      retries: 5
+      test: ['CMD', 'curl', '--head', 'http://localhost:3000/health']
+      timeout: 5s
+    image: ${REPORTING_IMAGE-app:cache}
+  redis:
+    healthcheck:
+      interval: 10s
+      retries: 5
+      test: ['CMD', 'redis-cli', 'ping']
+      timeout: 5s
+    image: redis:alpine
