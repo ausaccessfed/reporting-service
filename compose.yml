@@ -26,6 +26,7 @@ services:
       timeout: 5s
     image: mysql:8
     volumes:
+      - mysql_data:/var/lib/mysql
       - ./compose/mysql/conf.d:/etc/mysql/conf.d
   redis:
     healthcheck:
@@ -34,3 +35,5 @@ services:
       test: ['CMD', 'redis-cli', 'ping']
       timeout: 5s
     image: redis:alpine
+volumes:
+  mysql_data:
