@@ -45,6 +45,3 @@ run-image-tests:
 		ADDITIONAL_ARGS="${TESTS_ARGS}" \
 		COMMAND="bundle exec rspec -fd ${FILE}"
 
-
-test: docker-login
-	REPORTING_IMAGE=${DOCKER_ECR}${APP_NAME}:development docker compose -f compose.yml run reporting rspec
