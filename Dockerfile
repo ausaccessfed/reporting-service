@@ -188,7 +188,7 @@ COPY --chown=app ./lib ./lib
 COPY --chown=app ./app/helpers ./app/helpers
 COPY --chown=app ./app/controllers/application_controller.rb ./app/controllers/application_controller.rb
 
-RUN BUILD=true SECRET_KEY_BASE=TempSecretKey bundle exec rake assets:precompile
+RUN BUILD=true REDIS_HOST="" SECRET_KEY_BASE=TempSecretKey bundle exec rake assets:precompile
 
 FROM dependencies AS development
 ENV RAILS_ENV=development
