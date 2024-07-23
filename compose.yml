@@ -6,8 +6,7 @@ services:
       mysql:
         condition: service_healthy
     environment:
-      - REDIS_HOST=redis
-      - DATABASE_HOST=mysql
+      - REDIS_HOST=redis://redis
       - REPORTING_DB_HOST=mysql
       - REPORTING_DB_USERNAME=root
       - REPORTING_DB_PASSWORD=password
