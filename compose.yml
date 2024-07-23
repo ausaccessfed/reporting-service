@@ -25,9 +25,7 @@ services:
       test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '--password=password']
       timeout: 5s
     image: mysql:8
-    platform: linux/x86_64
     volumes:
-      - mysql_data:/var/lib/mysql
       - ./compose/mysql/conf.d:/etc/mysql/conf.d
   redis:
     healthcheck:
