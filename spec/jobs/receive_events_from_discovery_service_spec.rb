@@ -138,7 +138,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
         let(:event_attrs) { attributes_for(:discovery_service_event, :response) }
 
         it 'writes the event to a secondary local queue' do
-          redis = Redis.new(Rails.application.config.reporting_service.redis[:url])
+          redis = Rails.application.config.redis_client
           expect { run }.to change { redis.llen('wayf_access_record') }.by(1)
         end
       end
@@ -147,7 +147,7 @@ RSpec.describe ReceiveEventsFromDiscoveryService, type: :job do
         let(:event_attrs) { attributes_for(:discovery_service_event, phase: 'request') }
 
         it 'does not write the event to the secondary queue' do
-          redis = Redis.new(Rails.application.config.reporting_service.redis[:url])
+          redis = Rails.application.config.redis_client
           expect { run }.not_to(change { redis.llen('wayf_access_record') })
         end
       end

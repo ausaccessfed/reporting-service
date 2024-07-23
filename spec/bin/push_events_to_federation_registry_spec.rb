@@ -7,7 +7,7 @@ load Rails.root.join('bin/push_events_to_federation_registry.rb').to_s
 RSpec.describe PushEventsToFederationRegistry do
   let(:config) { Rails.application.config.database_configuration[Rails.env] }
   let(:client) { subject.mysql_client }
-  let(:redis) { Redis.new(Rails.application.config.reporting_service.redis[:url]) }
+  let(:redis) { Rails.application.config.redis_client }
   let(:ds_host) { "ds.#{Faker::Internet.domain_name}" }
 
   let(:selected_idp) { "https://idp.#{Faker::Internet.domain_name}/idp/shibboleth" }
