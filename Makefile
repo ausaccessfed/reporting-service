@@ -37,7 +37,7 @@ TESTS_ARGS=\
 -e REPORTING_DB_USERNAME=root \
 -e REPORTING_DB_PASSWORD='' \
 -e COVERAGE=true \
--e CI=true 
+-e CI=true
 
 run-image-tests:
 	@make run-generic-image-command \
@@ -46,3 +46,5 @@ run-image-tests:
 		COMMAND="bundle exec rspec -fd ${FILE}"
 
 
+test: docker-login
+	REPORTING_IMAGE=${DOCKER_ECR}${APP_NAME}:development docker compose -f compose.yml run reporting rspec

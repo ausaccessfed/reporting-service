@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'simplecov'
-require 'fakeredis'
 require 'simplecov-console'
 require 'support/capybara_setup'
 
