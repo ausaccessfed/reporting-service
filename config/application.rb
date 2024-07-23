@@ -48,8 +48,6 @@ module ReportingService
             verify_mode: OpenSSL::SSL::VERIFY_NONE
           }
         )
-    else
-      config.cache_store = [:memory_store]
     end
 
     if ENV['RAILS_LOG_TO_STDOUT'].present?

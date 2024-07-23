@@ -20,7 +20,13 @@ RSpec.describe FederationReportsController, type: :controller do
     it 'renders the page successfully' do
       expect(response).to have_http_status(:ok)
       expect(response).to render_template("federation_reports/#{route_value}")
+    end
+
+    it 'assigns the report data' do
       expect(assigns[:data]).to eq('{"a":1}')
+    end
+
+    it 'caches the report data' do
       expect(Rails.cache.fetch("public/#{cach_template}")).to eq('{"a":1}')
     end
 
