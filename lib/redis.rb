@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require('redis')
 
 # https://github.com/redis/redis-rb/issues/1174
 
