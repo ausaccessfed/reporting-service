@@ -6,11 +6,10 @@ services:
       mysql:
         condition: service_healthy
     environment:
-      - REDIS_HOST=redis://redis
+      - REDIS_HOST=redis
       - REPORTING_DB_HOST=mysql
       - REPORTING_DB_USERNAME=root
       - REPORTING_DB_PASSWORD=password
-      - REDIS_AUTH_TOKEN=
       - PREPARE_DB=true
     healthcheck:
       interval: 10s
