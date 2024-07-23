@@ -109,11 +109,13 @@ module ReportingService
 
     def redis
       redis_url =
-        if ENV.fetch('REDIS_AUTH_TOKEN', nil).present?
-          "#{ENV.fetch('REDIS_SCHEME', 'redis')}://:#{CGI.escape(ENV.fetch('REDIS_AUTH_TOKEN', 'password'))}@" \
-            "#{ENV.fetch('REDIS_HOST', 'localhost')}:6379/0"
-        else
-          ENV.fetch('REDIS_HOST', '')
+        if ENV.fetch('REDIS_HOST', '').present?
+          if ENV.fetch('REDIS_AUTH_TOKEN', nil).present?
+            "#{ENV.fetch('REDIS_SCHEME', 'redis')}://:#{CGI.escape(ENV.fetch('REDIS_AUTH_TOKEN', 'password'))}@" \
+              "#{ENV.fetch('REDIS_HOST')}:6379/0"
+          else
+            "#{ENV.fetch('REDIS_SCHEME', 'redis')}://#{ENV.fetch('REDIS_HOST')}"
+          end
         end
       { redis: { url: redis_url, namespace: ENV.fetch('REDIS_NAMESPACE', 'reporting-service') } }
     end

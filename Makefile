@@ -14,7 +14,9 @@ COMMON_ARGS=\
 -v ${PWD}/log:/app/log \
 -v ${PWD}/db:/app/db \
 -v ${PWD}/Gemfile.lock:/app/Gemfile.lock \
--e REPORTING_DB_HOST=${LOCAL_IP}
+-e REPORTING_DB_HOST=${LOCAL_IP} \
+-e REDIS_HOST=${LOCAL_IP} \
+
 
 RUN_ARGS=\
 --read-only \
@@ -34,6 +36,7 @@ TESTS_ARGS=\
 -v ${PWD}/tmp:/app/tmp \
 -e RAILS_ENV=test \
 -e REPORTING_DB_HOST=${LOCAL_IP} \
+-e REDIS_HOST=${LOCAL_IP} \
 -e REPORTING_DB_USERNAME=root \
 -e REPORTING_DB_PASSWORD='' \
 -e COVERAGE=true \
