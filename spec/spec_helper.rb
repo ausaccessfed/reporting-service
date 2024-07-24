@@ -1,15 +1,21 @@
 # frozen_string_literal: true
 
-require 'simplecov'
-require 'simplecov-console'
-require 'support/capybara_setup'
+unless ARGV.include?('--dry-run')
+  require 'simplecov'
+  require 'simplecov-console'
 
-SimpleCov.formatter = SimpleCov::Formatter::Console
+  SimpleCov.formatter = SimpleCov::Formatter::Console
+end
+
+require 'support/capybara_setup'
+require 'support/redis_helper'
+
 RSpec.configure do |config|
+  config.include RSpec::RedisHelper
+
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
-
   config.mock_with :rspec do |mocks|
     mocks.verify_partial_doubles = true
   end
