@@ -44,7 +44,7 @@ group :development, :test do
 
   gem 'aaf-gumboot'
 
-  gem 'byebug'
+  gem 'debug'
   gem 'pry', require: false
 
   gem 'capybara'
@@ -64,4 +64,8 @@ group :development, :test do
   gem 'syntax_tree', require: false
 
   gem 'terminal-notifier-guard', require: false
+end
+
+group :development do
+  gem 'dotenv'
 end
