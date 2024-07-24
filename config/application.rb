@@ -3,6 +3,7 @@
 require File.expand_path('boot', __dir__)
 
 require 'rails'
+require 'dotenv/load' unless Rails.env.production?
 require 'active_model/railtie'
 require 'active_record/railtie'
 require 'action_controller/railtie'
