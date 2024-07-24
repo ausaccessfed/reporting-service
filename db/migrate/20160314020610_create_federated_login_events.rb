@@ -3,8 +3,7 @@
 class CreateFederatedLoginEvents < ActiveRecord::Migration[4.2]
   def change
     create_table :federated_login_events do |t|
-      t.string :relying_party,
-               :asserting_party, :result, null: false
+      t.string :relying_party, :asserting_party, :result, null: false
 
       t.string :hashed_principal_name, null: false
 

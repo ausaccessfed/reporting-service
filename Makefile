@@ -14,7 +14,9 @@ COMMON_ARGS=\
 -v ${PWD}/log:/app/log \
 -v ${PWD}/db:/app/db \
 -v ${PWD}/Gemfile.lock:/app/Gemfile.lock \
--e REPORTING_DB_HOST=${LOCAL_IP}
+-e REPORTING_DB_HOST=${LOCAL_IP} \
+-e REDIS_HOST=${LOCAL_IP} \
+
 
 RUN_ARGS=\
 --read-only \
@@ -34,10 +36,11 @@ TESTS_ARGS=\
 -v ${PWD}/tmp:/app/tmp \
 -e RAILS_ENV=test \
 -e REPORTING_DB_HOST=${LOCAL_IP} \
+-e REDIS_HOST=${LOCAL_IP} \
 -e REPORTING_DB_USERNAME=root \
 -e REPORTING_DB_PASSWORD='' \
 -e COVERAGE=true \
--e CI=true 
+-e CI=true
 
 run-image-tests:
 	@make run-generic-image-command \
@@ -46,3 +49,8 @@ run-image-tests:
 		COMMAND="bundle exec rspec -fd ${FILE}"
 
 
+test: docker-login
+	REPORTING_IMAGE=${DOCKER_ECR}${APP_NAME}:development docker compose -f compose.yml run reporting rspec
+
+lint:
+	@bundle exec rake lint

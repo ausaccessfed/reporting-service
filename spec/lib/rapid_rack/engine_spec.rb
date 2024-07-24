@@ -64,16 +64,8 @@ RSpec.describe RapidRack::Engine, type: :feature do
 
     it 'creates the subject' do
       expect { run }.to change(Subject, :count).by(1)
-    end
-
-    it 'redirects to /' do
-      run
       expect(response).to be_redirect
       expect(response['Location']).to eq('/')
-    end
-
-    it 'sets the session' do
-      run
       expect(request.session[:subject_id]).to eq(Subject.last.id)
     end
 

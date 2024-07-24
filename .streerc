@@ -4,4 +4,6 @@
 --ignore-files='db/*schema.rb'
 --ignore-files='coverage/*'
 #EOF_DISTRIBUTION
---ignore-files='db/*'
+--ignore-files='log/*'
+--ignore-files='tmp/*'
+--ignore-files='public/*'

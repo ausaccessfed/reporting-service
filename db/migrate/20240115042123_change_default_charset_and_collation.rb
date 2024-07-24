@@ -18,13 +18,12 @@ class ChangeDefaultCharsetAndCollation < ActiveRecord::Migration[6.1]
       db
         .columns(table)
         .each do |column|
-        default = column.default.nil? ? '' : "DEFAULT '#{column.default}'"
-        null = column.null ? '' : 'NOT NULL'
-        if column.sql_type =~ /([a-z]*)text/i || column.sql_type =~ /varchar\(([0-9]+)\)/i
-          execute "ALTER TABLE `#{table}` MODIFY `#{column.name}` #{column.sql_type.upcase} CHARACTER SET #{character_set} COLLATE #{collation} #{default} #{null};"
+          default = column.default.nil? ? '' : "DEFAULT '#{column.default}'"
+          null = column.null ? '' : 'NOT NULL'
+          if column.sql_type =~ /([a-z]*)text/i || column.sql_type =~ /varchar\(([0-9]+)\)/i
+            execute "ALTER TABLE `#{table}` MODIFY `#{column.name}` #{column.sql_type.upcase} CHARACTER SET #{character_set} COLLATE #{collation} #{default} #{null};"
+          end
         end
-      end
     end
   end
 end
-
