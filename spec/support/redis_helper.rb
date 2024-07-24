@@ -8,11 +8,11 @@ module RSpec
       rspec.around(:each) { |example| with_clean_redis { example.run } }
     end
 
-    def redis(&block)
+    def redis(&)
       @redis ||= ::Rails.application.config.redis_client
     end
 
-    def with_clean_redis(&block)
+    def with_clean_redis(&)
       redis.flushall # clean before run
       begin
         yield

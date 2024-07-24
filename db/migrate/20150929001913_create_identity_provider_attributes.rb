@@ -9,8 +9,7 @@ class CreateIdentityProviderAttributes < ActiveRecord::Migration[4.2]
       t.foreign_key :identity_providers
       t.foreign_key :attributes
 
-      t.index %i[identity_provider_id attribute_id],
-              unique: true, name: 'unique_identity_provider_attribute'
+      t.index %i[identity_provider_id attribute_id], unique: true, name: 'unique_identity_provider_attribute'
     end
   end
 end

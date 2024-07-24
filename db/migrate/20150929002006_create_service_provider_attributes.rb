@@ -10,8 +10,7 @@ class CreateServiceProviderAttributes < ActiveRecord::Migration[4.2]
       t.foreign_key :service_providers
       t.foreign_key :attributes
 
-      t.index %i[service_provider_id attribute_id],
-              unique: true, name: 'unique_service_provider_attribute'
+      t.index %i[service_provider_id attribute_id], unique: true, name: 'unique_service_provider_attribute'
     end
   end
 end

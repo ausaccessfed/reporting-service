@@ -7,7 +7,7 @@ class RefactorDiscoveryServiceEventForeignKeys < ActiveRecord::Migration[4.2]
         add_column :discovery_service_events, :initiating_sp, :string
         add_column :discovery_service_events, :selected_idp, :string
 
-        execute %(
+        execute '
           update discovery_service_events dse
           join service_providers sp
             on dse.service_provider_id = sp.id
@@ -15,10 +15,9 @@ class RefactorDiscoveryServiceEventForeignKeys < ActiveRecord::Migration[4.2]
             on dse.identity_provider_id = idp.id
           set dse.initiating_sp = sp.entity_id,
             dse.selected_idp = idp.entity_id
-        )
+        '
 
-        change_column :discovery_service_events, :initiating_sp, :string,
-                      null: false
+        change_column :discovery_service_events, :initiating_sp, :string, null: false
 
         remove_foreign_key :discovery_service_events, :service_providers
         remove_column :discovery_service_events, :service_provider_id
@@ -33,7 +32,7 @@ class RefactorDiscoveryServiceEventForeignKeys < ActiveRecord::Migration[4.2]
         add_column :discovery_service_events, :identity_provider_id, :integer
         add_foreign_key :discovery_service_events, :identity_providers
 
-        execute %(
+        execute '
           update discovery_service_events dse
           join service_providers sp
             on dse.initiating_sp = sp.entity_id
@@ -41,10 +40,9 @@ class RefactorDiscoveryServiceEventForeignKeys < ActiveRecord::Migration[4.2]
             on dse.selected_idp = idp.entity_id
           set dse.service_provider_id = sp.id,
              dse.identity_provider_id = idp.id
-        )
+        '
 
-        change_column :discovery_service_events, :service_provider_id, :integer,
-                      null: false
+        change_column :discovery_service_events, :service_provider_id, :integer, null: false
 
         remove_column :discovery_service_events, :initiating_sp
         remove_column :discovery_service_events, :selected_idp
