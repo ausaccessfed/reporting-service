@@ -2,6 +2,7 @@ workflows/distributions/.cachedFiles
 workflows/distributions/.dockerignore
 workflows/distributions/.dockleignore
 workflows/distributions/.editorconfig
+workflows/distributions/.github/workflows/approve.yml
 workflows/distributions/.github/workflows/deploy.yml
 workflows/distributions/.github/workflows/pr-housekeeping.yml
 workflows/distributions/.github/workflows/sync-development.yml
