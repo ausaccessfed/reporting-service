@@ -8,8 +8,8 @@ on:
 jobs:
   all:
     concurrency:
-      group: ${{ github.event.comment.id }}-${{ github.event_name }}-${{ ( github.ref_name == 'master' || github.ref_name == 'main' ) && github.sha || github.ref_name }}-build
-      cancel-in-progress: true
+      group: ${{ github.event.comment.id }}-${{ github.event_name }}-${{ github.ref_name }}-build
+      cancel-in-progress: ${{ github.ref_name != 'master' && github.ref_name != 'main' }}
     permissions:
       id-token: write
       contents: read
