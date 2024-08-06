@@ -30,6 +30,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails', '~> 4.11'
   gem 'faker'
+  gem 'fakeredis'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
   gem 'rubocop', require: false
@@ -44,7 +45,7 @@ group :development, :test do
 
   gem 'aaf-gumboot'
 
-  gem 'debug'
+  gem 'byebug'
   gem 'pry', require: false
 
   gem 'capybara'
@@ -64,8 +65,4 @@ group :development, :test do
   gem 'syntax_tree', require: false
 
   gem 'terminal-notifier-guard', require: false
-end
-
-group :development do
-  gem 'dotenv'
 end
