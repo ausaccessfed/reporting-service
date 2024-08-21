@@ -163,7 +163,7 @@ COPY --from=imagick-dependencies \
     /usr/lib64/
 COPY --from=imagick-dependencies /usr/lib64/pkgconfig /usr/lib64/pkgconfig
 COPY --from=imagick-dependencies /usr/include/ImageMagick-6 /usr/include/ImageMagick-6
-COPY --from=imagick-dependencies /usr/lib64/ImageMagick-6.9.12 /usr/lib64/ImageMagick-6.9.12
+COPY --from=imagick-dependencies /usr/lib64/ImageMagick-6.9.13 /usr/lib64/ImageMagick-6.9.13
 COPY --from=imagick-dependencies /etc/ImageMagick-6 /etc/ImageMagick-6
 COPY --from=imagick-dependencies /deps/lib64 /usr/lib64/
 
@@ -230,7 +230,7 @@ COPY --from=imagick-dependencies \
     /usr/lib64/
 COPY --from=imagick-dependencies /usr/lib64/pkgconfig /usr/lib64/pkgconfig
 COPY --from=imagick-dependencies /usr/include/ImageMagick-6 /usr/include/ImageMagick-6
-COPY --from=imagick-dependencies /usr/lib64/ImageMagick-6.9.12 /usr/lib64/ImageMagick-6.9.12
+COPY --from=imagick-dependencies /usr/lib64/ImageMagick-6.9.13 /usr/lib64/ImageMagick-6.9.13
 COPY --from=imagick-dependencies /etc/ImageMagick-6 /etc/ImageMagick-6
 COPY --from=imagick-dependencies /deps/lib64 /usr/lib64/
 
