@@ -54,3 +54,15 @@ test: docker-login
 
 lint:
 	@bundle exec rake lint
+
+
+PROMETHEUS_EXPORTER_ARGS=\
+--read-only \
+-p 9394:9394 \
+-e PROMETHEUS_TYPE=exporter \
+--entrypoint  /app/bin/metrics.sh
+
+run-promtheus-exporter:
+	@make run-generic-image-command \
+		APP_NAME_POSTFIX="-prometheus" \
+		ADDITIONAL_ARGS="${PROMETHEUS_EXPORTER_ARGS}"

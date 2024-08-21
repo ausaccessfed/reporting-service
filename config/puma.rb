@@ -40,3 +40,14 @@ lowlevel_error_handler do |ex, env|
     ]
   ]
 end
+
+if ENV.fetch('PROMETHEUS_METRICS_SERVICE_HOST', '') != ''
+  on_booted { PrometheusExporter::Instrumentation::Puma.start(frequency: 1) }
+
+  after_worker_boot do
+    # if this is started outside after_worker_boot, then some metrics disappear
+    unless PrometheusExporter::Instrumentation::Puma.started?
+      PrometheusExporter::Instrumentation::Puma.start(frequency: 1)
+    end
+  end
+end
