@@ -1,4 +1,4 @@
-name: Approve
+name: Self-approve tidying
 on:
   issue_comment:
     types: [created]
@@ -12,7 +12,7 @@ jobs:
       pull-requests: write
     secrets:
       REPO_SCOPED_TOKEN: ${{secrets.ALL_REPO_SCOPED_TOKEN_2}}
-    uses: ausaccessfed/workflows/.github/workflows/approve.yml@main
+    uses: ausaccessfed/workflows/.github/workflows/self-approve-tidying.yml@main
     with:
       event_name: ${{ github.event_name }}
       event_comment_id: ${{ github.event.comment.id }}
