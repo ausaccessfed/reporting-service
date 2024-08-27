@@ -2,9 +2,9 @@ workflows/distributions/.cachedFiles
 workflows/distributions/.dockerignore
 workflows/distributions/.dockleignore
 workflows/distributions/.editorconfig
-workflows/distributions/.github/workflows/approve.yml
 workflows/distributions/.github/workflows/deploy.yml
 workflows/distributions/.github/workflows/pr-housekeeping.yml
+workflows/distributions/.github/workflows/self-approve-tidying.yml
 workflows/distributions/.github/workflows/sync-development.yml
 workflows/distributions/.gitignore
 workflows/distributions/.hadolint.yaml
@@ -15,4 +15,5 @@ workflows/distributions/.streerc
 workflows/distributions/.vscode/extensions.json
 workflows/distributions/eslint.config.js
 workflows/distributions/package.json
+workflows/distributions/trivy.yaml
 workflows/distributions/yarn.lock
