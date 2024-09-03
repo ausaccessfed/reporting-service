@@ -2,35 +2,47 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '> 6', '< 6.2'
-gem 'sass-rails'
-
-gem 'jbuilder'
-gem 'mysql2'
-gem 'slim'
-gem 'terser'
-
+gem 'aaf-lipstick', '>= 4.5.1'
 gem 'accession'
 gem 'activerecord-session_store'
+gem 'aws-sdk-sqs', '~> 1'
 gem 'implicit-schema'
+gem 'jbuilder'
+gem 'json-jwt'
 gem 'lograge'
+gem 'mysql2'
+gem 'prometheus_exporter'
+gem 'puma'
+gem 'rails', '> 6', '< 6.2'
 gem 'redis'
 gem 'redis-rails'
-gem 'valhammer'
-
-gem 'aaf-lipstick', '>= 4.5.1'
-gem 'aws-sdk-sqs', '~> 1'
-gem 'json-jwt'
-gem 'puma'
 gem 'rmagick'
+gem 'sass-rails'
 gem 'sentry-rails'
 gem 'sentry-ruby'
+gem 'slim'
+gem 'terser'
 gem 'torba-rails'
+gem 'valhammer'
 group :development, :test do
+  gem 'aaf-gumboot'
+  gem 'brakeman', require: false
+  gem 'capybara'
+  gem 'cuprite'
   gem 'database_cleaner'
+  gem 'debug'
   gem 'factory_bot_rails', '~> 4.11'
   gem 'faker'
+  gem 'guard', require: false
+  gem 'guard-brakeman', require: false
+  gem 'guard-bundler', require: false
+  gem 'guard-rspec', require: false
+  gem 'guard-rubocop', require: false
+  gem 'launchy', require: false
+  gem 'pry', require: false
+  gem 'rack-test', require: false
   gem 'rails-controller-testing'
+  gem 'rspec'
   gem 'rspec-rails'
   gem 'rubocop', require: false
   gem 'rubocop-capybara', require: false
@@ -39,31 +51,12 @@ group :development, :test do
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
   gem 'shoulda-matchers'
-  gem 'timecop'
-  gem 'webmock', require: false
-
-  gem 'aaf-gumboot'
-
-  gem 'debug'
-  gem 'pry', require: false
-
-  gem 'capybara'
-  gem 'cuprite'
-  gem 'launchy', require: false
-  gem 'rspec'
-
-  gem 'brakeman', require: false
-  gem 'guard', require: false
-  gem 'guard-brakeman', require: false
-  gem 'guard-bundler', require: false
-  gem 'guard-rspec', require: false
-  gem 'guard-rubocop', require: false
-  gem 'rack-test', require: false
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false
   gem 'syntax_tree', require: false
-
   gem 'terminal-notifier-guard', require: false
+  gem 'timecop'
+  gem 'webmock', require: false
 end
 
 group :development do
