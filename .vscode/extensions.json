@@ -1,97 +1,94 @@
 {
-    "recommendations": [
-        //html
-        "formulahendry.auto-close-tag",
-        "formulahendry.auto-complete-tag",
-        "formulahendry.auto-rename-tag",
-        "ecmel.vscode-html-css",
-        "redhat.vscode-xml",
-        "redhat.vscode-yaml",
+  "recommendations": [
+    //html
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-complete-tag",
+    "formulahendry.auto-rename-tag",
+    "ecmel.vscode-html-css",
+    "redhat.vscode-xml",
+    "redhat.vscode-yaml",
 
-        // shell
-        "foxundermoon.shell-format",
+    // shell
+    "foxundermoon.shell-format",
 
-        // css
-        "mrmlnc.vscode-scss",
-        "stylelint.vscode-stylelint",
+    // css
+    "mrmlnc.vscode-scss",
+    "stylelint.vscode-stylelint",
 
-        // js
-        "steoates.autoimport",
-        "mgmcdermott.vscode-language-babel",
-        "dbaeumer.vscode-eslint",
-        "Orta.vscode-jest",
-        "leizongmin.node-module-intellisense",
-        "christian-kohler.npm-intellisense",
-        "esbenp.prettier-vscode",
+    // js
+    "steoates.autoimport",
+    "mgmcdermott.vscode-language-babel",
+    "dbaeumer.vscode-eslint",
+    "Orta.vscode-jest",
+    "leizongmin.node-module-intellisense",
+    "christian-kohler.npm-intellisense",
+    "esbenp.prettier-vscode",
 
-        // linting
-        "dbaeumer.vscode-eslint",
-        "rvest.vs-code-prettier-eslint",
+    // linting
+    "dbaeumer.vscode-eslint",
+    "rvest.vs-code-prettier-eslint",
 
+    //jinja
+    "samuelcolvin.jinjahtml",
 
+    // spell checker
+    "streetsidesoftware.code-spell-checker",
 
-        //jinja
-        "samuelcolvin.jinjahtml",
+    // coverage
+    "ryanluker.vscode-coverage-gutters",
 
-        // spell checker
-        "streetsidesoftware.code-spell-checker",
+    //env
+    "mikestead.dotenv",
 
-        // coverage
-        "ryanluker.vscode-coverage-gutters",
+    // editorconfig
+    "EditorConfig.EditorConfig",
 
-        //env
-        "mikestead.dotenv",
+    // ruby
+    "aliariff.vscode-erb-beautify",
+    "rubocop.vscode-rubocop",
+    "Shopify.ruby-lsp",
+    "connorshea.vscode-ruby-test-adapter",
+    "sianglim.slim",
+    "aliariff.slim-lint",
+    "KoichiSasada.vscode-rdbg",
 
-        // editorconfig
-        "EditorConfig.EditorConfig",
+    // random
+    "ue.alphabetical-sorter",
+    "kisstkondoros.vscode-gutter-preview",
+    "christian-kohler.path-intellisense",
+    "alefragnani.project-manager",
+    "cssho.vscode-svgviewer",
+    "TabNine.tabnine-vscode",
+    "wayou.vscode-todo-highlight",
+    "aaron-bond.better-comments",
+    "vscode-icons-team.vscode-icons",
+    "tomoki1207.pdf",
 
-        // ruby
-        "aliariff.vscode-erb-beautify",
-        "rubocop.vscode-rubocop",
-        "Shopify.ruby-lsp",
-        "connorshea.vscode-ruby-test-adapter",
-        "sianglim.slim",
-        "aliariff.slim-lint",
-        "KoichiSasada.vscode-rdbg",
+    //test
+    "ms-vscode.test-adapter-converter",
+    "hbenl.vscode-test-explorer",
 
-        // random
-        "ue.alphabetical-sorter",
-        "kisstkondoros.vscode-gutter-preview",
-        "christian-kohler.path-intellisense",
-        "alefragnani.project-manager",
-        "cssho.vscode-svgviewer",
-        "TabNine.tabnine-vscode",
-        "wayou.vscode-todo-highlight",
-        "aaron-bond.better-comments",
-        "vscode-icons-team.vscode-icons",
-        "tomoki1207.pdf",
+    //github
+    "github.vscode-github-actions",
 
+    // git
+    "codezombiech.gitignore",
+    "qezhu.gitlink",
+    "eamodio.gitlens",
 
-        //test
-        "ms-vscode.test-adapter-converter",
-        "hbenl.vscode-test-explorer",
+    // terraform
+    "hashicorp.terraform",
+    "4ops.terraform",
 
-        //github
-        "github.vscode-github-actions",
+    //helm
+    "Tim-Koehler.helm-intellisense",
 
-        // git
-        "codezombiech.gitignore",
-        "qezhu.gitlink",
-        "eamodio.gitlens",
+    // live share
+    "ms-vsliveshare.vsliveshare",
 
-        // terraform
-        "hashicorp.terraform",
-        "4ops.terraform",
-
-        //helm
-        "Tim-Koehler.helm-intellisense",
-
-        // live share
-        "ms-vsliveshare.vsliveshare",
-
-        // markdown
-        "yzhang.markdown-all-in-one",
-        "bierner.markdown-mermaid",
-        "DavidAnson.vscode-markdownlint",
-    ]
+    // markdown
+    "yzhang.markdown-all-in-one",
+    "bierner.markdown-mermaid",
+    "DavidAnson.vscode-markdownlint"
+  ]
 }
