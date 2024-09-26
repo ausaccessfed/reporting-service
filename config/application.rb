@@ -49,6 +49,9 @@ module ReportingService
             verify_mode: OpenSSL::SSL::VERIFY_NONE
           }
         )
+    else
+      config.cache_store = :redis_cache_store
+      config.redis_client = Redis.new
     end
 
     if ENV['RAILS_LOG_TO_STDOUT'].present?
