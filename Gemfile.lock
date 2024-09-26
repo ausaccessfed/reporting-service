@@ -185,7 +185,7 @@ GEM
       guard (~> 2.0)
       rubocop (< 2.0)
     hashdiff (1.1.0)
-    i18n (1.14.5)
+    i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     implicit-schema (0.0.1)
     io-console (0.7.2)
