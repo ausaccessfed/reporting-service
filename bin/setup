@@ -23,6 +23,9 @@ FileUtils.chdir APP_ROOT do
   system 'bundle exec torba pack'
 
   puts "\n== Preparing database =="
+  system! 'mysql -e "CREATE USER IF NOT EXISTS \'reporting_app\'@\'localhost\';"'
+  system! 'mysql -e "SET PASSWORD FOR \'reporting_app\'@\'localhost\' = \'password\'"'
+  system! "mysql -e \"GRANT ALL PRIVILEGES ON *.* TO 'reporting_app'@'localhost';\""
   system! 'bin/rails db:prepare'
 
   puts "\n== Removing old logs and tempfiles =="
