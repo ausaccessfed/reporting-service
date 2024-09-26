@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   get '/dashboard' => 'dashboard#index', :as => 'dashboard'
   root to: 'welcome#index'
   get 'health' => 'health#show'
+  # Browsers often request /favicon.ico. This controller redirects to the actual favicon.
+  resource :favicon, only: :show
 
   scope '/federation_reports' do
     get 'federation_growth_report' => 'federation_reports#federation_growth_report',
