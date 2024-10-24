@@ -48,7 +48,7 @@ RUN yum -y update \
     && update-crypto-policies --set DEFAULT \
     && yum install -y \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
-    yarnpkg-1.22.19-5.el9  \
+    yarnpkg-1.22.22-5.el9  \
     && yum -y clean all \
     && rm -rf /var/cache/yum
 
