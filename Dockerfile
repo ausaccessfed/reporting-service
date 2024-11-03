@@ -74,7 +74,7 @@ RUN yum -y update \
     && yum -y install \
     --enablerepo=devel \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
-    ImageMagick-devel-6.9.13.14-1.el9 \
+    ImageMagick-devel-6.9.13.17-1.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
     advancecomp-2.5-1.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
