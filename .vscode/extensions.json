@@ -48,8 +48,6 @@
     "rubocop.vscode-rubocop",
     "Shopify.ruby-lsp",
     "connorshea.vscode-ruby-test-adapter",
-    "sianglim.slim",
-    "aliariff.slim-lint",
     "KoichiSasada.vscode-rdbg",
 
     // random
@@ -58,7 +56,6 @@
     "christian-kohler.path-intellisense",
     "alefragnani.project-manager",
     "cssho.vscode-svgviewer",
-    "TabNine.tabnine-vscode",
     "wayou.vscode-todo-highlight",
     "aaron-bond.better-comments",
     "vscode-icons-team.vscode-icons",
@@ -70,6 +67,8 @@
 
     //github
     "github.vscode-github-actions",
+    "GitHub.copilot",
+    "GitHub.copilot-chat",
 
     // git
     "codezombiech.gitignore",
