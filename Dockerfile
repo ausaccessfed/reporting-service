@@ -22,8 +22,9 @@ USER root
 
 RUN yum -y update \
     && yum install -y \
-    # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    jq-1.6-15.el9 \
+    curl \
+    && curl -L -o /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 \
+    && chmod +x /usr/bin/jq \
     && yum -y clean all \
     && rm -rf /var/cache/yum
 
