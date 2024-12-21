@@ -76,7 +76,7 @@ RUN yum -y update \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
     ImageMagick-devel-6.9.13.17-1.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
-    advancecomp-2.5-1.el9 \
+    advancecomp-2.6-4.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
     gifsicle-1.95-1.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
@@ -124,19 +124,19 @@ RUN yum -y update \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
     chromium-130.0.6723.91-1.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    libtool-2.4.6-45.el9 \
+    libtool-2.4.6-46.el9 \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
     make-4.3-8.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
     automake-1.16.2-8.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    gcc-11.4.1-3.el9 \
+    gcc-11.5.0-2.el9 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    gcc-c++-11.4.1-3.el9 \
+    gcc-c++-11.5.0-2.el9 \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
     xz-5.2.5-8.el9_0 \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    kernel-devel-5.14.0-427.42.1.el9_4 \
+    kernel-devel-5.14.0-503.19.1.el9_5 \
     # renovate: datasource=yum repo=rocky-9-crb-x86_64
     mysql-devel-8.0.36-1.el9_3 \
     # renovate: datasource=yum repo=rocky-9-baseos-x86_64
