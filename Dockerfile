@@ -23,7 +23,7 @@ USER root
 RUN yum -y update \
     && yum install -y \
     # renovate: datasource=yum repo=rocky-9-appstream-x86_64
-    jq-1.6-15.el9 \
+    jq-1.6-17.el9 \
     && yum -y clean all \
     && rm -rf /var/cache/yum
 
