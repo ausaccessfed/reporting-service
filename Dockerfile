@@ -76,7 +76,7 @@ RUN yum -y update \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
     ImageMagick-devel-6.9.13.17-1.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
-    advancecomp-2.5-1.el9 \
+    advancecomp-2.6-4.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
     gifsicle-1.95-1.el9 \
     # renovate: datasource=yum repo=epel-9-everything-x86_64
