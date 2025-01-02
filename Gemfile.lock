@@ -97,7 +97,7 @@ GEM
     base64 (0.2.0)
     bigdecimal (3.1.8)
     bindata (2.5.0)
-    brakeman (6.2.1)
+    brakeman (7.0.0)
       racc
     builder (3.3.0)
     capybara (3.40.0)
