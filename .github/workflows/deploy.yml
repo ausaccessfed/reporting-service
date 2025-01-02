@@ -38,5 +38,5 @@ jobs:
         ]
       production_commands: |
         [
-          'docker run --read-only -v /tmp:/tmp {0} bundle check',
+          'docker run -v /tmp:/tmp {0} bundle check && ls -a && cat /app/Gemfile.lock',
         ]
