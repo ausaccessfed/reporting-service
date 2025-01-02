@@ -28,7 +28,7 @@ AAF Reporting Service generates reports and graphs from data sourced from:
 1. Be using Ruby 2.2+
 2. `brew install phantomjs`
 3. `bin/setup` (and read the output for any additional steps)
-4. `guard`
+4. `bin/rails server`
 
 ## Running tests in development environment
 

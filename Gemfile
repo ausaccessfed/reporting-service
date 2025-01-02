@@ -33,12 +33,8 @@ group :development, :test do
   gem 'debug'
   gem 'factory_bot_rails', '~> 4.11'
   gem 'faker'
-  gem 'guard', require: false
-  gem 'guard-brakeman', require: false
-  gem 'guard-bundler', require: false
-  gem 'guard-rspec', require: false
-  gem 'guard-rubocop', require: false
   gem 'launchy', require: false
+  gem 'listen'
   gem 'pry', require: false
   gem 'rack-test', require: false
   gem 'rails-controller-testing'
@@ -54,7 +50,6 @@ group :development, :test do
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false
   gem 'syntax_tree', require: false
-  gem 'terminal-notifier-guard', require: false
   gem 'timecop'
   gem 'webmock', require: false
 end
