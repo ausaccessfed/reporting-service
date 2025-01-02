@@ -237,7 +237,7 @@ GEM
     parser (3.3.5.0)
       ast (~> 2.4.1)
       racc
-    pkg-config (1.5.6)
+    pkg-config (1.5.8)
     prettier_print (1.2.1)
     prometheus_exporter (2.1.1)
       webrick
@@ -318,7 +318,7 @@ GEM
     request_store (1.5.1)
       rack (>= 1.4)
     rexml (3.3.8)
-    rmagick (5.5.0)
+    rmagick (6.0.1)
       observer (~> 0.1)
       pkg-config (~> 1.4)
     rspec (3.13.0)
