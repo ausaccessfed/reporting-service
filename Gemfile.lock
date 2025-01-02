@@ -159,34 +159,8 @@ GEM
     ffi (1.17.0-arm64-darwin)
     ffi (1.17.0-x86_64-darwin)
     ffi (1.17.0-x86_64-linux-gnu)
-    formatador (1.1.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    guard (2.19.0)
-      formatador (>= 0.2.4)
-      listen (>= 2.7, < 4.0)
-      lumberjack (>= 1.0.12, < 2.0)
-      nenv (~> 0.1)
-      notiffany (~> 0.0)
-      pry (>= 0.13.0)
-      shellany (~> 0.0)
-      thor (>= 0.18.1)
-    guard-brakeman (0.8.6)
-      brakeman (>= 2.1.1)
-      guard (>= 2.0.0)
-      guard-compat (~> 1.0)
-    guard-bundler (3.0.1)
-      bundler (>= 2.1, < 3)
-      guard (~> 2.2)
-      guard-compat (~> 1.1)
-    guard-compat (1.2.1)
-    guard-rspec (4.7.3)
-      guard (~> 2.1)
-      guard-compat (~> 1.1)
-      rspec (>= 2.99.0, < 4.0)
-    guard-rubocop (1.5.0)
-      guard (~> 2.0)
-      rubocop (< 2.0)
     hashdiff (1.1.1)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
@@ -224,7 +198,6 @@ GEM
     loofah (2.23.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    lumberjack (1.2.10)
     mail (2.8.1)
       mini_mime (>= 0.1.1)
       net-imap
@@ -238,7 +211,6 @@ GEM
     minitest (5.25.1)
     multi_json (1.15.0)
     mysql2 (0.5.6)
-    nenv (0.3.0)
     net-http (0.4.1)
       uri
     net-imap (0.4.17)
@@ -260,9 +232,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
-    notiffany (0.1.3)
-      nenv (~> 0.1)
-      shellany (~> 0.0)
     observer (0.1.2)
     parallel (1.26.3)
     parser (3.3.5.0)
@@ -416,7 +385,6 @@ GEM
     sentry-ruby (5.21.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    shellany (0.0.1)
     shoulda-matchers (6.4.0)
       activesupport (>= 5.2.0)
     simplecov (0.22.0)
@@ -444,7 +412,6 @@ GEM
     syntax_tree (6.2.0)
       prettier_print (>= 1.2.0)
     temple (0.10.3)
-    terminal-notifier-guard (1.7.0)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
     terser (1.2.4)
@@ -498,15 +465,11 @@ DEPENDENCIES
   dotenv
   factory_bot_rails (~> 4.11)
   faker
-  guard
-  guard-brakeman
-  guard-bundler
-  guard-rspec
-  guard-rubocop
   implicit-schema
   jbuilder
   json-jwt
   launchy
+  listen
   lograge
   mysql2
   prometheus_exporter
@@ -534,7 +497,6 @@ DEPENDENCIES
   simplecov-console
   slim
   syntax_tree
-  terminal-notifier-guard
   terser
   timecop
   torba-rails
