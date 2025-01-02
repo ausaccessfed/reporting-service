@@ -31,7 +31,7 @@ group :development, :test do
   gem 'cuprite'
   gem 'database_cleaner'
   gem 'debug'
-  gem 'factory_bot_rails', '~> 4.11'
+  gem 'factory_bot_rails', '~> 6.0'
   gem 'faker'
   gem 'launchy', require: false
   gem 'listen'
